@@ -21,7 +21,7 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 
 
 
-@WebFilter(urlPatterns = {"/notice/*", "/member/*", "/board/*", "/thumbnail/*"})
+@WebFilter(urlPatterns = {"/admintask/*", "/board/*", "/book/*", "/code/*", "/company/*", "/history/*", "/issue/*", "/member/*", "/menu/*", "/output/*", "/project/*", "/statistics/*", "/task/*", "/user/*"})
 public class AuthenticationFilter implements Filter {
 	
 	Map<String, List<String>> permitURIList;
@@ -46,20 +46,20 @@ public class AuthenticationFilter implements Filter {
 		/* 로그인 상태인 회원과 로그인 하지 않은 비회원에 대한 처리 */
 		if(loginMember != null) {									// 회원일 시
 			boolean isPermitAdmin = permitURIList.get("adminPermitList").contains(intent);
-			boolean isPermitMember = permitURIList.get("memberPermitList").contains(intent);
+			boolean isPermitDeveloper = permitURIList.get("DeveloperPermitList").contains(intent);
 			boolean isPermitAll = permitURIList.get("allPermitList").contains(intent);
 			
 			/* url 접근자의 권한 인증 후 인가 */
 			if("ROLE_ADMIN".equals(loginMember.getRole())) {
 				
 				/* 관리자 권한 url 인가 처리*/
-				if(isPermitAdmin || isPermitMember || isPermitAll) {
+				if(isPermitAdmin || isPermitDeveloper || isPermitAll) {
 					isAuthorized = true;
 				}
-			} else if("ROLE_MEMBER".equals(loginMember.getRole())) {
+			} else if("ROLE_DEVELOPER".equals(loginMember.getRole())) {
 				
 				/* 일반 회원 권한 url 인가 */
-				if((isPermitMember || isPermitAll) && !isPermitAdmin) {
+				if((isPermitDeveloper || isPermitAll) && !isPermitAdmin) {
 					isAuthorized = true;
 				}
 			}
@@ -80,35 +80,43 @@ public class AuthenticationFilter implements Filter {
 				request.getRequestDispatcher("/WEB-INF/views/error/default.jsp").forward(hrequest, response);
 			}
 		}
-		
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
 		
 		permitURIList = new HashMap<>();
 		List<String> adminPermitList = new ArrayList<>();
-		List<String> memberPermitList = new ArrayList<>();
+		List<String> developerPermitList = new ArrayList<>();
 		List<String> allPermitList = new ArrayList<>();
 		
 		/* 관리자의 추가 접근 가능 url */
 		adminPermitList.add("/notice/regist");
 		adminPermitList.add("/notice/update");
 		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
+		adminPermitList.add("/notice/delete");
 		
 		/* 일반 회원의 추가 접근 가능 url */
-		memberPermitList.add("/member/update");
-		memberPermitList.add("/member/delete");
-		memberPermitList.add("/member/logout");
-		memberPermitList.add("/notice/list");
-		memberPermitList.add("/notice/detail");
-		memberPermitList.add("/board/list");
-		memberPermitList.add("/board/regist");
-		memberPermitList.add("/board/detail");
-		memberPermitList.add("/board/registReply");
-		memberPermitList.add("/board/removeReply");
-		memberPermitList.add("/thumbnail/list");
-		memberPermitList.add("/thumbnail/regist");
-		memberPermitList.add("/thumbnail/detail");
+		developerPermitList.add("/member/update");
+		developerPermitList.add("/member/delete");
+		developerPermitList.add("/member/logout");
+		developerPermitList.add("/notice/list");
+		developerPermitList.add("/notice/detail");
+		developerPermitList.add("/board/list");
+		developerPermitList.add("/board/regist");
+		developerPermitList.add("/board/detail");
+		developerPermitList.add("/board/registReply");
+		developerPermitList.add("/board/removeReply");
+		developerPermitList.add("/thumbnail/list");
+		developerPermitList.add("/thumbnail/regist");
+		developerPermitList.add("/thumbnail/detail");
 
 		/* 비회원의 접근 가능 url */
 		allPermitList.add("/member/regist");
@@ -116,7 +124,7 @@ public class AuthenticationFilter implements Filter {
 		allPermitList.add("/member/idDupCheck");
 		
 		permitURIList.put("adminPermitList", adminPermitList);
-		permitURIList.put("memberPermitList", memberPermitList);
+		permitURIList.put("memberPermitList", developerPermitList);
 		permitURIList.put("allPermitList", allPermitList);
 		
 	}
