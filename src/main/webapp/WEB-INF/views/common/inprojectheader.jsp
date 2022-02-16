@@ -22,7 +22,7 @@
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" href="index.html">Project WaterfallService</a>
+		<a class="navbar-brand ps-3" href="${ pageContext.servletContext.contextPath }/">Project WaterfallService</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!" style="margin-left: 20px;">
 			<i class="fas fa-bars"></i>
@@ -158,11 +158,11 @@
 							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<div class="menu-font2">
 								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" href="layout-static.html">공지사항</a> 
-									<a class="nav-link" href="layout-sidenav-light.html">회의록</a>
-									<a class="nav-link" href="layout-sidenav-light.html">교육</a>
-									<a class="nav-link" href="layout-sidenav-light.html">가이드</a>
-									<a class="nav-link" href="layout-sidenav-light.html">TO-DO</a>
+									<a class="nav-link" href="${ pageContext.servletContext.contextPath }/notice/list">공지사항</a> 
+									<a class="nav-link" href="${ pageContext.servletContext.contextPath }/meeting/list">회의록</a>       
+									<a class="nav-link" href="${ pageContext.servletContext.contextPath }/edu/list">교육</a>
+									<a class="nav-link" href="${ pageContext.servletContext.contextPath }/guide/list">가이드</a>
+									<a class="nav-link" href="${ pageContext.servletContext.contextPath }/todo/list">TO-DO</a>
 								</nav>
 							</div>
 						</div>
