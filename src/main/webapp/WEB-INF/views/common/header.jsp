@@ -81,11 +81,7 @@
                                    		 </c:forEach>
                                 	</div>                               
                                 </nav>
-                            </div>
-                           
-                            
-                                
-                           
+                            </div>                          
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -94,5 +90,6 @@
                     </div>
                 </nav>
             </div>
+            <div id="layoutSidenav_content">
     </body>
 </html>
