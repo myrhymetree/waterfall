@@ -39,6 +39,7 @@ public class EduController {
 		System.out.println("확인용");
 		System.out.println("확인용");
 		System.out.println("확인용");
+		System.out.println("확인용2");
 		this.eduService = eduService;
 	}
 	
