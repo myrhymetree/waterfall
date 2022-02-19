@@ -6,6 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <pre>
+ * Class : MeetingProjectDTO
+ * Comment : 클래스 설명 작성부분
+ * 
+ * History
+ * 2022. 2. 19.  (홍성원)
+ * @version 1
+ * @author 홍성원
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -13,5 +23,5 @@ import lombok.ToString;
 @ToString
 public class MeetingProjectDTO {
 
-	private int no;
+	private int no;				
 }
