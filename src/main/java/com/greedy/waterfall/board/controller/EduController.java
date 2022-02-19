@@ -141,6 +141,8 @@ public class EduController {
 			System.out.println("확인용" + request.getParameter("no"));
 			System.out.println("확인용" + request.getParameter("no"));
 			System.out.println("확인용" + request.getParameter("no"));
+			System.out.println("확인용" + request.getParameter("no"));
+			System.out.println("확인용" + request.getParameter("no"));
 		int no = Integer.parseInt(request.getParameter("no"));
 		
 		eduService.removeEduBoard(no);
