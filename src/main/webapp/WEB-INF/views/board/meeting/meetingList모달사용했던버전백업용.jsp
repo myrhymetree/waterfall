@@ -148,11 +148,44 @@ td {
                             		<td><c:out value="${ meeting.updatedDate }" /></td>
                             		<td><c:out value="${ meeting.member.memberName }" /></td>
                             	</tr>
+                            	<!-- 게시글 조회 모달 -->
+						        <div class="modal fade" id="readModal${ meeting.no }" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						            <div class="modal-dialog">
+						                <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+						                <div class="modal-content" style="top: 172px">
+						                    <form>
+						                        <div class="my-modal-header mb-1">
+						                            <label class="me-2" for="title-write">제목</label>
+						                            <input type="text" id="title-write" value="${ meeting.title}" style="width: 40%" readonly>
+						                        </div>
+						                        <div class="my-modal-header mb-2">
+						                            <label class="me-2">작성자</label>
+						                            <label class="me-2"><c:out value="${ meeting.member.memberName }" /></label>
+						                        </div>
+						                        <div class="my-modal-body mt-1">
+						                            <div class="my-textarea-div mb-2">
+						                                <textarea readonly name="my-textarea" id="my-textarea" cols="40" rows="10"><c:out value="${ meeting.content }" /></textarea>
+						                            </div>
+						                        </div>
+						                        <div class="my-modal-footer-read">
+						                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+						                        </div>
+						                    </form>
+						                </div>
+						            </div>
 						        </div>
                             </c:forEach>
                             </tbody>
                         </table>
 						<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>	
+                        
+                        
+                        
+                       
+                       
+                        
+                        
+                        
                         <div class="search-area">
                             <div class="search-set mt-2">
 	                            <form action="${ pageContext.servletContext.contextPath }/meeting/list" >
@@ -167,10 +200,12 @@ td {
                         </div>
                     </div>
                 </div>
+	
+	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>	
 	
 	
-	<script>
+	<!-- <script>
 		if(document.querySelectorAll("#meetingTable")){
 			const $tds = document.querySelectorAll("#meetingTable td");
 			for(let i = 0; i < $tds.length; i++) {
@@ -185,6 +220,47 @@ td {
 				
 			}
 		}
+			
+	</script> -->
+	<script>
+// 	$("button[name='modify']").click(function(){
+// 		action='modify';
+// 		type = 'PUT';
+// 		bno = this.value;
+
+// 		// content 담기
+// 		var row = $(this).parent().parent().parent();
+// 		var tr = row.children();
+		
+// 		var userName = tr.eq(2).text();
+// 		var contents = tr.eq(1).text();
+
+// 		$("#modal-title").text("수정하기");
+
+// 		$("#userName").val(userName);
+// 		$("#contents").val(contents);
+		
+// 		$("#myModal").modal();
+// 	});
+	
+// 	if(document.querySelectorAll("#meetingTable")){
+// 		const $tds = document.querySelectorAll("#meetingTable td");
+// 		for(let i = 0; i < $tds.length; i++) {
+			
+// 			$tds[i].onclick = function() {
+// 				const data = this.parentNode.children[1].innerText;
+// 				$('#readModal').modal('show'); 
+// 				console.log(data);
+// 				document.getElementById("title-write").innerHtml = data;
+// 				document.getElementById("test").innerHtml = 123;				
+
+// 			}
+// 			$tds[i].onmouseenter = function() {
+// 				this.parentNode.style.cursor = "pointer";
+// 			}
+			
+// 		}
+// 	}
 	</script>
 </body>
 </html>
