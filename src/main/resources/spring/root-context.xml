@@ -57,6 +57,10 @@
 	
 	<!-- 매퍼 파일 base-package 설정 (미리 다 등록하지 말고 관련 패키지를 만들고 매퍼를 추가할 때마다 하나씩 추가할 것!)-->
   	<mybatis-spring:scan 
+<<<<<<< .merge_file_a12244
 		base-package="com.greedy.waterfall.test.model.dao,
 					  com.greedy.waterfall.board.model.mapper"/>	
+=======
+		base-package="com.greedy.waterfall.test.model.dao"/>
+>>>>>>> .merge_file_a10812
 </beans>
