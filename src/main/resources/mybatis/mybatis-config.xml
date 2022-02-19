@@ -6,5 +6,4 @@
 	<typeAliases>
  		<typeAlias alias="TestDTO" type="com.greedy.waterfall.test.model.dto.TestDTO"/>
  	</typeAliases>
- 	
  </configuration>

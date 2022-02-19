@@ -2,6 +2,7 @@ package com.greedy.waterfall.member.model.dto;
 
 import java.sql.Date;
 
+
 public class MemberDTO {
 
 	private int no; 					//회원번호
