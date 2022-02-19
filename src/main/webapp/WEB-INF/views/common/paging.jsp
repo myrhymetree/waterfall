@@ -11,7 +11,13 @@
 	<div class="pagingArea" align="center">
 	
 		<!-- 맨 앞으로 이동 버튼 -->
-	    <button id="startPage"><<</button>
+		<c:if test="${ requestScope.selectCriteria.pageNo > 1}">
+	    	<button id="startPage"><<</button>
+		</c:if>
+		
+		<c:if test="${ requestScope.selectCriteria.pageNo <= 1 }">
+			<button disabled><<</button>
+		</c:if>
 		
 		<!-- 이전 페이지 버튼 -->
 		<c:if test="${ requestScope.selectCriteria.pageNo <= 1 }">
@@ -44,7 +50,7 @@
 	</div>
 	
 	<script>
-		const link = "${ pageContext.servletContext.contextPath }/board/list";
+	    const link = "${ pageContext.servletContext.contextPath }${ requestScope.intent }";
 		let searchText = "";
 		
 		/* 검색 조건 유무에 따른 경로 처리 */
