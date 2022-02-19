@@ -72,6 +72,7 @@
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                                 	<div class="menu-font2">
+                                	<a href=" ${ pageContext.servletContext.contextPath }/project/list"> 프로젝트</a>
                                 		<c:forEach var="project" items="${ requestScope.projectList }">
                                     			<a class="nav-link collapsed" z data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
                                       		  <%-- <c:out value="${ project.name }" /> --%>

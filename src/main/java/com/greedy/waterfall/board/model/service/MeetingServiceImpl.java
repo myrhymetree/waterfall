@@ -34,4 +34,28 @@ public class MeetingServiceImpl implements MeetingService {
 		return mapper.findMeetingTotalCount(searchMap);
 	}
 
+	@Override
+	public boolean registMeetingBoard(Map<String, String> parameter) {
+		
+		return mapper.registMeetingBoard(parameter) > 0 ? true: false;
+	}
+
+	@Override
+	public boolean removeMeetingBoard(int meetingNo) {
+
+		return mapper.removeMeetingBoard(meetingNo);
+	}
+
+	@Override
+	public boolean modifyMeetingBoard(Map<String, String> meeting) {
+		
+		return mapper.modifyMeetingBoard(meeting);
+	}
+
+	@Override
+	public MeetingDTO findOneMeetingBoard(int meetingNo) {
+
+		return mapper.findOneMeetingBoard(meetingNo);
+	}
+
 }

@@ -94,6 +94,7 @@ th {
 td {
     height: 50px;
 }
+
 </style>
 
 
@@ -140,17 +141,42 @@ td {
                             </thead>
                             <tbody>
                             <c:forEach var="meeting" items="${ meetingList }">
-                            	<tr class="mt-2" data-bs-toggle="modal" data-bs-target="#readModal">  <!-- class="mt-2" data-bs-toggle="modal" data-bs-target="#readModal" -->
+                            	<tr class="mt-2" data-bs-toggle="modal" data-bs-target="#readModal${ meeting.no }">  <!-- class="mt-2" data-bs-toggle="modal" data-bs-target="#readModal" -->
                             		<td><c:out value="${ meeting.no }" /></td>
                             		<td><c:out value="${ meeting.title }" /></td>
                             		<td><c:out value="${ meeting.boardCount }" /></td>
                             		<td><c:out value="${ meeting.updatedDate }" /></td>
                             		<td><c:out value="${ meeting.member.memberName }" /></td>
                             	</tr>
+                            	<!-- 게시글 조회 모달 -->
+						        <div class="modal fade" id="readModal${ meeting.no }" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						            <div class="modal-dialog">
+						                <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+						                <div class="modal-content" style="top: 172px">
+						                    <form>
+						                        <div class="my-modal-header mb-1">
+						                            <label class="me-2" for="title-write">제목</label>
+						                            <input type="text" id="title-write" value="${ meeting.title}" style="width: 40%" readonly>
+						                        </div>
+						                        <div class="my-modal-header mb-2">
+						                            <label class="me-2">작성자</label>
+						                            <label class="me-2"><c:out value="${ meeting.member.memberName }" /></label>
+						                        </div>
+						                        <div class="my-modal-body mt-1">
+						                            <div class="my-textarea-div mb-2">
+						                                <textarea readonly name="my-textarea" id="my-textarea" cols="40" rows="10"><c:out value="${ meeting.content }" /></textarea>
+						                            </div>
+						                        </div>
+						                        <div class="my-modal-footer-read">
+						                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+						                        </div>
+						                    </form>
+						                </div>
+						            </div>
+						        </div>
                             </c:forEach>
                             </tbody>
                         </table>
-                        <p id="test">dddd</p>
 						<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>	
                         
                         

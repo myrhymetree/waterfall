@@ -28,7 +28,34 @@
 		<id property="no" column="MEMBER_NO"/>
 	</resultMap>
 
-
+	<!--#보류 projectNo, memberNo 기능 추가될시 수정 -->
+	<insert id="registMeetingBoard" parameterType="hashmap">
+        INSERT
+          INTO TBL_BOARD A
+        (
+          A.BOARD_NO
+        , A.BOARD_POSTING_DATE
+        , A.BOARD_TITLE
+        , A.BOARD_CONTENT
+        , A.BOARD_STATUS
+        , A.PROJECT_NO
+        , A.BOARD_CATEGORY_NO
+        , A.MEMBER_NO
+        , A.BOARD_COUNT
+        )
+        VALUES
+        (
+          BOARD_NO.NEXTVAL
+        , SYSDATE
+        , #{ title }
+        , #{ content }
+        , 'Y'
+        , 3
+        , 4
+        , 1
+        , 0
+        )
+	</insert>
 
 	<select id="findMeetingList" resultMap="meetingResult">
        SELECT 
@@ -127,7 +154,34 @@
            AND A.BOARD_CATEGORY_NO = 4
 		</where>
 	</select>	
-	
+	<delete id="removeMeetingBoard" parameterType="_int">
+        DELETE
+          FROM TBL_BOARD A
+         WHERE A.BOARD_CATEGORY_NO = 4
+           AND A.BOARD_NO = #{ meetingNo }	
+	</delete>
+	<update id="modifyMeetingBoard" parameterType="hashmap">
+        UPDATE
+               TBL_BOARD A
+           SET BOARD_UPDATED_DATE = SYSDATE
+             , A.BOARD_TITLE = #{ title }
+             , A.BOARD_CONTENT = #{ content }
+         WHERE A.BOARD_NO = #{ no } 
+	</update>
+	<select id="findOneMeetingBoard" resultMap="meetingResult">
+        SELECT
+               A.BOARD_NO
+             , A.BOARD_UPDATED_DATE
+             , A.BOARD_POSTING_DATE
+             , A.BOARD_TITLE
+             , A.BOARD_CONTENT
+             , A.BOARD_STATUS
+             , A.BOARD_CATEGORY_NO
+             , A.PROJECT_NO
+             , A.MEMBER_NO
+          FROM TBL_BOARD A
+         WHERE A.BOARD_NO = #{ meetingNo }
+	</select>	
 </mapper>
 
 

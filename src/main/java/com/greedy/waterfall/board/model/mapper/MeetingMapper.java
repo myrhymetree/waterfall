@@ -17,4 +17,12 @@ public interface MeetingMapper {
 
 	int findMeetingTotalCount(Map<String, String> searchMap);
 
+	int registMeetingBoard(Map<String, String> parameter);
+
+	boolean removeMeetingBoard(int meetingNo);
+	
+	boolean modifyMeetingBoard(Map<String, String> meeting);
+
+	MeetingDTO findOneMeetingBoard(int meetingNo);
+
 }
