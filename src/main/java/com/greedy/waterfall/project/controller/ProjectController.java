@@ -11,14 +11,14 @@ import com.greedy.waterfall.project.model.service.ProjectService;
 @RequestMapping("/project/*")
 @Controller
 public class ProjectController {
-
-	private final ProjectService projectService;
-	
-	@Autowired
-	public ProjectController(ProjectService projectService) {
-		this.projectService = projectService;
-	}
-	
+//
+//	private final ProjectService projectService;
+//	
+//	@Autowired
+//	public ProjectController(ProjectService projectService) {
+//		this.projectService = projectService;
+//	}
+//	
 	
 	@GetMapping("/list")
 	public ModelAndView findProjectList(ModelAndView mv) {
