@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 /* 게시판 */
 #layoutSidenav_content .todo h2 {
@@ -100,7 +101,7 @@ table, th, td {
 /* 모달 */
 .modal-content {
   width: 635px;
-  height: 600px;
+  height: 630px;
   padding: 30px;
 }
 #title-write {
@@ -156,9 +157,6 @@ input::-webkit-search-results-decoration{
 
 </style>
 <script>
-
-	
-	
 	/* 비즈니스 로직 성공 alert 메시지 처리 */
 	const message = '${ requestScope.message }';
 	if(message != null && message !== '') {
@@ -167,7 +165,7 @@ input::-webkit-search-results-decoration{
 </script>
 </head>
 <body class="sb-nav-fixed">
-	<jsp:include page="../../common/header.jsp"/>
+	<jsp:include page="../../common/inprojectheader.jsp"/>
 		
 	   <!-- 게시글 등록 모달 -->
        <!-- Modal HTML  "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
@@ -175,7 +173,7 @@ input::-webkit-search-results-decoration{
             <div class="modal-dialog">
                 <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
                 <div class="modal-content" style="top: 172px">
-                    <form action="${ pageContext.servletContext.contextPath }/guide/regist" method="POST">
+                    <form action="${ pageContext.servletContext.contextPath }/guide/regist" method="POST" encType="multipart/form-data"> 
                         <div class="my-modal-header mb-4">
                             <label class="me-2" for="title-write">제목</label>
                             <input type="text" id="title-write" name="title">
@@ -183,8 +181,10 @@ input::-webkit-search-results-decoration{
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
                                 <textarea name="content" id="my-textarea" cols="30" rows="10"></textarea>
+                                <input type="file"  name="singleFile">
                             </div>
-                            <div class="my-modal-footer">
+                            <br>
+                            <div class="my-modal-footer-read">
                                 <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                             </div>
@@ -241,7 +241,7 @@ input::-webkit-search-results-decoration{
                             <tbody>
                                 <c:forEach var="guide" items="${ requestScope.guideList }" varStatus="status">
                                 <tr  id="listArea" class="guideSelect">
-                                    <td> <c:out value="${ guide.no }" />
+                                    <td> <c:out value="${ guide.no }" />	
                                     	<%-- <c:out value="${ status.index }"/> --%>
                                     </td>
                                     <td><c:out value="${ guide.title }" /></td>
@@ -267,7 +267,20 @@ input::-webkit-search-results-decoration{
 						                            <div class="my-textarea-div mb-3">
 						                                <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
 						                            </div>
+						                            
+						                            	<span><label>첨부파일</label></span>
+				                                        <div class="btn-group">
+				                                            <button type="button" class="btn btn-outline-dark">첨부파일.word</button>
+				                                            <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+				                                              <span class="caret"></span>
+				                                            </button>
+				                                            <div class="dropdown-menu">
+				                                              <a class="dropdown-item" href="#">다운로드</a>
+				                                              <a class="dropdown-item" href="#">삭제</a>
+				                                            </div>
+				                                         </div>
 						                        </div>
+						                        <br>
 						                        <div class="my-modal-footer-read">
 						                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
 						                            <input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
@@ -279,7 +292,7 @@ input::-webkit-search-results-decoration{
 						        </div>
 						        <!-- //게시글 조회 모달  -->
                         <div class="paging mt-3">
-                            <jsp:include page="paging.jsp"/>
+                            <jsp:include page="../../common/paging.jsp"/>
                         </div>
                         <div class="search-area">
                         	<form id="loginForm" action="${ pageContext.servletContext.contextPath }/guide/list" method="get">
@@ -374,9 +387,8 @@ $(function(){
 		});
 });
 
-
-if (document.querySelectorAll("#listArea td")) {
-   const $tds = document.querySelectorAll("#listArea td");	//이벤트 클릭 했을 때의 this 
+$(function() {
+   const $tds = document.querySelectorAll("#listArea td");	/* 이벤트 클릭 했을 때의 this  */
    console.log($tds);
    for (let i = 0; i < $tds.length; i++) {
       $tds[i].onclick = function() {
@@ -403,17 +415,15 @@ if (document.querySelectorAll("#listArea td")) {
                   $("#read-content").val(guideArray[3][1]);
                   $("#readModal").modal("show");
                   ex.children[2].innerText=guideArray[9][1];		//ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
-                  
                }
-               }, error:function(data){
+           	}, error:function(data) {
                   console.log(data);
                }
-            });
-          
-      }
-   }
-}
- 
+          });
+   		}
+	}
+});
+
 </script>
 	<jsp:include page="../../common/footer.jsp"/>
 </body>
