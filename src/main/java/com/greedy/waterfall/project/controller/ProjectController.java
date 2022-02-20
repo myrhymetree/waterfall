@@ -1,11 +1,15 @@
 package com.greedy.waterfall.project.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.greedy.waterfall.project.model.dto.MyProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectDTO;
 import com.greedy.waterfall.project.model.service.ProjectService;
 
 /**
@@ -49,14 +53,34 @@ public class ProjectController {
 	 * 
 	 * @author 홍성원
 	 */
-	@RequestMapping("/list")
+	@GetMapping("/list")
 	public ModelAndView findProjectList(ModelAndView mv) {
-		System.out.println("project/list servlet");
-		
+		/* 유저 회원번호 받는 부분 */
+		int no = 777;
+
+		/* 회원번호로 조회 */
+		MyProjectDTO project = projectService.findMyProject(no);
+
+		List<ProjectDTO> manageProject = project.getManageProject();
+		List<ProjectDTO> joinProject = project.getJoinProject();
+				
+		for(ProjectDTO p : manageProject) {
+			System.out.println(p);
+			System.out.println(p);
+		}
+		for(ProjectDTO p : joinProject) {
+			System.out.println(p);
+			System.out.println(p);
+		}
+				
+		mv.addObject("projectList", project);
 		mv.setViewName("/project/projectList");
+
 		return mv;
 	}
 	
+//	@GetMapping("/manage")
+//	public ModelAnd
 	
 	
 	

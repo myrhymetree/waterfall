@@ -1,6 +1,10 @@
 package com.greedy.waterfall.project.model.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
+
+import com.greedy.waterfall.project.model.dto.ProjectDTO;
 
 /**
  * <pre>
@@ -15,5 +19,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProjectMapper {
+
+	List<ProjectDTO> findManagaProject(int no);
+
+	List<ProjectDTO> findJoinProject(int no);
 
 }

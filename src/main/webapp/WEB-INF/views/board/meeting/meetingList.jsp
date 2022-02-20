@@ -149,7 +149,6 @@ td {
                             		<td><c:out value="${ meeting.updatedDate }" /></td>
                             		<td><c:out value="${ meeting.member.memberName }" /></td>
                             	</tr>
-						        </div>
                             </c:forEach>
                             </tbody>
                         </table>
@@ -183,6 +182,7 @@ td {
 				$tds[i].onclick = function() {
 					const no = this.parentNode.children[0].innerText;
 					const count = this.parentNode.children[2];
+					console.log(null);
 					console.log(no);
 					$.ajax({
 						type: 'get',

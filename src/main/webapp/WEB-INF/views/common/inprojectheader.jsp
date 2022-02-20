@@ -70,13 +70,6 @@
                                     		<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/project/list">
 														프로젝트 목록								
                                     		</a>
-									<c:forEach var="project" items="${ requestScope.projectList }">
-                                    		<a class="nav-link collapsed" z data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                      	  <%-- <c:out value="${ project.name }" /> --%>
-<!--                                         		<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div> -->
-                                       	  <%-- <input type="hidden" value="${ project.no }"/> --%>
-                                    		</a>
-                        			 </c:forEach>
 								</div>
 							</nav>
 						</div>

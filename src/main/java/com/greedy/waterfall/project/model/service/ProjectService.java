@@ -1,5 +1,7 @@
 package com.greedy.waterfall.project.model.service;
 
+import com.greedy.waterfall.project.model.dto.MyProjectDTO;
+
 /**
  * <pre>
  * Class : ProjectService
@@ -12,5 +14,7 @@ package com.greedy.waterfall.project.model.service;
  * @author 홍성원
  */
 public interface ProjectService {
+
+	MyProjectDTO findMyProject(int no);
 
 }
