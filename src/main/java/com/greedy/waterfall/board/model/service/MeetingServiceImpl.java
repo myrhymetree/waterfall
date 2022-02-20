@@ -51,6 +51,7 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public MeetingDTO findMeetingBoardDetail(int meetingNo) {
 		
+		mapper.increseCount(meetingNo);
 		/* 게시물 번호를 전달해 반환받은  게시물의 상세정보를 반환한다.*/
 		return mapper.findMeetingBoardDetail(meetingNo);
 	}

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,6 +27,7 @@
 .my-modal-footer-read {
   text-align: center;
 }
+ 
 .my-modal-footer-read button {
   color: #000;
   background: none;
@@ -35,26 +35,47 @@
 }
 
 .modal-content {
-  width: 635px;
+  width: 510px;
   height: 600px;
   padding: 30px;
 }
 
 #title-write {
-  width: 420px;
+  width: 390px;
 }
 .my-modal-body {
   margin-left: 0px;
 }
 .my-textarea-div {
   width: 440px;
-  height: 430px;
+  height: 330px;
 }
 #my-textarea {
   display: block;
   width: 100%;
   height: 100%;
 }
+.my-modal-upload {
+	align: left;
+}
+
+
+.my-read-textarea-div {
+  width: 440px;
+  height: 245px;
+}
+
+#read-title {
+	width: 390px;
+}
+#read-content {
+	width: 436px;
+}
+
+
+
+
+
 
 
 </style>
@@ -65,25 +86,27 @@
 
 </head>
 <body>
-	<!-- 게시글 조회 모달 -->
 	<div class="modal fade" id="writeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	    <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
 	    	<div class="modal-content" style="top: 172px">
-	        	<form action="${ pageContext.servletContext.contextPath }/meeting/regist" method="post">
+	        	<form action="${ pageContext.servletContext.contextPath }/meeting/regist" method="post" encType="multipart/form-data">
 	            	<div class="my-modal-header mb-4">
-	                	<label class="me-2" for="title-write">제목</label>
-	                    	<input type="text" id="title-write" name="title">
+	                	<label class="me-4" for="title-write">제목</label>
+	                    <input type="text" id="title-write" name="title">
 					</div>
                 	<div class="my-modal-body">
 	                	<div class="my-textarea-div mb-3">
 	                    	<textarea id="my-textarea" cols="30" rows="10" name="content"></textarea>
 	           			</div>
 	            	</div>
-					<div class="my-modal-footer-read">
+	            	<div class="my-modal-upload mb-4">
+	            		<input id="meeting-fileupload"  type="file" name="meetingfile" disabled="disabled">
+	            	</div>
+					<div class="mt-4 my-modal-footer-read" style="text-align: left">
 	                	<input type="hidden" name="no" value="${ meeting.member.memberName }">
 <!-- 	                	<button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button> -->
-	                	<button type="submit">등록</button>
+	                	<button type="submit" class="btn btn-secondary" >등록</button>
                       	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
                   	</div>
 				</form>
@@ -106,7 +129,35 @@
 	        </div>
 	    </div>
 	</div>
-	<!-- //subModal -->
+	
+	<div class="modal fade" id="readModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    	<div class="modal-dialog">
+			<div class="modal-content" style="top: 172px">
+				<form action="${ pageContext.servletContext.contextPath }/meeting/modify" method="post">
+                	<div class="my-modal-header mb-4">
+                    	<label class="me-2" for="title-write">제목</label>
+	                    <input type="text" id="read-title" name="title">
+	                    <input type ="hidden" id="read-no" name="no">
+                	</div>	
+	                <div class="my-modal-body">
+	                    <div class="my-read-textarea-div mb-3">
+	                        <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
+	                    </div>
+	                </div>
+	                <div class="my-modal-footer-read">
+	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+	                    <input type="button" class="btn" id="delete" value="삭제하기">
+	                  		<button type="submit" class="btn btn-secondary">수정하기</button>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
+	</div>
+	<script>
+		$("#delete").click( function() {
+			location.href= "${ pageContext.servletContext.contextPath }/meeting/remove/" + $("#read-no").val();
+		});
+	</script>
 </body>
 </html>
 

@@ -13,7 +13,7 @@ public class ProjectDTO {
 	private java.sql.Date completed;   //종료일
 	private String statusCode; 		   //상태코드
 	
-	private ProjectDTO() {}
+	public ProjectDTO() {}
 
 	public ProjectDTO(int no, String name, Date startDate, Date deadLine, int progression, String status,
 			Date completed, String statusCode) {

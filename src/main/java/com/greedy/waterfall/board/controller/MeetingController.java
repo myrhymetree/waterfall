@@ -1,12 +1,17 @@
 package com.greedy.waterfall.board.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +21,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.service.MeetingService;
 import com.greedy.waterfall.common.paging.Pagenation;
@@ -71,7 +79,6 @@ public class MeetingController {
 		
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
-		System.out.println(searchValue.length());
 		totalCount = meetingService.findMeetingTotalCount(searchMap);	
 
 		/* 현재페이지를 전달받으면 전달받은 값을 대입한다. */
@@ -105,15 +112,23 @@ public class MeetingController {
 	 * @return mv : 조회한 게시물의 정보와 요청 url정보를 담고있는 ModelAndView변수 반환.
 	 * 
 	 * @author 홍성원
+	 * @throws JsonProcessingException 
 	 */
 	@GetMapping("/detail/{meetingNo}")
-	public ModelAndView findMeetingBoardDetail(ModelAndView mv, @PathVariable("meetingNo") int meetingNo) {
+	public ModelAndView findMeetingBoardDetail(ModelAndView mv, @PathVariable("meetingNo") int meetingNo
+			, HttpServletResponse response) throws JsonProcessingException {
 		/* 전달받은 게시물번호로 조회된 게시물 정보를 저장한다. */
+		
+		
 		MeetingDTO meeting = meetingService.findMeetingBoardDetail(meetingNo);
 		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
 		/* 조회된 게시물의 정보와 요청 url을 저장한 후 반환한다. */
-		mv.addObject("meeting", meeting);
-		mv.setViewName("/board/meeting/meetingDetail");
+		mv.addObject("meeting", mapper.writeValueAsString(meeting));
+		mv.setViewName("jsonView");
 		
 		return mv;
 	}
@@ -152,10 +167,44 @@ public class MeetingController {
 	 * @author 홍성원
 	 */
 	@PostMapping("/regist")
-	public ModelAndView registMeetingBoard(ModelAndView mv, @RequestParam Map<String, String> parameter, RedirectAttributes rttr) throws UnsupportedEncodingException {
+	public ModelAndView registMeetingBoard(ModelAndView mv, 
+			@RequestParam("meetingfile") MultipartFile file, 
+			@RequestParam("title") String title,
+			@RequestParam("content") String content,
+			HttpServletRequest request) throws UnsupportedEncodingException {
 		/* 매개변수로 받은 게시물번호로 해당 게시물을 등록 한 후 결과에 따라 메세지를 저장한다. */
 		String message = "";
+		Map<String, String> parameter = new HashMap<>();
 		
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		String filePath = root + "\\uploadFiles\\meetingBoard";
+		
+		File mkdir = new File(filePath);
+		if(!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+		
+		String originFileName = file.getOriginalFilename();
+		String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		String savename = UUID.randomUUID().toString().replace("-", "") + ext;
+		
+		try {
+			file.transferTo(new File(filePath + "\\" + savename));
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			new File(filePath + "\\" + savename).delete();
+			mv.addObject("message", "파일 업로드 실패");
+		}
+		
+
+		parameter.put("title", title);
+		parameter.put("content", content);
+		parameter.put("originFileName", originFileName);
+		parameter.put("savename", savename);
+		parameter.put("filePath", filePath);
 		if(meetingService.registMeetingBoard(parameter)) {
 			message = "게시글을 등록했습니다.";
 		} else {
@@ -163,7 +212,6 @@ public class MeetingController {
 		}
 		
 		/* 요청 주소를 저장 후 반환한다. */
-		rttr.addFlashAttribute("message",  message);
 		mv.setViewName("redirect:/meeting/list");
 		
 		return mv;
@@ -197,7 +245,7 @@ public class MeetingController {
 	 * 
 	 * @author 홍성원
 	 */
-	@PostMapping("/modify/{meetingNo}")
+	@PostMapping("/modify")
 	public ModelAndView modifyMeetingBoard(ModelAndView mv, @RequestParam Map<String, String> meeting) {
 		/* 매개변수로 받은 게시물 번호와 , 수정내용으로 게시물 수정 한 결과에 따라 해당 메세지를 저장한다. */
 		String message = "";
@@ -209,7 +257,7 @@ public class MeetingController {
 		
 		/* 요청 주소값과 수정한 수정한 게시물을 저장 후 반환한다. */
 		mv.addObject("meeting", meeting);
-		mv.setViewName("redirect:/meeting/detail/" + meeting.get("no"));
+		mv.setViewName("redirect:/meeting/list");
 		
 		return mv;
 	}

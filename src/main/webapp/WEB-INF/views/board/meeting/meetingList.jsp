@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <style>
 
@@ -141,7 +142,7 @@ td {
                             </thead>
                             <tbody>
                             <c:forEach var="meeting" items="${ meetingList }">
-                            	<tr class="mt-2" data-bs-toggle="modal" data-bs-target="#readModal${ meeting.no }">  <!-- class="mt-2" data-bs-toggle="modal" data-bs-target="#readModal" -->
+                            	<tr class="mt-2" data-bs-toggle="modal" data-bs-target="#readModal">
                             		<td><c:out value="${ meeting.no }" /></td>
                             		<td><c:out value="${ meeting.title }" /></td>
                             		<td><c:out value="${ meeting.boardCount }" /></td>
@@ -175,20 +176,39 @@ td {
 			const $tds = document.querySelectorAll("#meetingTable td");
 			for(let i = 0; i < $tds.length; i++) {
 				
-				$tds[i].onclick = function() {
-					const no = this.parentNode.children[0].innerText;
-					location.href = "${ pageContext.servletContext.contextPath }/meeting/detail/" + no;
-				}
 				$tds[i].onmouseenter = function() {
 					this.parentNode.style.cursor = "pointer";
 				}
 				
+				$tds[i].onclick = function() {
+					const no = this.parentNode.children[0].innerText;
+					const count = this.parentNode.children[2];
+					console.log(no);
+					$.ajax({
+						type: 'get',
+						url: "${pageContext.servletContext.contextPath}/meeting/detail/"+ no,
+						success: function(data, status, xhr) {
+							meeting = JSON.parse(data.meeting);
+							
+							$("#read-no").val(meeting.no);
+							$("#read-title").val(meeting.title);
+							$("#read-content").val(meeting.content);
+							$("readModal").modal("show");
+							count.innerText = meeting.boardCount;
+						},
+						error: function(xhr, status, error) {
+							console.log(xhr);
+							
+							
+						}
+					});
+				}
 			}
 		}
 	</script>
 </body>
 </html>
-
+ 
 
 
 

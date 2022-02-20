@@ -25,4 +25,6 @@ public interface MeetingMapper {
 
 	MeetingDTO findOneMeetingBoard(int meetingNo);
 
+	void increseCount(int meetingNo);
+
 }
