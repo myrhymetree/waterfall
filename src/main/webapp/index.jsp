@@ -11,6 +11,7 @@
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
 <%-- 	<jsp:include page="/WEB-INF/views/common/header.jsp"/> --%>
+	<button style="font-size:100px;padding-top: 50px;" onclick="location.href='${ pageContext.servletContext.contextPath}/member/login'"></button>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>
