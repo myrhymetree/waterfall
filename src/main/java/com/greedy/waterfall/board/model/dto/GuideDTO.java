@@ -1,6 +1,5 @@
 package com.greedy.waterfall.board.model.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,5 +36,4 @@ public class GuideDTO {
 	private int count;						//조회 수
 	private GuideMemberDTO writer;			//TBL_MEMBER 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 MemberDTO 타입으로 생성
 	private int rnum;						//게시판을 순차적으로 표시할 식별자
-	private GuideFileDTO file;		//File 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 uideAttachmentDTO으로 생성
 }
