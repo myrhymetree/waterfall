@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,19 +72,7 @@
 #read-content {
 	width: 436px;
 }
-
-
-
-
-
-
-
 </style>
-
-
-
-
-
 </head>
 <body>
 	<div class="modal fade" id="writeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -101,13 +90,14 @@
 	           			</div>
 	            	</div>
 	            	<div class="my-modal-upload mb-4">
-	            		<input id="meeting-fileupload"  type="file" name="meetingfile" disabled="disabled">
+	            		<input id="meeting-fileupload"  type="file" name="meetingfile"  multiple>
 	            	</div>
 					<div class="mt-4 my-modal-footer-read" style="text-align: left">
 	                	<input type="hidden" name="no" value="${ meeting.member.memberName }">
 <!-- 	                	<button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button> -->
 	                	<button type="submit" class="btn btn-secondary" >등록</button>
-                      	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+                      	<input type="button" id="meetingRegistBackToList" class="btn btn-secondary" data-bs-dismiss="modal" value="돌아가기">
+                      	
                   	</div>
 				</form>
 			</div>
@@ -133,6 +123,28 @@
 	<div class="modal fade" id="readModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     	<div class="modal-dialog">
 			<div class="modal-content" style="top: 172px">
+                	<div class="my-modal-header mb-4">
+                    	<label class="me-2" for="title-write">제목</label>
+	                    <input type="text" id="read-title" name="title">
+	                    <input type ="hidden" id="read-no" name="no">
+                	</div>	
+	                <div class="my-modal-body">
+	                    <div class="my-read-textarea-div mb-3">
+	                        <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
+	                    </div>
+	                </div>
+	               	<div class="my-modal-upload mb-4" id="upload-file-area">
+	            	</div>
+	                <div class="my-modal-footer-read">
+	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+	                    <input type="button" class="btn" id="delete" value="삭제하기">
+	                </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="modal fade" id="modifyModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    	<div class="modal-dialog">
+			<div class="modal-content" style="top: 172px">
 				<form action="${ pageContext.servletContext.contextPath }/meeting/modify" method="post">
                 	<div class="my-modal-header mb-4">
                     	<label class="me-2" for="title-write">제목</label>
@@ -153,11 +165,18 @@
 	        </div>
 	    </div>
 	</div>
-	<script>
-		$("#delete").click( function() {
-			location.href= "${ pageContext.servletContext.contextPath }/meeting/remove/" + $("#read-no").val();
-		});
-	</script>
+<script>
+
+	$("#meetingRegistBackToList").click( function() {
+		console.log("123123");
+		$("#title-write").val("");
+		$("#my-textarea").val("");
+		$("#meeting-fileupload").val("");
+	});
+	$("#delete").click( function() {
+		location.href= "${ pageContext.servletContext.contextPath }/meeting/remove/" + $("#read-no").val();
+	});
+</script>
 </body>
 </html>
 

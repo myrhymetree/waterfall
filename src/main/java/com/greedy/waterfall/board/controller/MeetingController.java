@@ -3,8 +3,10 @@ package com.greedy.waterfall.board.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.service.MeetingService;
 import com.greedy.waterfall.common.paging.Pagenation;
@@ -60,7 +63,22 @@ public class MeetingController {
 	 * @return mv : 전달받은 현재페이지로 조회한 게시글 전체 목록과, 되돌아갈 주소를 저장한 ModelAndView 변수 반환
 	 * 
 	 * @author 홍성원
+	 * @throws IOException 
 	 */
+	
+	@GetMapping("/download/{fileNo}")
+	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
+		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		FileDTO file = meetingService.findFile(no);
+		fileInfo.put("filePath", file.getFilePath());
+		fileInfo.put("fileOriginName", file.getFileOriginName());
+		fileInfo.put("fileRandomName", file.getFileRandomName());
+		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
+	}
+	
 	@GetMapping("/list")
 	public ModelAndView findMeetingBoardList(ModelAndView mv, HttpServletRequest request) {
 		/* 페이징 처리를 위한 변수 선언 및 초기화 */
@@ -168,7 +186,7 @@ public class MeetingController {
 	 */
 	@PostMapping("/regist")
 	public ModelAndView registMeetingBoard(ModelAndView mv, 
-			@RequestParam("meetingfile") MultipartFile file, 
+			@RequestParam("meetingfile") List<MultipartFile> multiFile, 
 			@RequestParam("title") String title,
 			@RequestParam("content") String content,
 			HttpServletRequest request) throws UnsupportedEncodingException {
@@ -176,39 +194,58 @@ public class MeetingController {
 		String message = "";
 		Map<String, String> parameter = new HashMap<>();
 		
-		
 		String root = request.getSession().getServletContext().getRealPath("resources");
-		
 		String filePath = root + "\\uploadFiles\\meetingBoard";
-		
 		File mkdir = new File(filePath);
 		if(!mkdir.exists()) {
 			mkdir.mkdirs();
 		}
-		
-		String originFileName = file.getOriginalFilename();
-		String ext = originFileName.substring(originFileName.lastIndexOf("."));
-		String savename = UUID.randomUUID().toString().replace("-", "") + ext;
-		
-		try {
-			file.transferTo(new File(filePath + "\\" + savename));
-		} catch (Exception e) {
-			e.printStackTrace();
+		MeetingDTO meeting = new MeetingDTO().builder().title(title).content(content).build();
+		List<FileDTO> fileList = new ArrayList<FileDTO>();
+		System.out.println("meeting : " + meeting);
+		if(multiFile.get(0).getOriginalFilename().length() != 0) {
+			System.out.println(multiFile);
+			System.out.println(multiFile.isEmpty());
+			System.out.println("multiFile.size() : " + multiFile.size());
+			System.out.println("multiFiles.get(0) is not null");
+			for(int i = 0; i < multiFile.size(); i++) {
+				String fileOriginName = multiFile.get(i).getOriginalFilename();
+				String ext = fileOriginName.substring(fileOriginName.lastIndexOf("."));
+				String fileRandomName = UUID.randomUUID().toString().replace("-", "") + ext;
+				FileDTO file = new FileDTO().builder().fileOriginName(fileOriginName).fileRandomName(fileRandomName).filePath(filePath).build();
+				
+				fileList.add(file);
+			}
 			
-			new File(filePath + "\\" + savename).delete();
-			mv.addObject("message", "파일 업로드 실패");
+			
+			try {
+				for(int i = 0; i < multiFile.size(); i++) {
+					FileDTO uploadFile = fileList.get(i);
+					multiFile.get(i).transferTo(new File(filePath + "\\" + uploadFile.getFileRandomName()));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+				for(int i = 0; i < multiFile.size(); i++) {
+					FileDTO uploadFile = fileList.get(i);
+					
+					new File(filePath + "\\" + uploadFile.getFileRandomName()).delete();
+				}
+				
+				System.out.println("업로드 실패");
+				System.out.println("업로드 실패");
+				System.out.println("업로드 실패");
+				System.out.println("업로드 실패");
+			}
+			
+			meeting.setFile(fileList);
 		}
-		
-
-		parameter.put("title", title);
-		parameter.put("content", content);
-		parameter.put("originFileName", originFileName);
-		parameter.put("savename", savename);
-		parameter.put("filePath", filePath);
-		if(meetingService.registMeetingBoard(parameter)) {
+		if(meetingService.registMeetingBoard(meeting)) {
 			message = "게시글을 등록했습니다.";
+			System.out.println(message);
 		} else {
 			message = "게시글등록에 실패했습니다.";
+			System.out.println(message);
 		}
 		
 		/* 요청 주소를 저장 후 반환한다. */

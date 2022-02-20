@@ -104,19 +104,9 @@ td {
 
 </head>
 <body>
-        
-
-        
-
-
-
-
-
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp"/>
 	<jsp:include page="/WEB-INF/views/board/meeting/modal.jsp"/>
-
-   
-   <div class="todo">
+	<div class="todo">
                     <h2><span><i class="far fa-clipboard me-1"></i>회의록 게시판</span></h2>
                     <hr>
                     <div class="tbl-wrapper mx-auto">
@@ -182,23 +172,37 @@ td {
 				$tds[i].onclick = function() {
 					const no = this.parentNode.children[0].innerText;
 					const count = this.parentNode.children[2];
-					console.log(null);
-					console.log(no);
 					$.ajax({
 						type: 'get',
 						url: "${pageContext.servletContext.contextPath}/meeting/detail/"+ no,
 						success: function(data, status, xhr) {
 							meeting = JSON.parse(data.meeting);
-							
+							$("#upload-file-area").empty();
 							$("#read-no").val(meeting.no);
 							$("#read-title").val(meeting.title);
 							$("#read-content").val(meeting.content);
 							$("readModal").modal("show");
 							count.innerText = meeting.boardCount;
+							if(meeting.file != null) {
+								for(let i = 0;i < meeting.file.length; i++) {
+									const $fileName = meeting.file[i].fileOriginName;
+									const $fileNo = meeting.file[i].fileNo;
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
+									$("#upload-file-area").append($fileTag);
+									$("#upload-file-area").append("<br>");
+								}
+							}
 						},
 						error: function(xhr, status, error) {
 							console.log(xhr);
-							
 							
 						}
 					});

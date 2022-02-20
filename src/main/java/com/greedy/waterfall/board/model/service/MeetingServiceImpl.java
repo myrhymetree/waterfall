@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.mapper.MeetingMapper;
 import com.greedy.waterfall.common.paging.SelectCriteria;
@@ -77,10 +78,37 @@ public class MeetingServiceImpl implements MeetingService {
 	 * @author 홍성원
 	 */
 	@Override
-	public boolean registMeetingBoard(Map<String, String> parameter) {
+	public boolean registMeetingBoard(MeetingDTO parameter) {
 		
+		System.out.println(parameter);
 		/* Map형태로 저장된 게시판의 내용을  전달한 후 등록의 성공여부를 boolean형태로 반환한다.*/
-		return mapper.registMeetingBoard(parameter) > 0 ? true: false;
+		boolean result = false;
+		System.out.println("test2");
+		if(mapper.registMeetingBoard(parameter) > 0) {
+			result = true;
+			System.out.println("test3");
+			List<FileDTO> files = parameter.getFile();
+			System.out.println("test4");
+			System.out.println(files);
+			if(files != null) {
+				System.out.println(files);
+			} else {
+				System.out.println("files is null");
+			}
+			if(files != null) {
+				System.out.println("test5");
+				int count = 0;
+				for(int i = 0; i < files.size(); i++) {
+					files.get(i).setRefBoardNo(parameter.getNo());
+					count += mapper.registMeetingFile(files.get(i));
+				}
+				if(count != files.size()) {
+					result = false;
+				} 
+			}
+		}
+		
+		return result;
 	}
 
 	/**
@@ -106,6 +134,13 @@ public class MeetingServiceImpl implements MeetingService {
 	public MeetingDTO findOneMeetingBoard(int meetingNo) {
 
 		return mapper.findOneMeetingBoard(meetingNo);
+	}
+
+	@Override
+	public FileDTO findFile(int no) {
+		
+		
+		return mapper.fineFile(no);
 	}
 
 }

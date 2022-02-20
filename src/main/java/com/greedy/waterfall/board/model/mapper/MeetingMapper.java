@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
@@ -17,7 +18,7 @@ public interface MeetingMapper {
 
 	int findMeetingTotalCount(Map<String, String> searchMap);
 
-	int registMeetingBoard(Map<String, String> parameter);
+	int registMeetingBoard(MeetingDTO parameter);
 
 	boolean removeMeetingBoard(int meetingNo);
 	
@@ -26,5 +27,10 @@ public interface MeetingMapper {
 	MeetingDTO findOneMeetingBoard(int meetingNo);
 
 	void increseCount(int meetingNo);
+
+	int registMeetingFile(FileDTO fileDTO);
+
+	FileDTO fineFile(int no);
+
 
 }
