@@ -52,9 +52,9 @@ public class TodoController {
 	
 	/**
 	 * todoSelectList : 메소드 설명 작성 부분
-	 * @param request : 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
-	 * @param mv : 컨트롤러가 처리한 결과 정보 및 뷰 선택에 필요한 정보를 담은 매개변수를 전달인자로 받음
-	 * @return mv : ModelAndView 타입으로 반환
+	 * @param first  : request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param second : mv 컨트롤러가 처리한 결과 정보 및 뷰 선택에 필요한 정보를 담은 매개변수를 전달인자로 받음
+	 * @return : mv ModelAndView 타입으로 반환
 	 * 
 	 * @author 차화응
 	 */
@@ -125,6 +125,12 @@ public class TodoController {
 	public String registTodo(@ModelAttribute TodoDTO todo, HttpServletRequest request,
 			RedirectAttributes rttr) throws TodoRegistException {
 		
+		String title = request.getParameter("title");
+		String body = request.getParameter("body");
+		
+		todo.setTitle(title);
+		todo.setContent(body);
+		
 		todoService.registTodo(todo);
 		
 //		rttr.addFlashAttribute("message", "To Do 등록에 성공하셨습니다!");
@@ -172,7 +178,7 @@ public class TodoController {
 	/* 게시글 삭제 */
 	@GetMapping("/delete")
 	public String removeTodo(HttpServletRequest request, RedirectAttributes rttr) throws TodoRemoveException {
-		
+
 		int no = Integer.parseInt(request.getParameter("no"));
 		
 		todoService.removeTodo(no);

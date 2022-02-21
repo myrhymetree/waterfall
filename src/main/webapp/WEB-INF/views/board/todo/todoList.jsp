@@ -212,7 +212,7 @@ table, th, td {
 					</div>
 					<div class="my-modal-footer-read">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-						<button id="delete" class="btn btn-secondary">삭제하기</button>
+						<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
                         <button type="submit" class="btn btn-secondary">수정하기</button>
                         <input type="file" id="todoAttachment" name="todoAttachment">
 					</div>
@@ -365,19 +365,16 @@ table, th, td {
 		            }
 		         }
 		   } 
-		   /* 상세 조회 모달 끝 */
-
 		   
 		   
 		   /* 삭제 버튼 클릭 게시글 삭제 */
 		   $("#delete").click(function() {
-		      const no = $("#read-no").val();
-		      location.href="${ pageContext.servletContext.contextPath }/todo/delete?no=" + no;
-		      
+				const no = $("#read-no").val();
+				location.href="${ pageContext.servletContext.contextPath }/todo/delete?no=" + no;
 		   });
 		   
+		   
 		});
-		
 	</script>
 </body>
 </html>
