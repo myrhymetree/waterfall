@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.noticemapper.NoticeMapper;
 import com.greedy.waterfall.board.model.dto.NoticeDTO;
+import com.greedy.waterfall.board.model.noticedto.NoticeAttachmentDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
 /**
@@ -92,6 +93,20 @@ public class NoticeServiceImpl implements NoticeService {
 	public void registNotice(NoticeDTO notice) {
 		
 		int result = mapper.insertNotice(notice);
+		
+		System.out.println("notice insert 확인 : " + result);
+		
+		NoticeAttachmentDTO attachmentDTO = notice.getAttachmentDTO();
+	
+		if(attachmentDTO != null) {
+			attachmentDTO.setNoticeNo(notice.getNo());
+			int attachmentResult = mapper.insertAttachment(attachmentDTO);
+		}
+		
+		
+		
+		
+		
 		
 	
 	}

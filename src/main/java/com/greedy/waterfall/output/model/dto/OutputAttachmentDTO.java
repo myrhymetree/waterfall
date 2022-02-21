@@ -1,4 +1,4 @@
-package com.greedy.waterfall.board.model.noticedto;
+package com.greedy.waterfall.output.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +13,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class NoticeAttachmentDTO {
+public class OutputAttachmentDTO {
 	
 	private int fileNo;
 	private String filePath;
 	private String originName;
 	private String randomName;
 	private String status;
-	private int noticeNo;
-	
+	private int taskNo;
 
 }

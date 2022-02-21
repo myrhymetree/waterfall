@@ -1,14 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
 	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
 	crossorigin="anonymous">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+	crossorigin="anonymous"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+	crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+	crossorigin="anonymous"></script>
+<script src="js/datatables-simple-demo.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link href="${ pageContext.servletContext.contextPath }/css/styles.css" rel="stylesheet" />
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">	
 <style>
 #output_header {
 	position: absolute;
@@ -89,48 +125,26 @@ textarea {
 				<hr>
 
 				<div class="box" id="outputbox1">
-					<div id="box1header">
-						산출물 관리 <br>
+					<div id="box1header"> 산출물 관리 <br>
 						<hr>
 						<div id="box1_body">
-							<label type="button" class="folder_toggle" data-toggle="collapse"
-								data-target="#demo"><i style='font-size: 14px'
-								class='fas'>&#xf07b;</i>어쩌고</label>
-							<div id="demo" class="collapse">
-								<p>
-									저쩌고잉<br> 저꾸쩌<br> 드를어<br>
-								</p>
-							</div>
-							<br> <label type="button" class="folder_toggle"
-								data-toggle="collapse" data-target="#demo2"><i
-								style='font-size: 14px' class='fas'>&#xf07b;</i>저쩌고</label>
-							<div id="demo2" class="collapse">
-								<p>
-									저쩌고잉<br> 저꾸쩌<br> 드를어<br>
-								</p>
-							</div>
-							<br> <label type="button" class="folder_toggle"
-								data-toggle="collapse" data-target="#demo3"><i
-								style='font-size: 14px' class='fas'>&#xf07b;</i>흠냐리스트</label>
-
-							<div id="demo3" class="collapse">
-								<p>
-									저쩌고잉<br> 저꾸쩌<br> 드를어<br>
-								</p>
-							</div>
-							<br> <label type="button" class="folder_toggle"
-								data-toggle="collapse" data-target="#demo4"><i
-								style='font-size: 14px' class='fas'>&#xf07b;</i>드르렁</label>
-
-							<div id="demo4" class="collapse">
-								<p>
-									저쩌고잉<br> 저꾸쩌<br> 드를어<br>
-								</p>
-							</div>
+							<%-- 상위업무 forEach --%>
+							<c:forEach var="parentTask" items="${ requestScope.parentTaskList }" varStatus="status" >
+								<input type="button" class="folder_toggle" data-toggle="collapse" data-target="#demo1" >
+								<i style='font-size: 14px'class='fas'>&#xf07b;</i>
+								<c:out value="${ parentTask.taskCategory.categoryName }"/><br>
+							</c:forEach>
+							
+							<%--하위 업무 forEach --%>
+							<c:forEach var="childList" items="${ requestScope.parentTaskList[ status.index ].childList }" varStatus="status">
+							<div id="demo1" class="collapse" >
+								<div id="childTasks${ status.index }">
+									<input type="button" value="${ childList.taskCategory.categoryName }">		
+								</div>
+							</div>	
+							</c:forEach>
 						</div>
 					</div>
-
-
 				</div>
 
 				<div class="box" id="outputbox2">
