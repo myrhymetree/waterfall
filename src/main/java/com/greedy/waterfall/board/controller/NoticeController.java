@@ -1,9 +1,12 @@
 
 package com.greedy.waterfall.board.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +27,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.NoticeDTO;
+import com.greedy.waterfall.board.model.noticedto.NoticeAttachmentDTO;
 import com.greedy.waterfall.board.model.service.NoticeService;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
@@ -121,12 +125,17 @@ public class NoticeController {
 
 		/* request에서 공지사항 번호를 변수 no에 저장 */
 		int no = Integer.parseInt(request.getParameter("no"));
+		
 		NoticeDTO noticeDetail = noticeService.findNoticeDetail(no);
 
 		System.out.println("상세조회 noticeDetail : " + noticeDetail);
 
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss:SSS").setPrettyPrinting()
-				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY).serializeNulls().disableHtmlEscaping().create();
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls().disableHtmlEscaping()
+				.create();
 
 		return gson.toJson(noticeDetail);
 	}
@@ -140,17 +149,66 @@ public class NoticeController {
 	 * @return : 공지사항 목록조회로 리다이렉트(String 반환)
 	 */
 	@PostMapping("/regist")
-	public String registNotice(@ModelAttribute NoticeDTO notice, HttpServletRequest request, RedirectAttributes rttr) {
+	public String registNotice(@ModelAttribute NoticeDTO notice, HttpServletRequest request, RedirectAttributes rttr
+			,@RequestParam MultipartFile noticeFile) {
+		
 		int memberNo = 1;
 		String content = request.getParameter("content");
 
 		notice.setMemberNo(memberNo);
 		System.out.println("content 확인" + content);
-
-		System.out.println("등록용 noticeDTO 확인 : " + notice);
-		noticeService.registNotice(notice);
-
-		rttr.addFlashAttribute("message", "공지사항 등록에 성공하셨습니다.");
+		
+		/* 파일 저장될 root 설정 */
+		String root = request.getServletContext().getRealPath("resources");
+		System.out.println("file root : " +root);
+		String fileUploadDirectory = root + "/noticeUpload/noticeOriginal";
+		
+		/* filepath 경로인 폴더가 존재하는지 확인  */
+		File directory = new File(fileUploadDirectory);
+		if(!directory.exists()) {
+			directory.mkdirs();
+		}
+		
+		
+		
+		if(noticeFile.getSize() > 0 ) {
+			/* request로 들어온 파일 확인 */
+			System.out.println("singleFile : " + noticeFile);
+			
+			/* savedName 생성 */
+			String originFileName = noticeFile.getOriginalFilename();
+			String ext = originFileName.substring(originFileName.lastIndexOf("."));
+			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+			
+			System.out.println("originFileName : " + originFileName);
+			System.out.println("savedName : " + savedName);
+			
+			/* attachmentDTO에 file 정보 저장해서 noticeDTO에 set */
+			NoticeAttachmentDTO attachmentDTO = new NoticeAttachmentDTO();
+			attachmentDTO.setFilePath(fileUploadDirectory);
+			attachmentDTO.setOriginName(originFileName);
+			attachmentDTO.setRandomName(savedName);
+			notice.setAttachmentDTO(attachmentDTO);
+			
+			/* 파일 저장 */
+			try {
+				noticeFile.transferTo(new File(fileUploadDirectory + "/" + savedName));
+				System.out.println("등록용 noticeDTO 확인 : " + notice);
+				
+				noticeService.registNotice(notice);
+				
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				new File(fileUploadDirectory + "\\" + savedName).delete();
+				
+			}
+			
+			rttr.addFlashAttribute("message", "공지사항 등록에 성공하셨습니다.");
+		} else {
+			noticeService.registNotice(notice);
+		}
+		
+		
 
 		return "redirect:/notice/list";
 	}

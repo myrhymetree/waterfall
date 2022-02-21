@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.greedy.waterfall.board.model.dto.NoticeDTO;
+import com.greedy.waterfall.board.model.noticedto.NoticeAttachmentDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
 public interface NoticeMapper {
@@ -21,5 +22,8 @@ public interface NoticeMapper {
 	void updateNotice(NoticeDTO notice);
 
 	void deleteNotice(int no);
+
+	int insertAttachment(NoticeAttachmentDTO attachmentDTO);
+
 
 }
