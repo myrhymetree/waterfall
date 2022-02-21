@@ -28,6 +28,15 @@
 		<id property="no" column="MEMBER_NO"/>
 	</resultMap>
 
+	<update id="increseCount">
+        UPDATE
+               TBL_BOARD A
+           SET A.BOARD_COUNT = (SELECT B.BOARD_COUNT
+                                  FROM TBL_BOARD B
+                                 WHERE B.BOARD_NO = #{ meetingNo }
+                                 ) + 1
+         WHERE A.BOARD_NO = #{ meetingNo } 
+	</update>
 	<!--#보류 projectNo, memberNo 기능 추가될시 수정 -->
 	<insert id="registMeetingBoard" parameterType="hashmap">
         INSERT

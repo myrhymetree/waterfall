@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.waterfall.project.model.mapper.ProjectMapper">
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectDTO" id="projectResult">
+		<id property="no" column="PROJECT_NO"/>
+		<result property="name" column="PROJECT_NAME"/>	
+		<result property="startDate" column="PROJECT_START_DATE"/>
+		<result property="deadLine" column="PROJECT_DEADLINE"/>
+		<result property="progression" column="PROJECT_PROGRESSION"/>
+		<result property="status" column="PROJECT_STATUS"/>
+		<result property="completed" column="PROJECT_COMPLETED_DATE"/>
+		<result property="statusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		
+		<association property="member" resultMap="memberResult"></association>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
+		<id property="memberNo" column="MEMBER_NO"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<select id="findManagaProject" resultMap="projectResult">
+        SELECT 
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE
+             , A.PROJECT_DEADLINE
+             , A.PROJECT_PROGRESSION
+             , A.PROJECT_STATUS
+             , A.PROJECT_COMPLETED_DATE
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , C.MEMBER_NAME
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
+         WHERE B.MEMBER_NO = #{ no }
+           AND B.ROLE_NO = 8
+	</select>
+ 
+	<select id="findJoinProject" resultMap="projectResult">
+        SELECT 
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE
+             , A.PROJECT_DEADLINE
+             , A.PROJECT_PROGRESSION
+             , A.PROJECT_STATUS
+             , A.PROJECT_COMPLETED_DATE
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , C.MEMBER_NAME
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
+         WHERE A.PROJECT_NO IN (SELECT DISTINCT D.PROJECT_NO
+                                  FROM TBL_ROLE_ASSIGNMENT_HISTORY D
+                                 WHERE D.MEMBER_NO = #{ no }
+                                   AND D.ROLE_NO != 8
+                               )
+           AND B.ROLE_NO = 8            
+         ORDER BY A.PROJECT_NO 
+ 	</select>
+
+
+
+ 
+ 	
+
+
+</mapper>

@@ -61,9 +61,6 @@
 					  com.greedy.waterfall.board.model.mapper,
 					  com.greedy.waterfall.board.model.guidemapper,
 					  com.greedy.waterfall.board.model.noticemapper,
-					  com.greedy.waterfall.member.model.dao"/>
-	
-	 <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
-
+					  com.greedy.waterfall.project.model.mapper"/>
 
 </beans>

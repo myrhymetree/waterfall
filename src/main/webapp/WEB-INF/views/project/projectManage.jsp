@@ -20,10 +20,9 @@
                         <h1 class="mt-4"><i class="fas fa-project-diagram"></i> 프로젝트</h1>
                         <div class="mb-2">
                             <div class="col" style="width: 50%; text-align: left;">
-								<button type="button" onclick="location.href=${ pageContext.servletContext.contextPath }/project/manage'" class="btn btn-dark">프로젝트 관리</button>
+								<button type="button" onclick="location.href='메인 프로젝트화면.html'" class="btn btn-dark">프로젝트 관리</button>
                             </div>
                         </div>
-                        
                         <div class="card mb-4 mt-3">
                             <div class="card-header" style="width: 100%;">
                                 <div class="row">
@@ -58,7 +57,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="project" items="${ projectList.manageProject }">
+                                        <c:forEach var="project" items="${ manageProject }">
                                         	<tr>
 	                                        	<th><c:out value="${ project.name}" /></th>
 	                                            <th><c:out value="${ project.member.memberName}" /></th>
@@ -73,7 +72,7 @@
                                 </table>
                             </div>
                         </div>
-						<div class="card mb-4 mt-3">
+                        <div class="card mb-4 mt-3">
                             <div class="card-header">
                                 <label style="font-size: 1.3em; font-weight: bold">참여중인 프로젝트</label>
                             </div>
@@ -102,7 +101,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="project" items="${ projectList.joinProject }">
+                                        <c:forEach var="project" items="${ joinProject }">
                                         	<tr>
 	                                        	<th><c:out value="${ project.name}" /></th>
 	                                            <th><c:out value="${ project.member.memberName}" /></th>
