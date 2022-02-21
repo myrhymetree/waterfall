@@ -31,8 +31,7 @@
 			 , A.MEMBER_ID
 			 , A.MEMBER_PWD
 			 , A.PHONE
-			 , A.EMAIL
-			 , A.ADDRESS
+			 , A.EMAIL			
 			 , A.MEMBER_CREATED_DATE
 			 , A.MEMBER_RETIRED_DATE
 			 , A.MEMBER_STATUS
