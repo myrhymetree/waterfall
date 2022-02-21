@@ -90,7 +90,7 @@
 							<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 								<nav class="sb-sidenav-menu-nested nav accordion"
 									id="sidenavAccordionPages">
-									<a class="nav-link menu-font2" href="${ pageContext.servletContext.contextPath }/select/output">
+									<a class="nav-link menu-font2" href="${ pageContext.servletContext.contextPath }/output/list?no=3">
 										산출물관리
 									</a>
 									<div class="collapse" id="pagesCollapseAuth"

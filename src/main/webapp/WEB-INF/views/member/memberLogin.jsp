@@ -4,12 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link href="${pageContex.servletcontext.contextPath }/resources/css/login.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 <title>Insert title here</title>
 </head>
 <body>
 
-<<<<<<< HEAD
-=======
 <!-- 로그인 머리 부분 시작 -->
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
@@ -137,6 +137,6 @@
        			return unescape(cookieValue);
        		}
        	</script> -->
->>>>>>> c1d3db3 (FEAT 로그아웃 [추가])
+
 </body>
 </html>
