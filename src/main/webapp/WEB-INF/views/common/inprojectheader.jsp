@@ -41,7 +41,7 @@
                       <li><a class="dropdown-item" href="#!">계정정보 관리</a></li>
                       <li><a class="dropdown-item" href="#!">프로필 관리</a></li>
                       <li><hr class="dropdown-divider" /></li>
-                      <li><a class="dropdown-item" href="#!">로그아웃</a></li>
+                      <li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/member/logout">로그아웃</a></li>
                   </ul>
               </li>
          </ul>
