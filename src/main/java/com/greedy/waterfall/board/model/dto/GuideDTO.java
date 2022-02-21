@@ -15,7 +15,7 @@ import lombok.ToString;
  * History
  * 2022. 2. 21.  (박성준)
  * </pre>
- * @version 1
+ * @version 1.1
  * @author 박성준
  */
 @ToString
