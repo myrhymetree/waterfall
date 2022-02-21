@@ -1,9 +1,5 @@
 package com.greedy.waterfall.member.controller;
 
-<<<<<<< .merge_file_a19012
-public class MemberController {
-
-=======
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -79,5 +75,4 @@ public class MemberController {
 	
 	
 	
->>>>>>> .merge_file_a01980
 }
