@@ -219,5 +219,6 @@
 				</div>
 			</nav>
 		</div>	
-		<div id="layoutSidenav_content">	
+		<div id="layoutSidenav_content">
+			
 </html>

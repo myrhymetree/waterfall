@@ -44,6 +44,38 @@ public class ProjectController {
 		System.out.println("ProjectService created...");
 		this.projectService = projectService;
 	}
+
+	@GetMapping("/regist")
+	public ModelAndView registProject(ModelAndView mv) {
+		mv.setViewName("/project/projectRegist");
+		
+		return mv;
+	}
+	
+	
+	
+	@GetMapping("/manage")
+	public ModelAndView findManageProjectList(ModelAndView mv) {
+		/* 유저 회원번호 받는 부분 */
+		int no = 777;
+
+		/* 회원번호로 조회 */
+		MyProjectDTO project = projectService.findMyProject(no);
+
+		List<ProjectDTO> manageProject = project.getManageProject();
+		for(ProjectDTO p : manageProject) {
+			System.out.println(p);
+			System.out.println(p);
+		}
+				
+		mv.addObject("manageProject", manageProject);
+		mv.setViewName("/project/projectManage");
+		
+		return mv;
+	}
+	
+	
+	
 	
 	
 	/**
@@ -79,8 +111,6 @@ public class ProjectController {
 		return mv;
 	}
 	
-//	@GetMapping("/manage")
-//	public ModelAnd
 	
 	
 	
