@@ -1,1 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.waterfall.member.model.dao.MemberMapper">
+	<resultMap type="com.greedy.waterfall.member.model.dto.MemberDTO" id="memberResultMap">
+		<id property="no" column="MEMBER_NO"/>
+		<result property="id" column="MEMBER_ID"/>
+		<result property="pwd" column="MEMBER_PWD"/>
+		<result property="phone" column="PHONE"/>
+		<result property="email" column="EMAIL"/>
+		<result property="createDate" column="MEMBER_CREATED_DATE"/>
+		<result property="retiredDate" column="MEMBER_RETIRED_DATE"/>
+		<result property="status" column="MEMBER_STATUS"/>
+		<result property="name" column="MEMBER_NAME"/>
+		<result property="initStatus" column="MEMBER_PWD_INIT_STATUS"/>
+		<result property="role" column="MEMBER_AUTHORIZATION_NO"/>
+	</resultMap>
+	
+	<select id="selectEncryptedPwd" resultType="java.lang.String">
+		SELECT
+		       A.MEMBER_PWD
+		  FROM TBL_MEMBER A
+		 WHERE A.MEMBER_STATUS = 'Y'
+		   AND A.MEMBER_ID = #{ id }       
+	</select>
+	
+	<select id="selectMember" resultMap="memberResultMap">
+		SELECT
+			   A.MEMBER_NO
+			 , A.MEMBER_ID
+			 , A.MEMBER_PWD
+			 , A.PHONE
+			 , A.EMAIL			
+			 , A.MEMBER_CREATED_DATE
+			 , A.MEMBER_RETIRED_DATE
+			 , A.MEMBER_STATUS
+			 , A.MEMBER_NAME
+			 , A.MEMBER_PWD_INIT_STATUS
+			 , A.MEMBER_AUTHORIZATION_NO
+		  FROM TBL_MEMBER A
+		 WHERE A.MEMBER_STATUS = 'Y'
+		   AND A.MEMBER_ID = #{ id } 	   
+	</select>
+	
+</mapper>

@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>	
+
+		<h3 align="center">${ sessionScope.loginMember }님 환영합니다.</h3>
+		<button onclick="location.href='logout'">로그아웃</button>
 </body>
 </html>
