@@ -9,18 +9,5 @@
 </head>
 <body>
 
-<table align="center">
-	<tr>
-		<th>번호</th>
-		<th>이름</th>
-	</tr>
-	<c:forEach var="test" items="${ requestScope.testList }">
-		<tr>
-			<td><c:out value="${ test.no }"/></td>
-			<td><c:out value="${ test.name }"/></td>
-		</tr>
-	
-	</c:forEach>
-</table>
 </body>
 </html>

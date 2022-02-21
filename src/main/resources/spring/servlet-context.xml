@@ -28,8 +28,18 @@
 	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<beans:property name="order" value="1"/>
 	</beans:bean>
+<<<<<<< HEAD
 	<!-- 파일업로드 resolver -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="100000000"/>
 	</beans:bean>	
+=======
+	
+	<!-- <interceptors>
+		<interceptor>
+			<mapping path="/login/"/>
+			<beans:bean id="loginInterceptor" class="com.greedy.waterfall.member.controller.MemberInterceptor"/>
+		</interceptor>
+	</interceptors> -->
+>>>>>>> c1d3db3 (FEAT 로그아웃 [추가])
 </beans:beans>
