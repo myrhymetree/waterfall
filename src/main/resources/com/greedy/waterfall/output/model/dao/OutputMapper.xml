@@ -1,1 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.waterfall.output.model.dao.OutputMapper">
+	<resultMap type="com.greedy.waterfall.output.model.dto.OutputDTO" id="outputResultMap">
+	<id property="outputNo" column="OUPUT_NO"/>
+	<result property="outputVer" column="OUTPUT_VER"/>
+	<result property="content" column="OUTPUT_COMMENT"/>
+	<result property="registedDate" column="OUTPUT_REGISTED_DATE"/>
+	<result property="status" column="OUTPUT_STATUS"/>
+	
+	
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.TaskDTO" id="taskResultMap">
+		<id property="taskNo" column="TASK_NO"/>
+		<result property="parentTaskNo" column="TASK_REF_NO"/>
+		<result property="startDate" column="TASK_START_DATE"/>
+		<result property="taskStatus" column="TASK_STATUS"/>
+		<result property="progressStatus" column="TASK_PROGRESS_STATUS"/>
+		<result property="taskStatus" column="TASK_STATUS"/>
+		<result property="taskCode" column="TASK_CATEGORY_CODE"/>
+		<result property="projectNo" column="PROJECT_NO"/>
+		
+		<association property="taskCategory" resultMap="taskCategoryResultMap"></association>
+		<collection property="childList" resultMap="childTaskResultMap"></collection>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.ChildTaskDTO" id="childTaskResultMap">
+		<id property="taskNo" column="TASK_NO"/>
+		<result property="parentTaskNo" column="TASK_REF_NO"/>
+		<result property="startDate" column="TASK_START_DATE"/>
+		<result property="taskStatus" column="TASK_STATUS"/>
+		<result property="progressStatus" column="TASK_PROGRESS_STATUS"/>
+		<result property="taskStatus" column="TASK_STATUS"/>
+		<result property="taskCode" column="TASK_CATEGORY_CODE"/>
+		<result property="projectNo" column="PROJECT_NO"/>
+		
+		<association property="taskCategory" resultMap="taskCategoryResultMap"></association>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.member.model.dto.MemberDTO" id="memberResultMap">
+		<id property="no" column="MEMBER_NO"/>
+		<result property="name" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectDTO" id="projectResultMap">
+		<id property="no" column="PROJECT_NO"/>
+		<result property="name" column="PROJECT_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.TaskCategoryDTO" id="taskCategoryResultMap">
+		<id property="categoryCode" column="TASK_CATEGORY_CODE"/>
+		<result property="categoryName" column="TASK_CATEGORY_NAME"/>
+	</resultMap>
+		
+	<select id="selectParentTaskList" resultMap="taskResultMap">
+		SELECT
+		       A.TASK_CATEGORY_CODE
+		     , B.TASK_CATEGORY_NAME
+		     , A.TASK_NO
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE ) 
+		 WHERE A.PROJECT_NO = #{ projectNo }
+		   AND A.TASK_REF_NO IS NULL
+		   AND A.TASK_STATUS = 'Y'
+	</select>
+	
+	<select id="selectChildTaskList" resultMap="childTaskResultMap">
+		SELECT
+		       A.TASK_CATEGORY_CODE
+		     , B.TASK_CATEGORY_NAME
+		     , A.TASK_NO
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE ) 
+		 WHERE A.TASK_STATUS = 'Y'
+		   AND A.TASK_REF_NO = #{taskNo}
+		 	
+	</select>
+</mapper>
