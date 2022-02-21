@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.dto.GuideDTO;
+import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.board.model.guidemapper.GuideMapper;
 import com.greedy.waterfall.common.exception.GuideModifyException;
 import com.greedy.waterfall.common.exception.GuideRegistException;
@@ -16,12 +17,12 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 /**
  * <pre>
  * Class : GuideServiceImpl
- * Comment : GuideService를 인터페이스를 구현하는 클래스
+ * Comment : 가이드 게시판의 게시물 전체목록 조회, 게시글 상세조회, 수정, 삭제, 등록 기능 서비스
  * 
  * History
- * 2022. 2. 19.  (박성준)
+ * 2022. 2. 21.  (박성준)
  * </pre>
- * @version 1
+ * @version 1.1
  * @author 박성준
  */
 @Service
@@ -34,6 +35,13 @@ public class GuideServiceImpl implements GuideService {
 		this.mapper = mapper;
 	}
 	
+	/**
+	 * selectAllGuideList : 가이드 게시판의 게시물 전체목록 조회 결과를 반환하는 메소드
+	 * @param selectCriteria : 검색 조건을 조회할 DTO 매개변수
+	 * @return guideList : 검색조건에 해당하는 게시글 또는 전체 게시글 조회한 결과 반환
+	 * 
+	 * @author 박성준
+	 */
 	@Override
 	public List<GuideDTO> selectAllGuideList(SelectCriteria selectCriteria) {
 		List<GuideDTO> guideList = mapper.selectAllGuideList(selectCriteria);
@@ -41,6 +49,13 @@ public class GuideServiceImpl implements GuideService {
 		return guideList;
 	}
 
+	/**
+	 * selectTotalCount : 해당 게시판의 전체 게시글 또는 검색 조건에 해당하는 게시글의 수를 조회한 결과를 반환하는 서비스 메소드
+	 * @param searchMap : 검색 조건을 저장한 변수
+	 * @return result : 게시글의 수
+	 * 
+	 * @author 박성준
+	 */
 	@Override
 	public int selectTotalCount(Map<String, String> searchMap) {
 		int result = mapper.selectTotalCount(searchMap);
@@ -48,16 +63,36 @@ public class GuideServiceImpl implements GuideService {
 		return result;
 	}
 
+	/**
+	 * registGuide : 게시판에 게시글을 등록한 서비스 메소드
+	 * @param guide : 작성한 게시글을 DTO 타입으로 저장한 매개변수
+	 * 
+	 * @author 박성준
+	 */
 	@Override
 	public void registGuide(GuideDTO guide) throws GuideRegistException {
 		
 		int result = mapper.insertGuide(guide);
 		
+		GuideFileDTO guideFileDTO = guide.getFile();
+		
+		if(guideFileDTO != null) {
+			guideFileDTO.setRefBoardNo(guide.getNo());
+			mapper.insertGuideFile(guideFileDTO);
+		}
+		
 		if(!(result > 0)) {
 			throw new GuideRegistException("가이드 게시글 등록에 실패하셨습니다.");
 		}
+		
 	}
 
+	/**
+	 * removeGuide : 게시판에 게시글을 삭제한 서비스 메소드
+	 * @param no : 삭제할 게시판 번호
+	 * 
+	 * @author 박성준
+	 */
 	@Override
 	public void removeGuide(int no) throws GuideRemoveException {
 
@@ -69,7 +104,7 @@ public class GuideServiceImpl implements GuideService {
 	}
 
 	/**
-	 * modifyGuide : 메소드 설명 작성 부분
+	 * modifyGuide : 메소드 설명 작성 부분(수정해야함)
 	 * @param 매개변수의 설명 작성 부분
 	 * @return 리턴값의 설명 작성 부분
 	 * 
@@ -86,19 +121,54 @@ public class GuideServiceImpl implements GuideService {
 		
 	}
 
+	/**
+	 * selectGuideDetail : 게시글 상세 조회 결과를 반환하는 서비스 메소드
+	 * @param no : 상세 조회할 게시글 번호
+	 * @return guideDetail : 상세 조회한 게시글의 정보
+	 * 
+	 * @author 박성준
+	 */
 	@Override
-	public GuideDTO findGuideDetail(int no) {
+	public GuideDTO selectGuideDetail(int no) {
 		 int result = mapper.incrementGuideCount(no);
 	      
 	      GuideDTO guideDetail = new GuideDTO();
 	      
+	      
 	      if(result > 0) {
-	         guideDetail = mapper.selectGuideDetail(no);
+	    	  guideDetail = mapper.selectGuideDetail(no);
+	         
+	         GuideFileDTO guideFileDTO = guideDetail.getFile();
+	       
+	         
+				/*
+				 * if(guideFileDTO.getNo() == 0) { guideDetail = mapper.selectGuideDetailPlusFile(no); }
+				 */
 	      }
 	      
-	      System.out.println("guideDetail : " + guideDetail);
-	      
 	      return guideDetail;
+	}
+
+	/**
+	 * selectGuideFileDetail : 첨부파일이 등록된 게시글 상세 조회 결과를 반환하는 서비스 메소드
+	 * @param no : 상세 조회할 게시글 번호
+	 * @return guideDetail : 상세 조회한 게시글의 정보
+	 * 
+	 * @author 박성준
+	 */
+	@Override
+	public GuideDTO selectGuideFileDetail(int no) {
+		int result = mapper.incrementGuideCount(no);
+		
+		GuideDTO guideFileDetail = new GuideDTO();
+		
+		if(result > 0) {
+	         
+	        guideFileDetail = mapper.selectGuideDetailPlusFile(no);
+
+	      }
+		
+		return guideFileDetail;
 	}
 
 }

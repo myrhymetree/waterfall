@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.greedy.waterfall.board.model.dto.GuideDTO;
+import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.exception.GuideModifyException;
 import com.greedy.waterfall.common.exception.GuideRegistException;
 import com.greedy.waterfall.common.exception.GuideRemoveException;
@@ -15,9 +16,9 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
  * Comment : CRUD 트랜젝션을 제어하는 서비스의 인터페이스
  * 
  * History
- * 2022. 2. 19.  (박성준)
+ * 2022. 2. 21.  (박성준)
  * </pre>
- * @version 1
+ * @version 1.1
  * @author 박성준
  */
 public interface GuideService {
@@ -32,6 +33,8 @@ public interface GuideService {
 
 	void modifyGuide(GuideDTO guide) throws GuideModifyException;
 
-	GuideDTO findGuideDetail(int no);
+	GuideDTO selectGuideDetail(int no);
+
+	GuideDTO selectGuideFileDetail(int no);
 
 }

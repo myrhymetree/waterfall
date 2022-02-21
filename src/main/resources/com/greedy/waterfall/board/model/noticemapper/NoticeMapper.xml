@@ -136,7 +136,34 @@
         , 3
         , 1
         )
+        <selectKey keyProperty="no" resultType="Integer" order="AFTER">
+        	SELECT
+        	       BOARD_NO.CURRVAL
+        	  FROM DUAL
+        </selectKey>
     </insert>
+    
+    <insert id="insertAttachment">
+        INSERT 
+          INTO TBL_FILE A
+        (
+          A.FILE_NO
+        , A.REF_BOARD_NO
+        , A.FILE_ORIGIN_NAME
+        , A.FILE_RANDOM_NAME
+        , A.FILE_PATH
+        , A.FILE_CATEGORY_NO
+        )
+        VALUES 
+        (
+          FILE_NO.NEXTVAL
+        , #{ noticeNo }
+        , #{ originName }
+        , #{ randomName }
+        , #{ filePath }
+        , 3
+        )
+	</insert>
     
     <update id="updateNotice" parameterType="com.greedy.waterfall.board.model.dto.NoticeDTO">
 		UPDATE 
@@ -153,4 +180,7 @@
 		   SET A.BOARD_STATUS = 'N'    
 		 WHERE A.BOARD_NO = #{ no }
 	</update>
+	
+	
+        
  </mapper>
