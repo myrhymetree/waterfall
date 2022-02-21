@@ -84,6 +84,7 @@ public class EduController {
 
 		mv.addObject("eduList", eduList);
 		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("intent", "/edu/list");
 		mv.setViewName("/board/edu/eduList");
 		
 		return mv;
