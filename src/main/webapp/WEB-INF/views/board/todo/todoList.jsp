@@ -6,8 +6,18 @@
 <head>
 <meta charset="UTF-8">
 <title>To Do 게시판</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 <style>
 
+/* 투두 게시판 */
 #layoutSidenav_content .todo h2 {
   height: 50px;
   line-height: 1.5;
@@ -84,6 +94,45 @@ table, th, td {
   border: none;
 }
 
+/* 모달 */
+.modal-content {
+  width: 635px;
+  height: 600px;
+  padding: 30px;
+}
+#title-write {
+  width: 392px;
+}
+.my-modal-body {
+  margin-left: 0px;
+}
+.my-textarea-div {
+  width: 440px;
+  height: 430px;
+}
+#my-textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.my-modal-footer input {
+  width: 220px;
+}
+.my-modal-footer button {
+  color: #000;
+  background: none;
+  padding: 5px 25px;
+}
+.my-modal-footer button:nth-child(2) {
+  margin-right: 38px;
+}
+
+/* 서브모달 */
+.my-modal-message {
+  line-height: 45px;
+}
+
+/* 게시글 조회 모달 */
 .my-modal-footer-read {
   text-align: center;
 }
@@ -93,61 +142,29 @@ table, th, td {
   padding: 5px 25px;
 }
 
-.modal-content {
-  width: 635px;
-  height: 600px;
-  padding: 30px;
-}
-#title-write {
-  width: 480px;
-}
-.my-modal-body {
-  margin-left: 47px;
-}
-.my-textarea-div {
-  width: 480px;
-  height: 430px;
-}
-#my-textarea {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.my-modal-footer button {
-  color: #000;
-  background: none;
-  padding: 5px 25px;
-}
-.my-modal-footer button:first-child {
-  margin-right: 306px;
-}
-
-
-.my-modal-message {
-  line-height: 45px;
-}
-
 </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp"/>
-
+	
+	<!-- Modal HTML  "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
 	<div class="modal fade" id="writeModal" data-bs-backdrop="static"
 		tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
 			<div class="modal-content" style="top: 172px">
-				<form>
+				<form action="${ pageContext.servletContext.contextPath }/todo/regist" method="POST">
 					<div class="my-modal-header mb-4">
-						<label class="me-2" for="title-write">제목</label> <input
-							type="text" id="title-write">
+						<label class="me-2" for="title-write">제목</label>
+						<input type="text" id="title-write" name="title">
 					</div>
 					<div class="my-modal-body">
 						<div class="my-textarea-div mb-3">
-							<textarea name="my-textarea" id="my-textarea" cols="30" rows="10"></textarea>
+							<textarea name="body" id="my-textarea" cols="30" rows="10"></textarea>
 						</div>
 						<div class="my-modal-footer">
-							<button type="button" class="btn btn-secondary"
+							<input type="file" id="todoFile" name="todoFile">
+							<button type="submit" class="btn btn-secondary"
 								data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
 							<button type="button" class="btn btn-secondary"
 								data-bs-dismiss="modal">취소</button>
@@ -177,30 +194,35 @@ table, th, td {
 	<!-- //subModal -->
 
 	<!-- 게시글 조회 모달 -->
-	<div class="modal fade" id="readModal${ todo.no }" data-bs-backdrop="static"
+	<div class="modal fade" id="readModal" data-bs-backdrop="static"
 		tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
 			<div class="modal-content" style="top: 172px">
-				<form>
+				<form action="${ pageContext.servletContext.contextPath }/todo/update" method="POST">
 					<div class="my-modal-header mb-4">
-						<label class="me-2" for="title-write">제목</label> <input
-							type="text" id="title-write" value="${ todo.title }">
+						<label class="me-2" for="read-title">제목</label>
+                        <input type="text" id="read-title" name="title">
+                        <input type="hidden" id="read-no" name="no">
 					</div>
 					<div class="my-modal-body">
 						<div class="my-textarea-div mb-3">
-							<textarea name="my-textarea" id="my-textarea" cols="30" rows="10"><c:out value="${ todo.writer.name }" /></textarea>
+							<textarea name="content" id="read-content" cols="30" rows="10"></textarea>
 						</div>
 					</div>
 					<div class="my-modal-footer-read">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">돌아가기</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+						<button id="delete" class="btn btn-secondary">삭제하기</button>
+                        <button type="submit" class="btn btn-secondary">수정하기</button>
+                        <input type="file" id="todoAttachment" name="todoAttachment">
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-
+	<!-- //게시글 조회 모달  -->
+	
+	<!-- To Do 게시판 시작 -->
 	<div class="todo">
 		<h2>
 			<span><i class="far fa-clipboard me-1"></i>To Do 게시판</span>
@@ -231,8 +253,15 @@ table, th, td {
 					</tr>
 				</thead>
 				<tbody>
+					<!-- <tr data-bs-toggle="modal" data-bs-target="#readModal">
+						<td>1</td>
+						<td>1번 게시글</td>
+						<td>0</td>
+						<td>2022-01-01</td>
+						<td>박성준</td>
+					</tr> -->
 					<c:forEach var="todo" items="${ requestScope.todoList }">
-						<tr data-bs-toggle="modal" data-bs-target="#readModal${ todo.no }">
+						<tr id="listArea" data-bs-toggle="modal" data-bs-target="#readModal">
 							<td><c:out value="${ todo.no }" /></td>
 							<td><c:out value="${ todo.title }" /></td>
 							<td><c:out value="${ todo.count }" /></td>
@@ -264,7 +293,7 @@ table, th, td {
 			</div> -->
 			
 			<!-- 페이지 처리 -->
-			<jsp:include page="../../common/todoPaging.jsp" />
+			<jsp:include page="../../common/todoPaging.jsp"/>
 
 			<!-- 검색 폼 -->
 			<div class="search-area">
@@ -275,7 +304,7 @@ table, th, td {
 					</select> <input type="search" id="search-input"> -->
 					<form id="loginForm"
 						action="${ pageContext.servletContext.contextPath }/todo/list"
-						method="get" style="display: inline-block">
+						method="GET" style="display: inline-block">
 						<input type="hidden" name="currentPage" value="1"> <!-- 검색 드롭 창 --><select
 						id="searchCondition" name="searchCondition">
 						<option value="title"
@@ -296,7 +325,59 @@ table, th, td {
 			<!-- 검색 폼 끝 -->
 		</div>
 	</div>
+	<!-- To Do 게시판 끝 -->
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+	
+	<script>
+		$(function() {
+			
+		   /* 상세 조회 모달 */
+		   if (document.querySelectorAll("#listArea td")) {
+		         const $tds = document.querySelectorAll("#listArea td");
+		         console.log($tds);
+		         for (let i = 0; i < $tds.length; i++) {
+		            $tds[i].onclick = function() {
+		               const no = this.parentNode.children[0].innerText;
+		               const ex = this.parentNode;
+		               console.log(no);
+		               
+		                $.ajax({
+		                  url : "todoDetail",
+		                  type : "get",
+		                  data : { no : no },
+		                  success : function(data, textStatus, xhr) {
+		                	  console.log(data)
+		                     const todoDetail = JSON.parse(data.todoDetail);
+		                     
+//		                     for(let index in todoDetail) {
+		                        $("#read-no").val(todoDetail.no);
+		                        console.log( $("#read-no").val());
+		                        $("#read-title").val(todoDetail.title);
+		                        $("#read-content").val(todoDetail.content);
+		                        $("#readModal").modal("show");
+		                        ex.children[2].innerText=todoDetail.count;
+//		                     }
+		                  }, error : function(data) {
+		                        console.log(data);
+		                     }
+		                });
+		            }
+		         }
+		   } 
+		   /* 상세 조회 모달 끝 */
+
+		   
+		   
+		   /* 삭제 버튼 클릭 게시글 삭제 */
+		   $("#delete").click(function() {
+		      const no = $("#read-no").val();
+		      location.href="${ pageContext.servletContext.contextPath }/todo/delete?no=" + no;
+		      
+		   });
+		   
+		});
+		
+	</script>
 </body>
 </html>

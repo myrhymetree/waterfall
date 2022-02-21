@@ -5,15 +5,26 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.TodoDTO;
 import com.greedy.waterfall.board.model.service.TodoService;
+import com.greedy.waterfall.common.exception.TodoModifyException;
+import com.greedy.waterfall.common.exception.TodoRegistException;
+import com.greedy.waterfall.common.exception.TodoRemoveException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
@@ -40,15 +51,16 @@ public class TodoController {
 	}
 	
 	/**
-	 * TodoSelectList : 메소드 설명 작성 부분
+	 * todoSelectList : 메소드 설명 작성 부분
 	 * @param request : 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
 	 * @param mv : 컨트롤러가 처리한 결과 정보 및 뷰 선택에 필요한 정보를 담은 매개변수를 전달인자로 받음
 	 * @return mv : ModelAndView 타입으로 반환
 	 * 
 	 * @author 차화응
 	 */
+	/* 게시글 전체 목록 조회 */
 	@GetMapping("/list")
-	public ModelAndView TodoSelectList(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView todoSelectList(HttpServletRequest request, ModelAndView mv) {
 		
 		/* 
 		 * 목록보기를 눌렀을 시 가장 처음에 보여지는 페이지는 1페이지이다.
@@ -108,4 +120,65 @@ public class TodoController {
 		return mv;
 	}
 	
+	/* 게시글 등록 */
+	@PostMapping("/regist")
+	public String registTodo(@ModelAttribute TodoDTO todo, HttpServletRequest request,
+			RedirectAttributes rttr) throws TodoRegistException {
+		
+		todoService.registTodo(todo);
+		
+//		rttr.addFlashAttribute("message", "To Do 등록에 성공하셨습니다!");
+		
+		return "redirect:/todo/list";
+	}
+	
+	/* 게시글 상세 조회 */
+	@GetMapping(value = "todoDetail"/* , produces = "application/json; charset=UTF-8" */)
+	@ResponseBody
+	public ModelAndView detailTodo(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		TodoDTO todoDetail = todoService.detailTodo(no);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+		        .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+		        .serializeNulls()
+		        .disableHtmlEscaping()
+		        .create();
+		
+		mv.addObject("todoDetail", gson.toJson(todoDetail));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	/* 게시글 수정 */
+	@PostMapping("/update")
+	public String modifyTodo(@ModelAttribute TodoDTO todo,  
+			HttpServletRequest request, RedirectAttributes rttr) throws TodoModifyException {
+
+		todoService.modifyTodo(todo);
+		
+		rttr.addFlashAttribute("message", "To Do 수정에 성공하셨습니다.");
+
+		return "redirect:/todo/list";
+	}
+	
+	/* 게시글 삭제 */
+	@GetMapping("/delete")
+	public String removeTodo(HttpServletRequest request, RedirectAttributes rttr) throws TodoRemoveException {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		todoService.removeTodo(no);
+		
+		rttr.addFlashAttribute("message", "To Do 삭제에 성공하셨습니다!");
+		
+		return "redirect:/todo/list";
+	}
 }

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.dto.TodoDTO;
 import com.greedy.waterfall.board.model.mapper.TodoMapper;
+import com.greedy.waterfall.common.exception.TodoModifyException;
+import com.greedy.waterfall.common.exception.TodoRegistException;
+import com.greedy.waterfall.common.exception.TodoRemoveException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
 @Service
@@ -36,6 +39,55 @@ public class TodoServiceImpl implements TodoService {
 		int result = mapper.selectTotalCount(searchMap);
 		
 		return result;
+	}
+	
+	/* 게시글 상세 조회 메소드 */
+	@Override
+	public TodoDTO detailTodo(int no) {
+
+		int result = mapper.incrementTodoCount(no);
+	       
+        TodoDTO todoDetail = new TodoDTO();
+       
+       	if(result > 0) {
+       		todoDetail = mapper.selectTodoDetail(no);
+       	}   
+       
+        return todoDetail;
+	}
+	
+	/* 게시글 수정 메소드 */
+	@Override
+	public void modifyTodo(TodoDTO todo) throws TodoModifyException {
+		
+		int result = mapper.updateTodo(todo);
+		
+		if(!(result > 0)) {
+			throw new TodoModifyException("To Do 수정에 실패하셨습니다.");
+		}
+		
+	}
+	
+	/* 게시글 등록 메소드 */
+	@Override
+	public void registTodo(TodoDTO todo) throws TodoRegistException {
+
+		int result = mapper.insertTodo(todo);
+		
+		if(!(result > 0)) {
+			throw new TodoRegistException("To Do 등록에 실패하셨습니다.");
+		}
+	}
+	
+	/* 게시글 삭제 메소드 */
+	@Override
+	public void removeTodo(int no) throws TodoRemoveException {
+
+		int result = mapper.deleteTodo(no);
+		
+		if(!(result > 0)) {
+			throw new TodoRemoveException("To Do 삭제에 실패하셨습니다.");
+		}
 	}
 
 }
