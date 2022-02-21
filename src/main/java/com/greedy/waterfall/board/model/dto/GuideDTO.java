@@ -1,5 +1,6 @@
 package com.greedy.waterfall.board.model.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,9 @@ import lombok.ToString;
  * Comment : TBL_BOARD 테이블과 대응할 테이블
  * 
  * History
- * 2022. 2. 19.  (박성준)
+ * 2022. 2. 21.  (박성준)
  * </pre>
- * @version 1
+ * @version 1.1
  * @author 박성준
  */
 @ToString
@@ -36,4 +37,7 @@ public class GuideDTO {
 	private int count;						//조회 수
 	private GuideMemberDTO writer;			//TBL_MEMBER 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 MemberDTO 타입으로 생성
 	private int rnum;						//게시판을 순차적으로 표시할 식별자
+	private GuideFileDTO file;				//File 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 GuideFileDTO로 생성
+	private int fileNo;						//첨부파일 번호
+	private String originalName;			//첨부파일 이름
 }
