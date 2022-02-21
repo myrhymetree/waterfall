@@ -18,7 +18,7 @@ import lombok.ToString;
 public class TodoDTO {
 
 	private int no;
-	private Date postingDate;
+	private java.sql.Date postingDate;
 	private String title;
 	private String content;
 	private String status;

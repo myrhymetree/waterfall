@@ -107,4 +107,76 @@
 	       AND A.BOARD_CATEGORY_NO = 5
     	</where>
 	</select>
+	
+	<!-- 조회수 -->
+	<update id="incrementTodoCount" parameterType="_int">
+		UPDATE 
+               TBL_BOARD A
+           SET A.BOARD_COUNT = (SELECT B.BOARD_COUNT
+                                   FROM TBL_BOARD B
+                                  WHERE B.BOARD_NO = #{ no }
+                                ) + 1
+         WHERE A.BOARD_NO = #{ no }
+	</update>
+	
+	<!-- 게시글 상세 조회 -->
+	<select id="selectTodoDetail" resultMap="todoResultMap">
+		SELECT
+		       A.BOARD_NO
+             , A.BOARD_TITLE
+             , A.BOARD_CONTENT
+             , A.BOARD_COUNT
+             , A.BOARD_POSTING_DATE
+             , B.MEMBER_NAME
+             , A.BOARD_STATUS
+          FROM TBL_BOARD A
+          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+         WHERE A.BOARD_NO = #{ no }
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateTodo" parameterType="com.greedy.waterfall.board.model.dto.TodoDTO">
+		UPDATE
+		       TBL_BOARD A
+		   SET A.BOARD_TITLE = #{ title }
+		     , A.BOARD_CONTENT = #{ content }
+		 WHERE A.BOARD_NO = #{ no }    
+	</update>
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertTodo" parameterType="com.greedy.waterfall.board.model.dto.TodoDTO">
+		INSERT
+		  INTO TBL_BOARD A
+		(
+		  A.BOARD_NO
+        , A.BOARD_POSTING_DATE
+        , A.BOARD_TITLE
+        , A.BOARD_CONTENT
+        , A.BOARD_STATUS
+        , A.PROJECT_NO
+        , A.BOARD_CATEGORY_NO
+        , A.MEMBER_NO
+        , A.BOARD_COUNT
+		)
+		VALUES
+		(
+		  BOARD_NO.NEXTVAL
+		, SYSDATE  
+		, #{ title }
+		, #{ content }
+		, 'Y'
+		, 3
+		, 5
+		, 7
+		, 0    
+		)
+	</insert>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteTodo" parameterType="_int">
+		DELETE
+		  FROM TBL_BOARD A
+		 WHERE A.BOARD_NO = #{ no }
+		   AND A.BOARD_CATEGORY_NO = 5
+	</delete>
 </mapper>
