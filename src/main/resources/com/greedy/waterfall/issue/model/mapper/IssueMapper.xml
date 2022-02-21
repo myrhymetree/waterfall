@@ -1,1 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.greedy.waterfall.issue.model.mapper.IssueMapper">
+     <resultMap type="com.greedy.waterfall.issue.model.dto.IssueDTO" id="issueResultMap">
+        <id property="no" column="ISSUE_NO"></id>
+        <result property="name" column="ISSUE_NAME"/>
+        <result property="createdDate" column="ISSUE_CREATED_DATE"/>
+        <result property="progressNo" column="ISSUE_PROGRESS_NO"/>
+        <result property="progressStatus" column="ISSUE_PROGRESS_STATUS"/>
+        <result property="importance" column="ISSUE_IMPORTANCE"/>
+        <result property="content" column="ISSUE_CONTENT"/>
+        <result property="deadline" column="ISSUE_DEADLINE"/>
+        <result property="completedDate" column="ISSUE_COMPLETED_DATE"/>
+        <result property="status" column="ISSUE_STATUS"/>
+        <result property="register" column="ISSUE_REGISTER"/>
+        <result property="manager" column="ISSUE_MANAGER"/>
+        <result property="projectNo" column="PROJECT_NO"/>
+        <result property="taskNo" column="TASK_NO"/>
+        
+        <association property=""></association>
+     </resultMap>
+  
+  
+  </mapper>
