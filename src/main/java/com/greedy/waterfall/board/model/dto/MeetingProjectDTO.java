@@ -9,8 +9,8 @@ import lombok.ToString;
 /**
  * <pre>
  * Class : MeetingProjectDTO
- * Comment : 클래스 설명 작성부분
- * 
+ * Comment : 게시글의 소속 프로젝트의 번호를 저장하는 DTO 
+ * 			 resultMap id = projectResultMap
  * History
  * 2022. 2. 19.  (홍성원)
  * @version 1
@@ -23,5 +23,5 @@ import lombok.ToString;
 @ToString
 public class MeetingProjectDTO {
 
-	private int no;				
+	private int no;				//프로젝트의 번호를 저장
 }
