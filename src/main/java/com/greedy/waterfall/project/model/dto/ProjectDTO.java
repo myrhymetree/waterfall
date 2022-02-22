@@ -3,6 +3,7 @@ package com.greedy.waterfall.project.model.dto;
 import com.greedy.waterfall.board.model.dto.MeetingMemberDTO;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Builder
 public class ProjectDTO {
 
    private int no;                  //프젝번호

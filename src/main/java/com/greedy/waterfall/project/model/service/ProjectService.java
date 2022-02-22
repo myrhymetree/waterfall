@@ -1,6 +1,12 @@
 package com.greedy.waterfall.project.model.service;
 
+import java.util.List;
+import java.util.Map;
+
+import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.MyProjectDTO;
+import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
+import com.greedy.waterfall.project.model.dto.TeamDTO;
 
 /**
  * <pre>
@@ -17,4 +23,11 @@ public interface ProjectService {
 
 	MyProjectDTO findMyProject(int no);
 
+	Map<String, Object> findRegistForm();
+
+	List<TeamDTO> findTeam(String deptCode);
+
+	List<MemberDTO> findTeamMember(String teamCode);
+
+	boolean registProject(RegistProjectDTO newProject);
 }

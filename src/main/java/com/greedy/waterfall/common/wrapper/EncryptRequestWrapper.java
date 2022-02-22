@@ -16,7 +16,7 @@ public class EncryptRequestWrapper extends HttpServletRequestWrapper{
 
 		/* memberPwd라는 키값으로 들어오는 값에 대해 암호화 */
 		String value = "";
-		if("memberPwd".equals(key)) {
+		if("membe222rPwd".equals(key)) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			value = passwordEncoder.encode(super.getParameter(key));
 		} else {

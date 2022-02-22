@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,14 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -189,6 +185,7 @@ public class MeetingController {
 			@RequestParam("meetingfile") List<MultipartFile> multiFile, 
 			@RequestParam("title") String title,
 			@RequestParam("content") String content,
+			@RequestParam("no") int memberNo,
 			HttpServletRequest request) throws UnsupportedEncodingException {
 		/* 매개변수로 받은 게시물번호로 해당 게시물을 등록 한 후 결과에 따라 메세지를 저장한다. */
 		String message = "";
@@ -200,7 +197,7 @@ public class MeetingController {
 		if(!mkdir.exists()) {
 			mkdir.mkdirs();
 		}
-		MeetingDTO meeting = new MeetingDTO().builder().title(title).content(content).build();
+		MeetingDTO meeting = new MeetingDTO().builder().memberNo(memberNo).title(title).content(content).build();
 		List<FileDTO> fileList = new ArrayList<FileDTO>();
 		System.out.println("meeting : " + meeting);
 		if(multiFile.get(0).getOriginalFilename().length() != 0) {

@@ -18,8 +18,6 @@
 </style>
 </head>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
-	<jsp:include page="/WEB-INF/views/project/projectremovemodal.jsp"/>
-	
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">
 			<i class="fas fa-project-diagram"></i> 프로젝트 관리
