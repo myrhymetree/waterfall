@@ -1,5 +1,7 @@
 package com.greedy.waterfall.company.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.company.model.dto.CompanyDTO;
 import com.greedy.waterfall.company.model.service.CompanyService;
 
 @Controller
@@ -22,8 +26,12 @@ public class CompanyController {
 	}
 	
 	@GetMapping("/dept/list")
-	public ModelAndView deptManage(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView deptSelectList(HttpServletRequest request, ModelAndView mv) {
 		
+		SelectCriteria selectCriteria = null;
+		List<CompanyDTO> companyList = companyService.findCompany(selectCriteria);
+		mv.addObject("companyList", companyList);
+		mv.addObject("selectCriteria", selectCriteria);
 		mv.addObject("intent", "/company/dept/deptList");
 		mv.setViewName("/company/dept/deptList");
 		
