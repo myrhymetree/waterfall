@@ -232,13 +232,13 @@ table, th, td {
                             </thead>
                             <tbody>
                               <c:forEach var="edu" items="${ requestScope.eduList }">
-                                <tr id="listArea" data-bs-toggle="modal" data-bs-target="#readModal">
-                                    <td><c:out value="${ edu.no }"/></td>
-                                    <td><c:out value="${ edu.title }"/></td>
-                                    <td><c:out value="${ edu.count }"/></td>
-                                    <td><c:out value="${ edu.registedDate }"/></td>
-                                    <td><c:out value="${ edu.writer.name }"/></td>
-                                </tr>
+	                                <tr id="listArea" data-bs-toggle="modal" data-bs-target="#readModal">
+	                                    <td><c:out value="${ edu.no }"/></td>
+	                                    <td><c:out value="${ edu.title }"/></td>
+	                                    <td><c:out value="${ edu.count }"/></td>
+	                                    <td><c:out value="${ edu.registedDate }"/></td>
+	                                    <td><c:out value="${ edu.writer.name }"/></td>
+	                                </tr>
                                </c:forEach> 
                             </tbody>
                         </table>

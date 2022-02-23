@@ -1,11 +1,16 @@
 package com.greedy.waterfall.member.model.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dao.MemberMapper;
+import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 
 @Service
@@ -29,6 +34,23 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		return mapper.selectMember(member);
+	}
+
+
+	@Override
+	public List<AdminMemberDTO> findAdminMember(SelectCriteria selectCriteria) {
+		
+		List<AdminMemberDTO> adminMemberList = mapper.findAdminMemberList(selectCriteria);
+		
+		return adminMemberList;
+	}
+
+
+	@Override
+	public int selectTotalCount(Map<String, String> searchMap) {
+		int result = mapper.selectTotalCount(searchMap);
+		
+		return result;
 	}
 
 }
