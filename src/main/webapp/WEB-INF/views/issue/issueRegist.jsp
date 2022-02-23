@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -23,18 +23,18 @@
                         </div>
                     <div class="container" id="left-container" style="overflow:scroll">
                             <br>
-                            미니프로젝트
+                           	미니프로젝트
                             <br>
                             <br>
                             <div id="box1_body">
                                 <label type="button" class="folder_toggle" data-toggle="collapse" data-target="#demo">
                                     <i style='font-size:24px' class='fas'>&#xf07b;</i>
-                                    업무분석
+                                   	 업무분석
                                 </label>
                                 <div id="demo" class="collapse">
                                     <label type="button" class="folder_toggle nav-link" data-toggle="collapse" data-target="#subdemo1" style="color: black;">
                                         <i class="fas fa-folder"></i>
-                                        업무분석1
+                                       	 업무분석1
                                         <div id="subdemo1" class="collapse">
                                             <label type="button"  class="nav-link" style="color: black;">#1 이슈발생</label>
                                             <label type="button"  class="nav-link" style="color: black;">#2 이슈발생</label>
@@ -46,12 +46,12 @@
                                     <br>
                                     <label type="button" class="folder_toggle" data-toggle="collapse" data-target="#demo1">
                                         <i style='font-size:24px' class='fas'>&#xf07b;</i>
-                                        기획설계
+                                       	 기획설계
                                     </label>
                                     <div id="demo1" class="collapse">
                                         <label type="button" class="folder_toggle nav-link" data-toggle="collapse" data-target="#subdemo2" style="color: black;">
                                             <i class="fas fa-folder"></i>
-                                            기획1
+                                            	기획1
                                             <div id="subdemo2" class="collapse">
                                                 <label type="button"  class="nav-link" style="color: black;"><a href="detailedissue2.html">#1 이슈발생</a></label>
                                                 <label type="button"  class="nav-link" style="color: black;">#2 이슈발생</label>
@@ -62,17 +62,18 @@
     
                                         <label class="nav-link" style="color: black;">
                                             <i class="fas fa-folder"></i>
-                                            기획2
+                                            	기획2
                                         </label>
 
                                         <label class="nav-link" style="color: black;">
                                             <i class="fas fa-folder"></i>
-                                            기획3
+                                           	 기획3
                                         </label>
                                     </div>
                             </div>
                     </div>
                     <div class="container" id="right-container">
+                    		<form>
                                  <div class="mt-4 row">
                                     <div class="col-2 center"><label>업무명</label></div>
                                     <div class="col-1"><input type="text" readonly></div>
@@ -156,7 +157,7 @@
 
                                         <div class="modal-body" style="text-align: center;">
                                         #1 0001이슈발생을 정말로 삭제하시겠습니까?<br>
-                                        관리자 삭제 시 영구삭제됩니다.
+                                        	관리자 삭제 시 영구삭제됩니다.
                                         </div>
                                 
 
@@ -176,10 +177,11 @@
 
 
                                 <div class="modal"></div>
-                            </div> 
+                            </div>
+                       </form> 
                     </div>
                 </div>
 	
 	<jsp:include page="../common/footer.jsp"/>
 </body>
-</html> --%>
+</html>

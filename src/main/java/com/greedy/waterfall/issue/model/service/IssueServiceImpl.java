@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
+import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.mapper.IssueMapper;
 
 @Service
@@ -30,8 +31,19 @@ public class IssueServiceImpl implements IssueService {
 	public List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria) {
 		List<IssueDTO> issueList = mapper.selectAllIssueList(selectCriteria);
 		
-		
 		return issueList;
 	}
+
+	@Override
+	public List<ProjectIssueCountDTO> selectAllProjectList() {
+		List<ProjectIssueCountDTO> allProject = mapper.selectAllProjectList();
+		return allProject;
+	}
+	@Override
+	public List<IssueDTO> selectIssuesOfTask(int projectNo) {
+		List<IssueDTO> taskIssueList = mapper.selectIssuesOfTask(projectNo);
+		return taskIssueList;
+	}
+
 
 }

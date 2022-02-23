@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -13,10 +13,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-auto-replace-svg="nest"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<link href="css/styles.css" rel="stylesheet" />
 <style>
 	td { vertical-align: middle !important; }
 </style>
@@ -63,16 +73,16 @@
                              </tr>
                          </thead>
                          <tbody>
-                         	<c:forEach var="guide" items="${ requestScope.issueList }" varStatus="status">
+                         	<c:forEach var="issue" items="${ requestScope.issueList }" varStatus="status">
                              <tr>
-                                 <td>1</td>
-                                 <td>업무분석 및 요건정의</td>
+                                 <td><c:out value="${ issue.no }"/></td>
+                                 <td><c:out value="${ issue.taskCode.taskCategoryName }"/></td>
                                  <td>업무명 오타</td>
-                                 <td>2022-01-04</td>
-                                 <td>대기중</td>
-                                 <td>긴급</td>
-                                 <td>박성준</td>
-                                 <td>김영광</td>
+                                 <td><c:out value="${ issue.createdDate }"/></td>
+                                 <td><c:out value="${ issue.progressStatus }"/></td>
+                                 <td><c:out value="${ issue.importance }"/></td>
+                                 <td><c:out value="${ issue.register.name }"/></td>
+                                 <td><c:out value="${ issue.manager.name }"/></td>
                                  <td><button class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal">배정</button></td>
                              </tr>
 							</c:forEach>
@@ -232,4 +242,4 @@
 <jsp:include page="../common/footer.jsp"/>
 
 </body>
-</html> --%>
+</html>

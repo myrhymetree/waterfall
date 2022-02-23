@@ -19,7 +19,7 @@
   		<result property="originalName" column="FILE_ORIGIN_NAME"/>
   		
   		<association property="writer" resultMap="memberResultMap"/>
-  		<association property="file" resultMap="fileResultMap"></association>
+  		<association property="file" resultMap="fileResultMap"/>
   	</resultMap>
   	
   	<resultMap type="com.greedy.waterfall.board.model.dto.GuideMemberDTO" id="memberResultMap">
@@ -38,7 +38,8 @@
   	</resultMap>
   	
   
-  <select id="selectAllGuideList" resultMap="guideResultMap"> SELECT /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#selectAllGuideList() */
+  <select id="selectAllGuideList" resultMap="guideResultMap"> 
+  SELECT /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#selectAllGuideList() */
   	       A.RNUM
   	     , A.BOARD_NO
   	     , A.BOARD_TITLE
