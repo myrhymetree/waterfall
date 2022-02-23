@@ -21,7 +21,7 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 
 
 
-@WebFilter(urlPatterns = {"/admintask/*", "/board/*", "/book/*", "/code/*", "/company/*", "/history/*", "/issue/*", "/member/*", "/menu/*", "/output/*", "/statistics/*", "/task/*", "/user/*"})
+@WebFilter(urlPatterns = {"/admintask/*", "/board/*", "/book/*", "/code/*", "/history/*", "/issue/*", "/member/*", "/menu/*", "/output/*", "/statistics/*", "/task/*", "/user/*"})
 public class AuthenticationFilter implements Filter {
 	
 	Map<String, List<String>> permitURIList;

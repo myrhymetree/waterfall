@@ -61,6 +61,7 @@
 					  com.greedy.waterfall.board.model.mapper,
 					  com.greedy.waterfall.board.model.guidemapper,
 					  com.greedy.waterfall.board.model.noticemapper,
+					  com.greedy.waterfall.company.model.dao,
 					  com.greedy.waterfall.project.model.mapper"/>
 
 </beans>

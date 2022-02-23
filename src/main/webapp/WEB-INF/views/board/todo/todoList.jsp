@@ -82,6 +82,7 @@ table, th, td {
 }
 #layoutSidenav_content .todo .todo-tbl tbody tr:hover {
   background: paleturquoise;
+  cursor: pointer;
 }
 #layoutSidenav_content .todo .tbl-wrapper .search-area .search-set {
   text-align: center;
