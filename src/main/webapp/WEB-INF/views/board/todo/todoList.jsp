@@ -82,6 +82,7 @@ table, th, td {
 }
 #layoutSidenav_content .todo .todo-tbl tbody tr:hover {
   background: paleturquoise;
+  cursor: pointer;
 }
 #layoutSidenav_content .todo .tbl-wrapper .search-area .search-set {
   text-align: center;
@@ -123,8 +124,8 @@ table, th, td {
   background: none;
   padding: 5px 25px;
 }
-.my-modal-footer button:nth-child(2) {
-  margin-right: 38px;
+.my-modal-footer button:first-child {
+  margin-right: 264px;
 }
 
 /* 서브모달 */
@@ -153,7 +154,7 @@ table, th, td {
 		<div class="modal-dialog">
 			<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
 			<div class="modal-content" style="top: 172px">
-				<form action="${ pageContext.servletContext.contextPath }/todo/regist" method="POST">
+				<form action="${ pageContext.servletContext.contextPath }/todo/regist" method="POST" encType="multipart/form-data">
 					<div class="my-modal-header mb-4">
 						<label class="me-2" for="title-write">제목</label>
 						<input type="text" id="title-write" name="title">
@@ -162,8 +163,10 @@ table, th, td {
 						<div class="my-textarea-div mb-3">
 							<textarea name="body" id="my-textarea" cols="30" rows="10"></textarea>
 						</div>
+						<div class="my-modal-upload">
+	            			<input type="file" id="todoUploadInput" name="todoUpload" multiple>
+	            		</div>
 						<div class="my-modal-footer">
-							<input type="file" id="todoFile" name="todoFile">
 							<button type="submit" class="btn btn-secondary"
 								data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
 							<button type="button" class="btn btn-secondary"
@@ -209,12 +212,14 @@ table, th, td {
 						<div class="my-textarea-div mb-3">
 							<textarea name="content" id="read-content" cols="30" rows="10"></textarea>
 						</div>
+						<div class="my-modal-upload">
+	            			<input type="file" id="todoUploadOutput" name="todoUpload" multiple>
+	            		</div>
 					</div>
 					<div class="my-modal-footer-read">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-						<button id="delete" class="btn btn-secondary">삭제하기</button>
                         <button type="submit" class="btn btn-secondary">수정하기</button>
-                        <input type="file" id="todoAttachment" name="todoAttachment">
+						<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
 					</div>
 				</form>
 			</div>
@@ -330,54 +335,49 @@ table, th, td {
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 	
 	<script>
-		$(function() {
-			
-		   /* 상세 조회 모달 */
-		   if (document.querySelectorAll("#listArea td")) {
-		         const $tds = document.querySelectorAll("#listArea td");
-		         console.log($tds);
-		         for (let i = 0; i < $tds.length; i++) {
-		            $tds[i].onclick = function() {
-		               const no = this.parentNode.children[0].innerText;
-		               const ex = this.parentNode;
-		               console.log(no);
-		               
-		                $.ajax({
-		                  url : "todoDetail",
-		                  type : "get",
-		                  data : { no : no },
-		                  success : function(data, textStatus, xhr) {
-		                	  console.log(data)
-		                     const todoDetail = JSON.parse(data.todoDetail);
-		                     
-//		                     for(let index in todoDetail) {
-		                        $("#read-no").val(todoDetail.no);
-		                        console.log( $("#read-no").val());
-		                        $("#read-title").val(todoDetail.title);
-		                        $("#read-content").val(todoDetail.content);
-		                        $("#readModal").modal("show");
-		                        ex.children[2].innerText=todoDetail.count;
-//		                     }
-		                  }, error : function(data) {
-		                        console.log(data);
-		                     }
-		                });
-		            }
+	
+		/* 상세 조회 모달 */
+		if (document.querySelectorAll("#listArea td")) {
+		      const $tds = document.querySelectorAll("#listArea td");
+		      console.log($tds);
+		      for (let i = 0; i < $tds.length; i++) {
+		         $tds[i].onclick = function() {
+		            const no = this.parentNode.children[0].innerText;
+		            const ex = this.parentNode;
+		            console.log(no);
+		            
+		            $.ajax({
+		               url : "todoDetail",
+		               type : "get",
+		               data : { no : no },
+		               success : function(data, textStatus, xhr) {
+		             	  console.log(data)
+		                  const todoDetail = JSON.parse(data.todoDetail);
+		                  
+//		                  for(let index in todoDetail) {
+		                     $("#read-no").val(todoDetail.no);
+		                     console.log( $("#read-no").val());
+		                     $("#read-title").val(todoDetail.title);
+		                     $("#read-content").val(todoDetail.content);
+		                     $("#readModal").modal("show");
+		                     ex.children[2].innerText=todoDetail.count;
+//		                  }
+		                  
+		               }, error : function(data) {
+		                     console.log(data);
+		                  }
+		            });
 		         }
-		   } 
-		   /* 상세 조회 모달 끝 */
-
+		      }
+		} 
 		   
 		   
-		   /* 삭제 버튼 클릭 게시글 삭제 */
-		   $("#delete").click(function() {
-		      const no = $("#read-no").val();
-		      location.href="${ pageContext.servletContext.contextPath }/todo/delete?no=" + no;
-		      
-		   });
-		   
+		/* 삭제 버튼 클릭 게시글 삭제 */
+		$("#delete").click(function() {
+			const no = $("#read-no").val();
+			location.href="${ pageContext.servletContext.contextPath }/todo/delete?no=" + no;
 		});
-		
+	   
 	</script>
 </body>
 </html>
