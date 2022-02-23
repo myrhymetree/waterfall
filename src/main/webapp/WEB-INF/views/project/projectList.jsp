@@ -10,14 +10,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">
 			<i class="fas fa-project-diagram"></i> 프로젝트
 		</h1>
 		<div class="mb-2">
 			<div class="col" style="width: 50%; text-align: left;">
-				<button type="button" onclick="location.href='${ pageContext.servletContext.contextPath }/project/manage'" class="btn btn-dark">프로젝트 관리</button>
+				<button type="button" onclick="location.href='${ pageContext.servletContext.contextPath }/project/manage'" class="btn btn-outline-secondary">프로젝트 관리</button>
 			</div>
 		</div>
 	
@@ -41,6 +41,7 @@
 						<col style="width: 10%" />
 						<col style="width: 10%" />
 						<col style="width: 10%" />
+						<col style="width: 1%" />
 	
 					</colgroup>
 					<thead>
@@ -52,6 +53,7 @@
 							<th>이슈</th>
 							<th>시작일</th>
 							<th>마감일</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -64,56 +66,61 @@
 								<td>대기</td>
 								<td><c:out value="${ project.startDate }" /></td>
 								<td><c:out value="${ project.deadLine }" /></td>
+								<td><input type="hidden" value="${ project.no }" name="projectNo"></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 		</div>
-		<div class="card mb-4 mt-3">
-			<div class="card-header">
-				<label style="font-size: 1.3em; font-weight: bold">참여중인 프로젝트</label>
-			</div>
-			<div class="card-body">
-				<table style="width: 100%; text-align: center;">
-					<colgroup>
-						<col style="width: 20%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-	
-					</colgroup>
-	
-					<thead>
-						<tr>
-							<th>프로젝트명</th>
-							<th>담당자</th>
-							<th>진행률</th>
-							<th>산출물</th>
-							<th>이슈</th>
-							<th>시작일</th>
-							<th>마감일</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="project" items="${ projectList.joinProject }">
+		<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role ne '1'}">
+			<div class="card mb-4 mt-3">
+				<div class="card-header">
+					<label style="font-size: 1.3em; font-weight: bold">참여중인 프로젝트</label>
+				</div>
+				<div class="card-body">
+					<table style="width: 100%; text-align: center;">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 1%" />
+						</colgroup>
+		
+						<thead>
 							<tr>
-								<td><c:out value="${ project.name}" /></td>
-								<td><c:out value="${ project.member.memberName}" /></td>
-								<td><c:out value="${ project.progression }" /></td>
-								<td>대기</td>
-								<td>대기</td>
-								<td><c:out value="${ project.startDate }" /></td>
-								<td><c:out value="${ project.deadLine }" /></td>
+								<th>프로젝트명</th>
+								<th>담당자</th>
+								<th>진행률</th>
+								<th>산출물</th>
+								<th>이슈</th>
+								<th>시작일</th>
+								<th>마감일</th>
+								<th></th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							<c:forEach var="project" items="${ projectList.joinProject }">
+								<tr>
+									<td><c:out value="${ project.name}" /></td>
+									<td><c:out value="${ project.member.memberName}" /></td>
+									<td><c:out value="${ project.progression }" /></td>
+									<td>대기</td>
+									<td>대기</td>
+									<td><c:out value="${ project.startDate }" /></td>
+									<td><c:out value="${ project.deadLine }" /></td>
+									<td><input type="hidden" value="${ project.no }" name="projectNo"></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 			</div>
-		</div>
+		</c:if>
 	</div>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
@@ -145,8 +152,8 @@
 	            }
 	            
 	            $tds[i].onclick = function() {
-	                const no = this.parentNode.children[0].innerText;
-	                location.href = "${ pageContext.servletContext.contextPath }/board/detail?no=" + no;
+	                const projectNo = this.parentNode.children[7].children[0].value;
+	                location.href = "${ pageContext.servletContext.contextPath }/project/main/" + projectNo;
 	            }
 	            
 	        }

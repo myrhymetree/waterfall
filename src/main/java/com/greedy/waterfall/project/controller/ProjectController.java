@@ -1,13 +1,12 @@
 package com.greedy.waterfall.project.controller;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.MyProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
 import com.greedy.waterfall.project.model.dto.ProjectStatusDTO;
 import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
@@ -127,29 +126,39 @@ public class ProjectController {
 		return mv;
 	}
 	
+	/* 회원의 정보를 세션에서 받아서 권한이 있는 프로젝트를 조회한다. */
 	@RequestMapping("/managelist")
-	public ModelAndView findManageProjectList(ModelAndView mv) {
-		/* 유저 회원번호 받는 부분 */
-		int no = 777;
-
-		/* 회원번호로 조회 */
-		MyProjectDTO project = projectService.findMyProject(no);
-
+	public ModelAndView findManageProjectList(ModelAndView mv, HttpSession session) {
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트");
+		/* 회원의 정보로 프로젝트를 조회 */
+		MemberDTO member = (MemberDTO) session.getAttribute("loginMember");
+		MyProjectDTO project = projectService.findMyProject(member);
 		List<ProjectDTO> manageProject = project.getManageProject();
-		for(ProjectDTO p : manageProject) {
-			System.out.println(p);
-			System.out.println(p);
-		}
+		System.out.println("member : " + member);
+		System.out.println("project : " + manageProject);
 				
 		mv.addObject("manageProject", manageProject);
 		
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
+		System.out.println("managelist 컨트롤러에서 manageProject 출력 테스트종료");
 		mv.setViewName("/project/projectManage");
 		return mv;
 	}
-	
-	
-	
-	
 	
 	/**
 	 * findProjectList : 메소드 설명 작성 부분
@@ -159,25 +168,12 @@ public class ProjectController {
 	 * @author 홍성원
 	 */
 	@GetMapping("/list")
-	public ModelAndView findProjectList(ModelAndView mv) {
-		/* 유저 회원번호 받는 부분 */
-		int no = 777;
-
+	public ModelAndView findProjectList(HttpSession session, ModelAndView mv) {
 		/* 회원번호로 조회 */
-		MyProjectDTO project = projectService.findMyProject(no);
-
-		List<ProjectDTO> manageProject = project.getManageProject();
-		List<ProjectDTO> joinProject = project.getJoinProject();
-				
-		for(ProjectDTO p : manageProject) {
-			System.out.println(p);
-			System.out.println(p);
-		}
-		for(ProjectDTO p : joinProject) {
-			System.out.println(p);
-			System.out.println(p);
-		}
-				
+		MemberDTO member = (MemberDTO) session.getAttribute("loginMember");
+		MyProjectDTO project = projectService.findMyProject(member);
+		System.out.println("member : " + member);
+		System.out.println("project : " + project);
 		mv.addObject("projectList", project);
 		mv.setViewName("/project/projectList");
 
@@ -187,13 +183,6 @@ public class ProjectController {
 	@GetMapping("/regist/team/{deptCode}")
 	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode, HttpServletResponse response) throws IOException {
 	
-		System.out.println(deptCode);
-		System.out.println(deptCode);
-		System.out.println(deptCode);
-		System.out.println(deptCode);
-		System.out.println(deptCode);
-		System.out.println(deptCode);
-		System.out.println(deptCode);
 		List<TeamDTO> teamList = projectService.findTeam(deptCode);
 		
 		
@@ -229,7 +218,20 @@ public class ProjectController {
 		mv.setViewName("jsonView");
 		return mv;
 	}
+	
+	@GetMapping("main/{projectNo}")
+	public ModelAndView sendProjectDetail(@PathVariable int projectNo, ModelAndView mv) {
+		ProjectAuthorityDTO projectAutority = new ProjectAuthorityDTO()
+												.builder().pmNo(projectService.findPmNumber(projectNo))
+												.projectNo(projectNo).build();
+		System.out.println("projectAutority : " + projectAutority);
 		
+		mv.addObject("projectAutority", projectAutority);
+		mv.addObject("projectNo", projectNo);
+		mv.setViewName("/project/projectMain");
+		
+		return mv;
+	}
 									
 	
 	

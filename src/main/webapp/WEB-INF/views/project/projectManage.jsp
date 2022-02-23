@@ -17,18 +17,17 @@
 	}
 </style>
 </head>
-	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">
 			<i class="fas fa-project-diagram"></i> 프로젝트 관리
 		</h1>
 		<div class="mb-2">
 			<div class="col" style="width: 50%; text-align: left;">
-				<button type="button"
-					onclick="location.href='${ pageContext.servletContext.contextPath }/project/list'"
-					class="btn btn-secondary">프로젝트 관리</button>
-					<button class="regist-project btn btn-dark"
-						onclick="location.href='${ pageContext.servletContext.contextPath }/project/regist'">생성</button>
+				<button type="button" onclick="location.href='${ pageContext.servletContext.contextPath }/project/list'" class="btn btn-secondary">프로젝트 관리</button>
+                <c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role eq 1 }">
+					<button class="regist-project btn btn-dark" onclick="location.href='${ pageContext.servletContext.contextPath }/project/regist'">생성</button>
+				</c:if>
 			</div>
 		</div>
 		<div class="card mb-4 mt-3">

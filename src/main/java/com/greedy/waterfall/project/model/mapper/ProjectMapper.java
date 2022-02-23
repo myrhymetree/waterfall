@@ -44,5 +44,16 @@ public interface ProjectMapper {
 	int registPm(RegistProjectDTO newProject);
 
 	int registMemberProject(RegistProjectDTO newProject);
+
+	List<ProjectDTO> findAllProject();
+
+	/**
+	 * finePmNumber : 프로젝트메인페이지 이동 시 , 해당 프로젝트의 pm 회원번호를 조회한다.
+	 * @param 이동하는 프로젝트의 번호를 전달받는다.
+	 * @return 프로젝트의 pm번호를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	int finePmNumber(int projectNo);
 	
 }

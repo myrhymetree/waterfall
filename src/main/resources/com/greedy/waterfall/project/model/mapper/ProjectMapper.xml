@@ -86,9 +86,9 @@
                A.DEPT_CODE
              , A.DEPT_NAME
           FROM TBL_DEPT A
-	</select> 
+	</select>
 	
-	<select id="findManagaProject" resultMap="projectResult">
+	<select id="findAllProject" resultMap="projectResult">
         SELECT 
                A.PROJECT_NO
              , A.PROJECT_NAME
@@ -102,7 +102,29 @@
           FROM TBL_PROJECT A
           JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
           JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
+         WHERE B.ROLE_NO = 8
+	</select> 
+	
+	<select id="findManagaProject" resultMap="projectResult">
+            SELECT 
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE
+             , A.PROJECT_DEADLINE
+             , A.PROJECT_PROGRESSION
+             , A.PROJECT_STATUS
+             , A.PROJECT_COMPLETED_DATE
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , C.MEMBER_NAME
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
          WHERE B.MEMBER_NO = #{ no }
+          AND B.ROLE_HISTORY_NO IN (SELECT MAX(C.ROLE_HISTORY_NO)
+                                      FROM TBL_ROLE_ASSIGNMENT_HISTORY C
+                                     WHERE ROLE_NO = 8
+                                     GROUP BY ROLE_HISTORY_NO 
+                                   )
            AND B.ROLE_NO = 8
 	</select>
  
@@ -120,13 +142,18 @@
           FROM TBL_PROJECT A
           JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
           JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
-         WHERE A.PROJECT_NO IN (SELECT DISTINCT D.PROJECT_NO
+         WHERE A.PROJECT_NO IN (SELECT D.PROJECT_NO
                                   FROM TBL_ROLE_ASSIGNMENT_HISTORY D
-                                 WHERE D.MEMBER_NO = #{ no }
-                                   AND D.ROLE_NO != 8
+                                 WHERE D.MEMBER_NO =  #{ no }
+                                   AND D.ROLE_HISTORY_NO  NOT IN (SELECT MAX(E.ROLE_HISTORY_NO)
+                                                              FROM TBL_ROLE_ASSIGNMENT_HISTORY E
+                                                             WHERE E.ROLE_NO = 8
+                                                             GROUP BY E.ROLE_HISTORY_NO 
+                                                           )
+                                   
                                )
-           AND B.ROLE_NO = 8            
-         ORDER BY A.PROJECT_NO 
+           AND B.ROLE_NO = 8        
+         ORDER BY A.PROJECT_NO DESC
  	</select>
 	
 
@@ -199,7 +226,17 @@
         , 1
         )
 	</insert>
- 
+	<select id="finePmNumber" resultType="_int">
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#finePmNumber() */
+               A.MEMBER_NO
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+         WHERE PROJECT_NO = #{ projectNo }
+           AND A.ROLE_HISTORY_NO = (SELECT MAX(B.ROLE_HISTORY_NO) 
+                                      FROM TBL_ROLE_ASSIGNMENT_HISTORY B 
+                                     WHERE B.PROJECT_NO = #{ projectNo }            
+                                       AND ROLE_NO = 8
+                                   )
+	</select> 
  	
 
 

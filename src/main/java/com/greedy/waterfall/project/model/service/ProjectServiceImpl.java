@@ -1,5 +1,6 @@
 package com.greedy.waterfall.project.model.service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,17 +40,29 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 	
 	@Override
-	public MyProjectDTO findMyProject(int no) {
+	public MyProjectDTO findMyProject(MemberDTO member) {
+		List<ProjectDTO> manageProject = new ArrayList<ProjectDTO>();
+		List<ProjectDTO> joinProject = new ArrayList<ProjectDTO>();
 		
-		List<ProjectDTO> manageProject = mapper.findManagaProject(no);
-		List<ProjectDTO> joinProject = mapper.findJoinProject(no);
-		
+		if(member != null) {
+			System.out.println("session에 member가 저장돼있어서 프로젝트를 조회중입니다....");
+			System.out.println("현재 session member의 역할 : " + member.getRole());
+			if("1".equals(member.getRole())) {
+				System.out.println("관리자 입니다.");
+				manageProject = mapper.findAllProject();
+			} else {
+				System.out.println("관리자가 아닙니다.");
+				manageProject = mapper.findManagaProject(member.getNo());
+				joinProject = mapper.findJoinProject(member.getNo());
+				
+			}
+		}
 		MyProjectDTO projectList = new MyProjectDTO().builder()
-				.no(no)
-				.manageProject(manageProject)
-				.joinProject(joinProject)
-				.build();
-		
+													.manageProject(manageProject)
+													.joinProject(joinProject)
+													.build();
+		System.out.println("조회된 프로젝트 리스트");
+		System.out.println("projectList : " + projectList);
 		
 		return projectList;
 	}
@@ -94,6 +107,84 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		
 		return false;
+	}
+
+	/**
+	 * findPmNumber : 프로젝트 목록페이지에서 프로젝트 메인페이지로 이동할 떄 해당 프로젝트의 pm번호를 조회한다.
+	 * @param 프로젝트번호를 전달받는다.
+	 * @return 프로젝트 pm의 회원번호를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	@Override
+	public int findPmNumber(int projectNo) {
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		System.out.println("projectNo : " + projectNo);
+		return mapper.finePmNumber(projectNo);
 	}
 }
 

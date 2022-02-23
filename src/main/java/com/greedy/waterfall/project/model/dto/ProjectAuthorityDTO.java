@@ -1,7 +1,5 @@
 package com.greedy.waterfall.project.model.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,15 +10,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-@ToString
 @Getter
+@ToString
 @Builder
-public class MyProjectDTO {
+public class ProjectAuthorityDTO {
 
-	private int no;
-	private List<ProjectDTO> manageProject;
-	private List<ProjectDTO> joinProject;
-	
-	
-	
+	private int projectNo;
+	private int pmNo;
+	private String projectName;
 }
