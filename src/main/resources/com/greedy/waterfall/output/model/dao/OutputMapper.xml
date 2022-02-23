@@ -4,24 +4,32 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.greedy.waterfall.output.model.dao.OutputMapper">
 	<resultMap type="com.greedy.waterfall.output.model.dto.OutputDTO" id="outputResultMap">
-	<id property="outputNo" column="OUPUT_NO"/>
+	<id property="outputNo" column="OUTPUT_NO"/>
 	<result property="outputVer" column="OUTPUT_VER"/>
 	<result property="content" column="OUTPUT_COMMENT"/>
 	<result property="registedDate" column="OUTPUT_REGISTED_DATE"/>
 	<result property="status" column="OUTPUT_STATUS"/>
+	<result property="memberNo" column="MEMBER_NO"/>
+	<result property="projectNo" column="PROJECT_NO"/>
 	
-	
+	<association property="memberName" resultMap="memberResultMap"></association>
+	<association property="outputFile" resultMap="fileResultMap"></association>
+	<association property="project" resultMap="projectResultMap"></association>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.task.model.dto.TaskDTO" id="taskResultMap">
 		<id property="taskNo" column="TASK_NO"/>
 		<result property="parentTaskNo" column="TASK_REF_NO"/>
 		<result property="startDate" column="TASK_START_DATE"/>
+		<result property="deadline" column="TASK_DEADLINE"/>
+		<result property="progression" column="TASK_PROGRESSION"/>
+		<result property="typeNo" column="TASK_TYPE_NO"/>
 		<result property="taskStatus" column="TASK_STATUS"/>
 		<result property="progressStatus" column="TASK_PROGRESS_STATUS"/>
 		<result property="taskStatus" column="TASK_STATUS"/>
 		<result property="taskCode" column="TASK_CATEGORY_CODE"/>
 		<result property="projectNo" column="PROJECT_NO"/>
+		<result property="managerNo" column="MEMBER_NO"/>
 		
 		<association property="taskCategory" resultMap="taskCategoryResultMap"></association>
 		<collection property="childList" resultMap="childTaskResultMap"></collection>
@@ -31,11 +39,14 @@
 		<id property="taskNo" column="TASK_NO"/>
 		<result property="parentTaskNo" column="TASK_REF_NO"/>
 		<result property="startDate" column="TASK_START_DATE"/>
+		<result property="deadline" column="TASK_DEADLINE"/>
+		<result property="progression" column="TASK_PROGRESSION"/>
 		<result property="taskStatus" column="TASK_STATUS"/>
 		<result property="progressStatus" column="TASK_PROGRESS_STATUS"/>
-		<result property="taskStatus" column="TASK_STATUS"/>
 		<result property="taskCode" column="TASK_CATEGORY_CODE"/>
 		<result property="projectNo" column="PROJECT_NO"/>
+		<result property="managerNo" column="MEMBER_NO"/>
+		<result property="typeNo" column="TASK_TYPE_NO"/>
 		
 		<association property="taskCategory" resultMap="taskCategoryResultMap"></association>
 	</resultMap>
@@ -53,6 +64,16 @@
 	<resultMap type="com.greedy.waterfall.task.model.dto.TaskCategoryDTO" id="taskCategoryResultMap">
 		<id property="categoryCode" column="TASK_CATEGORY_CODE"/>
 		<result property="categoryName" column="TASK_CATEGORY_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.output.model.dto.OutputAttachmentDTO" id="fileResultMap">
+		<id property="fileNo" column="OUTPUT_FILE_NO"/>
+		<result property="filePath" column="OUTPUT_FILE_PATH"/>
+		<result property="originName" column="OUTPUT_ORIGIN_NAME"/>
+		<result property="randomName" column="OUTPUT_RANDOM_NAME"/>
+		<result property="status" column="OUTPUT_STATUS"/>
+		<result property="registedDate" column="OUTPUT_REGISTED_DATE"/>
+		<result property="outputNo" column="REF_OUTPUT_NO"/>
 	</resultMap>
 		
 	<select id="selectParentTaskList" resultMap="taskResultMap">
@@ -78,4 +99,72 @@
 		   AND A.TASK_REF_NO = #{taskNo}
 		 	
 	</select>
+	
+	<select id="selectChildTask" resultMap="childTaskResultMap">
+		SELECT
+		       A.TASK_REF_NO
+		     , A.TASK_START_DATE
+		     , A.TASK_DEADLINE
+		     , A.TASK_PROGRESSION
+		     , A.TASK_PROGRESS_STATUS
+		     , A.TASK_TYPE_NO
+		     , A.TASK_STATUS
+		     , A.PROJECT_NO
+		     , A.MEMBER_NO
+		     , A.TASK_CATEGORY_CODE
+		     , B.TASK_CATEGORY_NAME
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE )
+		 WHERE A.TASK_STATUS = 'Y'
+		   AND A.TASK_NO = #{ taskNo }
+	</select>
+	
+	<select id="selectOutputDetail" resultMap="outputResultMap">
+		SELECT
+		       A.OUTPUT_NO
+		     , A.OUTPUT_COMMENT
+		     , A.OUTPUT_REGISTED_DATE
+		     , A.OUTPUT_STATUS
+		     , A.MEMBER_NO
+		     , B.MEMBER_NAME
+		     , A.PROJECT_NO
+		     , A.OUTPUT_VER
+		     , C.OUTPUT_ORIGIN_NAME
+		     , D.PROJECT_NAME
+		  FROM TBL_OUTPUT A
+		  JOIN TBL_MEMBER B ON(A.MEMBER_NO = B.MEMBER_NO)
+		  LEFT JOIN TBL_OUTPUT_FILE C ON(A.OUTPUT_NO = C.REF_OUTPUT_NO)
+		  JOIN TBL_PROJECT D ON(A.PROJECT_NO = D.PROJECT_NO)
+		 WHERE A.OUTPUT_STATUS = 'Y'
+		   AND A.TASK_NO = #{ taskNo }
+	</select>
+	
+	<select id="selectParentTask" resultMap="taskResultMap">
+		SELECT
+		        A.TASK_START_DATE
+		      , A.TASK_DEADLINE
+		      , A.TASK_PROGRESSION
+		      , A.TASK_STATUS
+		      , A.TASK_PROGRESS_STATUS
+		      , A.TASK_CATEGORY_CODE
+		      , A.PROJECT_NO
+		      , A.MEMBER_NO
+		      , A.TASK_TYPE_NO
+		      , B.TASK_CATEGORY_NAME
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE )
+		 WHERE A.TASK_REF_NO IS NULL
+		   AND A.TASK_STATUS = 'Y' 
+		   AND A.TASK_NO = #{ parentTaskNo }
+	</select>
+	
+	<update id="deleteOutput">
+		UPDATE
+		       TBL_OUTPUT A
+		   SET A.OUTPUT_STATUS = 'Y'
+		 WHERE OUTPUT_NO = #{ no }
+		       
+	</update>
+	
+	
 </mapper>

@@ -10,10 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.output.model.dto.OutputDTO;
 import com.greedy.waterfall.output.model.service.OutputService;
+import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 
 @Controller
@@ -49,6 +55,40 @@ public class OutputController {
 		
 		return mv; 
 		
+	}
+	
+	@GetMapping(value = "/detail", produces = "application/json; charset= UTF-8")
+	@ResponseBody
+	public String findOutputDetail(HttpServletRequest request) {
+		
+		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+		
+		System.out.println("outputDatail no 넘어오나? : " + taskNo);
+		
+		OutputDTO outputDetail = outputService.findOutputDetail(taskNo);
+		
+		System.out.println("outputDetail : " +outputDetail);
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls().disableHtmlEscaping()
+				.create();
+		
+		return gson.toJson(outputDetail);
+	}
+	
+	@GetMapping("/delete")
+	public String removeOutput(HttpServletRequest request, RedirectAttributes rttr) {
+		
+		int no = Integer.parseInt(request.getParameter("outputNo"));
+		
+		outputService.removeOutput(no);
+		
+		rttr.addFlashAttribute("message", "산출물 삭제에 성공하셨습니다.");
+		
+		return "redirect:/output/detail";
 	}
 
 }
