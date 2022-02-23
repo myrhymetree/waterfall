@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
 <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -15,6 +16,22 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 		<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>		
 <title>Insert title here</title>
+=======
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<link href="css/styles.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+<link href="${ pageContext.servletContext.contextPath }/resources/css/styles.css" rel="stylesheet" />
+<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>
+>>>>>>> feature/project/main
 </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -45,10 +62,12 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             
-                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <div class="sb-sidenav-menu-heading"></div>
+                           
+                           
+                           <c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role eq 1 }">
+                           
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <!-- <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div> -->
-								<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>
                                 <div class="menu-font">관리자메뉴</div>
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -63,7 +82,12 @@
 		                                    </nav>
 		                                </div>
 		                            </div>
-                            	 <%-- </c:if> --%>
+                           </c:if>
+		                            
+		                            
+		                            
+		                            
+		                            
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <!-- <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div> -->
                                 <div class="menu-font">프로젝트</div>
@@ -73,13 +97,13 @@
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                                 	<div class="menu-font2">
                                 	<a href=" ${ pageContext.servletContext.contextPath }/project/list"> 프로젝트</a>
-                                		<c:forEach var="project" items="${ requestScope.projectList }">
-                                    			<a class="nav-link collapsed" z data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                      		  <%-- <c:out value="${ project.name }" /> --%>
-                                        			<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                     	  	  <%-- <input type="hidden" value="${ project.no }"/> --%>
-                                    			</a>
-                                   		 </c:forEach>
+<%--                                 		<c:forEach var="project" items="${ requestScope.projectList }"> --%>
+<!--                                     			<a class="nav-link collapsed" z data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth"> -->
+<%--                                       		  <c:out value="${ project.name }" /> --%>
+<!--                                         			<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div> -->
+<%--                                      	  	  <input type="hidden" value="${ project.no }"/> --%>
+<!--                                     			</a> -->
+<%--                                    		 </c:forEach> --%>
                                 	</div>                               
                                 </nav>
                             </div>                          

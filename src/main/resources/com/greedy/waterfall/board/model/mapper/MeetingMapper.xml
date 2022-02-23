@@ -3,8 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.greedy.waterfall.board.model.mapper.MeetingMapper">
-
-
 	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingDTO" id="meetingResult">
 	 	<id property="no" column="BOARD_NO"/>
 	 	<result property="updatedDate" column="BOARD_UPDATED_DATE"/>
@@ -16,33 +14,34 @@
 	 	<result property="boardCount" column="BOARD_COUNT"/>
 	 	<result property="projectNo" column="PROJECT_NO"/>
 	 	<result property="memberNo" column="MEMBER_NO"/>
-	 	
 	 	<association property="member" resultMap="memberResultMap" />
 	 	<collection property="file" resultMap="fileResultMap"/>
  	</resultMap>
  	
  	<resultMap type="com.greedy.waterfall.board.model.dto.FileDTO" id="fileResultMap">
-	 		<id property="fileNo" column="FILE_NO"/>
-	 		<result property="filePath" column="FILE_PATH"/>
-	 		<result property="fileOriginName" column="FILE_ORIGIN_NAME"/>
-	 		<result property="fileRandomName" column="FILE_RANDOM_NAME"/>
-	 		<result property="fileStatus" column="FILE_STATUS"/>
-	 		<result property="refIssueNo" column="REF_ISSUE_NO"/>
-	 		<result property="refTaskNo" column="REF_TASK_NO"/>
-	 		<result property="refBoardNo" column="REF_BOARD_NO"/>
-	 		<result property="fileCategoryNo" column="FILE_CATEGORY_NO"/>
-	 	</resultMap>
+		<id property="fileNo" column="FILE_NO"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOriginName" column="FILE_ORIGIN_NAME"/>
+		<result property="fileRandomName" column="FILE_RANDOM_NAME"/>
+		<result property="fileStatus" column="FILE_STATUS"/>
+		<result property="refIssueNo" column="REF_ISSUE_NO"/>
+		<result property="refTaskNo" column="REF_TASK_NO"/>
+		<result property="refBoardNo" column="REF_BOARD_NO"/>
+		<result property="fileCategoryNo" column="FILE_CATEGORY_NO"/>
+	</resultMap>
  	
  	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResultMap">
 		<id property="memberNo" column="MEMBER_NO"/>
 		<result property="memberName" column="MEMBER_NAME"/>
 	</resultMap>
+	
 	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingProjectDTO" id="projectResultMap">
 		<id property="no" column="MEMBER_NO"/>
 	</resultMap>
 
+	<!-- 게시물 조회시  조회수를 1 증가시킨다.-->
 	<update id="increseCount">
-        UPDATE
+        UPDATE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#increseCount() */
                TBL_BOARD A
            SET A.BOARD_COUNT = (SELECT B.BOARD_COUNT
                                   FROM TBL_BOARD B
@@ -50,9 +49,11 @@
                                  ) + 1
          WHERE A.BOARD_NO = #{ meetingNo } 
 	</update>
+	
 	<!--#보류 projectNo, memberNo 기능 추가될시 수정 -->
+	<!-- 게시판 게시물 등록 후 등록한 게시물의 번호를 MeetingDTO의 no에 넣준다.. -->
 	<insert id="registMeetingBoard" parameterType="com.greedy.waterfall.board.model.dto.MeetingDTO">
-        INSERT
+        INSERT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#registMeetingBoard() */
           INTO TBL_BOARD A
         (
           A.BOARD_NO
@@ -83,8 +84,10 @@
         	  FROM DUAL
         </selectKey>
 	</insert>
+	
+	<!-- 게시물의 첨부파일을 저장한다. -->
 	<insert id="registMeetingFile" parameterType="com.greedy.waterfall.board.model.dto.FileDTO">
-        INSERT
+        INSERT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#registMeetingFile() */
           INTO TBL_FILE A
         (
           A.FILE_NO
@@ -103,10 +106,11 @@
         , #{ refBoardNo }
         , 3
         ) 
-	
 	</insert>
+	
+	<!-- 회의록 게시판의 게시글을 조회한다. selectCriteria안에 담긴 현재페이지에 출력될 시작행과 끝 행으로 게시글의 갯수를 정하고, serchCondition과  searchValue로 검색을 한다. -->
 	<select id="findMeetingList" resultMap="meetingResult">
-       SELECT 
+       SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMeetingList() */  
               A.RNUM
             , A.BOARD_NO
             , A.BOARD_POSTING_DATE
@@ -164,8 +168,10 @@
         WHERE  RNUM >= #{ startRow }
         ORDER BY A.BOARD_NO DESC
 	</select>
+	
+	<!-- 전달받은 게시글번호로 해당 게시물의 상세내역을 조회한다. -->
 	<select id="findMeetingBoardDetail" resultMap="meetingResult">
-       SELECT
+       SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMeetingBoardDetail() */
               A.BOARD_NO
             , A.BOARD_POSTING_DATE
             , A.BOARD_TITLE
@@ -187,8 +193,9 @@
           AND A.BOARD_NO = #{ meetingNo }
 	</select>
 	
+	<!-- 회으록게시판의 전체 게시글을 조회한다. -->
 	<select id="findMeetingTotalCount" resultType="_int" parameterType="hashmap">
-        SELECT
+        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMeetingTotalCount() */
                COUNT(*)
           FROM TBL_BOARD A
 		<if test="searchCondition == 'writer'">
@@ -208,22 +215,28 @@
            AND A.BOARD_CATEGORY_NO = 4
 		</where>
 	</select>	
+	
+	<!-- 게시글을 삭제한다. -->
 	<delete id="removeMeetingBoard" parameterType="_int">
-        DELETE
+        DELETE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#removeMeetingBoard() */
           FROM TBL_BOARD A
          WHERE A.BOARD_CATEGORY_NO = 4
            AND A.BOARD_NO = #{ meetingNo }	
 	</delete>
+	
+	<!-- 입력받은 정보로 게시글을 수정한다. -->
 	<update id="modifyMeetingBoard" parameterType="hashmap">
-        UPDATE
+        UPDATE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#modifyMeetingBoard() */
                TBL_BOARD A
            SET BOARD_UPDATED_DATE = SYSDATE
              , A.BOARD_TITLE = #{ title }
              , A.BOARD_CONTENT = #{ content }
          WHERE A.BOARD_NO = #{ no } 
 	</update>
+	
+	<!-- 게시글 번호로 하나의 게시글을 조회한다. -->
 	<select id="findOneMeetingBoard" resultMap="meetingResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findOneMeetingBoard() */
                A.BOARD_NO
              , A.BOARD_UPDATED_DATE
              , A.BOARD_POSTING_DATE
@@ -237,8 +250,9 @@
          WHERE A.BOARD_NO = #{ meetingNo }
 	</select>	
 	
+	<!-- 첨부파일번호로 첨부파일 전체 정보를 조회한다. -->
 	<select id="fineFile" resultMap="fileResultMap">
-        SELECT
+        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#fineFile() */
                A.FILE_NO
              , A.FILE_PATH
              , A.FILE_ORIGIN_NAME

@@ -71,37 +71,35 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	/**
-	 * registMeetingBoard : 입력한 정보로 회의록 게시물을 작성하는 서비스 메소드
-	 * @param parameter : 작성한 회의록게시물의 내용을 Map형태로 저장한 변수
-	 * @return 새로운 게시물의 등록 여부를 boolean형태로 반환한다
+	 * registMeetingBoard : 회의록 게시글을 등록한다.
+	 * @param parameter : 등록할 게시글의 내용을 전달받는다.
+	 * @return boolean : 게시물의 등록 여부를 반환한다.
 	 * 
 	 * @author 홍성원
 	 */
 	@Override
 	public boolean registMeetingBoard(MeetingDTO parameter) {
-		
-		System.out.println(parameter);
 		/* Map형태로 저장된 게시판의 내용을  전달한 후 등록의 성공여부를 boolean형태로 반환한다.*/
+		/* 성공여부를 저장할 result와, parameter에 저장된 첨부파일 정보를 저장할 files를 선언 후 초기화한다.*/
 		boolean result = false;
-		System.out.println("test2");
+		List<FileDTO> files = parameter.getFile();
+
+		/* 게시글 등록을 성공하면 첨부파일을 등록한다. */
 		if(mapper.registMeetingBoard(parameter) > 0) {
 			result = true;
-			System.out.println("test3");
-			List<FileDTO> files = parameter.getFile();
-			System.out.println("test4");
-			System.out.println(files);
+			
+			/* 첨부파일을 담는 files가 null이 아니라면 첨부파일을 등록한다.*/
 			if(files != null) {
-				System.out.println(files);
-			} else {
-				System.out.println("files is null");
-			}
-			if(files != null) {
-				System.out.println("test5");
+				
+				/* 첨부파일 등록 성공 갯수를 저장할 count 변수를 선언 후 0으로 초기화한다. */
 				int count = 0;
 				for(int i = 0; i < files.size(); i++) {
+					
+					/* 각각의 첨부파일에 상위 게시글번호를 전달한 후 첨부파일을 등록한다. */
 					files.get(i).setRefBoardNo(parameter.getNo());
 					count += mapper.registMeetingFile(files.get(i));
 				}
+				/* 첨부파일의 갯수와, 첨부파일 등록 성공 갯수가 다를 시 등록에 실패한다. */
 				if(count != files.size()) {
 					result = false;
 				} 
@@ -112,9 +110,9 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	/**
-	 * removeMeetingBoard : 게시물을 삭제하는 프로세스의 서비스 메소드
-	 * @param meetingNo : 
-	 * @return 리턴값의 설명 작성 부분
+	 * removeMeetingBoard : 게시글을 삭제한다.
+	 * @param meetingNo : 삭제할 게시글의 번호를 전달받는다.
+	 * @return boolean : 게시글 삭제 성공여부를 반환한다.
 	 * 
 	 * @author 홍성원
 	 */
@@ -124,18 +122,39 @@ public class MeetingServiceImpl implements MeetingService {
 		return mapper.removeMeetingBoard(meetingNo);
 	}
 
+	/**
+	 * modifyMeetingBoard : 게시글을 수정한다.
+	 * @param meeting : 수정할 게시글의 내용을 전달받는다.
+	 * @return boolean : 수정 성공여부를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@Override
 	public boolean modifyMeetingBoard(Map<String, String> meeting) {
 		
 		return mapper.modifyMeetingBoard(meeting);
 	}
 
+	/**
+	 * findOneMeetingBoard : 하나의 게시글을 조회한다.
+	 * @param meetingNo : 조회할 게시글 번호를 전달받는다.
+	 * @return MeetingDTO : 조회한 게시글 정보를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@Override
 	public MeetingDTO findOneMeetingBoard(int meetingNo) {
 
 		return mapper.findOneMeetingBoard(meetingNo);
 	}
 
+	/**
+	 * findFile : 하나의 첨부파일의 상세정보를 조회한다.
+	 * @param no : 조회할 첨부파일의 번호를 전달받는다.
+	 * @return FileDTO : 첨부파일의 상세정보를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@Override
 	public FileDTO findFile(int no) {
 		

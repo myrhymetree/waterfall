@@ -15,13 +15,80 @@
 		
 		<association property="member" resultMap="memberResult"></association>
 	</resultMap>
-	
+	<resultMap type="com.greedy.waterfall.project.model.dto.RegistProjectDTO" id="registProjectResult">
+		<id property="projectNo" column="PROJECT_NO"/>
+		<result property="projectName" column="PROJECT_NAME"/>	
+		<result property="startDate" column="PROJECT_START_DATE"/>
+		<result property="deadLine" column="PROJECT_DEADLINE"/>
+		<result property="pmNumber" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="projectStatus" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="dept" column="DEPT_CODE"/>
+		<result property="team" column="TEAM_CODE"/>
+		<result property="adminNo" column="MANAGER_NO"/>
+	</resultMap>
 	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
 		<id property="memberNo" column="MEMBER_NO"/>
 		<result property="memberName" column="MEMBER_NAME"/>
 	</resultMap>
+
+	<resultMap type="com.greedy.waterfall.project.model.dto.DeptDTO" id="deptResult">
+		<id property="deptCode" column="DEPT_CODE"/>
+		<result property="deptName" column="DEPT_NAME"/>
+	</resultMap>
 	
-	<select id="findManagaProject" resultMap="projectResult">
+	<resultMap type="com.greedy.waterfall.project.model.dto.TeamDTO" id="teamResult">
+		<id property="teamCode" column="TEAM_CODE"/>
+		<result property="teamName" column="TEAM_NAME"/>
+		<result property="deptCode" column="DEPT_CODE"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectStatusDTO" id="projectStatusResult">
+		<id property="statusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="statusName" column="PROJECT_PROGRESS_STATUS_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.member.model.dto.MemberDTO" id="memberResultMap">
+		<id property="no" column="MEMBER_NO"/>
+		<result property="name" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<select id="findTeam" resultMap="teamResult">
+        SELECT
+               A.TEAM_CODE
+             , A.TEAM_NAME
+          FROM TBL_TEAM A
+         WHERE A.DEPT_CODE = #{ deptCode }
+	</select>
+	
+	<select id="findTeamMember" resultMap="memberResultMap">
+        SELECT
+               B.MEMBER_NO
+             , B.MEMBER_NAME
+          FROM TBL_MEM_TEAM_HISTORY A
+          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+         WHERE A.TEAM_UPDATED_NAME = #{ teamCode }
+           AND A.TEAM_MEM_HISTORY_NO IN (SELECT MAX(C.TEAM_MEM_HISTORY_NO)
+                                           FROM TBL_MEM_TEAM_HISTORY C
+                                          GROUP BY C.MEMBER_NO
+                                          )
+	</select>
+	
+	
+	
+	<select id="findAllProjectStatus" resultMap="projectStatusResult">
+        SELECT
+               A.PROJECT_PROGRESS_STATUS_CODE
+             , A.PROJECT_PROGRESS_STATUS_NAME
+          FROM TBL_PROJECT_STATUS A
+	</select>
+	<select id="findAllDept" resultMap="deptResult">
+        SELECT
+               A.DEPT_CODE
+             , A.DEPT_NAME
+          FROM TBL_DEPT A
+	</select>
+	
+	<select id="findAllProject" resultMap="projectResult">
         SELECT 
                A.PROJECT_NO
              , A.PROJECT_NAME
@@ -35,7 +102,29 @@
           FROM TBL_PROJECT A
           JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
           JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
+         WHERE B.ROLE_NO = 8
+	</select> 
+	
+	<select id="findManagaProject" resultMap="projectResult">
+            SELECT 
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE
+             , A.PROJECT_DEADLINE
+             , A.PROJECT_PROGRESSION
+             , A.PROJECT_STATUS
+             , A.PROJECT_COMPLETED_DATE
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , C.MEMBER_NAME
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
          WHERE B.MEMBER_NO = #{ no }
+          AND B.ROLE_HISTORY_NO IN (SELECT MAX(C.ROLE_HISTORY_NO)
+                                      FROM TBL_ROLE_ASSIGNMENT_HISTORY C
+                                     WHERE ROLE_NO = 8
+                                     GROUP BY ROLE_HISTORY_NO 
+                                   )
            AND B.ROLE_NO = 8
 	</select>
  
@@ -53,19 +142,132 @@
           FROM TBL_PROJECT A
           JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
           JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
-         WHERE A.PROJECT_NO IN (SELECT DISTINCT D.PROJECT_NO
+         WHERE A.PROJECT_NO IN (SELECT D.PROJECT_NO
                                   FROM TBL_ROLE_ASSIGNMENT_HISTORY D
-                                 WHERE D.MEMBER_NO = #{ no }
-                                   AND D.ROLE_NO != 8
+                                 WHERE D.MEMBER_NO =  #{ no }
+                                   AND D.ROLE_HISTORY_NO  NOT IN (SELECT MAX(E.ROLE_HISTORY_NO)
+                                                              FROM TBL_ROLE_ASSIGNMENT_HISTORY E
+                                                             WHERE E.ROLE_NO = 8
+                                                             GROUP BY E.ROLE_HISTORY_NO 
+                                                           )
+                                   
                                )
-           AND B.ROLE_NO = 8            
-         ORDER BY A.PROJECT_NO 
+           AND B.ROLE_NO = 8        
+         ORDER BY A.PROJECT_NO DESC
  	</select>
+	
 
-
-
- 
+	<insert id="registProject">
+		<selectKey keyProperty="projectNo" resultType="_int" order="AFTER">
+        SELECT
+               PROJECT_NO.CURRVAL AS projectNumber
+          FROM DUAL
+		</selectKey>
+        INSERT
+          INTO TBL_PROJECT A
+        (
+          A.PROJECT_NO
+        , A.PROJECT_NAME
+        , A.PROJECT_START_DATE
+        , A.PROJECT_DEADLINE
+        , A.PROJECT_PROGRESSION
+        , A.PROJECT_STATUS
+        , A.PROJECT_PROGRESS_STATUS_CODE 
+        )
+        VALUES
+        (  
+          PROJECT_NO.NEXTVAL
+        , #{ projectName }
+        , #{ startDate }
+        , #{ deadLine }
+        , 0
+        , 'Y'
+        , #{ projectStatus }
+        )
+	</insert>
+	
+	<insert id="registPm">
+        INSERT
+          INTO TBL_ROLE_ASSIGNMENT_HISTORY A
+        (
+          A.ROLE_HISTORY_NO
+        , A.MEMBER_NO
+        , A.ROLE_NO
+        , A.PROJECT_NO
+        , A.MANAGER_NO
+        )
+        VALUES
+        (
+          ROLE_HISTORY_NO.NEXTVAL
+        , #{ pmNumber }
+        , 8
+        , #{ projectNo }
+        , 1
+        )
+	</insert>
+	<insert id="registMemberProject">
+        INSERT
+          INTO TBL_PROJECT_MEM_HISTORY A
+        (
+          A.PROJECT_MEM_HISTORY_NO
+        , A.PROJECT_MEM_STARTED_DATE
+        , A.PROJECT_MEM_DROP_DATE
+        , A.MEMBER_NO
+        , A.PROJECT_NO
+        , A.MANAGER_NO
+        )
+        VALUES
+        (
+          PROJECT_MEM_HISTORY_NO.NEXTVAL
+        , #{ startDate }
+        , null
+        , #{ pmNumber }
+        , #{ projectNo }
+        , 1
+        )
+	</insert>
+	<select id="finePmNumber" resultType="_int">
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#finePmNumber() */
+               A.MEMBER_NO
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+         WHERE PROJECT_NO = #{ projectNo }
+           AND A.ROLE_HISTORY_NO = (SELECT MAX(B.ROLE_HISTORY_NO) 
+                                      FROM TBL_ROLE_ASSIGNMENT_HISTORY B 
+                                     WHERE B.PROJECT_NO = #{ projectNo }            
+                                       AND ROLE_NO = 8
+                                   )
+	</select> 
  	
 
 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

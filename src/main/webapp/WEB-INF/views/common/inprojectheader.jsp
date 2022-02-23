@@ -17,6 +17,7 @@
  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
  <link href="css/styles.css" rel="stylesheet" />
  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+ <script src="https://kit.fontawesome.com/c24bc5c6f2.js" crossorigin="anonymous"></script>
  <script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>
 <title>Insert title here</title>
 </head>
@@ -29,91 +30,46 @@
 			<i class="fas fa-bars"></i>
 		</button>
 		<!-- Navbar Search-->
-		<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
- 		</form>
+		<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
 		<!-- Navbar-->
 	    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fas fa-user fa-fw"></i>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="#!">계정정보 관리</a></li>
-                      <li><a class="dropdown-item" href="#!">프로필 관리</a></li>
-                      <li><hr class="dropdown-divider" /></li>
-                      <li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/member/logout">로그아웃</a></li>
-                  </ul>
-              </li>
-         </ul>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<i class="fas fa-user fa-fw"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+					<li><a class="dropdown-item" href="#!">계정정보 관리</a></li>
+					<li><a class="dropdown-item" href="#!">프로필 관리</a></li>
+					<li><hr class="dropdown-divider" /></li>
+					<li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/member/logout">로그아웃</a></li>
+				</ul>
+			</li>
+		</ul>
 	</nav>
 	<div id="layoutSidenav">
 		<div id="layoutSidenav_nav">
 			<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
 				<div class="sb-sidenav-menu">
 					<div class="nav">		
-							<div class="sb-sidenav-menu-heading">Interface</div>
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#collapseLayouts" aria-expanded="false"
-								aria-controls="collapseLayouts">
-								<div class="sb-nav-link-icon">
-									<i class="fas fa-columns"></i>
-								</div>
-								<div class="menu-font">프로젝트</div>
-								<div class="sb-sidenav-collapse-arrow">
-									<i class="fas fa-angle-down"></i>
-								</div>
-							</a>					
-						<div class="collapse" id="collapseLayouts"
-							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+						<div class="sb-sidenav-menu-heading"><label></label></div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-columns"></i>
+							</div>
+							<div class="menu-font">프로젝트</div>
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>					
+						<div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav">
 								<div class="menu-font2">
-                                    		<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/project/list">
-														프로젝트 목록								
-                                    		</a>
-								</div>
-							</nav>
-						</div>
-					<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#collapsePages" aria-expanded="false"
-								aria-controls="collapsePages">
-								<div class="sb-nav-link-icon">
-									<i class="fas fa-book-open"></i>
-								</div>
-								<div class="menu-font">산출물</div>
-								<div class="sb-sidenav-collapse-arrow">
-									<i class="fas fa-angle-down"></i>
-								</div>
-							</a>
-					<%-- </c:if> --%>
-					<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>					
-							<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-								<nav class="sb-sidenav-menu-nested nav accordion"
-									id="sidenavAccordionPages">
-									<a class="nav-link menu-font2" href="${ pageContext.servletContext.contextPath }/output/list?no=3">
-										산출물관리
+									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/project/list">
+										프로젝트 목록								
 									</a>
-									<div class="collapse" id="pagesCollapseAuth"
-										aria-labelledby="headingOne"
-										data-bs-parent="#sidenavAccordionPages">
-										<nav class="sb-sidenav-menu-nested nav">
-											<a class="nav-link" href="login.html">직급관리</a> 									
-										</nav>
-									</div>
-								</nav>
-							</div>
-					<%-- </c:if> --%>
-					<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>	
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#collapsePages2" aria-expanded="false"
-								aria-controls="collapsePages2">
-								<div class="sb-nav-link-icon">
-									<i class="fas fa-book-open"></i>
+									
 								</div>
-								<div class="menu-font">이슈</div>
-								<div class="sb-sidenav-collapse-arrow">
-									<i class="fas fa-angle-down"></i>
-								</div>
+<<<<<<< HEAD
 							</a>
 					<%-- </c:if> --%>
 					<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>	
@@ -135,6 +91,11 @@
 						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 							data-bs-target="#collapsePages3" aria-expanded="false"
 							aria-controls="collapsePages3">
+=======
+							</nav>
+						</div>	
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapsePages3">
+>>>>>>> feature/project/main
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-book-open"></i>
 							</div>
@@ -154,8 +115,7 @@
 								<i class="fas fa-angle-down"></i>
 							</div>
 						</a>
-						<div class="collapse" id="collapseLayouts4"
-							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+						<div class="collapse" id="collapseLayouts4" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<div class="menu-font2">
 								<nav class="sb-sidenav-menu-nested nav">
 									<a class="nav-link" href="${ pageContext.servletContext.contextPath }/notice/list">공지사항</a> 
@@ -166,51 +126,16 @@
 								</nav>
 							</div>
 						</div>
-					<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>		
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#collapseLayouts5" aria-expanded="false"
-								aria-controls="collapseLayouts5">
-								<div class="sb-nav-link-icon">
-									<i class="fas fa-columns"></i>
-								</div>
-								<div class="menu-font">히스토리</div>
-								<div class="sb-sidenav-collapse-arrow">
-									<i class="fas fa-angle-down"></i>
-								</div>
-							</a>
-							<div class="collapse" id="collapseLayouts5"
-								aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-								<div class="menu-font2">
-									<nav class="sb-sidenav-menu-nested nav">
-										<a class="nav-link" href="layout-static.html">산출물</a> 
-										<a class="nav-link" href="layout-sidenav-light.html">이슈</a> 
-										<a class="nav-link" href="layout-sidenav-light.html">게시판</a>
-										<button onclick="location.href='${  pageContext.servletContext.contextPath }/test'">Test DB 연결</button>
-										
-									</nav>
-								</div>
-							</div>
-			    	<%-- </c:if> --%>
-			    	<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>		
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#collapseLayouts6" aria-expanded="false"
-								aria-controls="collapseLayouts6">
-								<div class="sb-nav-link-icon">
-									<i class="fas fa-columns"></i>
-								</div>
-								<div class="menu-font">인원관리</div>
-								<div class="sb-sidenav-collapse-arrow">
-									<i class="fas fa-angle-down"></i>
-								</div>
-							</a>
-					<%-- </c:if> --%>		
+						<c:if test="${ !empty requestScope.loginMember and sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo or sessionScope.loginMember.role eq 1}">
+							<jsp:include page="/WEB-INF/views/common/inprojectheaderManage.jsp"/>
+						</c:if>
 						<div class="collapse" id="collapseLayouts6"
 							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<div class="menu-font2">
 								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" href="layout-static.html"></a> <a
-										class="nav-link" href="layout-sidenav-light.html"></a> <a
-										class="nav-link" href="layout-sidenav-light.html"></a>
+									<a class="nav-link" href="layout-static.html"></a> 
+									<a class="nav-link" href="layout-sidenav-light.html"></a> 
+									<a class="nav-link" href="layout-sidenav-light.html"></a>
 								</nav>
 							</div>
 						</div>					

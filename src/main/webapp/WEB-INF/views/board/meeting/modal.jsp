@@ -168,7 +168,6 @@
 <script>
 
 	$("#meetingRegistBackToList").click( function() {
-		console.log("123123");
 		$("#title-write").val("");
 		$("#my-textarea").val("");
 		$("#meeting-fileupload").val("");
