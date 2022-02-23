@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 //package com.greedy.waterfall.common.filter;
 //
 //import java.io.IOException;
@@ -132,6 +133,8 @@
 //
 //}
 =======
+=======
+>>>>>>> origin/feature/issue/list
 package com.greedy.waterfall.common.filter;
 
 import java.io.IOException;
@@ -155,7 +158,11 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 
 
 
+<<<<<<< HEAD
 @WebFilter(urlPatterns = {"/admintask/*", "/board/*", "/book/*", "/code/*", "/history/*", "/issue/*", "/member/*", "/menu/*", "/output/*", "/statistics/*", "/task/*", "/user/*"})
+=======
+@WebFilter(urlPatterns = {"/admintask/*", /*"/board",*/ "/book/*", "/code/*", "/company/*", "/history/*", /*"/issue/*",*/ "/member/*", "/menu/*", "/output/*", "/project/*", "/statistics/*", "/task/*", "/user/*"})
+>>>>>>> origin/feature/issue/list
 public class AuthenticationFilter implements Filter {
 	
 	Map<String, List<String>> permitURIList;
@@ -264,4 +271,7 @@ public class AuthenticationFilter implements Filter {
 	}
 
 }
+<<<<<<< HEAD
 >>>>>>> origin/feature/todoboard
+=======
+>>>>>>> origin/feature/issue/list
