@@ -1,5 +1,13 @@
 package com.greedy.waterfall.member.controller;
 
+
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -10,8 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
+import com.greedy.waterfall.common.paging.Pagenation;
+import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.member.model.service.MemberService;
 
@@ -73,6 +85,54 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 	
+	/*
+	 * @GetMapping("/list") public ModelAndView MemberSelectList(HttpServletRequest
+	 * request, ModelAndView mv) {
+	 * 
+	 * String currentPage = request.getParameter("currentPage");
+	 * 
+	 * return mv; }
+	 */
 	
+	@GetMapping("list")
+	public ModelAndView findAdminMemberList(HttpServletRequest request ,ModelAndView mv) {
+		
+		String currentPage = request.getParameter("currentPage");
+		int pageNo = 1;
+		
+		if(currentPage != null && !"".equals(currentPage)) {
+			pageNo = Integer.parseInt(currentPage);
+		}
+		
+		String searchCondition = request.getParameter("searchCondition");
+		String searchValue = request.getParameter("searchValue");
+		
+		Map<String, String> searchMap = new HashMap<>();
+		searchMap.put("searchCondition", searchCondition);
+		searchMap.put("searchValue", searchValue);
+		
+		int totalCount = memberService.selectTotalCount(searchMap);
+		
+		int limit = 10;
+		
+		int buttonAmount = 5;
+		
+		SelectCriteria selectCriteria = null;
+		
+		if(searchCondition != null && !"".equals(searchCondition)) {
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
+		} else {
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+		}
+		
+		List<AdminMemberDTO> adminMemberList = memberService.findAdminMember(selectCriteria); 
+		
+		mv.addObject("adminMemberList", adminMemberList);
+		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("intent", "/member/list");
+		mv.setViewName("/member/memberList");
+		
+		return mv;
+	}
 	
 }

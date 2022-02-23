@@ -13,6 +13,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="${ pageContext.servletContext.contextPath }/resources/css/styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+		<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>		
 <title>Insert title here</title>
 </head>
     <body class="sb-nav-fixed">
@@ -54,7 +55,7 @@
 		                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 		                                <div class="menu-font2">
 		                                     <nav class="sb-sidenav-menu-nested nav">
-		                                        <a class="nav-link" href="layout-static.html">계정관리</a>
+		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/member/list">계정관리</a>
 		                                        <a class="nav-link" href="layout-sidenav-light.html">직급관리</a>
 		                                        <a class="nav-link" href="layout-sidenav-light.html">부서관리</a>
 		                                        <a class="nav-link" href="layout-sidenav-light.html">산출물</a>

@@ -17,6 +17,34 @@
 		<result property="role" column="MEMBER_AUTHORIZATION_NO"/>
 	</resultMap>
 	
+	<resultMap type="com.greedy.waterfall.member.model.dto.AdminMemberDTO" id="AdminMemberResultMap">
+		<id property="no" column="MEMBER_NO"/>
+		<result property="id" column="MEMBER_ID"/>
+		<result property="name" column="MEMBER_NAME"/>
+		<result property="phone" column="PHONE"/>
+		<result property="email" column="EMAIL"/>
+		<result property="createDate" column="MEMBER_CREATED_DATE"/>		
+	
+		<association property="dept" resultMap="deptResultMap"/>
+		<association property="team" resultMap="teamResultMap"/>
+		<association property="job" resultMap="jobResultMap"/>		
+	</resultMap> 
+	
+	<resultMap type="com.greedy.waterfall.member.model.dto.DeptDTO" id="deptResultMap">
+		<id property="deptCode" column="DEPT_CODE"/>
+		<result property="deptName" column="DEPT_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.member.model.dto.TeamDTO" id="teamResultMap">
+		<id property="teamCode" column="TEAM_CODE"/>
+		<result property="teamName" column="TEAM_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.member.model.dto.JobDTO" id="jobResultMap">
+		<id property="jobCode" column="JOB_CODE"/>
+		<result property="jobName" column="JOB_NAME"/>
+	</resultMap>
+	
 	<select id="selectEncryptedPwd" resultType="java.lang.String">
 		SELECT
 		       A.MEMBER_PWD
@@ -41,6 +69,68 @@
 		  FROM TBL_MEMBER A
 		 WHERE A.MEMBER_STATUS = 'Y'
 		   AND A.MEMBER_ID = #{ id } 	   
+	</select>
+	
+	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+		SELECT
+		       COUNT(*)
+		  FROM TBL_MEMBER A
+		 WHERE A.MEMBER_STATUS = 'Y'         
+	</select>
+	
+	<select id="findAdminMemberList" resultMap="AdminMemberResultMap">	
+		SELECT
+		       G.RNUM
+		     , G.MEMBER_NO
+		     , G.MEMBER_ID
+		     , G.MEMBER_NAME
+		     , G.PHONE
+		     , G.EMAIL
+		     , G.MEMBER_CREATED_DATE
+		     , G.DEPT_NAME
+		     , G.TEAM_NAME
+		     , G.JOB_NAME
+		  FROM (SELECT ROWNUM RNUM
+		                 , F.MEMBER_NO
+		                 , F.MEMBER_ID
+		                 , F.MEMBER_NAME
+		                 , F.PHONE
+		                 , F.EMAIL
+		                 , F.MEMBER_CREATED_DATE
+		                 , F.DEPT_NAME
+		                 , F.TEAM_NAME
+		                 , F.JOB_NAME
+		              FROM (SELECT A.MEMBER_NO
+		                         , A.MEMBER_ID
+		                         , A.MEMBER_NAME
+		                         , A.PHONE
+		                         , A.EMAIL
+		                         , A.MEMBER_CREATED_DATE
+		                         , C.DEPT_NAME
+		                         , D.TEAM_NAME
+		                         , E.JOB_NAME
+		                      FROM TBL_MEMBER A
+		                      JOIN TBL_MEMBER_COM_INFO B ON (A.MEMBER_NO = B.MEMBER_NO )
+		                      JOIN TBL_DEPT C ON (B.DEPT_CODE = C.DEPT_CODE)
+		                      JOIN TBL_TEAM D ON (B.TEAM_CODE = D.TEAM_CODE)
+		                      JOIN TBL_JOB_TITLE E ON (B.JOB_CODE = E.JOB_CODE)
+		                     <where>
+		                       <if test="searchCondition == 'name'">
+		                           A.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
+		                       </if>
+		                       <if test="searchCondition == 'deptName'">
+		                       	   C.DEPT_NAME LIKE '%' || #{ searchValue } || '%' 
+		                       </if>
+		                       AND A.MEMBER_STATUS = 'Y' 
+		                     </where>
+		                     ORDER BY A.MEMBER_NO ASC
+		                 ) F
+		             <![CDATA[    
+		             WHERE ROWNUM <= #{ endRow }
+		             ]]> 
+		           ) G
+		 WHERE G.RNUM >= #{ startRow }
+		 ORDER BY 1 ASC              
 	</select>
 	
 </mapper>
