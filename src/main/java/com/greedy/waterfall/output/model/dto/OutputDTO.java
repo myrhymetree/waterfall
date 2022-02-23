@@ -2,6 +2,7 @@ package com.greedy.waterfall.output.model.dto;
 
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 
 import lombok.AllArgsConstructor;
@@ -26,10 +27,12 @@ public class OutputDTO {
 	private String status;
 	private int memberNo;
 	private int projectNo;
-	private MemberDTO member;
+	private MemberDTO memberName;
 	private TaskDTO task;
+	private ChildTaskDTO childTask;
 	private ProjectDTO project;
 	private OutputAttachmentDTO outputFile;
+	private int totalCount;
 	
 	
 

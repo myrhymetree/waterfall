@@ -1,5 +1,7 @@
 package com.greedy.waterfall.task.model.dto;
 
+import com.greedy.waterfall.project.model.dto.ProjectDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,7 +30,9 @@ public class ChildTaskDTO {
 	private int projectNo;				//업무에 해당하는 프로젝트번호
 	private int managerNo;				//업무 담당하는 사람 번호
 	private String taskCode;			//하위업무 코드명(ex.TEST_ALL)
+	private ProjectDTO projectName;
 	
 	private TaskCategoryDTO taskCategory;
+	private TaskDTO parentTask;
 
 }

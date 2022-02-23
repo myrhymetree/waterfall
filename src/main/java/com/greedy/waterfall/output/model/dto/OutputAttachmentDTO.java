@@ -20,6 +20,7 @@ public class OutputAttachmentDTO {
 	private String originName;
 	private String randomName;
 	private String status;
-	private int taskNo;
+	private java.sql.Date registedDate;
+	private int outputNo;
 
 }
