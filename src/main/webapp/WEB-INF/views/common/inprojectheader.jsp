@@ -69,33 +69,10 @@
 									</a>
 									
 								</div>
-<<<<<<< HEAD
-							</a>
-					<%-- </c:if> --%>
-					<%-- <c:if text="${ !empty loginmember && loginMember.role eq 'ROLE_ADMIN'} "> --%>	
-							<div class="collapse" id="collapsePages2"
-								aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-								<nav class="sb-sidenav-menu-nested nav accordion"
-									id="sidenavAccordionPages">
-									<a class="nav-link collapsed, menu-font2" href="login.html"
-										data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth"
-										aria-expanded="false" aria-controls="pagesCollapseAuth">
-										이슈관리
-									</a>					
-									<nav class="sb-sidenav-menu-nested nav">
-										<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/list"">이슈 조회</a> 									
-									</nav>
-								</nav>
-							</div>
-					<%-- </c:if> --%>	
-						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-							data-bs-target="#collapsePages3" aria-expanded="false"
-							aria-controls="collapsePages3">
-=======
+
 							</nav>
 						</div>	
 						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapsePages3">
->>>>>>> feature/project/main
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-book-open"></i>
 							</div>

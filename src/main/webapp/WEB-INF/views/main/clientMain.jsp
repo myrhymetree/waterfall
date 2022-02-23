@@ -9,7 +9,7 @@
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-		<h1 align="center">개발자 메인화면</h1>
+	<h1 align="center">클라이언트 메인화면</h1>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>

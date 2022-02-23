@@ -18,7 +18,7 @@
 	</a>
 	<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 		<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-			<a class="nav-link menu-font2" href="${ pageContext.servletContext.contextPath }/output/list?no=3">
+			<a class="nav-link menu-font2" href="${ pageContext.servletContext.contextPath }/output/list?no=" + "${ projectAutority.projectNo }">
 				산출물관리
 			</a>
 			<div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
@@ -41,7 +41,11 @@
 		<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
 			<a class="nav-link collapsed, menu-font2" href="${ pageContext.servletContext.contextPath }/issue/list" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
 				이슈관리
-			</a>					
+			</a>						
+			<nav class="sb-sidenav-menu-nested nav">
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/list"">이슈 조회</a> 									
+<%-- 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/list?no=" +  + "${ projectAutority.projectNo }">이슈 조회</a> 									 --%>
+			</nav>				
 		</nav>
 	</div>
 	<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts5" aria-expanded="false" aria-controls="collapseLayouts5">

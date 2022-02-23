@@ -39,7 +39,9 @@ public class OutputController {
 		/* loginMember가 ROLE_ADMIN 일 때 */
 		/* loginMember가 ROLE_MEMBER 일 때 */
 		
-		int projectNo = Integer.parseInt(request.getParameter("no"));//
+//		int projectNo = Integer.parseInt(request.getParameter("no"));//
+		//임시 프로젝트 번호
+		int projectNo = 3;
 		int memberNo = 2;		// 임시 memberNo
 		
 		TaskDTO taskDTO = new TaskDTO();

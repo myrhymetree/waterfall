@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,7 +53,7 @@ public class MemberController {
 	@GetMapping("/login2") 
 	public String login2() {
 		
-		return "/main/memberMain";
+		return "/main/mainPage";
 	}
 	
 	/* 관리자 화면으로 가기 */

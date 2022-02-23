@@ -4,39 +4,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<<<<<<< HEAD
-<meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Dashboard - SB Admin</title>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-        <link href="${ pageContext.servletContext.contextPath }/resources/css/styles.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
-		<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>		
-<title>Insert title here</title>
-=======
-<meta name="description" content="" />
-<meta name="author" content="" />
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-<link href="css/button.css" rel="stylesheet" type="text/css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<meta name="author" content="" />
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-<link href="css/styles.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 <link href="${ pageContext.servletContext.contextPath }/resources/css/styles.css" rel="stylesheet" />
-<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>
->>>>>>> feature/project/main
+<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>		
+<title>Insert title here</title>
+
+<!-- 추가됐던거 -->
+<!-- <link href="css/button.css" rel="stylesheet" type="text/css"> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> -->
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Project Waterfall Service</a>
+            <a class="navbar-brand ps-3" href="${ pageContext.servletContext.contextPath }">Project Waterfall Service</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -76,8 +63,8 @@
 		                                     <nav class="sb-sidenav-menu-nested nav">
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/member/list">계정관리</a>
 		                                        <a class="nav-link" href="layout-sidenav-light.html">직급관리</a>
-		                                        <a class="nav-link" href="layout-sidenav-light.html">부서관리</a>
-		                                        <a class="nav-link" href="layout-sidenav-light.html">산출물</a>
+		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/company/dept/list">부서관리</a>
+		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/output/list">산출물</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/project">이슈</a>
 		                                    </nav>
 		                                </div>

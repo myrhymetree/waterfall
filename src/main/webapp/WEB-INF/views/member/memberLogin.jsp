@@ -15,8 +15,7 @@
 <!-- 로그인 머리 부분 시작 -->
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Project Waterfall Service</a>
-  
+              <a class="navbar-brand ps-3" href="${ pageContext.servletContext.contextPath }">Project Waterfall Service</a>
         </nav>
         <!-- 로그인 머리 부분 끝  -->
 
