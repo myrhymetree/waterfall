@@ -121,11 +121,14 @@
 								aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 								<nav class="sb-sidenav-menu-nested nav accordion"
 									id="sidenavAccordionPages">
-									<a class="nav-link collapsed, menu-font2" href="${ pageContext.servletContext.contextPath }/issue/list"
+									<a class="nav-link collapsed, menu-font2" href="login.html"
 										data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth"
 										aria-expanded="false" aria-controls="pagesCollapseAuth">
 										이슈관리
 									</a>					
+									<nav class="sb-sidenav-menu-nested nav">
+										<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/list"">이슈 조회</a> 									
+									</nav>
 								</nav>
 							</div>
 					<%-- </c:if> --%>	

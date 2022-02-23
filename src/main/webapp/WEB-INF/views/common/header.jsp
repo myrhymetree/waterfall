@@ -58,7 +58,7 @@
 		                                        <a class="nav-link" href="layout-sidenav-light.html">직급관리</a>
 		                                        <a class="nav-link" href="layout-sidenav-light.html">부서관리</a>
 		                                        <a class="nav-link" href="layout-sidenav-light.html">산출물</a>
-		                                        <a class="nav-link" href="layout-sidenav-light.html">이슈</a>
+		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/project">이슈</a>
 		                                    </nav>
 		                                </div>
 		                            </div>
