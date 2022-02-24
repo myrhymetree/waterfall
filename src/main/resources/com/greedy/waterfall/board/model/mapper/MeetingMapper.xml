@@ -73,7 +73,7 @@
         , #{ title }
         , #{ content }
         , 'Y'
-        , 3
+        , #{ projectNo }
         , 4
         , 1
         , 0

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -185,9 +186,7 @@ public class MeetingController {
 	@PostMapping("/regist")
 	public ModelAndView registMeetingBoard(ModelAndView mv, 
 			@RequestParam(name = "meetingfile",required = false) List<MultipartFile> multiFile, 
-			@RequestParam("meetingRegisttitle") String title,
-			@RequestParam("meetingRegistContent") String content,
-			@RequestParam("memberNo") int memberNo,
+			@ModelAttribute MeetingDTO meeting,
 			HttpServletRequest request) throws UnsupportedEncodingException {
 		/* 매개변수로 받은 게시물번호로 해당 게시물을 등록 한 후 결과에 따라 메세지를 저장한다. */
 		String message = "";
@@ -199,9 +198,7 @@ public class MeetingController {
 		if(!mkdir.exists()) {
 			mkdir.mkdirs();
 		}
-		MeetingDTO meeting = new MeetingDTO().builder().memberNo(memberNo).title(title).content(content).build();
 		List<FileDTO> fileList = new ArrayList<FileDTO>();
-		System.out.println("meeting : " + meeting);
 		if(multiFile.get(0).getOriginalFilename().length() != 0) {
 			System.out.println(multiFile);
 			System.out.println(multiFile.isEmpty());
