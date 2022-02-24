@@ -149,10 +149,10 @@ public class ProjectController {
 		MemberDTO member = (MemberDTO) session.getAttribute("loginMember");
 		MyProjectDTO project = projectService.findMyProject(member);
 		List<ProjectDTO> manageProject = project.getManageProject();
-		System.out.println("member : " + member);
-		System.out.println("project : " + manageProject);
+		List<ProjectDTO> removedProject = project.getRemovedProject();
 				
 		mv.addObject("manageProject", manageProject);
+		mv.addObject("removedProject", removedProject);
 		mv.setViewName("/project/projectManage");
 		return mv;
 	}
@@ -311,12 +311,39 @@ public class ProjectController {
 			message = "삭제에 성공했습니다.";
 			
 		}
+		mv.setViewName("redirect:/project/managelist");
 
-		mv.addObject("message", message);
-		mv.setViewName("redirect:manageList");
+		return mv;
+	}
+	
+	@GetMapping("/restore/{projectNo}")
+	public ModelAndView restoreProject(ModelAndView mv, @PathVariable int projectNo) {
+		
+		String message = "프로젝트 복구 실패.";
+		
+		if(projectService.restoreProject(projectNo)) {
+			message = "프로젝트 복구 성공.";
+			
+		}
+		mv.setViewName("redirect:/project/managelist");
+
+		return mv;
+	}
+	
+	@GetMapping("/delete/{projectNo}")
+	public ModelAndView deleteProject(ModelAndView mv, @PathVariable int projectNo) {
+		
+		String message = "프로젝트 삭제 실패.";
+		
+		if(projectService.deleteProject(projectNo)) {
+			message = "프로젝트 삭제 성공.";
+			
+		}
+		mv.setViewName("redirect:/project/managelist");
 		
 		return mv;
 	}
+	
 	
 	
 	

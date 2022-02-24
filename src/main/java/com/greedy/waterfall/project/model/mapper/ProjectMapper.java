@@ -32,6 +32,11 @@ public interface ProjectMapper {
 	
 	List<ProjectStatusDTO> findAllProjectStatus();
 
+	
+	
+	
+	
+
 	List<DeptDTO> findAllDept();
 	
 	List<TeamDTO> findTeam(String deptCode);
@@ -45,8 +50,26 @@ public interface ProjectMapper {
 
 	int registMemberProject(RegistProjectDTO newProject);
 
-	List<ProjectDTO> findAllProject();
+	
+	
+	
+	//어드민 프로젝트 전체 조회
+//	List<ProjectDTO> findAllProject();
+	
+	List<ProjectDTO> findAllManageProject();
 
+	List<ProjectDTO> findAllRemovedProject();
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * finePmNumber : 프로젝트메인페이지 이동 시 , 해당 프로젝트의 pm 회원번호를 조회한다.
 	 * @param 이동하는 프로젝트의 번호를 전달받는다.
@@ -92,5 +115,11 @@ public interface ProjectMapper {
 	int kickOldPm(RegistProjectDTO newProject);
 	
 	boolean removeProject(int projectNo);
+
+	boolean restoreProject(int projectNo);
+
+	boolean deleteProject(int projectNo);
+
+	
 	
 }

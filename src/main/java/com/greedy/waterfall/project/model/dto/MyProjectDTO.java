@@ -20,6 +20,7 @@ public class MyProjectDTO {
 	private int no;
 	private List<ProjectDTO> manageProject;
 	private List<ProjectDTO> joinProject;
+	private List<ProjectDTO> removedProject;
 	
 	
 	

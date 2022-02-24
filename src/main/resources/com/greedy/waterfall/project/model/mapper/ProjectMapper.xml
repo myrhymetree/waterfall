@@ -90,7 +90,7 @@
           FROM TBL_DEPT A
 	</select>
 	
-	<select id="findAllProject" resultMap="projectResult">
+	<select id="findAllManageProject" resultMap="projectResult">
         SELECT 
                A.PROJECT_NO
              , A.PROJECT_NAME
@@ -105,6 +105,24 @@
           JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
           JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
          WHERE B.ROLE_NO = 8
+           AND A.PROJECT_STATUS = 'Y'
+	</select> 
+	<select id="findAllRemovedProject" resultMap="projectResult">
+        SELECT 
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE
+             , A.PROJECT_DEADLINE
+             , A.PROJECT_PROGRESSION
+             , A.PROJECT_STATUS
+             , A.PROJECT_COMPLETED_DATE
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , C.MEMBER_NAME
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
+         WHERE B.ROLE_NO = 8
+           AND A.PROJECT_STATUS = 'N'
 	</select> 
 	
 	<select id="findManagaProject" resultMap="projectResult">
@@ -364,6 +382,18 @@
            SET A.PROJECT_STATUS = 'N'
          WHERE A.PROJECT_NO = #{ projectNo }
 	</update>
+	
+	<update id="restoreProject">
+        UPDATE
+               TBL_PROJECT A
+           SET A.PROJECT_STATUS = 'Y'
+         WHERE A.PROJECT_NO = #{ projectNo }
+	</update>
+	<delete id="deleteProject">
+        DELETE
+          FROM TBL_PROJECT A
+         WHERE A.PROJECT_NO = #{ projectNo }
+	</delete>
 </mapper>
 
 

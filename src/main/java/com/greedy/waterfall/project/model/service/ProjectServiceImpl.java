@@ -46,10 +46,12 @@ public class ProjectServiceImpl implements ProjectService {
 	public MyProjectDTO findMyProject(MemberDTO member) {
 		List<ProjectDTO> manageProject = new ArrayList<ProjectDTO>();
 		List<ProjectDTO> joinProject = new ArrayList<ProjectDTO>();
+		List<ProjectDTO> removedProject = new ArrayList<ProjectDTO>();
 		
 		if(member != null) {
 			if("1".equals(member.getRole())) {
-				manageProject = mapper.findAllProject();
+				manageProject = mapper.findAllManageProject();
+				removedProject = mapper.findAllRemovedProject();
 			} else {
 				manageProject = mapper.findManagaProject(member.getNo());
 				joinProject = mapper.findJoinProject(member.getNo());
@@ -59,6 +61,7 @@ public class ProjectServiceImpl implements ProjectService {
 		MyProjectDTO projectList = new MyProjectDTO().builder()
 													.manageProject(manageProject)
 													.joinProject(joinProject)
+													.removedProject(removedProject)
 													.build();
 		
 		return projectList;
@@ -185,6 +188,18 @@ public class ProjectServiceImpl implements ProjectService {
 	public boolean removeProject(int projectNo) {
 
 		return mapper.removeProject(projectNo);
+	}
+
+	@Override
+	public boolean restoreProject(int projectNo) {
+		
+		return mapper.restoreProject(projectNo);
+	}
+	
+	@Override
+	public boolean deleteProject(int projectNo) {
+		
+		return mapper.deleteProject(projectNo);
 	}
 }
 
