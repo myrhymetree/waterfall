@@ -20,8 +20,10 @@
 		<result property="projectName" column="PROJECT_NAME"/>	
 		<result property="startDate" column="PROJECT_START_DATE"/>
 		<result property="deadLine" column="PROJECT_DEADLINE"/>
-		<result property="pmNumber" column="PROJECT_PROGRESS_STATUS_CODE"/>
-		<result property="projectStatus" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="pmNumber" column="MEMBER_NO"/>
+		<result property="pmName" column="MEMBER_NAME"/>
+		<result property="projectStatusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="progression" column="PROJECT_PROGRESSION"/>
 		<result property="dept" column="DEPT_CODE"/>
 		<result property="team" column="TEAM_CODE"/>
 		<result property="adminNo" column="MANAGER_NO"/>
@@ -122,10 +124,11 @@
          WHERE B.MEMBER_NO = #{ no }
           AND B.ROLE_HISTORY_NO IN (SELECT MAX(C.ROLE_HISTORY_NO)
                                       FROM TBL_ROLE_ASSIGNMENT_HISTORY C
-                                     WHERE ROLE_NO = 8
-                                     GROUP BY ROLE_HISTORY_NO 
+                                     WHERE C.ROLE_NO = 8
+                                     GROUP BY C.PROJECT_NO 
                                    )
            AND B.ROLE_NO = 8
+           AND A.PROJECT_STATUS = 'Y'
 	</select>
  
 	<select id="findJoinProject" resultMap="projectResult">
@@ -152,7 +155,8 @@
                                                            )
                                    
                                )
-           AND B.ROLE_NO = 8        
+           AND B.ROLE_NO = 8
+           AND A.PROJECT_STATUS = 'Y'        
          ORDER BY A.PROJECT_NO DESC
  	</select>
 	
@@ -182,7 +186,33 @@
         , #{ deadLine }
         , 0
         , 'Y'
-        , #{ projectStatus }
+        , #{ projectStatusCode }
+        )
+	</insert>
+	
+	<insert id="registProjectHistory">
+        INSERT
+          INTO TBL_PROJECT_HISTORY A
+        (
+          A.PROJECT_HISTORY_NO
+        , A.PROJECT_NO
+        , A.PROJECT_UPDATED_CONTENT
+        , A.PROJECT_UPDATED_DATE
+        , A.MEMBER_NO
+        , A.PROJECT_UPDATED_CODE
+        , A.PROJECT_PROGRESS_STATUS_CODE
+        , A.TASK_MEM_HISTORY_NO
+        )
+        VALUES
+        (
+          PROJECT_HISTORY_NO.NEXTVAL
+        , #{ projectNo }
+        , '생성'
+        , SYSDATE
+        , 1
+        , 1
+        , 'COMPLETE'
+        , NULL
         )
 	</insert>
 	
@@ -238,8 +268,102 @@
                                    )
 	</select> 
  	
+	<select id="findOneProjectInfo" resultMap="registProjectResult">
+        SELECT  /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findOneProjectInfo() */
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE 
+             , A.PROJECT_DEADLINE 
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , A.PROJECT_PROGRESSION
+             , C.MEMBER_NO
+             , C.MEMBER_NAME
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON (B.MEMBER_NO = C.MEMBER_NO)
+         WHERE B.ROLE_HISTORY_NO IN (SELECT MAX(D.ROLE_HISTORY_NO) 
+                                       FROM TBL_ROLE_ASSIGNMENT_HISTORY D
+                                      WHERE D.ROLE_NO = 8
+                                      GROUP BY D.PROJECT_NO
+                                    )
+           AND A.PROJECT_NO = #{ projectNo } 
+	</select>
+	<update id="modifyProject" >
+        UPDATE
+               TBL_PROJECT A
+           SET A.PROJECT_NAME = #{ projectName }
+             , A.PROJECT_START_DATE = #{ startDate }
+             , A.PROJECT_DEADLINE = #{ deadLine }
+             , A.PROJECT_PROGRESSION = #{ progression }
+             , A.PROJECT_PROGRESS_STATUS_CODE = #{ projectStatusCode }
+         WHERE A.PROJECT_NO = #{ projectNo }
+	</update>
+	
+	
+	
+	<select id="findMemberInProject" resultType="Integer">
+        SELECT 
+               A.MEMBER_NO
+          FROM TBL_PROJECT_MEM_HISTORY A
+         WHERE A.MEMBER_NO = #{ pmNumber }
+           AND A.PROJECT_NO = #{ projectNo }
+           AND A.PROJECT_MEM_DROP_DATE = NULL
+	</select>
+	<insert id="joinPmInProject">
+        INSERT
+          INTO TBL_PROJECT_MEM_HISTORY A
+        (
+          A.PROJECT_MEM_HISTORY_NO
+        , A.PROJECT_MEM_STARTED_DATE
+        , A.PROJECT_MEM_DROP_DATE
+        , A.MEMBER_NO
+        , A.PROJECT_NO
+        , A.MANAGER_NO
+        )
+        VALUES
+        (
+          PROJECT_MEM_HISTORY_NO.NEXTVAL
+        , SYSDATE
+        , NULL
+        , #{ pmNumber }
+        , #{ projectNo }
+        , #{ adminNo }
+        )        
+	</insert>
 
+	<insert id="assignPmRole">
+        INSERT
+          INTO TBL_ROLE_ASSIGNMENT_HISTORY A
+        (
+          A.MEMBER_NO
+        , A.ROLE_NO
+        , A.PROJECT_NO
+        , A.ROLE_HISTORY_NO
+        , A.MANAGER_NO
+        )
+        VALUES
+        (
+          #{ pmNumber }
+        , 8
+        , #{ projectNo }
+        , ROLE_HISTORY_NO.NEXTVAL
+        , #{ adminNo }
+        )	
+	</insert>
+	<update id="kickOldPm">
+        UPDATE
+               TBL_PROJECT_MEM_HISTORY A
+           SET A.PROJECT_MEM_DROP_DATE = SYSDATE
+         WHERE A.PROJECT_NO = #{ projectNo }
+           AND A.MEMBER_NO = #{ pmNumber }
+	</update>
 
+	<update id="removeProject">
+        UPDATE
+               TBL_PROJECT A
+           SET A.PROJECT_STATUS = 'N'
+         WHERE A.PROJECT_NO = #{ projectNo }
+	</update>
 </mapper>
 
 

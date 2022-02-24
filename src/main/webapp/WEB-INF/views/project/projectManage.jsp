@@ -51,6 +51,7 @@
 						<col style="width: 10%" />
 						<col style="width: 10%" />
 						<col style="width: 5%" />
+						<col style="width: 1%" />
 					</colgroup>
 					<thead>
 						<tr>
@@ -62,6 +63,7 @@
 							<th>시작일</th>
 							<th>마감일</th>
 							<th>삭제</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -75,6 +77,7 @@
 								<td><c:out value="${ project.startDate }" /></td>
 								<td><c:out value="${ project.deadLine }" /></td>
 								<td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#projectRemove">삭제</button></td>
+								<td ><input type="hidden" value="${ project.no }"></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -98,8 +101,9 @@
 				}
 	
 				$tds[i].onclick = function() {
-					const no = this.parentNode.children[0].innerText;
-					location.href = "${ pageContext.servletContext.contextPath }/board/detail?no=" + no;
+					const no = this.parentNode.children[8].children[0].value;
+					console.log(no);
+					location.href = "${ pageContext.servletContext.contextPath }/project/modify/" + no;
 				}
 			}
 	</script>

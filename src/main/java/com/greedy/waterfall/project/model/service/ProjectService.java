@@ -33,4 +33,14 @@ public interface ProjectService {
 
 	/* 프로젝트 번호로 pm번호를 반환한다. 프로젝트 목록에서 프로젝트 메인으로 이동할 때 해당 프로젝트의 pm번호를 세션에 추가한다. */
 	int findPmNumber(int projectNo);
+
+	RegistProjectDTO findOneProjectInfo(int projectNo);
+
+	boolean modifyProject(RegistProjectDTO project);
+	
+	boolean removeProject(int projectNo);
+	
+	
+	
+	
 }

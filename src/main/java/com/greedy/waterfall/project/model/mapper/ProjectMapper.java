@@ -55,5 +55,42 @@ public interface ProjectMapper {
 	 * @author 홍성원
 	 */
 	int finePmNumber(int projectNo);
+
+	/**
+	 * findOneProjectInfo : 프로젝트 수정을 위해 프로젝트 상세정보를 조회한다.
+	 * @param 프로젝트의 번호를 전달받는다.
+	 * @return 프로젝트의 정보를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	RegistProjectDTO findOneProjectInfo(int projectNo);
+
+	/**
+	 * registProjectHistory : 프로젝트 생성시 프로젝트 생성 이력을 기록한다.
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	int registProjectHistory(int projectNo);
+
+	/**
+	 * modifyProject : 프로젝트 정보를 수정한다.
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	int modifyProject(RegistProjectDTO newProject);
+
+	Integer findMemberInProject(RegistProjectDTO newProject);
+
+	int joinPmInProject(RegistProjectDTO newProject);
+
+	int assignPmRole(RegistProjectDTO newProject);
+
+	int kickOldPm(RegistProjectDTO newProject);
+	
+	boolean removeProject(int projectNo);
 	
 }

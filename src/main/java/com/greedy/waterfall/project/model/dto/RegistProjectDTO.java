@@ -11,7 +11,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString
 @Builder
 public class RegistProjectDTO {
 
@@ -20,8 +19,18 @@ public class RegistProjectDTO {
 	private java.sql.Date startDate;
 	private java.sql.Date deadLine;
 	private int pmNumber;
-	private String projectStatus;
+	private String pmName;
+	private String projectStatusCode;
+	private int progression;
 	private String dept;
 	private String team;
 	private int adminNo;
+	@Override
+	public String toString() {
+		return "RegistProjectDTO [projectNo=" + projectNo + "\n"  + ", projectName=" + projectName + ", startDate=" + startDate
+				+ "\n" + ", deadLine=" + deadLine + ", pmNumber=" + pmNumber + "\n" + ", pmName=" + pmName + ", projectStatusCode="
+				+ projectStatusCode +  "\n" +", progression=" + progression + ", dept=" + dept + ", team=" + team + "\n" 
+				+ ", adminNo=" + adminNo + "]";
+	}
+	
 }

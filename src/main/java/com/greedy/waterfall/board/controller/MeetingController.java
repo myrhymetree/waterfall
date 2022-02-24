@@ -30,6 +30,7 @@ import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.service.MeetingService;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 /**
  * <pre>
@@ -84,6 +85,7 @@ public class MeetingController {
 		int totalCount = 0;													//검색조건과 검색값에 해당하는 게시물의 갯수를 저장할 변수를 선언한다.
 		Map<String, String> searchMap = new HashMap<>();					//검색조건과 검색값을 담을 HashMap 변수를 선언한다.
 		SelectCriteria selectCriteria = null;								//검색 조건과, 페이징처리를 할 클래스변수를 선언한다.
+		int projectNo = ((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo();
 		/* request에서 전달받은 현재 페이지를 currentPage에 저장한다. */
 		String currentPage = request.getParameter("currentPage");
 		
@@ -106,7 +108,7 @@ public class MeetingController {
 		} else {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
-
+		selectCriteria.setProjectNo(projectNo);
 		/* 검색조건을 전달해, 게시물 목록을 반환받는다. */
 		List<MeetingDTO> meetingList = meetingService.findMeetingBoardList(selectCriteria);
 		
@@ -182,10 +184,10 @@ public class MeetingController {
 	 */
 	@PostMapping("/regist")
 	public ModelAndView registMeetingBoard(ModelAndView mv, 
-			@RequestParam("meetingfile") List<MultipartFile> multiFile, 
-			@RequestParam("title") String title,
-			@RequestParam("content") String content,
-			@RequestParam("no") int memberNo,
+			@RequestParam(name = "meetingfile",required = false) List<MultipartFile> multiFile, 
+			@RequestParam("meetingRegisttitle") String title,
+			@RequestParam("meetingRegistContent") String content,
+			@RequestParam("memberNo") int memberNo,
 			HttpServletRequest request) throws UnsupportedEncodingException {
 		/* 매개변수로 받은 게시물번호로 해당 게시물을 등록 한 후 결과에 따라 메세지를 저장한다. */
 		String message = "";

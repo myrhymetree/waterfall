@@ -20,7 +20,7 @@
 		<form action="${ pageContext.servletContext.contextPath }/project/regist" method="post">
 			<div class="card mb-4" style="width: 95%;">
 				<div class="card-header col" style="width: 100%">
-					<label style="width: 15%;">프로젝트 수정</label>
+					<label style="width: 15%;">프로젝트 생성</label>
 					<span style="display:inline-block; width: 80%; margin-left: 2em; text-align: right;">
 						<button class="btn-dark" style="width: 80px; height: 40px;">취소</button>
 						<input type="submit" class="btn-dark" style="width: 80px; height: 40px;" value="저장">
@@ -66,7 +66,7 @@
 				</div>
 				<div class="mt-3">
 					<label style="margin-left: 2%; width: 20%">진행상태</label>
-					<select id="projectStatus" name="projectStatus" >
+					<select id="projectStatus" name="projectStatusCode" >
 					    <option value="" selected disabled>프로젝트 상태</option>
 					    <c:forEach var="stat" items="${ statusList }">
 					    	<option value="${ stat.statusCode }"><c:out value="${ stat.statusName }"/> </option>

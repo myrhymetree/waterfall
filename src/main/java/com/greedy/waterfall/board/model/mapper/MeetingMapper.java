@@ -113,5 +113,14 @@ public interface MeetingMapper {
 	 */
 	FileDTO fineFile(int no);
 
+	/**
+	 * findMainList : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	List<MeetingDTO> findMainList(int projectNo);
+
 
 }
