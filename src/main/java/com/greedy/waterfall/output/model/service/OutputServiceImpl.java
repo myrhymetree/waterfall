@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.output.model.dao.OutputMapper;
 import com.greedy.waterfall.output.model.dto.OutputDTO;
+import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 
@@ -32,7 +33,6 @@ public class OutputServiceImpl implements OutputService{
 	 */
 	@Override
 	public List<TaskDTO> findOutputTask(TaskDTO taskDTO) {
-		
 		/* 상위업무 List */
 		List<TaskDTO> parentTaskList = mapper.selectParentTaskList(taskDTO);
 		System.out.println("parentTaskList 확인 : " + parentTaskList);
@@ -104,6 +104,34 @@ public class OutputServiceImpl implements OutputService{
 		mapper.deleteOutput(no);
 		
 	}
+
+	@Override
+	public List<OutputProjectDTO> findOutputList() {
+		
+		List<OutputProjectDTO> projectList = new ArrayList<OutputProjectDTO>();
+		List<OutputDTO> outputList = new ArrayList<OutputDTO>();
+		
+		/* 각 각 프로젝트에 해당하는 산출물 개수 */
+		projectList = mapper.selectAllProjectList();
+		System.out.println("output Admin projectList : " + projectList);
+		
+		for(int i = 0; i < projectList.size(); i++) {
+			
+			int projectNo = projectList.get(i).getNo();
+			
+			int outputCount = mapper.selectAlloutputCount(projectNo);
+			
+			outputList = mapper.selectAdminOutputList(projectNo);
+			
+			projectList.get(i).setTotalOutputCount(outputCount);
+			projectList.get(i).setOutput(outputList);			
+		}
+		
+		System.out.println(projectList);
+		
+		return projectList;
+	}
+
 
 
 }

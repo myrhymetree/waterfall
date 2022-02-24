@@ -14,6 +14,7 @@
  	<result property="boardCategoryNo" column="BOARD_CATEGORY_NO"/>
  	<result property="memberNo" column="MEMBER_NO"/>
  	<result property="projectNo" column="PROJECT_NO"/>
+ 	
  	<association property="memberName" resultMap="memberResultMap"/>
  	</resultMap>
  	
@@ -32,7 +33,6 @@
           FROM TBL_BOARD A
 	      WHERE A.BOARD_STATUS = 'Y'
 	        AND A.BOARD_CATEGORY_NO = 1
-    	
 	</select>
 	<select id="selectNoticeList" resultMap="noticeResultMap">
 		SELECT 

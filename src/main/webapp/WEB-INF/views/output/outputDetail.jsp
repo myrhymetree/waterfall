@@ -68,6 +68,7 @@
 	top: 150px;
 	border-width: 1px;
 	float : left;
+	overflow : scroll;
 	/* margin-left:200px; */
 }
 #outputbox2 {

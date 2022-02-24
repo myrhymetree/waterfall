@@ -1,7 +1,6 @@
 package com.greedy.waterfall.output.model.dto;
 
 import com.greedy.waterfall.member.model.dto.MemberDTO;
-import com.greedy.waterfall.project.model.dto.ProjectDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 
@@ -30,9 +29,8 @@ public class OutputDTO {
 	private MemberDTO memberName;
 	private TaskDTO task;
 	private ChildTaskDTO childTask;
-	private ProjectDTO project;
+	private OutputProjectDTO project;
 	private OutputAttachmentDTO outputFile;
-	private int totalCount;
 	
 	
 
