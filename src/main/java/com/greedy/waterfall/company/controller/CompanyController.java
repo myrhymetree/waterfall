@@ -37,4 +37,18 @@ public class CompanyController {
 		
 		return mv;
 	}
+	
+	@GetMapping("/job/list")
+	public ModelAndView jobSelectList(HttpServletRequest request, ModelAndView mv) {
+		
+		SelectCriteria selectCriteria = null;
+		List<CompanyDTO> companyList = companyService.findCompany(selectCriteria);
+		mv.addObject("companyList", companyList);
+		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("intent", "/company/job/jobList");
+		mv.setViewName("/company/job/jobList");
+		
+		return mv;
+	}
+	
 }
