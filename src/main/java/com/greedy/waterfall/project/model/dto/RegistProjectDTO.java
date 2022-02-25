@@ -7,11 +7,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <pre>
+ * Class : RegistProjectDTO
+ * Comment : 프로젝트 생성하는과정에 필요한 정보를 저장한다.
+ * 
+ * History
+ * 2022. 2. 25.  (홍성원)
+ * </pre>
+ * @version 1
+ * @author 홍성원
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Builder
+@ToString
 public class RegistProjectDTO {
 
 	private int projectNo;
@@ -25,12 +37,5 @@ public class RegistProjectDTO {
 	private String dept;
 	private String team;
 	private int adminNo;
-	@Override
-	public String toString() {
-		return "RegistProjectDTO [projectNo=" + projectNo + "\n"  + ", projectName=" + projectName + ", startDate=" + startDate
-				+ "\n" + ", deadLine=" + deadLine + ", pmNumber=" + pmNumber + "\n" + ", pmName=" + pmName + ", projectStatusCode="
-				+ projectStatusCode +  "\n" +", progression=" + progression + ", dept=" + dept + ", team=" + team + "\n" 
-				+ ", adminNo=" + adminNo + "]";
-	}
 	
 }

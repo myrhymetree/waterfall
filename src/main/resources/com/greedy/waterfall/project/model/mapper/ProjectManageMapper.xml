@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.waterfall.project.model.mapper.ProjectManageMapper">
+	
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectManageMemberDTO" id="projectMemberResult">
+		<result property="projectNo" column="PROJECT_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+		<result property="completeTask" column="COMPLETE_TASK"/>
+		<result property="progressingTask" column="PROGRESSING_TASK"/>
+		<result property="registOutput" column="REGIST_OUTPUT"/>
+		<result property="registIssue" column="REGIST_ISSUE"/>
+		<result property="joinDate" column="PROJECT_MEM_STARTED_DATE"/>
+		<result property="quitDate" column="PROJECT_MEM_DROP_DATE"/>
+		
+		<collection property="role" resultMap="projectRole"/>
+		
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectRoleDTO" id="projectRole">
+		<id property="roleNo" column="ROLE_NO"/>
+		<result property="roleName" column="ROLE_NAME"/>
+	</resultMap>
+	
+	<select id="findProjectMember" resultMap="projectMemberResult">
+        SELECT
+               D.PROJECT_NO
+             , A.MEMBER_NO
+             , A.MEMBER_NAME
+             , C.ROLE_NAME
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK E
+                 WHERE E.PROJECT_NO = D.PROJECT_NO
+                   AND E.MEMBER_NO = A.MEMBER_NO
+                   AND E.TASK_PROGRESS_STATUS = '완료'
+               ) AS COMPLETE_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK F
+                 WHERE F.PROJECT_NO = D.PROJECT_NO
+                   AND F.MEMBER_NO = A.MEMBER_NO
+                   AND F.TASK_PROGRESS_STATUS = '진행중'
+               ) AS PROGRESSING_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_OUTPUT G
+                 WHERE G.PROJECT_NO = D.PROJECT_NO
+                   AND G.MEMBER_NO = A.MEMBER_NO
+               ) AS REGIST_OUTPUT
+             , (SELECT COUNT(*)
+                  FROM TBL_ISSUE H
+                 WHERE H.PROJECT_NO = D.PROJECT_NO
+                   AND H.ISSUE_REGISTER = A.MEMBER_NO
+               ) AS REGIST_ISSUE
+             , I.PROJECT_MEM_STARTED_DATE
+             , I.PROJECT_MEM_DROP_DATE
+          FROM TBL_MEMBER A
+          LEFT JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.MEMBER_NO = B.MEMBER_NO)
+          JOIN TBL_ROLE_CATEGORY C ON (B.ROLE_NO = C.ROLE_NO)
+                  JOIN TBL_PROJECT D ON (B.PROJECT_NO = D.PROJECT_NO)
+          LEFT JOIN TBL_PROJECT_MEM_HISTORY I ON (B.PROJECT_NO = I.PROJECT_NO)
+         WHERE B.PROJECT_NO = #{ projectNo }
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
