@@ -73,7 +73,7 @@
         , #{ title }
         , #{ content }
         , 'Y'
-        , 3
+        , #{ projectNo }
         , 4
         , 1
         , 0
@@ -157,6 +157,7 @@
 							</if> 
                           AND C.BOARD_CATEGORY_NO = 4
                           AND C.BOARD_STATUS = 'Y'
+                          AND C.PROJECT_NO = #{ projectNo }
 						</where>	      
                         ORDER BY C.BOARD_NO DESC
                       ) B    
@@ -213,6 +214,7 @@
 			</if>
            AND A.BOARD_STATUS = 'Y'
            AND A.BOARD_CATEGORY_NO = 4
+           AND A.PROJECT_NO = #{ projectNo }
 		</where>
 	</select>	
 	
@@ -264,6 +266,24 @@
              , A.FILE_CATEGORY_NO
           FROM TBL_FILE A
          WHERE A.FILE_NO = #{ no }
+	</select>
+	<select id ="findMainList" resultMap="meetingResult">
+        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMainList() */
+               ROWNUM
+             , A.BOARD_NO
+             , A.BOARD_UPDATED_DATE
+             , A.BOARD_POSTING_DATE
+             , A.BOARD_TITLE
+             , A.BOARD_CONTENT
+             , A.BOARD_STATUS
+             , A.BOARD_CATEGORY_NO
+             , A.PROJECT_NO
+             , A.MEMBER_NO
+          FROM TBL_BOARD A
+         WHERE A.PROJECT_NO = #{ projectNo }
+		<![CDATA[ 
+           AND ROWNUM <= 6  
+		]]>
 	</select>
 </mapper>
 

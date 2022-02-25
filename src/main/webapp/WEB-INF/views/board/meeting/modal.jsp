@@ -93,8 +93,8 @@
 	            		<input id="meeting-fileupload"  type="file" name="meetingfile"  multiple>
 	            	</div>
 					<div class="mt-4 my-modal-footer-read" style="text-align: left">
-	                	<input type="hidden" name="no" value="${ meeting.member.memberName }">
-<!-- 	                	<button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button> -->
+	                	<input type="hidden" name="memberNo" value="${ sessionScope.loginMember.no }">
+	                	<input type="hidden" name="projectNo" value="${ sessionScope.projectAutority.projectNo }">
 	                	<button type="submit" class="btn btn-secondary" >등록</button>
                       	<input type="button" id="meetingRegistBackToList" class="btn btn-secondary" data-bs-dismiss="modal" value="돌아가기">
                       	

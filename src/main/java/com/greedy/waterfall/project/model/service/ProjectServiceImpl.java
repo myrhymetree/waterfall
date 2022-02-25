@@ -28,6 +28,9 @@ import com.greedy.waterfall.project.model.mapper.ProjectMapper;
  * </pre>
  * @version 1
  * @author 홍성원
+ * 
+ * Review
+ * 2022. 2. 23 (차화응)
  */
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -43,15 +46,13 @@ public class ProjectServiceImpl implements ProjectService {
 	public MyProjectDTO findMyProject(MemberDTO member) {
 		List<ProjectDTO> manageProject = new ArrayList<ProjectDTO>();
 		List<ProjectDTO> joinProject = new ArrayList<ProjectDTO>();
+		List<ProjectDTO> removedProject = new ArrayList<ProjectDTO>();
 		
 		if(member != null) {
-			System.out.println("session에 member가 저장돼있어서 프로젝트를 조회중입니다....");
-			System.out.println("현재 session member의 역할 : " + member.getRole());
 			if("1".equals(member.getRole())) {
-				System.out.println("관리자 입니다.");
-				manageProject = mapper.findAllProject();
+				manageProject = mapper.findAllManageProject();
+				removedProject = mapper.findAllRemovedProject();
 			} else {
-				System.out.println("관리자가 아닙니다.");
 				manageProject = mapper.findManagaProject(member.getNo());
 				joinProject = mapper.findJoinProject(member.getNo());
 				
@@ -60,9 +61,8 @@ public class ProjectServiceImpl implements ProjectService {
 		MyProjectDTO projectList = new MyProjectDTO().builder()
 													.manageProject(manageProject)
 													.joinProject(joinProject)
+													.removedProject(removedProject)
 													.build();
-		System.out.println("조회된 프로젝트 리스트");
-		System.out.println("projectList : " + projectList);
 		
 		return projectList;
 	}
@@ -100,7 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
 		int registProjectdResult = mapper.registProject(newProject);
 		int pmRegistResult = mapper.registPm(newProject);
 		int memberRegistResult = mapper.registMemberProject(newProject);
-
+		int registProjectHistory = mapper.registProjectHistory(newProject.getProjectNo());
 		if(registProjectdResult > 0 && pmRegistResult > 0 && memberRegistResult > 0) {
 
 			return true;
@@ -118,73 +118,88 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Override
 	public int findPmNumber(int projectNo) {
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
-		System.out.println("projectNo : " + projectNo);
+
 		return mapper.finePmNumber(projectNo);
+	}
+
+	/**
+	 * findOneProjectInfo : 프로젝트 수정하기위해 하나의 프로젝트 상세정보를 조회한다.
+	 * @param projectNo : 프로젝트의 번호를 전달받는다.
+	 * @return : 프로젝트의 상세정보를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	@Override
+	public RegistProjectDTO findOneProjectInfo(int projectNo) {
+
+		return mapper.findOneProjectInfo(projectNo);
+	}
+
+	/**
+	 * modifyProject : 프로젝트의 정보를 수정한다.
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	@Override
+	public boolean modifyProject(RegistProjectDTO newProject) {
+		
+		RegistProjectDTO oldProject = mapper.findOneProjectInfo(newProject.getProjectNo());
+		int resultPmChange = 1;
+		int resultModifyProject = mapper.modifyProject(newProject);
+		if(oldProject.getPmNumber() != newProject.getPmNumber()) {
+			
+			/* 새로운pm번호가 기존 pm번호랑 다를시 회원 배정내역, 회원 역할배정내역에 추가해준다. */
+			/* 새로운 pm이 프로젝트에 배정이 안돼있을 시 프로젝트에 배정한다. */
+			if(mapper.findMemberInProject(newProject) != null) {
+				int pmChangeResult = mapper.joinPmInProject(newProject);
+				
+				if(pmChangeResult <= 0) {
+					resultPmChange = 0;
+				}
+			} else {
+				/* 이미 배정되어있는 멤버라면 역할을 pm으로 등록한다 */
+				int pmChangeResult = mapper.assignPmRole(newProject);
+				
+				if(pmChangeResult <= 0) {
+					resultPmChange = 0;
+				}
+			}
+			
+			/* 기존의 pm은 프로젝트에서 내보낸다. */
+			int pmChangeResult = mapper.kickOldPm(newProject);
+			
+			if(pmChangeResult <= 0) {
+				resultPmChange = 0;
+			}
+		}
+		
+		if(resultPmChange > 0 && resultModifyProject > 0) {
+			return true;
+		}
+		
+		
+		
+		return false;
+	}
+
+	@Override
+	public boolean removeProject(int projectNo) {
+
+		return mapper.removeProject(projectNo);
+	}
+
+	@Override
+	public boolean restoreProject(int projectNo) {
+		
+		return mapper.restoreProject(projectNo);
+	}
+	
+	@Override
+	public boolean deleteProject(int projectNo) {
+		
+		return mapper.deleteProject(projectNo);
 	}
 }
 

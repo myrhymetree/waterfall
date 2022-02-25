@@ -120,7 +120,15 @@
 				</div>
 				<div class="sb-sidenav-footer">
 					<div class="small">Logged in as:</div>
-					Administrator
+					<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role eq 1 }">
+						Administrator
+					</c:if>
+					<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role eq 2 }">
+						Developer
+					</c:if>
+					<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role eq 3 }">
+						Client
+					</c:if>
 				</div>
 			</nav>
 		</div>	

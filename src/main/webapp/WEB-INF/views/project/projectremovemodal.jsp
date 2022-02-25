@@ -79,23 +79,23 @@
 		<div class="modal-dialog">
 	    	<div class="modal-content" style="top: 172px">
 	        	<form action="${ pageContext.servletContext.contextPath }/meeting/regist" method="post" encType="multipart/form-data">
-	            	<div class="my-modal-header mb-4">
-	                	<label class="me-4" for="title-write">제목</label>
-	                    <input type="text" id="title-write" name="title">
-					</div>
+					<div class="row">
+                   		<input type="button" id="realRemove" class="btn btn-secondary" data-bs-dismiss="modal" value="찐삭제">
+                      	<input type="button" id="restoreProject" class="btn btn-secondary" data-bs-dismiss="modal" value="복원">
+                     	<input type="button" id="backToList" class="btn btn-secondary" data-bs-dismiss="modal" value="취소">
+                   	</div>
+					<div class="mt-4 mb-4"></div>
                 	<div class="my-modal-body">
-	                	<div class="my-textarea-div mb-3">
-	                    	<textarea id="my-textarea" cols="30" rows="10" name="content"></textarea>
-	           			</div>
-	            	</div>
-	            	<div class="my-modal-upload mb-4">
-	            		<input id="meeting-fileupload"  type="file" name="meetingfile"  multiple>
+		            	<div class="my-modal-header mb-4">
+		                	<label class="me-4" for="removed">프로젝트명</label>
+	    	                <input id="projectName" value="프로젝트이름부분" readonly>
+						</div>
+		            	<div class="my-modal-header mb-4">
+		                	<label class="me-4" for="removed">프로젝트번호 숨기는부분</label>
+	    	                <input type="number" id="projectNo" value="" readonly>
+						</div>
 	            	</div>
 					<div class="mt-4 my-modal-footer-read" style="text-align: left">
-	                	<input type="hidden" name="no" value="${ meeting.member.memberName }">
-<!-- 	                	<button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button> -->
-	                	<button type="submit" class="btn btn-secondary" >등록</button>
-                      	<input type="button" id="backToList" class="btn btn-secondary" data-bs-dismiss="modal" value="취소">
                       	
                   	</div>
 				</form>
@@ -111,8 +111,11 @@
 		$("#my-textarea").val("");
 		$("#meeting-fileupload").val("");
 	});
-	$("#delete").click( function() {
-		location.href= "${ pageContext.servletContext.contextPath }/meeting/remove/" + $("#read-no").val();
+	$("#restoreProject").click( function() {
+		location.href= "${ pageContext.servletContext.contextPath }/project/restore/" + $("#projectNo").val();
+	});
+	$("#realRemove").click( function() {
+		location.href= "${ pageContext.servletContext.contextPath }/project/delete/" + $("#projectNo").val();
 	});
 </script>
 </body>

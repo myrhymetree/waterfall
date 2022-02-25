@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.service.MeetingService;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 /**
  * <pre>
@@ -84,6 +86,7 @@ public class MeetingController {
 		int totalCount = 0;													//검색조건과 검색값에 해당하는 게시물의 갯수를 저장할 변수를 선언한다.
 		Map<String, String> searchMap = new HashMap<>();					//검색조건과 검색값을 담을 HashMap 변수를 선언한다.
 		SelectCriteria selectCriteria = null;								//검색 조건과, 페이징처리를 할 클래스변수를 선언한다.
+		int projectNo = ((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo();
 		/* request에서 전달받은 현재 페이지를 currentPage에 저장한다. */
 		String currentPage = request.getParameter("currentPage");
 		
@@ -106,7 +109,7 @@ public class MeetingController {
 		} else {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
-
+		selectCriteria.setProjectNo(projectNo);
 		/* 검색조건을 전달해, 게시물 목록을 반환받는다. */
 		List<MeetingDTO> meetingList = meetingService.findMeetingBoardList(selectCriteria);
 		
@@ -182,10 +185,8 @@ public class MeetingController {
 	 */
 	@PostMapping("/regist")
 	public ModelAndView registMeetingBoard(ModelAndView mv, 
-			@RequestParam("meetingfile") List<MultipartFile> multiFile, 
-			@RequestParam("title") String title,
-			@RequestParam("content") String content,
-			@RequestParam("no") int memberNo,
+			@RequestParam(name = "meetingfile",required = false) List<MultipartFile> multiFile, 
+			@ModelAttribute MeetingDTO meeting,
 			HttpServletRequest request) throws UnsupportedEncodingException {
 		/* 매개변수로 받은 게시물번호로 해당 게시물을 등록 한 후 결과에 따라 메세지를 저장한다. */
 		String message = "";
@@ -197,9 +198,7 @@ public class MeetingController {
 		if(!mkdir.exists()) {
 			mkdir.mkdirs();
 		}
-		MeetingDTO meeting = new MeetingDTO().builder().memberNo(memberNo).title(title).content(content).build();
 		List<FileDTO> fileList = new ArrayList<FileDTO>();
-		System.out.println("meeting : " + meeting);
 		if(multiFile.get(0).getOriginalFilename().length() != 0) {
 			System.out.println(multiFile);
 			System.out.println(multiFile.isEmpty());

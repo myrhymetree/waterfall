@@ -13,7 +13,7 @@ public class SelectCriteria implements java.io.Serializable {
 	private int endRow;					//DB 조회 시 최신글부터 조회해야 하는 행의 마지막 수
 	private String searchCondition;		//검색 조건
 	private String searchValue;			//검색어
-	
+	private int projectNo;
 	public SelectCriteria() {}
 
 	public SelectCriteria(int pageNo, int totalCount, int limit, int buttonAmount, int maxPage, int startPage,
@@ -83,6 +83,10 @@ public class SelectCriteria implements java.io.Serializable {
 	public int getEndPage() {
 		return endPage;
 	}
+	
+	public int getProjectNo() {
+		return projectNo;
+	}
 
 	public void setEndPage(int endPage) {
 		this.endPage = endPage;
@@ -119,13 +123,16 @@ public class SelectCriteria implements java.io.Serializable {
 	public void setSearchValue(String searchValue) {
 		this.searchValue = searchValue;
 	}
-
+	public void setProjectNo(int projectNo) {
+		this.projectNo = projectNo;
+	}
 	@Override
 	public String toString() {
 		return "SelectCriteria [pageNo=" + pageNo + ", totalCount=" + totalCount + ", limit=" + limit
 				+ ", buttonAmount=" + buttonAmount + ", maxPage=" + maxPage + ", startPage=" + startPage + ", endPage="
 				+ endPage + ", startRow=" + startRow + ", endRow=" + endRow + ", searchCondition=" + searchCondition
-				+ ", searchValue=" + searchValue + "]";
+				+ ", searchValue=" + searchValue + "]"
+				+ "\nprojectNo : " + projectNo;
 	}
 	
 }
