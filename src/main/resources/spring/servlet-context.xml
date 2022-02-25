@@ -28,11 +28,9 @@
 	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<beans:property name="order" value="1"/>
 	</beans:bean>
-<<<<<<< HEAD
+
     <beans:bean id="fileDownloadView" class="com.greedy.waterfall.common.download.FileDownloadView" />
-=======
-	
-<<<<<<< HEAD
+
 	<!-- 파일 업로드 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="10000000000"/>
@@ -46,25 +44,12 @@
 			<beans:ref bean="jacksonMessageConverter"/>
 		</beans:property>
 	</beans:bean>
-	
->>>>>>> origin/feature/issue/regist
-=======
-	<!-- 파일업로드 resolver -->
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="10000000"/>
-	</beans:bean>
-	
->>>>>>> origin/feature/company
+
 	<!-- <interceptors>
 		<interceptor>
 			<mapping path="/login/"/>
 			<beans:bean id="loginInterceptor" class="com.greedy.waterfall.member.controller.MemberInterceptor"/>
 		</interceptor>
 	</interceptors> -->
-	
-    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-
-        <beans:property name="maxUploadSize" value="100000000"/>
-    </beans:bean>    
     
 </beans:beans>
