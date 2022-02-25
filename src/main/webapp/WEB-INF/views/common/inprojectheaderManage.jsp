@@ -19,7 +19,7 @@
 	</a>
 	<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 		<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-			<a class="nav-link menu-font2" href="${ pageContext.servletContext.contextPath }/output/list?no=" + "${ projectAutority.projectNo }">
+			<a class="nav-link menu-font2" href="${ pageContext.servletContext.contextPath }/output/admin/list?no=" + "${ projectAutority.projectNo }">
 				산출물관리
 			</a>
 			<div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
