@@ -9,17 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * <pre>
- * Class : MyProjectDTO
- * Comment : 회원의 권한별 조회할 수 있는 프로젝트의 목록들을 저장한다.
- * 
- * History
- * 2022. 2. 25.  (홍성원)
- * </pre>
- * @version 1
- * @author 홍성원
- */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
