@@ -25,7 +25,7 @@ public interface GuideService {
 
 	List<GuideDTO> selectAllGuideList(SelectCriteria selectCriteria);
 
-	int selectTotalCount(Map<String, String> searchMap);
+	int selectTotalCount(Map<Object, Object> searchMap);
 
 	void registGuide(GuideDTO guide) throws GuideRegistException;
 

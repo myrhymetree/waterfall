@@ -28,7 +28,25 @@
 	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<beans:property name="order" value="1"/>
 	</beans:bean>
+<<<<<<< HEAD
     <beans:bean id="fileDownloadView" class="com.greedy.waterfall.common.download.FileDownloadView" />
+=======
+	
+	<!-- 파일 업로드 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10000000000"/>
+	</beans:bean>
+	
+	<!-- 스프링에서 제공하는걸로는 자바 object를 완벽하게 json문자로 반환시키지 못해서 추가한 메시지 컨버터 , 스프링 부트에서는 기본설정으로 되어있음  -->
+	<beans:bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+	
+	<beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<beans:property name="messageConverters">
+			<beans:ref bean="jacksonMessageConverter"/>
+		</beans:property>
+	</beans:bean>
+	
+>>>>>>> origin/feature/issue/regist
 	<!-- <interceptors>
 		<interceptor>
 			<mapping path="/login/"/>

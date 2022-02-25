@@ -65,6 +65,23 @@
   		<association property="project" resultMap="projectResultMap"/>
   	</resultMap>
   	
+  	<resultMap type="com.greedy.waterfall.issue.model.dto.TaskIssueCountDTO" id="taskIssueCountResultMap">
+  		<id property="taskNo" column="TASK_NO"/>
+  		<result property="projectNo" column="PROJECT_NO"/>
+  		<result property="allIssueCount" column="ALL_TASK_ISSUE_COUNT"/>
+  		<result property="pendingIssueCount" column="PENDING_TASK_ISSUE_COUNT"/>
+  		<result property="processingIssueCount" column="PROCESSING_TASK_ISSUE_COUNT"/>
+  		<result property="completedIssueCount" column="COMPLETED_TASK_ISSUE_COUNT"/>
+  		<result property="managerNo" column="MEMBER_NO"/>
+  		<result property="managerName" column="MEMBER_NAME"/>
+  		<result property="taskCodeManageName" column="TASK_CATEGORY_NAME"/>
+  		
+  		<association property="task" resultMap="taskResultMap"/>
+  		<association property="taskCode" resultMap="taskCodeResultMap"/>
+  		<association property="manager" resultMap="managerResultMap"/>
+  		<association property="project" resultMap="projectResultMap"/>
+  	</resultMap>
+  	
   	
 	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
 	 SELECT /* com.greedy.waterfall.issue.model.mapper.IssueMapper#selectTotalCount() */
@@ -80,8 +97,10 @@
 	   AND A.ISSUE_STATUS = 'Y'
 	 </where> 	    
 	</select>
-  	
-  	<select id="selectAllIssueList" resultMap="issueResultMap">
+ 
+ <!-- 페이징, 검색기능 구현한 서브쿼리문, 프론트 페이지에서 지원해줘서 따로 넣을 필요를 못느꼈지만
+ 혹시나 사용할 일이 있을지 몰라서 넣어놓음 --> 	
+ <!--  	<select id="selectAllIssueList" resultMap="issueResultMap">
   	SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllIssueList() */
             A.RNUM
           , A.ISSUE_NO
@@ -151,66 +170,194 @@
 				  JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
 			     WHERE A.RNUM >= #{ startRow }
 			     ORDER BY 1 ASC 
-  	</select>
+  	</select> -->
+  	
+  <select id="selectIssueList" parameterType="_int" resultMap="issueResultMap">
+ 	SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllIssueList() */
+            A.ISSUE_NO
+          , A.ISSUE_NAME
+          , A.ISSUE_CREATED_DATE
+		  , A.ISSUE_PROGRESS_STATUS
+		  , A.ISSUE_IMPORTANCE
+		  , A.ISSUE_CONTENT
+		  , A.ISSUE_DEADLINE
+		  , A.ISSUE_COMPLETED_DATE 
+		  , A.ISSUE_STATUS
+		  , A.ISSUE_REGISTER
+		  , A.PROJECT_NO
+		  , A.ISSUE_MANAGER 
+		  , A.TASK_NO
+		  , D.MEMBER_NAME AS REGISTER_NAME
+		  , H.MEMBER_NAME AS MANAGER_NAME
+		  , E.PROJECT_NAME
+		  , G.TASK_CATEGORY_NAME
+     FROM TBL_ISSUE A 
+     JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+     JOIN TBL_PROJECT E ON (A.PROJECT_NO = E.PROJECT_NO)
+     JOIN TBL_TASK F ON (A.TASK_NO = F.TASK_NO)
+     JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
+     JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
+    WHERE A.TASK_NO = #{ taskNo }
+      AND A.ISSUE_STATUS = 'Y' 
+   </select>
+   
+   <select id="selectAllIssue" resultMap="issueResultMap">
+ 	SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllIssueList() */
+            A.ISSUE_NO
+          , A.ISSUE_NAME
+          , A.ISSUE_CREATED_DATE
+		  , A.ISSUE_PROGRESS_STATUS
+		  , A.ISSUE_IMPORTANCE
+		  , A.ISSUE_CONTENT
+		  , A.ISSUE_DEADLINE
+		  , A.ISSUE_COMPLETED_DATE 
+		  , A.ISSUE_STATUS
+		  , A.ISSUE_REGISTER
+		  , A.PROJECT_NO
+		  , A.ISSUE_MANAGER 
+		  , A.TASK_NO
+		  , D.MEMBER_NAME AS REGISTER_NAME
+		  , H.MEMBER_NAME AS MANAGER_NAME
+		  , E.PROJECT_NAME
+		  , G.TASK_CATEGORY_NAME
+     FROM TBL_ISSUE A 
+     JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+     JOIN TBL_PROJECT E ON (A.PROJECT_NO = E.PROJECT_NO)
+     JOIN TBL_TASK F ON (A.TASK_NO = F.TASK_NO)
+     JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
+     JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
+    WHERE A.ISSUE_STATUS = 'Y' 
+   </select>
   	
   	<select id="selectAllProjectList" resultMap="projectIssueCountResultMap">
-  		SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
-  	  DISTINCT
-  	             ROWNUM RNUM
-			   , A.PROJECT_NO
-			   , B.PROJECT_NAME
-			   , (SELECT
-                         COUNT(C.ISSUE_NO) AS ALL_ISSUE_COUNT
-	                FROM TBL_ISSUE C 
+  	  SELECT DISTINCT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
+            ( A.PROJECT_NO)
+            , A.PROJECT_NAME
+            , (SELECT
+                         COUNT(C.ISSUE_NO)
+                   FROM TBL_ISSUE C 
                    WHERE C.ISSUE_STATUS = 'Y'
-                     AND C.PROJECT_NO = C.PROJECT_NO
+                     AND C.PROJECT_NO = B.PROJECT_NO
                   ) AS ALL_ISSUE_COUNT
                 , ( SELECT
                            COUNT(D.ISSUE_NO) 
                       FROM TBL_ISSUE D
                      WHERE D.ISSUE_STATUS = 'Y'
                        AND D.ISSUE_PROGRESS_STATUS = '대기중'
-                       AND D.PROJECT_NO = D.PROJECT_NO
+                       AND D.PROJECT_NO = B.PROJECT_NO
                   ) AS PENDING_ISSUE_COUNT
                 , ( SELECT
                            COUNT(E.ISSUE_NO)  
                       FROM TBL_ISSUE E
                      WHERE E.ISSUE_STATUS = 'Y'
                        AND E.ISSUE_PROGRESS_STATUS = '처리중'
-                       AND E.PROJECT_NO = E.PROJECT_NO
+                       AND E.PROJECT_NO = B.PROJECT_NO
                    ) AS PROCESSING_ISSUE_COUNT
                  , ( SELECT
                             COUNT(F.ISSUE_NO) 
                        FROM TBL_ISSUE F
                       WHERE F.ISSUE_STATUS = 'Y'
                         AND F.ISSUE_PROGRESS_STATUS = '완료'
-                        AND F.PROJECT_NO = F.PROJECT_NO
+                        AND F.PROJECT_NO = B.PROJECT_NO
                     ) AS COMPLETED_ISSUE_COUNT
-			   , G.MANAGER_NO AS PM_NO
-			   , H.MEMBER_NAME AS PM_NAME
-	        FROM TBL_ISSUE A
-	        JOIN TBL_PROJECT B ON (A.PROJECT_NO = B.PROJECT_NO)
-	        JOIN TBL_PROJECT_MEM_HISTORY G ON (A.PROJECT_NO = G.PROJECT_NO)
-            JOIN TBL_MEMBER H ON (G.MANAGER_NO = H.MEMBER_NO)
-	       WHERE B.PROJECT_STATUS = 'Y'
+            , H.MEMBER_NO AS PM_NO
+            , H.MEMBER_NAME AS PM_NAME
+           FROM TBL_PROJECT A
+           JOIN TBL_ISSUE B ON (A.PROJECT_NO = B.PROJECT_NO)
+            JOIN TBL_ROLE_ASSIGNMENT_HISTORY G ON (A.PROJECT_NO = G.PROJECT_NO)
+            JOIN TBL_MEMBER H ON (G.MEMBER_NO = H.MEMBER_NO)
+          WHERE A.PROJECT_STATUS = 'Y'
+            AND G.ROLE_HISTORY_NO IN (SELECT MAX(J.ROLE_HISTORY_NO)
+                                   FROM TBL_ROLE_ASSIGNMENT_HISTORY J
+                                  WHERE J.ROLE_NO = 8
+                                  GROUP BY J.PROJECT_NO
+                                )
+            AND G.ROLE_NO = 8
   	</select>
   	
-  	<select id="selectIssuesOfTask" parameterType="_int" resultMap="issueResultMap" >
-  		SELECT
-                A.PROJECT_NO
-              , B.PROJECT_NAME
-              , A.TASK_NO
-              , D.TASK_CATEGORY_NAME
-              , A.ISSUE_NO
-              , A.ISSUE_NAME
+  	<select id="selectIssuesOfTask" parameterType="_int" resultMap="taskIssueCountResultMap" >
+  		SELECT DISTINCT
+                A.TASK_NO
+              , C.TASK_CATEGORY_NAME
+              , I.MEMBER_NAME
+			  , (SELECT
+                         COUNT(D.ISSUE_NO)
+	                FROM TBL_ISSUE D 
+                   WHERE D.ISSUE_STATUS = 'Y'
+                     AND D.TASK_NO = B.TASK_NO
+                  ) AS ALL_TASK_ISSUE_COUNT
+                , ( SELECT
+                           COUNT(E.ISSUE_NO) 
+                      FROM TBL_ISSUE E
+                     WHERE E.ISSUE_STATUS = 'Y'
+                       AND E.ISSUE_PROGRESS_STATUS = '대기중'
+                       AND E.TASK_NO = B.TASK_NO
+                  ) AS PENDING_TASK_ISSUE_COUNT
+                , ( SELECT
+                           COUNT(F.ISSUE_NO)  
+                      FROM TBL_ISSUE F
+                     WHERE F.ISSUE_STATUS = 'Y'
+                       AND F.ISSUE_PROGRESS_STATUS = '처리중'
+                       AND F.TASK_NO = B.TASK_NO
+                   ) AS PROCESSING_TASK_ISSUE_COUNT
+                 , ( SELECT
+                            COUNT(G.ISSUE_NO) 
+                       FROM TBL_ISSUE G
+                      WHERE G.ISSUE_STATUS = 'Y'
+                        AND G.ISSUE_PROGRESS_STATUS = '완료'
+                        AND G.TASK_NO = B.TASK_NO
+                    ) AS COMPLETED_TASK_ISSUE_COUNT
            FROM TBL_ISSUE A
-           JOIN TBL_PROJECT B ON (A.PROJECT_NO = B.PROJECT_NO)
-           JOIN TBL_TASK C ON (A.TASK_NO = C.TASK_NO)
-           JOIN TBL_TASK_CODE_MANAGE D ON (C.TASK_CATEGORY_CODE = D.TASK_CATEGORY_CODE)
+           JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+           JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+           JOIN TBL_PROJECT H ON (A.PROJECT_NO = H.PROJECT_NO)
+           JOIN TBL_MEMBER I ON (B.MEMBER_NO = I.MEMBER_NO)
           WHERE A.ISSUE_STATUS = 'Y'
-	        AND B.PROJECT_STATUS = 'Y'
-	        AND C.TASK_STATUS = 'Y'
+	        AND H.PROJECT_STATUS = 'Y'
+	        AND B.TASK_STATUS = 'Y'
 	        AND A.PROJECT_NO = #{ projectNo }
   	</select>
+  	
+   	<select id="selectTask" parameterType="_int" resultMap="issueResultMap" >
+  		SELECT
+  		       A.TASK_NO
+  		       C.TASK_CATEGORY_NAME
+  		  FROM TBL_ISSUE A
+  		  JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+  		  JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+  		 WHERE TBL_TASK = 'Y'
+  		   AND A.TASK_NO = #{ no }   
+  	</select>
+  	
+  	<insert id="" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO" >
+  		INSERT
+		  INTO TBL_ISSUE A
+	    ( 
+		  A.ISSUE_NO
+	    , A.ISSUE_NAME
+	    , A.ISSUE_CREATED_DATE
+	    , A.ISSUE_PROGRESS_STATUS
+		, A.ISSUE_IMPORTANCE
+		, A.ISSUE_CONTENT
+	    , A.ISSUE_DEADLINE
+	    , A.ISSUE_COMPLETED_DATE
+	    , A.ISSUE_REGISTER
+		, A.PROJECT_NO
+		, A.TASK_NO
+		)
+		VALUES
+		(
+		  ISSEU_NO.NEXTVAL
+		, #{ name }
+		, #{ progressStatus }
+		, #{ importance }
+		, #{ content }
+		, #{ deadline }
+		, #{ completedDate }
+		, #{ registerNo }
+		, #{ projectNo }
+		, #{ taskNo }
+	    )
+  	</insert>
   
   </mapper>

@@ -22,7 +22,7 @@ public interface GuideMapper {
 
 	List<GuideDTO> selectAllGuideList(SelectCriteria selectCriteria);
 
-	int selectTotalCount(Map<String, String> searchMap);
+	int selectTotalCount(Map<Object, Object> searchMap);
 
 	int insertGuide(GuideDTO guide);
 

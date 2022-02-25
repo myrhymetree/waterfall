@@ -38,7 +38,7 @@
   	</resultMap>
   	
   
-  <select id="selectAllGuideList" resultMap="guideResultMap"> 
+  <select id="selectAllGuideList" parameterType="com.greedy.waterfall.common.paging.SelectCriteria" resultMap="guideResultMap"> 
   SELECT /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#selectAllGuideList() */
   	       A.RNUM
   	     , A.BOARD_NO
@@ -89,6 +89,7 @@
   	 				) A
   	 		   JOIN TBL_MEMBER E ON (A.MEMBER_NO = E.MEMBER_NO)
   	 		  WHERE A.RNUM >= #{ startRow }
+                AND A.PROJECT_NO = #{ projectNo }
   	 		  ORDER BY 1 ASC
   </select>
   
@@ -105,6 +106,7 @@
   	 	</if>
   	   AND A.BOARD_STATUS = 'Y'
   	   AND A.BOARD_CATEGORY_NO = 3
+  	   AND A.PROJECT_NO = #{ projectNo }
   	 </where>
   </select>
   
@@ -125,8 +127,8 @@
   	, 3 
   	, #{ title }
   	, #{ content }
-	, 3
-	, 1
+	, #{ projectNo } 
+	, #{ writerMemberNo }
   	)
   	<selectKey keyProperty="no" resultType="Integer" order="AFTER">
   		SELECT
