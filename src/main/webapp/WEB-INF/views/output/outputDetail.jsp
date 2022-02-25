@@ -75,6 +75,7 @@
 	top: 150px;
 	border-width: 1px;
 	margin-left:660px;
+
 }
 
 #box2_border_top {
@@ -329,12 +330,19 @@ input{
 						 
 						 
 						 $("input[name=projectName]").val(data.project.name);
+						 
 						 $("input[name=parentTaskName]").val(data.childTask.parentTaskName);
+						 
 						 $("input[name=registedMember]").val(data.memberName.name);
+						 
 						 $("input[name=registedDate]").val(data.registedDate);
+						 
 						 $("textarea[name=content]").val(data.content);
+						 
 						 $("input[name=parentTaskName]").val(data.childTask.parentTask.taskCategory.categoryName);
+						 
 						 $("input[name=outputNo]").val(data.outputNo);
+						 
 					 }, error:function(data){
 						 console.log(data);
 					 }
