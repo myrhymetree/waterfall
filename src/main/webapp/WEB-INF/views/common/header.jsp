@@ -62,7 +62,7 @@
 		                                <div class="menu-font2">
 		                                     <nav class="sb-sidenav-menu-nested nav">
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/member/list">계정관리</a>
-		                                        <a class="nav-link" href="layout-sidenav-light.html">직급관리</a>
+		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/company/job/list">직급관리</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/company/dept/list">부서관리</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/output/list">산출물</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/project">이슈</a>

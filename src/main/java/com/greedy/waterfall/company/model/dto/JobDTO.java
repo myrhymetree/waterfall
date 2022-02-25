@@ -11,9 +11,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CompanyDTO {
+public class JobDTO {
 
-	private DeptDTO dept;
-	private TeamDTO team;
-	private JobDTO job;
+	private String jobCode;
+	private String jobName;
+	private int jobRank;
 }
