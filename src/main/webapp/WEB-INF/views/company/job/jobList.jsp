@@ -1,12 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
         integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>        
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">      
 <title>직급 관리</title>
 <style>
 
@@ -15,7 +17,7 @@
 	left: 230px;
 	top: 10px;
 	width: 1700px;
-	height: 1500px;
+	height: 900px;
 }
 
 .jobadminheader {
@@ -23,7 +25,7 @@
 	left: 100px;
 	top: 100px;
 	width: 1500px;
-	height: 1800px;
+	height: 700px;
 }
 
 .table-area {
@@ -124,36 +126,30 @@ td{
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${ jobList }" var="job">
+							<c:forEach var="job" items="${ requestScope.jobList }">
 								<tr>
-									<td>1 <c:out value="${ job.rank }" />
+									<td> <c:out value="${ job.jobRank }" />
 									</td>
-									<td>대표 <c:out value="${ job.rank }" />
+									<td> <c:out value="${ job.jobName }" />
 									</td>
 									<td><button class="float button" id="modifyButton">수정</button>
 										<button class="float button" id="deleteButton">삭제</button></td>
 								</tr>
 							</c:forEach>
-							<tr>
+							<%-- <tr>
 								<td>2 <c:out value="${ job.rank }" />
 								</td>
-								<td>이사 <c:out value="${ job.rank }" />
+								<td>이사 <c:out value="${ job.name }" />
 								</td>
 								<td><button class="float button" id="modifyButton">수정</button>
 									<button class="float button" id="deleteButton">삭제</button></td>
-							</tr>
+							</tr> --%>
 						</tbody>
 
 					</table>
 
 
 				</div>
-				<br> <br> <br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 				
 			</div>
 		</main>

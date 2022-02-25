@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class DeptDTO {
 
-	private String code;
-	private String name;
+	private String deptCode;
+	private String deptName;
 	
 }

@@ -29,6 +29,11 @@
 		<beans:property name="order" value="1"/>
 	</beans:bean>
 	
+	<!-- 파일업로드 resolver -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10000000"/>
+	</beans:bean>
+	
 	<!-- <interceptors>
 		<interceptor>
 			<mapping path="/login/"/>

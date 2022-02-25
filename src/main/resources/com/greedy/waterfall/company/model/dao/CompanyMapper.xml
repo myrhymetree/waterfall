@@ -4,8 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.greedy.waterfall.company.model.dao.CompanyMapper">
 	<resultMap type="com.greedy.waterfall.company.model.dto.CompanyDTO" id="companyResultMap">
-		<id property="" column=""/>
-		<result property="" column=""/>
+		<association property="dept" resultMap="deptResultMap"/>
+		<association property="team" resultMap="teamResultMap"/>
+		<association property="job" resultMap="jobResultMap"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.DeptDTO" id="deptResultMap">
@@ -16,17 +17,27 @@
 	<resultMap type="com.greedy.waterfall.company.model.dto.TeamDTO" id="teamResultMap">
 		<id property="teamCode" column="TEAM_CODE"/>
 		<result property="teamName" column="TEAM_NAME"/>
+		<result property="deptCode" column="DEPT_CODE"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.JobDTO" id="jobResultMap">
 		<id property="jobCode" column="JOB_CODE"/>
 		<result property="jobName" column="JOB_NAME"/>
+		<result property="jobRank" column="JOB_RANK"/>
 	</resultMap>
 	
-	<select id="findCompany" resultMap="companyResultMap">
+	<select id="findDept" resultMap="deptResultMap">
 		SELECT
-		       DEPT_NAME
+		       DEPT_CODE
+		     , DEPT_NAME
 		  FROM TBL_DEPT
-		  
+	</select>
+	
+	<select id="findJob" resultMap="jobResultMap">
+		SELECT 
+		       JOB_CODE
+		     , JOB_NAME
+		     , JOB_RANK
+		  FROM TBL_JOB_TITLE     
 	</select>
 </mapper>
