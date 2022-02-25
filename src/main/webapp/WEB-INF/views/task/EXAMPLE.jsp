@@ -33,11 +33,11 @@
                     <div class="container-fluid px-4">
                         <br>
                         <br>
-                        <h1 class="mt-4"><i class="fas fa-exclamation-circle"></i>산출물</h1>
+                        <h3 class="mt-4"><i class="fas fa-exclamation-circle" style="font-size:14px"></i>업무</h3>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                관리자 프로젝트 목록
+                                업무 목록
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -47,20 +47,15 @@
                                         <col style="width:20%"/>
                                         <col style="width:20%"/>
                                     </colgroup>
-                                    <!-- <colgroup>
-                                        <col style="width:10%"/>
-                                        <col style="width:50%"/>
-                                        <col style="width:10%"/>
-                                        <col style="width:10%"/>
-                                        <col style="width:20%"/>
-                                    </colgroup> -->
                                     <thead>
                                     
                                         <tr>
                                             <th>No</th>
-                                            <th>프로젝트 명</th>
-                                            <th>산출물 총 개수</th>
-                                            <th>PM</th>
+                                            <th>상위 업무명</th>
+                                            <th>진행상태</th>
+                                            <th>진행률</th>
+                                            <th>시작일</th>
+                                            <th>마감일</th>
                                         </tr>
                                     </thead>
                                     <tbody>

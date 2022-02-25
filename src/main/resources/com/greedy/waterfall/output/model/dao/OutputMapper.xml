@@ -56,9 +56,16 @@
 		<result property="name" column="MEMBER_NAME"/>
 	</resultMap>
 	
-	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectDTO" id="projectResultMap">
+	<resultMap type="com.greedy.waterfall.output.model.dto.OutputProjectDTO" id="projectResultMap">
 		<id property="no" column="PROJECT_NO"/>
 		<result property="name" column="PROJECT_NAME"/>
+		<result property="startDate" column="PROJECT_START_DATE"/>
+		<result property="deadLine" column="PROJECT_DEADLINE"/>
+		<result property="progression" column="PROJECT_PROGRESSION"/>
+		<result property="statusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		
+		<association property="status" resultMap="projectStatusResultMap"/>
+		<association property="manager" resultMap="memberResultMap"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.task.model.dto.TaskCategoryDTO" id="taskCategoryResultMap">
@@ -75,6 +82,12 @@
 		<result property="registedDate" column="OUTPUT_REGISTED_DATE"/>
 		<result property="outputNo" column="REF_OUTPUT_NO"/>
 	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.output.model.dto.OutputProjectStatusDTO" id="projectStatusResultMap">
+		<id property="projectStatusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="projectStatusName" column="PROJECT_PROGRESS_STATUS_NAME"/>
+	</resultMap>
+	
 		
 	<select id="selectParentTaskList" resultMap="taskResultMap">
 		SELECT
@@ -161,10 +174,53 @@
 	<update id="deleteOutput">
 		UPDATE
 		       TBL_OUTPUT A
-		   SET A.OUTPUT_STATUS = 'Y'
+		   SET A.OUTPUT_STATUS = 'N'
 		 WHERE OUTPUT_NO = #{ no }
-		       
 	</update>
+	
+	<select id="selectAllProjectList" resultMap="projectResultMap">
+		SELECT 
+			   A.PROJECT_NO
+			 , A.PROJECT_NAME
+			 , A.PROJECT_PROGRESSION
+			 , B.PROJECT_PROGRESS_STATUS_NAME
+			 , D.MEMBER_NAME
+          FROM TBL_PROJECT A
+          JOIN TBL_PROJECT_STATUS B ON(A.PROJECT_PROGRESS_STATUS_CODE = B.PROJECT_PROGRESS_STATUS_CODE)
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY C ON(A.PROJECT_NO = C.PROJECT_NO)
+          LEFT JOIN TBL_MEMBER D ON(C.MEMBER_NO = D.MEMBER_NO)
+ 	     WHERE A.PROJECT_STATUS = 'Y'
+ 	       
+ 	       AND C.ROLE_HISTORY_NO IN (SELECT MAX(ROLE_HISTORY_NO)
+ 	                                  FROM TBL_ROLE_ASSIGNMENT_HISTORY E
+ 	                                 WHERE E.ROLE_NO = 8
+ 	                                 GROUP BY PROJECT_NO
+ 	                                          )
+	</select>
+	
+	<select id="selectAlloutputCount" resultType="_int">
+		SELECT
+		       COUNT(*)
+		  FROM TBL_OUTPUT
+		 WHERE PROJECT_NO = #{ projectNo }
+		   AND OUTPUT_STATUS = 'Y'
+		       
+	</select>
+	
+	<select id="selectAdminOutputList" resultMap="outputResultMap">
+		SELECT
+		       A.OUTPUT_NO
+		     , A.OUTPUT_COMMENT
+		     , A.OUTPUT_REGISTED_DATE
+		     , A.OUTPUT_STATUS
+		     , A.MEMBER_NO
+		     , B.MEMBER_NAME
+		     , A.PROJECT_NO
+		     , A.OUTPUT_VER
+		  FROM TBL_OUTPUT A
+		  LEFT JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+		 WHERE A.PROJECT_NO = #{ projectNo }  
+	</select>
 	
 	
 </mapper>

@@ -256,10 +256,6 @@ public class NoticeController {
 		return "redirect:/notice/list";
 	}
 
-	@PostMapping("/fileUpload")
-	public String fileUpload(HttpServletRequest request, @RequestParam("noticeFile" ) MultipartFile noticeFile) {
-		return "fileUpload";
-	}
 
 
 }
