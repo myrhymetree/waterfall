@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.common.exception.company.JobRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.company.model.dao.CompanyMapper;
 import com.greedy.waterfall.company.model.dto.DeptDTO;
