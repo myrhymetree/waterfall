@@ -2,6 +2,7 @@ package com.greedy.waterfall.company.model.service;
 
 import java.util.List;
 
+import com.greedy.waterfall.common.exception.company.JobRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.company.model.dto.DeptDTO;
 import com.greedy.waterfall.company.model.dto.JobDTO;

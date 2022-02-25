@@ -1,4 +1,4 @@
-package com.greedy.waterfall.company.model.service;
+package com.greedy.waterfall.common.exception.company;
 
 public class JobRegistException extends Exception {
 

@@ -17,7 +17,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.company.model.dto.DeptDTO;
 import com.greedy.waterfall.company.model.dto.JobDTO;
 import com.greedy.waterfall.company.model.service.CompanyService;
-import com.greedy.waterfall.company.model.service.JobRegistException;
+import com.greedy.waterfall.common.exception.company.JobRegistException;
 
 @Controller
 @RequestMapping("/company")
