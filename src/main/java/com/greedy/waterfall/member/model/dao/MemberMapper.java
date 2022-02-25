@@ -5,7 +5,11 @@ import java.util.Map;
 
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
+import com.greedy.waterfall.member.model.dto.DeptDTO;
+import com.greedy.waterfall.member.model.dto.DeptJobDTO;
+import com.greedy.waterfall.member.model.dto.JobDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.member.model.dto.TeamDTO;
 
 public interface MemberMapper {
 
@@ -16,5 +20,12 @@ public interface MemberMapper {
 	List<AdminMemberDTO> findAdminMemberList(SelectCriteria selectCriteria);
 
 	int selectTotalCount(Map<String, String> searchMap);
+
+	List<DeptDTO> findDept();
+
+	List<JobDTO> findJob();
+
+	List<TeamDTO> findTeamList(String teamCode);
+
 
 }

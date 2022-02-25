@@ -1,5 +1,6 @@
 package com.greedy.waterfall.member.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,10 @@ import com.greedy.waterfall.common.exception.member.LoginFailedException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dao.MemberMapper;
 import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
+import com.greedy.waterfall.member.model.dto.DeptDTO;
+import com.greedy.waterfall.member.model.dto.JobDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.member.model.dto.TeamDTO;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -52,5 +56,28 @@ public class MemberServiceImpl implements MemberService {
 		
 		return result;
 	}
+
+
+	@Override
+	public Map<String, Object> findDeptJobService() {
+
+		Map<String, Object> allList = new HashMap<>();
+		List<DeptDTO> deptDTO = mapper.findDept(); 
+		List<JobDTO> jobDTO = mapper.findJob();
+		
+		allList.put("deptDTO", deptDTO);
+		allList.put("jobDTO", jobDTO);
+		
+	    return allList;
+	}
+
+	@Override
+	public List<TeamDTO> findTeamList(String deptCode) {
+
+		return mapper.findTeamList(deptCode);
+	}
+
+
+	
 
 }

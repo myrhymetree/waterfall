@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +26,10 @@ import com.greedy.waterfall.common.exception.member.LoginFailedException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
+import com.greedy.waterfall.member.model.dto.DeptDTO;
+import com.greedy.waterfall.member.model.dto.JobDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.member.model.dto.TeamDTO;
 import com.greedy.waterfall.member.model.service.MemberService;
 
 @Controller
@@ -137,9 +141,57 @@ public class MemberController {
 	}
 	
 	@GetMapping("regist")
-	public String regist() {
+	public ModelAndView regist(ModelAndView mv) {
 		
-		return "member/memberRegist";
+		Map<String, Object> allList = memberService.findDeptJobService(); 
+
+		List<DeptDTO> deptList  = (List<DeptDTO>)allList.get("deptDTO");
+		List<JobDTO> jobList = (List<JobDTO>)allList.get("jobDTO");
+		
+		mv.addObject("deptList", deptList);
+		mv.addObject("jobList", jobList);
+		mv.setViewName("/member/memberRegist");
+		
+		return mv;
+	}
+	
+	@GetMapping("regist2/{deptCode}")
+	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,HttpServletResponse response) {
+		
+		System.out.println("실행확인 컨트롤러");
+		System.out.println("실행확인 컨트롤러");
+		System.out.println("실행확인 컨트롤러");
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		System.out.println("확인용2" + deptCode);
+		List<TeamDTO> teamList = memberService.findTeamList(deptCode);
+		
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		System.out.println("확인용" + teamList);
+		
+		mv.addObject("teamList", teamList);
+		mv.setViewName("jsonView");
+		
+		
+		return mv;
 	}
 	
 	

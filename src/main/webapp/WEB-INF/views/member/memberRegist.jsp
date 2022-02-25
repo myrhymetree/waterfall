@@ -105,7 +105,7 @@ label {
                                     <table align="center" width="510">
                                         <tr>
                                             <td align="center">
-                                                <select class="select-bar form-select" aria-label="Default select example" id="dept" name="dept" onchange="setSelectBox(this)">
+                                                <select class="select-bar form-select" aria-label="Default select example" id="dept" name="dept">
                                                     <option value="" selected>부서</option>
                                                   	<c:forEach var="dept" items="${ deptList }">
                                                   		<option value="${ dept.deptCode }"><c:out value="${ dept.deptName }"/></option>
@@ -113,16 +113,15 @@ label {
                                                 </select> 
                                             </td>
                                             <td align="center">
-                                                <select class="select-bar form-select" aria-label="Default select example" id="team" name="team" onchange="setSelectBox(this)" disabled>
-                                                    <option selected>팀</option>
-                                                    <option value="${ team.teamCode }"><c:out value="${ team.teamName }"/>                                                                                      
+                                                <select class="select-bar form-select" aria-label="Default select example" id="team" name="team">
+                                                    <option value="" selected disabled>팀 선택</option>
                                                 </select>
                                             </td>
                                             <td align="center">
                                                 <select class="select-bar form-select" aria-label="Default select example" id="job" name="job">
-                                                    <option selected>직급</option>
+                                                    <option value="" selected>직급</option>
                                                     <c:forEach var="job" items="${ jobList }">
-                                                    	<option value="${ job.jobCode }"><c:out value="${ job.jobName }"/></option>
+                                                		<option value="${ job.jobCode }"><c:out value="${ job.jobName }"/></option>
                                                     </c:forEach>
                                                 </select>
                                             </td>
@@ -171,15 +170,16 @@ label {
                 </main>
             </div>
                  				 <script>
-            							$("input:checkbox").on('click',function(){
+            					/* 		$("input:checkbox").on('click',function(){
 
             								$("[id=dept]").val("미지정");
             								$("[id=team]").val("미지정");
             								$("[id=job]").val("미지정");          								
-            								});
+            								}); */
             							
             							$("#dept").on("change", function(){
             								const deptCode = $(this).val();
+            								console.log(deptCode);
             								const url = "${pageContext.servletContext.contextPath}/member/regist2/" + $(this).val();
             								$("#team option").remove();
             								$.ajax({
@@ -187,10 +187,40 @@ label {
             									type : "get",
             									data : {deptCode:deptCode},
             									success: function(data){
-            										const $
+            										const $teamOption = "<option value='' selected disabled>팀 선택</option>";
+            										$("#team").append($teamOption);
+            										teamList = JSON.parse(data.teamList);
+            										for(let i = 0; i < teamList.length; i++) {
+            											const $teamTag = "<option value = '" + teamList[i].teamCode + "'>" + teamList[i].teamName + "</option>"
+            											
+            											$("#team").append($teamTag);
+            										}
+            									},
+            									error: function(data){
+            										alert("문제생김");
             									}
             								});
-            							});
+            							}); 
+            							
+            							
+            							
+            							/* $("#job").on('click',function(){
+            								const jobCode = $(this).val();
+            								const url = "${pageContext.servletContext.contextPath}/member/regist2/" + $(this).val();
+            								
+            								$.ajax({
+            									url: url,
+            									type: "get",
+            									data: {teamCode: teamCode},
+            									success: function(data){
+            										jobList = JSON.parse(data.jobList);
+            										for(let i = 0; i < jobList.length; i++){
+            											const $jobTag = "<option value"
+            										}
+            									}
+            								});
+            							}); */
+            							
             					  </script>
 
 </body>
