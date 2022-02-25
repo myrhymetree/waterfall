@@ -261,7 +261,8 @@ input::-webkit-search-results-decoration{
 						                        <div class="my-modal-header mb-4">
 						                            <label class="me-2" for="title-write">제목</label>
 						                            <input type="text" id="read-title" name="title">
-						                            <input type ="hidden" id="read-no" name="no">
+						                            <input type="hidden" id="read-no" name="no">
+						                            <input type="hidden" id="read-writerNo" name="writerMemberNo">
 						                        </div>
 						                        <div class="my-modal-body">
 						                            <div class="my-textarea-div mb-3">
@@ -283,8 +284,12 @@ input::-webkit-search-results-decoration{
 						                        <br>
 						                        <div class="my-modal-footer-read">
 						                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-						                            <input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
-				                            		<button type="submit" class="btn btn-secondary">수정하기</button>
+						                            <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( sessionScope.loginMember.no eq requestScope.guideList.writerMemberNo) }">
+						                            	<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
+						                            </c:if>
+						                            <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq requestScope.guideList.writerMemberNo)) }">
+				                            			<button type="submit" class="btn btn-secondary">수정하기</button>
+				                            		</c:if>
 						                        </div>
 						                    </form>
 						                </div>
@@ -376,6 +381,7 @@ $(function() {
                   $("#read-no").val(guideArray[0][1]);		
                   $("#read-title").val(guideArray[2][1]);
                   $("#read-content").val(guideArray[3][1]);
+                  $("#read-writerNo").val(guideArray[8][1]);
                   $("#read-originalName").val(guideArray[14][1]);
                   $("#readModal").modal("show");
                   ex.children[2].innerText=guideArray[9][1];		//ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스

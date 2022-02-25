@@ -57,7 +57,7 @@ public class GuideServiceImpl implements GuideService {
 	 * @author 박성준
 	 */
 	@Override
-	public int selectTotalCount(Map<String, String> searchMap) {
+	public int selectTotalCount(Map<Object, Object> searchMap) {
 		int result = mapper.selectTotalCount(searchMap);
 		
 		return result;
