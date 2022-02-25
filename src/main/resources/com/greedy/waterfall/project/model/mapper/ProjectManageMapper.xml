@@ -19,6 +19,11 @@
 		
 	</resultMap>
 	
+	<resultMap type="com.greedy.waterfall.project.model.dto.DeptDTO" id="deptResult">
+		<id property="deptCode" column="DEPT_CODE"/>
+		<result property="deptName" column="DEPT_NAME"/>
+	</resultMap>
+	
 	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectRoleDTO" id="projectRole">
 		<id property="roleNo" column="ROLE_NO"/>
 		<result property="roleName" column="ROLE_NAME"/>
@@ -60,8 +65,22 @@
                   JOIN TBL_PROJECT D ON (B.PROJECT_NO = D.PROJECT_NO)
           LEFT JOIN TBL_PROJECT_MEM_HISTORY I ON (B.PROJECT_NO = I.PROJECT_NO)
          WHERE B.PROJECT_NO = #{ projectNo }
+           AND B.ROLE_NO != 8
 	</select>
-	
+    <select id="findAllRole" resultMap="projectRole">
+        SELECT
+               A.ROLE_NO
+             , A.ROLE_NAME
+          FROM TBL_ROLE_CATEGORY A
+         WHERE A.ROLE_NO != 8
+         ORDER BY A.ROLE_NO
+    </select>
+   	<select id="findAllDept" resultMap="deptResult">
+        SELECT
+               A.DEPT_CODE
+             , A.DEPT_NAME
+          FROM TBL_DEPT A
+	</select>
 	
 </mapper>
 
