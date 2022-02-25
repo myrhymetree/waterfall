@@ -89,6 +89,7 @@
   	 				) A
   	 		   JOIN TBL_MEMBER E ON (A.MEMBER_NO = E.MEMBER_NO)
   	 		  WHERE A.RNUM >= #{ startRow }
+<!--   	 		    AND A.PROJECT_NO = #{ projectNo } -->
   	 		  ORDER BY 1 ASC
   </select>
   

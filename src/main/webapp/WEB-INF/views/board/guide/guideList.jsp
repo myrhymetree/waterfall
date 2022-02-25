@@ -318,44 +318,6 @@ input::-webkit-search-results-decoration{
           
 <script>
 
-/* x누르면 해당경로로 이동 */
-/* $(function() {
-	$("#backButton").click(function(){
-		alert("돌아감");
-		location.href="${ pageContext.servletContext.contextPath }/guide/list";
-	});
-}); */
-
-
-/* $(function() {
-	$("#backButton").click(function(){
-		alert("돌아감");
-		location.href="${ pageContext.servletContext.contextPath }/guide/list";
-	}); */
-
-/* <input type="search" id="searchvalue" name="searchValue" onclick="search_click()"
-	value="<c:out value="${ requestScope.selectCriteria.searchValue }"/>"> 이거에 대한 이벤트 */
-/* function search_click() {
-	console.log("검색")
-} */
-
-
-/* $("input::-webkit-search-cancel-button").click(function() {
-	console.log("버튼1을 누르셨습니다.");
-});  */
-
-/* 돋보기 누르면 해당경로로 이동 */
-/* $(function(){
-	$("#submitButton").click(function(){
-		location.href="${ pageContext.servletContext.contextPath }/guide/list";
-	});
-}); */
-
-/* 돋보고 버튼을 눌러서 input 내용 삭제 */
-/* $("#submitButton").on('click',function(event){
-	$(this).parent().find("input").val("");
-}); */
-
 $('#title-write').removeAttr('required');
 
  $(function(){

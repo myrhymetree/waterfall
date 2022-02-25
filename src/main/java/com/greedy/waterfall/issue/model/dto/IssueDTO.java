@@ -1,5 +1,7 @@
 package com.greedy.waterfall.issue.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +18,14 @@ public class IssueDTO {
 	private int rnum;
 	private int no;							//이슈번호
 	private String name;					//이슈명
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createdDate;		//생성일
 	private String progressStatus;			//진행상태
 	private String importance;				//중요도
 	private String content;					//이슈내용
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date deadline;		//이슈마감일
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date completedDate;	//이슈종료일
 	private String status;					//이슈 삭제여부
 	private IssueRegisterDTO register;			//TBL_MEMBER 테이블과 JOIN하는 경우 1:1 조인이 될 것이기  때문에 DTO타입으로 생성
@@ -32,5 +37,8 @@ public class IssueDTO {
 	private IssueTaskDTO task;				//TBL_TASK 테이블과 JOIN하는 경우 1:1 조인이 될 것이기  때문에 DTO타입으로 생성
 	private int taskNo;						//업무 번호 (어떤 업무에서 발생한 이슈인지 확인)
 	private IssueTaskCodeManageDTO taskCode;		//업무이름을 저장하기 위한 DTO
-	private String taskCodeManageCode;			
+	private String taskCodeManageCode;
+	private IssueFileDTO file;				//File 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 GuideFileDTO로 생성
+	private int fileNo;						//첨부파일 번호
+	private String originalName;			//첨부파일 이름
 }

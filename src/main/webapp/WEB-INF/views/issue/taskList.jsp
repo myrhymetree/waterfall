@@ -35,7 +35,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                관리자 프로젝트 목록
+                                	프로젝트 별 업무 목록
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -59,24 +59,24 @@
                                     
                                         <tr>
                                             <th>No</th>
-                                            <th>프로젝트 명</th>
+                                            <th>업무 명</th>
                                             <th>총 이슈</th>
                                             <th>해결 전 이슈</th>
                                             <th>해결 중인 이슈</th>
                                             <th>해결 완료된 이슈</th>
-                                            <th>PM</th>
+                                            <th>담당자</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-			                             <c:forEach var="project" items="${ requestScope.allProject }" varStatus="status">
+			                             <c:forEach var="task" items="${ requestScope.taskIssueList }" varStatus="status">
 				                             <tr>
-				                                 <td><c:out value="${ project.projectNo }"/></td>
-				                                 <td><c:out value="${ project.projectName }"/></td>
-				                                 <td><c:out value="${ project.allIssueCount}"/></td>
-				                                 <td><c:out value="${ project.pendingIssueCount}"/></td>
-				                                 <td><c:out value="${ project.processingIssueCount}"/></td>
-				                                 <td><c:out value="${ project.completedIssueCount}"/></td>
-				                                 <td><c:out value="${ project.pmName }"/></td>
+				                                 <td><c:out value="${ task.task.no }"/></td>
+				                                 <td><c:out value="${ task.taskCode.taskCategoryName }"/></td>
+				                                 <td><c:out value="${ task.allIssueCount }"/></td>
+				                                 <td><c:out value="${ task.pendingIssueCount }"/></td>
+				                                 <td><c:out value="${ task.processingIssueCount }"/></td>
+				                                 <td><c:out value="${ task.completedIssueCount }"/></td>
+				                                 <td><c:out value="${ task.managerName }"/></td>
 				                             </tr>
 										</c:forEach>
                                         
@@ -93,9 +93,9 @@
 <script>
 $(function() {
 	$("#datatablesSimple td").click(function(){
-		 const projectNo = $(this).parent().children(":eq(0)").text();
-		 console.log(projectNo)
-		location.href = "${ pageContext.servletContext.contextPath }/issue/task?projectNo=" + projectNo;
+		 const taskNo = $(this).parent().children(":eq(0)").text();
+		 console.log(taskNo)
+		location.href = "${ pageContext.servletContext.contextPath }/issue/list?taskNo=" + taskNo;
 	});
 });
 </script>

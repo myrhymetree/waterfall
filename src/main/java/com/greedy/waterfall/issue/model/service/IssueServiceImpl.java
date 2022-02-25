@@ -6,8 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.common.exception.issue.IssueRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
+import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.mapper.IssueMapper;
 
@@ -27,12 +29,12 @@ public class IssueServiceImpl implements IssueService {
 		return result;
 	}
 
-	@Override
-	public List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria) {
-		List<IssueDTO> issueList = mapper.selectAllIssueList(selectCriteria);
-		
-		return issueList;
-	}
+//	@Override
+//	public List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria) {
+//		List<IssueDTO> issueList = mapper.selectAllIssueList(selectCriteria);
+//		
+//		return issueList;
+//	}
 
 	@Override
 	public List<ProjectIssueCountDTO> selectAllProjectList() {
@@ -44,6 +46,46 @@ public class IssueServiceImpl implements IssueService {
 		List<IssueDTO> taskIssueList = mapper.selectIssuesOfTask(projectNo);
 		return taskIssueList;
 	}
-
+	@Override
+	public List<IssueDTO> selectIssueList(int taskNo) {
+		List<IssueDTO> issueList = mapper.selectIssueList(taskNo);
+		return issueList;
+	}
+	@Override
+	public List<IssueDTO> selectAllIssue() {
+		List<IssueDTO> allIssueList = mapper.selectAllIssue();
+		return allIssueList;
+	}
+	@Override
+	public IssueDTO selectTasks(int no) {
+		IssueDTO issue = mapper.selectTasks(no);
+		
+		return issue;
+	}
+	@Override
+	public List<IssueDTO> selectTask(int taskNo) {
+		List<IssueDTO> taskList = mapper.selectTask(taskNo);
+		
+		return taskList;
+	}
+	
+	@Override
+	public void registIssue(IssueDTO issue) {
+		
+		int result = mapper.registIssue(issue);
+		
+		IssueFileDTO issueFileDTO = issue.getFile();
+		
+		if(issueFileDTO != null) {
+			issueFileDTO.setRefIssueNo(issue.getNo());
+//			mapper.insertIssueFile(issueFileDTO);
+		}
+		
+//		if(!(result > 0)) {
+//			throw new IssueRegistException("이슈 등록에 실패하셨습니다.");
+//		}
+		
+		
+	}
 
 }

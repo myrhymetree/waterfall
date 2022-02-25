@@ -103,7 +103,7 @@
 								</nav>
 							</div>
 						</div>
-						<c:if test="${ !empty requestScope.loginMember and sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo or sessionScope.loginMember.role eq 1}">
+						<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo or sessionScope.loginMember.role eq 1}">
 							<jsp:include page="/WEB-INF/views/common/inprojectheaderManage.jsp"/>
 						</c:if>
 						<div class="collapse" id="collapseLayouts6"
@@ -125,5 +125,5 @@
 			</nav>
 		</div>	
 		<div id="layoutSidenav_content">
-			
+
 </html>

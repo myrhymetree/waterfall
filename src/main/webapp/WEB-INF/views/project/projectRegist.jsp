@@ -93,6 +93,7 @@
 	});
 	$("#dept").on("change", function() {
 		const deptCode = $(this).val();
+		console.log(deptCode);
 		const url = "${pageContext.servletContext.contextPath}/project/regist/team/" + $(this).val();
 		$("#team option").remove();
 		$.ajax({

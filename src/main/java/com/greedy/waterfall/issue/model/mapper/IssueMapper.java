@@ -11,10 +11,20 @@ public interface IssueMapper {
 
 	int selectTotalCount(Map<String, String> searchMap);
 
-	List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria);
+//	List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria);
 
 	List<ProjectIssueCountDTO> selectAllProjectList();
 
 	List<IssueDTO> selectIssuesOfTask(int projectNo);
+
+	List<IssueDTO> selectIssueList(int taskNo);
+
+	List<IssueDTO> selectAllIssue();
+
+	IssueDTO selectTasks(int no);
+
+	List<IssueDTO> selectTask(int taskNo);
+
+	int registIssue(IssueDTO issue);
 
 }

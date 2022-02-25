@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +33,7 @@ import com.greedy.waterfall.common.exception.GuideRegistException;
 import com.greedy.waterfall.common.exception.GuideRemoveException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 /**
  * <pre>
@@ -64,7 +65,52 @@ public class GuideController {
 	 * @author 박성준
 	 */
 	@GetMapping("/list")
-	public ModelAndView guideList(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView guideList( HttpServletRequest request, ModelAndView mv, HttpSession session) {
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("일루 오긴하는가????");
+		System.out.println("안오냐? " + (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo()));
+		int projectNo = (((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo());
+//		System.out.println("pn : " + projectNo1);
+		
+//		int projectNo1 = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
+		System.out.println("pn : " + projectNo);
 		
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
@@ -122,19 +168,36 @@ public class GuideController {
 	 */
 	@PostMapping("/regist")
 	public String registGuide(@ModelAttribute GuideDTO guide, HttpServletRequest request,
-			RedirectAttributes rttr, @RequestParam MultipartFile singleFile) throws GuideRegistException {
+		RedirectAttributes rttr, @RequestParam MultipartFile singleFile, HttpSession session) throws GuideRegistException {
 		/* 나중에 로그인 기능이 구현되면 HttpServletRequest를 webRequst로 바꿔서 해보자 */
 		/* @ModelAttribute는 view에서 넘어온 데이터를 GuideDTO와 바인딩 해주는 역할을 함 */
 		/* 첨부파일은 일반적인 request객체에서 값을 꺼내는것이 아닌 multi-part 객체에서 꺼내야된다 */
-
+		
+		int projectNo = Integer.parseInt(request.getParameter("projectNo"));
+		
+		System.out.println("프로젝트넘버는 : " + projectNo);
+		System.out.println("프로젝트넘버는 : " + projectNo);
+		System.out.println("프로젝트넘버는 : " + projectNo);
+		System.out.println("프로젝트넘버는 : " + projectNo);
+		System.out.println("프로젝트넘버는 : " + projectNo);
+		System.out.println("프로젝트넘버는 : " + projectNo);
+		
+		int projectNo1 = (int) request.getAttribute("projectNo");
+		
+		System.out.println("프로젝트넘버1는 : " + projectNo1);
+		System.out.println("프로젝트넘버1는 : " + projectNo1);
+		System.out.println("프로젝트넘버1는 : " + projectNo1);
+		System.out.println("프로젝트넘버1는 : " + projectNo1);
+		System.out.println("프로젝트넘버1는 : " + projectNo1);
+		System.out.println("프로젝트넘버1는 : " + projectNo1);
+		
 		/* 로그인 기능이 구현되면 쓸 코드 */
-//		int writerMemberNo = ((GuideMemberDTO) request.getSession().getAttribute("loginMember").getNo();
+		int writerMemberNo =  (int) session.getAttribute("loginMember");
+		guide.setWriterMemberNo(writerMemberNo);
 		
+//		int register = (int) session.getAttribute("loginMember");
 		
 		/* 로그인 기능이 구현되면 쓸 코드 */
-//		guide.setWriterMemberNo(writerMemberNo);
-		
-		
 		
 		System.out.println("singleFile : " + singleFile);
 		
@@ -266,7 +329,7 @@ public class GuideController {
     
     int no = Integer.parseInt(request.getParameter("no"));
     System.out.println("detail에 들어오는 no " + no);
-    GuideDTO guideDetail= guideService.selectGuideDetail(no);
+    GuideDTO guideDetail = guideService.selectGuideDetail(no);
     GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
     System.out.println("상세조회 guideDetail : " + guideDetail);
     Gson gson = new GsonBuilder()
