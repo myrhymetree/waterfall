@@ -15,6 +15,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <pre>
+ * Class : ProjectMainBoardDTO
+ * Comment : 프로젝트 메인화면에 출력되는 모든 게시판의 게시글들의 목록을 저장한다.
+ * 
+ * History
+ * 2022. 2. 25.  (홍성원)
+ * </pre>
+ * @version 1
+ * @author 홍성원
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
