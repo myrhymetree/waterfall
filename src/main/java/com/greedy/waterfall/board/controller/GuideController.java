@@ -125,7 +125,28 @@ public class GuideController {
 		
 		List<GuideDTO> guideList = guideService.selectAllGuideList(selectCriteria);
 		
-		GuideDTO guide = new GuideDTO();
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
+		System.out.println(guideList);
 		
 		mv.addObject("guideList", guideList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -295,6 +316,8 @@ public class GuideController {
     GuideDTO guideDetail = guideService.selectGuideDetail(no);
     GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
     System.out.println("상세조회 guideDetail : " + guideDetail);
+    System.out.println((((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getPmNo()));
+    System.out.println((((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()));
     Gson gson = new GsonBuilder()
           .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
           .setPrettyPrinting()

@@ -212,14 +212,16 @@ input::-webkit-search-results-decoration{
 
         
 
-		 <!-- To Do 게시판 시작 -->
+		 <!-- 가이드 게시판 시작 -->
                 <div class="todo">
                     <h2><span><i class="far fa-clipboard me-1"></i>가이드 게시판</span></h2>
                     <hr>
                     <div class="tbl-wrapper mx-auto">
                         <div class="write">
-                            <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#writeModal"><i class="far fa-edit me-1"></i>등록</button>
-                            <button type="button" class="btn btn-secondary mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-undo"></i></button>
+                        	<c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
+                            	<button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#writeModal"><i class="far fa-edit me-1"></i>등록</button>
+                            	<button type="button" class="btn btn-secondary mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-undo"></i></button>
+                            </c:if>
                         </div>
                         <table class="todo-tbl">
                             <colgroup>
@@ -284,12 +286,12 @@ input::-webkit-search-results-decoration{
 						                        <br>
 						                        <div class="my-modal-footer-read">
 						                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-						                            <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( sessionScope.loginMember.no eq requestScope.guideList.writerMemberNo) }">
+						                            <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
 						                            	<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
 						                            </c:if>
-						                            <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq requestScope.guideList.writerMemberNo)) }">
+						                            <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo)) }">
 				                            			<button type="submit" class="btn btn-secondary">수정하기</button>
-				                            		</c:if>
+				                            		</c:if> 
 						                        </div>
 						                    </form>
 						                </div>
