@@ -110,10 +110,10 @@
 		                         , D.TEAM_NAME
 		                         , E.JOB_NAME
 		                      FROM TBL_MEMBER A
-		                      JOIN TBL_MEMBER_COM_INFO B ON (A.MEMBER_NO = B.MEMBER_NO )
-		                      JOIN TBL_DEPT C ON (B.DEPT_CODE = C.DEPT_CODE)
-		                      JOIN TBL_TEAM D ON (B.TEAM_CODE = D.TEAM_CODE)
-		                      JOIN TBL_JOB_TITLE E ON (B.JOB_CODE = E.JOB_CODE)
+		                      LEFT JOIN TBL_MEMBER_COM_INFO B ON (A.MEMBER_NO = B.MEMBER_NO )
+		                      LEFT JOIN TBL_DEPT C ON (B.DEPT_CODE = C.DEPT_CODE)
+		                      LEFT JOIN TBL_TEAM D ON (B.TEAM_CODE = D.TEAM_CODE)
+		                      LEFT JOIN TBL_JOB_TITLE E ON (B.JOB_CODE = E.JOB_CODE)
 		                     <where>
 		                       <if test="searchCondition == 'name'">
 		                           A.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'

@@ -160,7 +160,7 @@
                                               
                                 <div style="float: right">
                                     <div style="float: left;">
-                                        <button class="ui secondary button" style="padding-left: 20px; margin-bottom: 10px;">
+                                        <button class="ui secondary button" style="padding-left: 20px; margin-bottom: 10px;" onclick="location.href='regist'">
                                         		   계정생성 
                                         </button>  
                                     </div>
