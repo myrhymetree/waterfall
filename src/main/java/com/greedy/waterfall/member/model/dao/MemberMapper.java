@@ -25,7 +25,7 @@ public interface MemberMapper {
 
 	List<JobDTO> findJob();
 
-	List<TeamDTO> findTeamList(String teamCode);
+	List<TeamDTO> findTeamList(String deptCode);
 
 
 }

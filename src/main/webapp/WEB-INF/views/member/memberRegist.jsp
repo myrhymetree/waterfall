@@ -186,18 +186,27 @@ label {
             									url : url,
             									type : "get",
             									data : {deptCode:deptCode},
-            									success: function(data){
-            										const $teamOption = "<option value='' selected disabled>팀 선택</option>";
-            										$("#team").append($teamOption);
-            										teamList = JSON.parse(data.teamList);
+            									dataType:"text",
+            									success: function(data,xhr){
+            										
+            										console.log(xhr);
+            										
+            										const teamList = JSON.parse(data.teamList);
+            										JSON.stringfy(teamList);
+            										JSON.parse(sring);
+            										console.log(teamList);
+            										console.log(teamList);
+            										console.log(teamList);
             										for(let i = 0; i < teamList.length; i++) {
-            											const $teamTag = "<option value = '" + teamList[i].teamCode + "'>" + teamList[i].teamName + "</option>"
+            											const $teamTag = "<option value = '" + teamList[i].teamCode + "'>" + teamList[i].teamName + "</option>";
             											
             											$("#team").append($teamTag);
             										}
-            									},
-            									error: function(data){
+            									}, 
+            									error: function(data,xhr){
             										alert("문제생김");
+            										
+            										console.log(xhr);
             									}
             								});
             							}); 

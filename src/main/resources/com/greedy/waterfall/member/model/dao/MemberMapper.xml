@@ -147,12 +147,12 @@
 		  FROM TBL_JOB_TITLE A   
 	</select>
 	
-	<select id="findTeamList">
+	<select id="findTeamList" resultMap="teamResultMap">
 		SELECT
 		       A.TEAM_CODE
 		     , A.TEAM_NAME
 		  FROM TBL_TEAM A
-		 WHERE A.DEPT_CODE = { #deptCode };
+		 WHERE A.DEPT_CODE = #{ deptCode }
 	</select>
 	
 </mapper>

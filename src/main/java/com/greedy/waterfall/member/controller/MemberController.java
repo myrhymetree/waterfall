@@ -18,10 +18,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
@@ -156,38 +162,28 @@ public class MemberController {
 	}
 	
 	@GetMapping("regist2/{deptCode}")
+	@ResponseBody
 	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,HttpServletResponse response) {
-		
-		System.out.println("실행확인 컨트롤러");
-		System.out.println("실행확인 컨트롤러");
-		System.out.println("실행확인 컨트롤러");
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		
+
 		response.setContentType("application/json; charset=UTF-8");
 		
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
-		System.out.println("확인용2" + deptCode);
 		List<TeamDTO> teamList = memberService.findTeamList(deptCode);
 		
 		System.out.println("확인용" + teamList);
 		System.out.println("확인용" + teamList);
 		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
+		Gson gson = new GsonBuilder()
+			      .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+			      .setPrettyPrinting()
+			      .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+			      .serializeNulls()
+			      .disableHtmlEscaping()
+			      .create();
+		mv.addObject("teamList", gson.toJson(teamList));
 		
-		mv.addObject("teamList", teamList);
+		System.out.println("왜 안될까?" + mv);
+		System.out.println("왜 안될까?" + mv);
+		System.out.println("왜 안될까?" + mv);
 		mv.setViewName("jsonView");
 		
 		
