@@ -173,9 +173,23 @@ public class GuideServiceImpl implements GuideService {
 	}
 
 	@Override
-	public FileDTO findFile(int no) {
+	public GuideFileDTO findFile(int no) {
 		
 		return mapper.findFile(no);
+	}
+
+	@Override
+	public GuideFileDTO removeGuideFile(int fileNumber) {
+		
+		GuideFileDTO guideFileDTO = mapper.findFile(fileNumber);
+		
+		int result = mapper.deleteGuideFile(fileNumber);
+		
+//		if(!(result > 0)) {
+//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
+//		}
+		
+		return guideFileDTO;
 	}
 
 }

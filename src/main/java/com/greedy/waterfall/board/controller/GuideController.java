@@ -2,6 +2,7 @@ package com.greedy.waterfall.board.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -189,9 +190,9 @@ public class GuideController {
 		
 		System.out.println("singleFile : " + singleFile);
 		
-//		String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 파일서버를 따로둠
+		String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 파일서버를 따로둠
 		
-		String root1 = request.getSession().getServletContext().getContextPath();				// 상대경로
+//		String root1 = request.getSession().getServletContext().getContextPath();				// 상대경로
 		
 //		String root2 = request.getServletContext().getRealPath("resources");					// 절대경로
 		
@@ -199,14 +200,13 @@ public class GuideController {
 		
 		
 //		System.out.println("root : " + root);		//절대경로 반환
-		System.out.println("root : " + root1);		
+		System.out.println("root : " + root);		
 		
 //		String filePath = root + "/uploadFiles";
 		
-		String filePath1 = root1 + "/resources/guideUploadFiles";
+		String filePath = root + "/guideUploadFiles";
 		
-//		File mkdir = new File(filePath);
-		File mkdir = new File(filePath1);
+		File mkdir = new File(filePath);
 		
 		/* 폴더 생성 */
 		if(!mkdir.exists()) {
@@ -225,16 +225,15 @@ public class GuideController {
 			
 			/* file 정보 저장해서 DTO에 insert */
 			GuideFileDTO guideFileDTO = new GuideFileDTO();
-//			guideFileDTO.setSavedPath(filePath);
-			guideFileDTO.setSavedPath(filePath1);
+			guideFileDTO.setSavedPath(filePath);
 			guideFileDTO.setOriginalName(originFileName);
 			guideFileDTO.setRandomName(savedName);
 			guide.setFile(guideFileDTO);
 			
 			/* 파일 저장 */
 			try {
-//				singleFile.transferTo(new File(filePath + "\\" + savedName));
-				singleFile.transferTo(new File(filePath1 + "/" + savedName));
+				singleFile.transferTo(new File(filePath + "\\" + savedName));
+//				singleFile.transferTo(new File(filePath1 + "/" + savedName));
 				
 				System.out.println("등록 용 가이드 확인 " + guide);
 				
@@ -245,8 +244,8 @@ public class GuideController {
 				e.printStackTrace();
 				
 				/* 실패 시 파일 삭제*/
-//				new File(filePath + "\\" + savedName).delete();
-				new File(filePath1 + "/" + savedName).delete();
+				new File(filePath + "\\" + savedName).delete();
+//				new File(filePath + "/" + savedName).delete();
 				rttr.addFlashAttribute("message", "파일 업로드 실패");
 			}
 		
@@ -344,12 +343,39 @@ public class GuideController {
 		
 		Map<String, Object> fileInfo = new HashMap<String, Object>();
 		
-		FileDTO file = guideService.findFile(no);
-		fileInfo.put("filePath", file.getFilePath());
-		fileInfo.put("fileOriginName", file.getFileOriginName());
-		fileInfo.put("fileRandomName", file.getFileRandomName());
+		GuideFileDTO file = guideService.findFile(no);
+		fileInfo.put("filePath", file.getSavedPath());
+		System.out.println(file.getSavedPath());
+		System.out.println(file.getRandomName());
+		fileInfo.put("fileOriginName", file.getOriginalName());
+		fileInfo.put("fileRandomName", file.getRandomName());
 		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
 	}
-
 	
+	@GetMapping("/deleteFile/{fileNo}")
+	public String deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session, 
+			RedirectAttributes rttr, ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
+		int fileNumber = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		GuideFileDTO guideFileDTO = guideService.removeGuideFile(fileNumber); 
+		
+		String root = session.getServletContext().getRealPath("resources");	
+		
+		String filePath = root + "/guideUploadFiles";
+		
+		File file = new File(filePath + "\\" + guideFileDTO.getRandomName());
+		
+		if(file.exists()) {
+			file.delete();
+		}
+		
+		
+		mv.addObject("intent", "/guide/deleteFile");
+		mv.setViewName("/board/guide/guideList");
+		
+		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
+		
+		return "redirect:/guide/list"; 
+		
+	}
 }

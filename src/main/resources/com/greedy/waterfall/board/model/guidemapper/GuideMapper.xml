@@ -28,7 +28,7 @@
   	</resultMap>
   	
   	<resultMap type="com.greedy.waterfall.board.model.dto.GuideFileDTO" id="fileResultMap">
-  		<id property="no" column="FILE_NO"/>
+  		<id property="fileNo" column="FILE_NO"/>
   		<result property="refBoardNo" column="REF_BOARD_NO"/>
   		<result property="savedPath" column="FILE_PATH"></result>
   		<result property="originalName" column="FILE_ORIGIN_NAME"></result>
@@ -236,7 +236,13 @@
              , A.REF_BOARD_NO
              , A.FILE_CATEGORY_NO
           FROM TBL_FILE A
-         WHERE A.FILE_NO = #{ no }
+         WHERE A.FILE_NO = #{ fileNo }
 	</select>
+	
+	<delete id="deleteGuideFile" parameterType="_int">
+    DELETE /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#deleteGuideFile() */
+  	  FROM TBL_File A
+     WHERE A.FILE_NO = #{ fileNo }
+	</delete>
   
 </mapper>

@@ -38,6 +38,8 @@ public interface GuideService {
 
 	GuideDTO selectGuideFileDetail(int no);
 
-	FileDTO findFile(int no);
+	GuideFileDTO findFile(int no);
+
+	GuideFileDTO removeGuideFile(int fileNumber);
 
 }

@@ -39,6 +39,8 @@ public interface GuideMapper {
 
 	GuideDTO selectGuideDetailPlusFile(int no);
 
-	FileDTO findFile(int no);
+	GuideFileDTO findFile(int no);
+
+	int deleteGuideFile(int fileNumber);
 
 }
