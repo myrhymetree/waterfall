@@ -54,51 +54,6 @@ public class IssueController {
 	@GetMapping("/project")
 	public ModelAndView projectList(HttpServletRequest request, ModelAndView mv) {
 		
-		String currentPage = request.getParameter("currentPage");
-		int pageNo = 1;
-		
-		if(currentPage != null && !"".equals(currentPage)) {
-			pageNo = Integer.parseInt(currentPage);
-		}
-		
-		String searchCondition = request.getParameter("searchCondition");
-		String searchValue = request.getParameter("searchValue");
-//		int projectNo = Integer.parseInt(request.getParameter("projectNo"));
-		
-		Map<String, String> searchMap = new HashMap<>();
-		searchMap.put("searchCondition", searchCondition);
-		searchMap.put("searchValue", searchValue);
-		
-
-//		
-		System.out.println("컨트롤러에서 검색 조건 확인하기 : " + searchValue);
-		
-		int totalCount = issueService.selectTotalCount(searchMap);
-		
-		System.out.println("totalCount : " + totalCount);
-		
-		int limit = 10;
-		
-		int buttonAmount = 5;
-		
-		SelectCriteria selectCriteria = null;
-		
-		if(searchCondition != null && !"".equals(searchCondition)) {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
-		} else {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
-		}
-		
-		System.out.println(selectCriteria);
-		
-//		List<IssueDTO> projectList = issueService.selectAllProjectList(selectCriteria);
-//		int projectNo = (int) (request.getAttribute("projectNo"));
-//	
-//		Map<String, Integer> projectNoMap = new HashMap<>();
-//		projectNoMap.put("projectNo", projectNo);
-		
-//		System.out.println("projectNo" + projectNo);
-		
 		int No = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
 		Map<String, Integer> managerNo = new HashMap<>();
@@ -117,41 +72,6 @@ public class IssueController {
 	@GetMapping("/list")
 	public ModelAndView issueList(HttpServletRequest request, ModelAndView mv) {
 		
-//		String currentPage = request.getParameter("currentPage");
-//		int pageNo = 1;
-//		
-//		if(currentPage != null && !"".equals(currentPage)) {
-//			pageNo = Integer.parseInt(currentPage);
-//		}
-//		
-//		String searchCondition = request.getParameter("searchCondition");
-//		String searchValue = request.getParameter("searchValue");
-////		int projectNo = Integer.parseInt(request.getParameter("projectNo"));
-//		
-//		Map<String, String> searchMap = new HashMap<>();
-//		searchMap.put("searchCondition", searchCondition);
-//		searchMap.put("searchValue", searchValue);
-		
-//		Map<String, Integer> projectNoMap = new HashMap<>();
-//		projectNoMap.put("projectNo", projectNo);
-//		
-//		System.out.println("컨트롤러에서 검색 조건 확인하기 : " + searchValue);
-//		
-//		int totalCount = issueService.selectTotalCount(searchMap);
-//		
-//		System.out.println("totalCount : " + totalCount);
-//		
-//		int limit = 100;
-//		
-//		int buttonAmount = 5;
-//		
-//		SelectCriteria selectCriteria = null;
-//		
-//		if(searchCondition != null && !"".equals(searchCondition)) {
-//			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
-//		} else {
-//			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
-//		}
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		
 		System.out.println(taskNo);
@@ -159,7 +79,6 @@ public class IssueController {
 		List<IssueDTO> issueList = issueService.selectIssueList(taskNo);
 		
 		mv.addObject("issueList", issueList);
-//		mv.addObject("selectCriteria", selectCriteria);
 		mv.addObject("intent", "/issue/list");
 		mv.setViewName("/issue/issueList");
 		
@@ -169,10 +88,8 @@ public class IssueController {
 	@GetMapping("/task*")
 	public ModelAndView taskList(HttpServletRequest request, ModelAndView mv) {
 		
-//		int projectNo = (int) (request.getAttribute("projectNo"));
-		
 		int projectNo = Integer.parseInt(request.getParameter("projectNo"));
-//	
+	
 //		Map<String, Integer> projectNoMap = new HashMap<>();
 //		projectNoMap.put("projectNo", projectNo);
 		
@@ -184,7 +101,6 @@ public class IssueController {
 		mv.addObject("taskIssueList", taskIssueList);
 		mv.addObject("intent", "/issue/task");
 		mv.setViewName("/issue/taskList");
-//		mv.setViewName("/issue/taskIssues");
 		
 		return mv;
 	}

@@ -25,7 +25,10 @@
 </style>
 </head>
 <body>
-	<jsp:include page="../common/inprojectheader.jsp"/>
+	<c:choose>
+ 		<c:when test="${ sessionScope.loginMember.role eq 1 }"><jsp:include page="../common/header.jsp"/></c:when>
+		<c:otherwise><jsp:include page="../common/inprojectheader.jsp"/></c:otherwise>
+	</c:choose>
 	
                 <main>
                     <div class="container-fluid px-4">

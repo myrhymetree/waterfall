@@ -2,6 +2,7 @@ package com.greedy.waterfall.board.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.board.model.service.GuideService;
@@ -332,5 +335,19 @@ public class GuideController {
     }
     
    return gson.toJson(guideFileDetail); }
+	
+	@GetMapping("/download/{fileNo}")
+	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
+		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		FileDTO file = guideService.findFile(no);
+		fileInfo.put("filePath", file.getFilePath());
+		fileInfo.put("fileOriginName", file.getFileOriginName());
+		fileInfo.put("fileRandomName", file.getFileRandomName());
+		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
+	}
+
 	
 }

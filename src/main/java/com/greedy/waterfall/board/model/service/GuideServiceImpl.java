@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.board.model.guidemapper.GuideMapper;
@@ -169,6 +170,12 @@ public class GuideServiceImpl implements GuideService {
 	      }
 		
 		return guideFileDetail;
+	}
+
+	@Override
+	public FileDTO findFile(int no) {
+		
+		return mapper.findFile(no);
 	}
 
 }

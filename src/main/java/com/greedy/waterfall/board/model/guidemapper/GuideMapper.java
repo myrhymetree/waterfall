@@ -3,6 +3,7 @@ package com.greedy.waterfall.board.model.guidemapper;
 import java.util.List;
 import java.util.Map;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
@@ -37,5 +38,7 @@ public interface GuideMapper {
 	int insertGuideFile(GuideFileDTO guideFileDTO);
 
 	GuideDTO selectGuideDetailPlusFile(int no);
+
+	FileDTO findFile(int no);
 
 }

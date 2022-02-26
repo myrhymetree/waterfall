@@ -9,10 +9,6 @@ import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 
 public interface IssueMapper {
 
-	int selectTotalCount(Map<String, String> searchMap);
-
-//	List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria);
-
 	List<ProjectIssueCountDTO> selectAllProjectList(Map<String, Integer> managerNo);
 
 	List<IssueDTO> selectIssuesOfTask(int projectNo);

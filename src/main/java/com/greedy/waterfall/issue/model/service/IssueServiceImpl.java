@@ -22,19 +22,6 @@ public class IssueServiceImpl implements IssueService {
 	public IssueServiceImpl(IssueMapper mapper) {
 		this.mapper = mapper;
 	}
-	@Override
-	public int selectTotalCount(Map<String, String> searchMap) {
-		int result = mapper.selectTotalCount(searchMap);
-		
-		return result;
-	}
-
-//	@Override
-//	public List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria) {
-//		List<IssueDTO> issueList = mapper.selectAllIssueList(selectCriteria);
-//		
-//		return issueList;
-//	}
 
 	@Override
 	public List<ProjectIssueCountDTO> selectAllProjectList(Map<String, Integer> managerNo) {

@@ -278,7 +278,7 @@ input::-webkit-search-results-decoration{
 				                                              <span class="caret"></span>
 				                                            </button>
 				                                            <div class="dropdown-menu">
-				                                              <a class="dropdown-item" href="#">다운로드</a>
+				                                              <a class="dropdown-item">다운로드</a>
 				                                              <a class="dropdown-item" href="#">삭제</a>
 				                                            </div>
 				                                         </div>
@@ -387,7 +387,24 @@ $(function() {
                   $("#read-originalName").val(guideArray[14][1]);
                   $("#readModal").modal("show");
                   ex.children[2].innerText=guideArray[9][1];		//ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
-               }
+                  
+/*                   if(guide.file != null) {
+						for(let i = 0;i < meeting.file.length; i++) {
+							const $fileName = meeting.file[i].fileOriginName;
+							const $fileNo = meeting.file[i].fileNo;
+							console.log($fileNo);
+							console.log($fileNo);
+							console.log($fileNo);
+							console.log($fileNo);
+							console.log($fileNo);
+							console.log($fileNo);
+							console.log($fileNo);
+							console.log($fileNo);
+							const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/guide/download/' + $fileNo + "'>"+$fileName+"</a>";
+							$("#upload-file-area").append($fileTag);
+							$("#upload-file-area").append("<br>");
+						}
+               } */
            	}, error:function(data) {
                   console.log(data);
                }
