@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
 <!DOCTYPE html>
@@ -40,9 +40,22 @@
 	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
 	rel="stylesheet" />
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-	<script src="frappe-gantt.min.js"></script>
-<link rel="stylesheet" href="frappe-gantt.css">
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">		
+
+	
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.3.0/frappe-gantt.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.3.0/frappe-gantt.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.3.0/frappe-gantt.min.css">
+<script type="text/javascript"
+	src="https://unpkg.com/frappe-gantt@0.6.0/src/index.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.3.0/frappe-gantt.min.js"></script>
+
+
+
 <style>
 #box1header{
 	margin:30px;
@@ -52,14 +65,12 @@
 .box{
 	width: 1600px !important;
 	height : 800px;
-	background-color : orange;
 	margin : 30px;
 	display: flex;
 }
 .box2{
 	width:1400px;
 	height: 800px;
-	background-color: blueviolet;
 	margin-left:50px;
 }
 #box1_body{
@@ -68,13 +79,25 @@
 	
 }
 .upDown { 
-	border: 1px solid black;
+	border: 0.2px solid gray;
 	overflow: visible;
 	width:0.3px;
 	height:800px;
 	display:inline-box;
 	
 }
+body {
+			font-family: sans-serif;
+			background: #ccc;
+		}
+		.container {
+			width: 80%;
+			margin: 0 auto;
+		}
+		/* custom class */
+		.gantt .bar-milestone .bar {
+			fill: tomato;
+		}
 
 </style>
 </head>
@@ -87,7 +110,7 @@
 		<hr>
 		<div class="box">
 			<div id="box1_body">
-				상위업무 forEach
+				<%-- 상위업무 forEach --%>
 
 				<c:forEach var="parentTask" items="${ requestScope.parentTaskList }"
 					varStatus="status">
@@ -96,7 +119,7 @@
 						style='font-size: 16px;' class='fas'>&#xf07b;</i>&nbsp;<c:out
 							value="${ parentTask.taskCategory.categoryName }" /></label>
 					<br>
-					하위 업무 forEach
+					<%--하위 업무 forEach --%>
 					<c:forEach var="childList"
 						items="${ requestScope.parentTaskList[ status.index ].childList }"
 						varStatus="st">
@@ -105,88 +128,125 @@
 							<div id="childTasks${ st.index }">
 								<div id="childTask">
 									<label class=childName type="button"><i
-										style='font-size: 24px' class='fas'>&#xf0da;</i> <c:out
-											value="${ childList.taskCategory.categoryName }" /></label> <input
+										style='font-size: 24px' class='fas'>&#xf0da;</i>
+									<c:out value="${ childList.taskCategory.categoryName }" /></label> <input
 										id="childDTO${ st.index }" type="hidden"
 										value="${ childList.taskNo }">
 								</div>
 							</div>
 						</div>
 					</c:forEach>
-					<c:out value="${ parentTask.taskCategory.categoryName }"/><br>
+					<%-- <c:out value="${ parentTask.taskCategory.categoryName }"/><br> --%>
 				</c:forEach>
 			</div>
 			<div class="upDown"></div>
-			<div class="box2"></div>
+			<div class="box2">
+				<div class="container">
+					<h2>Gantt Chart</h2>
+					<div class="gantt-target"></div>
+				</div>
+			</div>
 		</div>
 		
 	</div>
-	<div class="box2">
-		<div class="container">
-		<h2>Interactive Gantt Chart entirely made in SVG!</h2>
-		<div class="gantt-target"></div>
-	</div>
-	</div>
 	<script>
-	var tasks = [
-		{
-			start: '2021-12-20',
-			end: '2021-12-25',
-			name: '요구사항분석',
-			id: "Task 0",
-			progress: 100
-		},
-		{
-			start: '2021-12-26',
-			end: '2022-01-01',
-			name: '고객 요구사항',
-			id: "Task 1",
-			progress: 100,
-			dependencies: 'Task 0'
-		},
-		{
-			start: '2022-01-02',
-			end: '2022-01-10',
-			name: '분석',
-			id: "Task 2",
-			progress: 70,
-			dependencies: 'Task 1'
-		},
-		{
-			start: '2022-01-11',
-			end: '2022-01-15',
-			name: 'DB설계',
-			id: "Task 3",
-			progress: 100,
-			dependencies: 'Task 2'
-		},
-		{
-			start: '2022-01-16',
-			end: '2022-01-21',
-			name: 'ERD 제작',
-			id: "Task 4",
-			progress: 80,
-			dependencies: 'Task 2'
-		}
-	]
-	var gantt_chart = new Gantt(".gantt-target", tasks, {
-		on_click: function (task) {
-			console.log(task);
-		},
-		on_date_change: function(task, start, end) {
-			console.log(task, start, end);
-		},
-		on_progress_change: function(task, progress) {
-			console.log(task, progress);
-		},
-		on_view_change: function(mode) {
-			console.log(mode);
-		},
-		view_mode: 'Day',
-		language: 'en'
+	<%-- hover event 추가 --%>
+	$(".folder_toggle").hover(function(){
+		$(this).css({"border" : "solid",
+				    "border-color" : "gray",
+				    "border-radius" : "5px",
+				    "border-width" : "1px"});
+		
+	}, function(){
+		$(this).css({"border-color" : "white"});
 	});
-	console.log(gantt_chart);
+	
+	$(".childName").hover(function(){
+		$(this).css({"border" : "solid",
+		    "border-color" : "gray",
+		    "border-radius" : "5px",
+		    "border-width" : "1px"});
 
+	}, function(){
+		$(this).css({"border-color" : "white"});
+	});
+	
+	
+		var tasks = [
+			{
+				start: '2018-10-01',
+				end: '2018-10-08',
+				name: 'Redesign website',
+				id: "Task 0",
+				progress: 20
+			},
+			{
+				start: '2018-10-03',
+				end: '2018-10-06',
+				name: 'Write new content',
+				id: "Task 1",
+				progress: 5,
+				dependencies: 'Task 0'
+			},
+			{
+				start: '2018-10-04',
+				end: '2018-10-08',
+				name: 'Apply new styles',
+				id: "Task 2",
+				progress: 10,
+				dependencies: 'Task 1'
+			},
+			{
+				start: '2018-10-08',
+				end: '2018-10-09',
+				name: 'Review',
+				id: "Task 3",
+				progress: 5,
+				dependencies: 'Task 2'
+			},
+			{
+				start: '2018-10-08',
+				end: '2018-10-10',
+				name: 'Deploy',
+				id: "Task 4",
+				progress: 0,
+				dependencies: 'Task 2'
+			},
+			{
+				start: '2018-10-11',
+				end: '2018-10-11',
+				name: 'Go Live!',
+				id: "Task 5",
+				progress: 0,
+				dependencies: 'Task 4',
+				custom_class: 'bar-milestone'
+			},
+			{
+				start: '2014-01-05',
+				end: '2019-10-12',
+				name: 'Long term task',
+				id: "Task 6",
+				progress: 0
+			}
+		]
+		var gantt_chart = new Gantt(".gantt-target", tasks, {
+			on_click: function (task) {
+				console.log(task);
+			},
+			on_date_change: function(task, start, end) {
+				console.log(task, start, end);
+			},
+			on_progress_change: function(task, progress) {
+				console.log(task, progress);
+			},
+			on_view_change: function(mode) {
+				console.log(mode);
+			},
+			view_mode: 'Day',
+			language: 'en'
+		});
+		console.log(gantt_chart);
 	</script>
+	
 </body>
-</html> --%>
+</html>

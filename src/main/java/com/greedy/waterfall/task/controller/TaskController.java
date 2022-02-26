@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 import com.greedy.waterfall.task.model.service.TaskService;
 
@@ -31,7 +32,9 @@ public class TaskController {
 	@GetMapping("/list")
 	public ModelAndView taskFindList(HttpServletRequest request, ModelAndView mv, HttpSession session ) {
 		
-		int projectNo = 3;
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		
+		System.out.println("projectNo : " +projectNo);
 		
 		TaskDTO taskDTO = new TaskDTO();
 		
@@ -39,6 +42,8 @@ public class TaskController {
 		List<TaskDTO> parentTaskList = new ArrayList<TaskDTO>();
 		
 		parentTaskList = taskService.findTaskList(taskDTO);
+		
+		System.out.println("parentTaskList : " + parentTaskList);
 		
 		mv.addObject("parentTaskList", parentTaskList);
 		mv.setViewName("task/taskDetail");
