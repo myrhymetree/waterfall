@@ -271,6 +271,10 @@ input::-webkit-search-results-decoration{
 						                                <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
 						                            </div>
 						                            
+						                            	<div class="my-modal-upload mb-4" id="upload-file-area">
+	            										</div>
+						                            
+						                            
 						                            	<span><label>첨부파일</label></span>
 				                                        <div class="btn-group">
 				                                            <input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
@@ -278,7 +282,7 @@ input::-webkit-search-results-decoration{
 				                                              <span class="caret"></span>
 				                                            </button>
 				                                            <div class="dropdown-menu">
-				                                              <a class="dropdown-item">다운로드</a>
+				                                              <a class="dropdown-item" href="#">다운로드</a>
 				                                              <a class="dropdown-item" href="#">삭제</a>
 				                                            </div>
 				                                         </div>
@@ -371,7 +375,6 @@ $(function() {
             type : "get",
             data : { no : no },
             success : function(data, textStatus, xhr) {
-               
                for(let index in data) {		//여기 this는  다름
                   console.log(data);
                   console.log(Object.entries(data));
@@ -388,23 +391,18 @@ $(function() {
                   $("#readModal").modal("show");
                   ex.children[2].innerText=guideArray[9][1];		//ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
                   
-/*                   if(guide.file != null) {
-						for(let i = 0;i < meeting.file.length; i++) {
-							const $fileName = meeting.file[i].fileOriginName;
-							const $fileNo = meeting.file[i].fileNo;
+   	        /*            if(guideDetail.file != null) {
+						for(let i = 0; i < guideDetail.file.length; i++) {
+							const $fileName = guideDetail.file[i].fileOriginName;
+							const $fileNo = guideDetail.file[i].fileNo;
 							console.log($fileNo);
-							console.log($fileNo);
-							console.log($fileNo);
-							console.log($fileNo);
-							console.log($fileNo);
-							console.log($fileNo);
-							console.log($fileNo);
-							console.log($fileNo);
+
 							const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/guide/download/' + $fileNo + "'>"+$fileName+"</a>";
 							$("#upload-file-area").append($fileTag);
 							$("#upload-file-area").append("<br>");
-						}
-               } */
+						} */
+               }  
+                  
            	}, error:function(data) {
                   console.log(data);
                }

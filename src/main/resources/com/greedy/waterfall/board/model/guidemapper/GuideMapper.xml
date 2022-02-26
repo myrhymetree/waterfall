@@ -198,6 +198,7 @@
              , A.PROJECT_NO
              , C.FILE_NO
              , C.FILE_ORIGIN_NAME
+             , C.FILE_PATH
           FROM TBL_BOARD A
           JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
           JOIN TBL_FILE C ON (A.BOARD_NO = C.REF_BOARD_NO)

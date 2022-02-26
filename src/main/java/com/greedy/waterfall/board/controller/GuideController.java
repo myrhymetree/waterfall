@@ -315,26 +315,28 @@ public class GuideController {
     @ResponseBody
     public String findguideDetail(HttpServletRequest request) {
     
-    int no = Integer.parseInt(request.getParameter("no"));
-    System.out.println("detail에 들어오는 no " + no);
-    GuideDTO guideDetail = guideService.selectGuideDetail(no);
-    GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
-    System.out.println("상세조회 guideDetail : " + guideDetail);
-    System.out.println((((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getPmNo()));
-    System.out.println((((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()));
-    Gson gson = new GsonBuilder()
-          .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
-          .setPrettyPrinting()
-          .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
-          .serializeNulls()
-          .disableHtmlEscaping()
-          .create();
-   
-    if(guideFileDetail == null) {
-    	return gson.toJson(guideDetail);
-    }
+	    int no = Integer.parseInt(request.getParameter("no"));
+	    System.out.println("detail에 들어오는 no " + no);
+	    GuideDTO guideDetail = guideService.selectGuideDetail(no);
+	    GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
+	    System.out.println("상세조회 guideDetail : " + guideDetail);
+	    System.out.println("상세조회 guideDetail : " + guideFileDetail);
+	    System.out.println((((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getPmNo()));
+	    System.out.println((((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()));
+	    Gson gson = new GsonBuilder()
+	          .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+	          .setPrettyPrinting()
+	          .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+	          .serializeNulls()
+	          .disableHtmlEscaping()
+	          .create();
+	   
+	    if(guideFileDetail == null) {
+	    	return gson.toJson(guideDetail);
+	    }
     
-   return gson.toJson(guideFileDetail); }
+    	return gson.toJson(guideFileDetail); 
+   }
 	
 	@GetMapping("/download/{fileNo}")
 	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
