@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
+
 .my-modal-footer button {
   color: #000;
   background: none;
@@ -34,9 +35,9 @@
   padding: 5px 25px;
 }
 .modal-content {
-    width: 700px;
-    height: 670px;
-    padding: 30px;
+    width: 633px;
+    height: 517px;
+    padding: 26px;
 }
 #title-write {
   width: 390px;
@@ -77,15 +78,14 @@
 .check {
 	zoom: 2;
 }
-
 </style>
 </head>
 <body>
 	<div class="modal fade" id="member-regist-modal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
-	    	<div class="modal-content" style="top: 172px">
-	        	<form action="${ pageContext.servletContext.contextPath }/meeting/regist" method="post" encType="multipart/form-data">
-					<div class="mt-4 mb-4"></div>
+	    	<div class="modal-content" style="top: 140px">
+	        	<form action="${ pageContext.servletContext.contextPath }/manage/member/regist" method="post">
+					<div class=" mb-4"></div>
 	           		<div class="my-modal-body">
 		            	<div class="row">
 							<div class="col">
@@ -93,7 +93,7 @@
 							</div>
                         </div>
 						<div class="mt-4">
-							<span  style="margin-left: 2%">
+							<span  style="margin-left: 2%;margin-right: 2%">
 								<select id="dept" name="dept">
 									<option value="" selected disabled>부서 선택</option>
 									<c:forEach var="dept" items="${ allDept }">
@@ -101,30 +101,21 @@
 									</c:forEach>
 								</select>
 							</span>
-							<span>
+							<span  style="margin-left: 2%;margin-right: 2%">
 								<select id="team" name="team">
 									<option value="" selected disabled>팀 선택</option>
 								</select>
 							</span>
-							<span>
+							<span  style="margin-left: 2%;margin-right: 2%">
 								<select id="member" name="member">
 									<option value="" selected disabled>사원 선택</option>
 								</select>
 							</span>
-							<span>
-							    <input id="save-member" type="button" value="등록">
-							</span>
 						</div>
-						<div>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check" value="DBA1" id="allCheck">전체 선택/해제</label><br>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA1">DBA1</label>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA1">DBA1</label>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA1">DBA1</label>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA1">DBA1</label>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA5">DBA5</label>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA6">DBA6</label>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA7">DBA7</label>
-							<label class="cklabel" style="margin: 2em"><input type="checkbox" class="check checkbok" value="DBA8">DBA8</label>
+						<div class="mt-4">
+							<c:forEach var="projectRole" items="${ allRole }">
+								<label class="cklabel" style="margin: 1.5em"><input type="checkbox" class="check checkbok" value="${ projectRole.roleNo }">${ projectRole.roleName }</label>
+							</c:forEach>
                     	</div>
                      	<div class="row mt-3">
 							<div style="text-align: left; margin-left: 8%;">
@@ -134,6 +125,11 @@
 	            	</div>
 	            	<input type="hidden" name="memberNo" id="memberNo">
 	            	<input type="hidden" name="managerNo" id="managerNo">
+	            	
+	            	<div style="margin-ton: 2%;text-align: center">
+	            		<button type="submit" class="btn btn-secondary mb-2"><i class="far fa-edit me-1"></i>등록</button>
+	            		<button type="button" id="backToList" class="btn btn-secondary mb-2" data-bs-dismiss="modal">취소</button>
+	            	</div>
 				</form>
 			</div>
 		</div>
@@ -210,75 +206,12 @@
     });
 	
 	
-	$(document).ready(function(){
-        
-        // .check 클래스 중 어떤 원소가 체크되었을 때 발생하는 이벤트
-    
-        $(".checkbok").click(function(){  // 여기서 .click은 체크박스의 체크를 뜻한다.
-    
-            var str = "";  // 여러개가 눌렸을 때 전부 출력이 될 수 있게 하나의 객체에 담는다.
-    
-            $(".check").each(function(){  // .each()는 forEach를 뜻한다.
-    
-                if($(this).is(":checked"))  // ":checked"를 이용하여 체크가 되어있는지 아닌지 확인한다.
-    
-                    str += $(this).val() + " ";  // 체크된 객체를 str에 저장한다.
-                    console.log(this);
-            });
-    
-            $("#multiPrint").text(str);  // #multiPrint에 체크된 원소를 출력한다.
-    
-        });
-    
-        
-    
-        // 전부 체크하는 방법
-    
-        $("#allCheck").click(function(){
-    
-            if($(this).is(":checked"))  // 먼저 #allCheck가 선택되었는지 확인한다.
-    
-                            // 체크가 되어있으면 .check의 모든 원소에 checked="checked"를 추가한다.
-    
-                $(".checkbok").attr("checked","checked")  
-    
-            else
-    
-                $(".checkbok").removeAttr("checked")  // 체크가 안 되어있으면 "checked"를 제거한다.
-    
-                 // 이 때 체크가 되어있는 원소는 안 바뀐다. 어디까지나 체크가 안 된 것들에 대해서만 효과가 있다.
-    
-            var str = "";  // 여러개가 눌렸을 때 전부 출력이 될 수 있게 하나의 객체에 담는다.
-    
-            $(".checkbok").each(function(){  // .each()는 forEach를 뜻한다.
-    
-                if($(this).is(":checked"))  // ":checked"를 이용하여 체크가 되어있는지 아닌지 확인한다.
-    
-                    str += $(this).val() + " ";  // 체크된 객체를 str에 저장한다.
-    
-            });
-    
-            $("#multiPrint").text(str);  // #multiPrint에 체크된 원소를 출력한다.
-    
-        });
-    
-    });
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		$("#backToList").click( function() {
-			console.log("123123");
-			$("#title-write").val("");
-			$("#my-textarea").val("");
-			$("#meeting-fileupload").val("");
-		});
+	$("#backToList").click( function() {
+		$("#dept option:eq(0)").prop("selected", true);
+		$("#team option:eq(0)").prop("selected", true);
+		$("#member option:eq(0)").prop("selected", true);
+		$(":checkbox:checked").prop('checked', false);
+	});
 	</script>
 </body>
 </html>

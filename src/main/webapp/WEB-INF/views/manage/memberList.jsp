@@ -99,7 +99,7 @@ td {
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp"/>
 <div class="todo">
-	<h1><span><i class="fas fa-users-cog"></i>프로젝트 인원조회</span></h1>
+	<h1><span><i class="fas fa-users-cog"></i>프로젝트2 인원조회</span></h1>
 	<hr>
 	<div class="tbl-wrapper mx-auto">
 	    <div class="write">

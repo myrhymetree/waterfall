@@ -65,7 +65,7 @@ public class MeetingController {
 	 */
 	
 	@GetMapping("/download/{fileNo}")
-	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
+	public ModelAndView downloadFile(ModelAndView mv, @PathVariable("fileNo") String fileNo) throws IOException {
 		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
 		
 		Map<String, Object> fileInfo = new HashMap<String, Object>();
@@ -74,7 +74,10 @@ public class MeetingController {
 		fileInfo.put("filePath", file.getFilePath());
 		fileInfo.put("fileOriginName", file.getFileOriginName());
 		fileInfo.put("fileRandomName", file.getFileRandomName());
-		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
+		mv.addObject("downloadFile", fileInfo);
+		mv.setViewName("fileDownloadView");
+		
+		return mv;
 	}
 	
 	@GetMapping("/list")

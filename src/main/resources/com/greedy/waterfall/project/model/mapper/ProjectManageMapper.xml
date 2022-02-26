@@ -30,42 +30,45 @@
 	</resultMap>
 	
 	<select id="findProjectMember" resultMap="projectMemberResult">
-        SELECT
-               D.PROJECT_NO
-             , A.MEMBER_NO
-             , A.MEMBER_NAME
-             , C.ROLE_NAME
-             , (SELECT COUNT(*)
-                  FROM TBL_TASK E
-                 WHERE E.PROJECT_NO = D.PROJECT_NO
-                   AND E.MEMBER_NO = A.MEMBER_NO
-                   AND E.TASK_PROGRESS_STATUS = '완료'
-               ) AS COMPLETE_TASK
+        SELECT 
+               A.PROJECT_NO
+             , C.MEMBER_NAME
+             , D.ROLE_NAME
+             , E.PROJECT_MEM_STARTED_DATE
+             , E.PROJECT_MEM_DROP_DATE
              , (SELECT COUNT(*)
                   FROM TBL_TASK F
-                 WHERE F.PROJECT_NO = D.PROJECT_NO
+                 WHERE F.PROJECT_NO = A.PROJECT_NO
                    AND F.MEMBER_NO = A.MEMBER_NO
-                   AND F.TASK_PROGRESS_STATUS = '진행중'
+                   AND F.TASK_PROGRESS_STATUS = '완료'
+               ) AS COMPLETE_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK G
+                 WHERE G.PROJECT_NO = A.PROJECT_NO
+                   AND G.MEMBER_NO = A.MEMBER_NO
+                   AND G.TASK_PROGRESS_STATUS = '진행중'
                ) AS PROGRESSING_TASK
              , (SELECT COUNT(*)
-                  FROM TBL_OUTPUT G
-                 WHERE G.PROJECT_NO = D.PROJECT_NO
-                   AND G.MEMBER_NO = A.MEMBER_NO
+                  FROM TBL_OUTPUT H
+                 WHERE H.PROJECT_NO = A.PROJECT_NO
+                   AND H.MEMBER_NO = A.MEMBER_NO
                ) AS REGIST_OUTPUT
              , (SELECT COUNT(*)
-                  FROM TBL_ISSUE H
-                 WHERE H.PROJECT_NO = D.PROJECT_NO
-                   AND H.ISSUE_REGISTER = A.MEMBER_NO
+                  FROM TBL_ISSUE I
+                 WHERE I.PROJECT_NO = A.PROJECT_NO
+                   AND I.ISSUE_REGISTER = A.MEMBER_NO
                ) AS REGIST_ISSUE
-             , I.PROJECT_MEM_STARTED_DATE
-             , I.PROJECT_MEM_DROP_DATE
-          FROM TBL_MEMBER A
-          LEFT JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.MEMBER_NO = B.MEMBER_NO)
-          JOIN TBL_ROLE_CATEGORY C ON (B.ROLE_NO = C.ROLE_NO)
-                  JOIN TBL_PROJECT D ON (B.PROJECT_NO = D.PROJECT_NO)
-          LEFT JOIN TBL_PROJECT_MEM_HISTORY I ON (B.PROJECT_NO = I.PROJECT_NO)
-         WHERE B.PROJECT_NO = #{ projectNo }
-           AND B.ROLE_NO != 8
+          FROM (SELECT B.PROJECT_NO
+                     , B.MEMBER_NO
+                     , B.ROLE_NO
+                  FROM TBL_ROLE_ASSIGNMENT_HISTORY B
+                 WHERE B.ROLE_NO != 8
+                   AND B.PROJECT_NO = #{ projectNo }
+               ) A
+          JOIN TBL_MEMBER C ON (A.MEMBER_NO = C.MEMBER_NO)
+          JOIN TBL_ROLE_CATEGORY D ON (A.ROLE_NO = D.ROLE_NO)
+          JOIN TBL_PROJECT_MEM_HISTORY E ON (A.MEMBER_NO = E.MEMBER_NO)
+         WHERE E.PROJECT_NO = #{ projectNo }
 	</select>
     <select id="findAllRole" resultMap="projectRole">
         SELECT

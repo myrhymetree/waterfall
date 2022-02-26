@@ -75,7 +75,7 @@
         , 'Y'
         , #{ projectNo }
         , 4
-        , 1
+        , #{ memberNo }
         , 0
         )
         <selectKey keyProperty="no" resultType="_int" order="AFTER">
@@ -84,6 +84,7 @@
         	  FROM DUAL
         </selectKey>
 	</insert>
+	<!-- //memberNo -->
 	
 	<!-- 게시물의 첨부파일을 저장한다. -->
 	<insert id="registMeetingFile" parameterType="com.greedy.waterfall.board.model.dto.FileDTO">
@@ -194,7 +195,7 @@
           AND A.BOARD_NO = #{ meetingNo }
 	</select>
 	
-	<!-- 회으록게시판의 전체 게시글을 조회한다. -->
+	<!-- 회의록게시판의 전체 게시글을 조회한다. -->
 	<select id="findMeetingTotalCount" resultType="_int" parameterType="hashmap">
         SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMeetingTotalCount() */
                COUNT(*)
