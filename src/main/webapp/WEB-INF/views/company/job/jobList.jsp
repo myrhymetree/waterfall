@@ -114,6 +114,8 @@ td{
 					</label>
 					<button class="float button" id="addButton">추가</button>
 					<hr>
+					<!-- 직급 추가 모달 -->
+					
 					<!-- 직급검색창-->
 					<br> 
 					<!-- 직급명 목록 조회 -->
@@ -128,9 +130,9 @@ td{
 						<tbody>
 							<c:forEach var="job" items="${ requestScope.jobList }">
 								<tr>
-									<td> <c:out value="${ job.jobRank }" />
+									<td> <c:out value="${ job.rank }" />
 									</td>
-									<td> <c:out value="${ job.jobName }" />
+									<td> <c:out value="${ job.name }" />
 									</td>
 									<td><button class="float button" id="modifyButton">수정</button>
 										<button class="float button" id="deleteButton">삭제</button></td>

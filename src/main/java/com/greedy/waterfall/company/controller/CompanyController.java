@@ -60,11 +60,11 @@ public class CompanyController {
 	public String registJob(@ModelAttribute JobDTO job, HttpServletRequest request,
 			RedirectAttributes rttr) throws JobRegistException {
 		
-		int jobRank = Integer.parseInt(request.getParameter("rank"));
-		String jobName = request.getParameter("name");
+		int rank = Integer.parseInt(request.getParameter("rank"));
+		String name = request.getParameter("name");
 		
-		job.setJobRank(jobRank);
-		job.setJobName(jobName);
+		job.setRank(rank);
+		job.setName(name);
 		
 		companyService.registJob(job);
 		

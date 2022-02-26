@@ -109,15 +109,15 @@ table, th, td {
 }
 .my-textarea-div {
   width: 440px;
-  height: 430px;
+  height: 400px;
 }
 #my-textarea {
   display: block;
   width: 100%;
   height: 100%;
 }
-.my-modal-footer input {
-  width: 220px;
+.my-modal-footer {
+  text-align: right;
 }
 .my-modal-footer button {
   color: #000;
@@ -125,7 +125,7 @@ table, th, td {
   padding: 5px 25px;
 }
 .my-modal-footer button:first-child {
-  margin-right: 264px;
+  margin-right: 5px;
 }
 
 /* 서브모달 */
@@ -134,13 +134,29 @@ table, th, td {
 }
 
 /* 게시글 조회 모달 */
+#read-title {
+  width: 392px;
+}
+#read-content {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .my-modal-footer-read {
-  text-align: center;
+  text-align: right;
+}
+.my-modal-footer-read input {
+  width: 84px;
+  height: 36px;
+  line-height: 1rem;
 }
 .my-modal-footer-read button {
   color: #000;
   background: none;
   padding: 5px 25px;
+}
+.my-modal-footer-read button {
+  margin-left: 5px;
 }
 
 </style>
@@ -217,9 +233,9 @@ table, th, td {
 	            		</div>
 					</div>
 					<div class="my-modal-footer-read">
-                        <button type="submit" class="btn btn-secondary">수정하기</button>
-						<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+						<input type="button" class="btn btn-secondary" id="delete" value="삭제">
+                        <button type="submit" class="btn btn-secondary">수정</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 					</div>
 				</form>
 			</div>

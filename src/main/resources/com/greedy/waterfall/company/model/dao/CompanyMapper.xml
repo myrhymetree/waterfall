@@ -10,20 +10,20 @@
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.DeptDTO" id="deptResultMap">
-		<id property="deptCode" column="DEPT_CODE"/>
-		<result property="deptName" column="DEPT_NAME"/>
+		<id property="code" column="DEPT_CODE"/>
+		<result property="name" column="DEPT_NAME"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.TeamDTO" id="teamResultMap">
-		<id property="teamCode" column="TEAM_CODE"/>
-		<result property="teamName" column="TEAM_NAME"/>
+		<id property="code" column="TEAM_CODE"/>
+		<result property="name" column="TEAM_NAME"/>
 		<result property="deptCode" column="DEPT_CODE"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.JobDTO" id="jobResultMap">
-		<id property="jobCode" column="JOB_CODE"/>
-		<result property="jobName" column="JOB_NAME"/>
-		<result property="jobRank" column="JOB_RANK"/>
+		<id property="code" column="JOB_CODE"/>
+		<result property="name" column="JOB_NAME"/>
+		<result property="rank" column="JOB_RANK"/>
 	</resultMap>
 	
 	<select id="findDept" resultMap="deptResultMap">

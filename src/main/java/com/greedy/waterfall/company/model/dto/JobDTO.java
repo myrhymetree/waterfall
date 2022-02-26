@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class JobDTO {
 
-	private String jobCode;
-	private String jobName;
-	private int jobRank;
+	private String code;
+	private String name;
+	private int rank;
 }
