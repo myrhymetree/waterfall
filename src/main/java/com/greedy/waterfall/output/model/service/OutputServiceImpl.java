@@ -14,6 +14,16 @@ import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 
+/**
+ * <pre>
+ * Class : OutputServiceImpl
+ * Comment : 산출물 로직 처리 부분
+ * 
+ * History
+ * 2022. 2. 26.  (김서영)
+ * @version 1
+ * @author 김서영
+ */
 @Service
 public class OutputServiceImpl implements OutputService{
 	
@@ -63,6 +73,13 @@ public class OutputServiceImpl implements OutputService{
 		return parentTaskList;
 	}
 
+	/**
+	 * findOutputDetail : 업무 별 세부 산출물 내용 조회
+	 * @param taskNo : 클릭한 업무의 번호
+	 * @return 클릭한 업무번호의 산출물 정보가 담긴 DTO 반환
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public OutputDTO findOutputDetail(int taskNo) {
 		
@@ -98,6 +115,13 @@ public class OutputServiceImpl implements OutputService{
 		return outputDetail;
 	}
 
+	/**
+	 * removeOutput : 산출물 삭제
+	 * @param 삭제할 업무의 번호
+	 * @return x
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public void removeOutput(int no) {
 		
@@ -105,6 +129,13 @@ public class OutputServiceImpl implements OutputService{
 		
 	}
 
+	/**
+	 * findOutputList : Admin이 모든 프로젝트별 산출물 개수 조회를 위한 로직
+	 * @param x
+	 * @return 전체 프로젝트 내 각각 산출물List를 담은 List
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public List<OutputProjectDTO> findOutputList() {
 		
