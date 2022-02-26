@@ -44,7 +44,7 @@
 				이슈관리
 			</a>						
 			<nav class="sb-sidenav-menu-nested nav">
-				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/list"">이슈 조회</a> 									
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/project"">이슈 조회</a> 									
 <%-- 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/list?no=" +  + "${ projectAutority.projectNo }">이슈 조회</a> 									 --%>
 			</nav>				
 		</nav>

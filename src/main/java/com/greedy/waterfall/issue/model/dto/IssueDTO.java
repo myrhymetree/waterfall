@@ -19,14 +19,14 @@ public class IssueDTO {
 	private int no;							//이슈번호
 	private String name;					//이슈명
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
-	private java.util.Date createdDate;		//생성일
+	private java.sql.Date createdDate;		//생성일
 	private String progressStatus;			//진행상태
 	private String importance;				//중요도
 	private String content;					//이슈내용
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
-	private java.util.Date deadline;		//이슈마감일
+	private java.sql.Date deadline;		//이슈마감일
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
-	private java.util.Date completedDate;	//이슈종료일
+	private java.sql.Date completedDate;	//이슈종료일
 	private String status;					//이슈 삭제여부
 	private IssueRegisterDTO register;			//TBL_MEMBER 테이블과 JOIN하는 경우 1:1 조인이 될 것이기  때문에 DTO타입으로 생성
 	private IssueManagerDTO manager;

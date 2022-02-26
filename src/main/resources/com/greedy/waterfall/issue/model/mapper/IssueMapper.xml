@@ -229,7 +229,7 @@
     WHERE A.ISSUE_STATUS = 'Y' 
    </select>
   	
-  	<select id="selectAllProjectList" resultMap="projectIssueCountResultMap">
+  	<select id="selectAllProjectList" parameterType="hashmap" resultMap="projectIssueCountResultMap">
   	  SELECT DISTINCT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
             ( A.PROJECT_NO)
             , A.PROJECT_NAME
@@ -263,16 +263,24 @@
             , H.MEMBER_NO AS PM_NO
             , H.MEMBER_NAME AS PM_NAME
            FROM TBL_PROJECT A
-           JOIN TBL_ISSUE B ON (A.PROJECT_NO = B.PROJECT_NO)
+          LEFT JOIN TBL_ISSUE B ON (A.PROJECT_NO = B.PROJECT_NO)
             JOIN TBL_ROLE_ASSIGNMENT_HISTORY G ON (A.PROJECT_NO = G.PROJECT_NO)
             JOIN TBL_MEMBER H ON (G.MEMBER_NO = H.MEMBER_NO)
           WHERE A.PROJECT_STATUS = 'Y'
+<!--            <if test="mangerNo != 1"> -->
             AND G.ROLE_HISTORY_NO IN (SELECT MAX(J.ROLE_HISTORY_NO)
                                    FROM TBL_ROLE_ASSIGNMENT_HISTORY J
                                   WHERE J.ROLE_NO = 8
                                   GROUP BY J.PROJECT_NO
                                 )
             AND G.ROLE_NO = 8
+    <!--        </if>
+            <if test="mangerNo == 1">
+             AND G.ROLE_NO = 1
+           </if> -->
+           <if test="managerNo != 1">
+           	AND G.MEMBER_NO = #{ managerNo } 
+           </if>
   	</select>
   	
   	<select id="selectIssuesOfTask" parameterType="_int" resultMap="taskIssueCountResultMap" >

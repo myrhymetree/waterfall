@@ -13,7 +13,7 @@ public interface IssueService {
 
 //	List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria);
 
-	List<ProjectIssueCountDTO> selectAllProjectList();
+	List<ProjectIssueCountDTO> selectAllProjectList(Map<String, Integer> managerNo);
 
 	List<IssueDTO> selectIssuesOfTask(int projectNo);
 

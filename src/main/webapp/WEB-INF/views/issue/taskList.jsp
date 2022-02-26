@@ -25,7 +25,10 @@
 </style>
 </head>
 <body>
-	<jsp:include page="../common/inprojectheader.jsp"/>
+	<c:choose>
+ 	<c:when test="${ sessionScope.loginMember.role eq 1 }"><jsp:include page="../common/header.jsp"/></c:when>
+	<c:otherwise><jsp:include page="../common/inprojectheader.jsp"/></c:otherwise>
+	</c:choose>
 	
                 <main>
                     <div class="container-fluid px-4">
@@ -95,6 +98,11 @@ $(function() {
 	$("#datatablesSimple td").click(function(){
 		 const taskNo = $(this).parent().children(":eq(0)").text();
 		 console.log(taskNo)
+		 
+/* 		 if("td" == null) {
+			 location.href = "${ pageContext.servletContext.contextPath }/issue/task"
+		 } */
+		 
 		location.href = "${ pageContext.servletContext.contextPath }/issue/list?taskNo=" + taskNo;
 	});
 });

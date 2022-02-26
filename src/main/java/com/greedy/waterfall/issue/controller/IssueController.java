@@ -98,8 +98,13 @@ public class IssueController {
 //		projectNoMap.put("projectNo", projectNo);
 		
 //		System.out.println("projectNo" + projectNo);
+		
+		int No = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		Map<String, Integer> managerNo = new HashMap<>();
+		managerNo.put("managerNo", No);
 
-		List<ProjectIssueCountDTO> allProject = issueService.selectAllProjectList();
+		List<ProjectIssueCountDTO> allProject = issueService.selectAllProjectList(managerNo);
 		System.out.println("allProject" + allProject);
 		
 		mv.addObject("allProject", allProject);
@@ -147,7 +152,6 @@ public class IssueController {
 //		} else {
 //			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 //		}
-		
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		
 		System.out.println(taskNo);

@@ -37,8 +37,8 @@ public class IssueServiceImpl implements IssueService {
 //	}
 
 	@Override
-	public List<ProjectIssueCountDTO> selectAllProjectList() {
-		List<ProjectIssueCountDTO> allProject = mapper.selectAllProjectList();
+	public List<ProjectIssueCountDTO> selectAllProjectList(Map<String, Integer> managerNo) {
+		List<ProjectIssueCountDTO> allProject = mapper.selectAllProjectList(managerNo);
 		return allProject;
 	}
 	@Override
