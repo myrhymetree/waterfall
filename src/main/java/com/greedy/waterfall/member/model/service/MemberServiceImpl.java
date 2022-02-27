@@ -78,6 +78,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public void adminMemberRegist(AdminMemberDTO adminMember) {
+		
+		int adminResult = mapper.adminMemberRegist(adminMember);
+		int deptResult = mapper.deptMemberRegist(adminMember);
+		int teamResult = mapper.teamMemberRegist(adminMember);
+		int jobResult = mapper.jobMemberRegist(adminMember);	
+		int memberResult = mapper.memberRegist(adminMember);
+	}
+
+
 	
 
 }

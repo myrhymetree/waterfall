@@ -155,4 +155,104 @@
 		 WHERE A.DEPT_CODE = #{ deptCode }
 	</select>
 	
+	<insert id="adminMemberRegist" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
+		INSERT
+		  INTO TBL_MEMBER A
+		(
+		  A.MEMBER_NO
+		, A.MEMBER_ID
+		, A.MEMBER_PWD
+		, A.MEMBER_STATUS
+		, A.MEMBER_NAME
+		, A.MEMBER_PWD_INIT_STATUS
+		, A.MEMBER_AUTHORIZATION_NO
+		)
+		VALUES
+	    (
+	      MEMBER_NO.NEXTVAL
+	    , MEMBER_ID.NEXTVAL
+	    , '$2a$12$k6UZtvzfjYMzS.5vcccTAeeNgjw30cOTeh79H2ZxSogYb31gH414e'
+		, 'Y'	
+	    , #{ name }
+	    , 'Y'
+	    , 2  
+	    )
+	    <selectKey keyProperty="no" resultType="_int" order="AFTER">
+	    	SELECT 
+	    		   MEMBER_NO.CURRVAL
+	          FROM DUAL		   
+	    </selectKey> 	
+	</insert>
+	
+	<insert id="deptMemberRegist">
+		INSERT
+		  INTO TBL_MEM_DEPT_HISTORY A
+		(
+		  A.DEPT_MEM_HISTORY_NO
+		, A.DEPT_CODE
+		, A.MEMBER_NO
+		, A.DEPT_UPDATED_NAME  	
+		)
+		VALUES
+		(
+		  DEPT_MEM_HISTORY_NO.NEXTVAL
+		, #{ dept.deptCode }
+		, #{ no }
+		, #{ dept.deptCode } 
+		)  
+	</insert>
+	
+	<insert	id="teamMemberRegist">
+		INSERT
+		  INTO TBL_MEM_TEAM_HISTORY A
+		(
+		  A.TEAM_MEM_HISTORY_NO
+		, A.TEAM_CODE
+		, A.MEMBER_NO
+		, A.TEAM_UPDATED_NAME  	
+		) 
+		VALUES
+		(
+		  TEAM_MEM_HISTORY_NO.NEXTVAL
+		, #{ team.teamCode }
+		, #{ no }
+		, #{ team.teamCode } 
+		) 
+	</insert>
+	
+	<insert id="jobMemberRegist">
+		INSERT
+		  INTO TBL_MEM_JOB_HISTORY A
+		(
+		  A.JOB_MEM_HISTORY_NO
+		, A.JOB_CODE
+		, A.MEMBER_NO
+		, A.JOB_UPDATED_TITLE  
+		)
+		VALUES
+		(
+		  JOB_MEM_HISTORY_NO.NEXTVAL
+		, #{ job.jobCode }
+		, #{ no }
+		, #{ job.jobCode }  
+		)  
+	</insert>
+	
+	<insert id="memberRegist">
+		INSERT
+		  INTO TBL_MEMBER_COM_INFO A
+		(
+		  A.MEMBER_NO
+		, A.DEPT_CODE
+		, A.TEAM_CODE
+		, A.JOB_CODE  
+		)
+		VALUES
+		(
+		  #{ no }
+		, #{ dept.deptCode }
+		, #{ team.teamCode }
+		, #{ job.jobCode }  
+		)  
+	</insert>
 </mapper>

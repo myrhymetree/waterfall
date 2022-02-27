@@ -24,5 +24,7 @@ public interface MemberService {
 
 	List<TeamDTO> findTeamList(String deptCode);
 
+	void adminMemberRegist(AdminMemberDTO adminMember);
+
 
 }
