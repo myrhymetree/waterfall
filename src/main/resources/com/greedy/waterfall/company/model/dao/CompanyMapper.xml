@@ -33,6 +33,7 @@
 		  FROM TBL_DEPT
 	</select>
 	
+	<!-- 직급 조회 -->
 	<select id="findJob" resultMap="jobResultMap">
 		SELECT 
 		       JOB_CODE
@@ -40,4 +41,21 @@
 		     , JOB_RANK
 		  FROM TBL_JOB_TITLE     
 	</select>
+	
+	<!-- 직급 생성 -->
+	<insert id="insertJob" parameterType="com.greedy.waterfall.company.model.dto.JobDTO">
+		INSERT
+		  INTO TBL_JOB_TITLE A
+		(
+		  A.JOB_CODE
+		, A.JOB_NAME
+		, A.JOB_RANK
+		)
+		VALUES
+		(
+		  #{ code }
+		, #{ name }
+		, #{ rank }
+		)
+	</insert>
 </mapper>

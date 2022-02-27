@@ -46,4 +46,5 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new JobRegistException("직급 등록에 실패하셨습니다.");
 		}
 	}
+
 }
