@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
+import com.greedy.waterfall.common.exception.member.MemberRegistException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
@@ -194,7 +195,7 @@ public class MemberController {
 																													
 	@PostMapping("/regist3")                                                                                	
 	public ModelAndView registMember(ModelAndView mv, @RequestParam Map<String, String> parameter, HttpServletRequest request,
-			RedirectAttributes rttr) {       																	
+			RedirectAttributes rttr) throws MemberRegistException {       																	
 	
 		String name = parameter.get("name");
 		String dept = parameter.get("dept");

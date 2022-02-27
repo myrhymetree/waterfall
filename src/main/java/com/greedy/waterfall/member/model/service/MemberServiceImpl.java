@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
+import com.greedy.waterfall.common.exception.member.MemberRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dao.MemberMapper;
 import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
@@ -79,13 +80,17 @@ public class MemberServiceImpl implements MemberService {
 
 
 	@Override
-	public void adminMemberRegist(AdminMemberDTO adminMember) {
+	public void adminMemberRegist(AdminMemberDTO adminMember) throws MemberRegistException {
 		
 		int adminResult = mapper.adminMemberRegist(adminMember);
 		int deptResult = mapper.deptMemberRegist(adminMember);
 		int teamResult = mapper.teamMemberRegist(adminMember);
 		int jobResult = mapper.jobMemberRegist(adminMember);	
 		int memberResult = mapper.memberRegist(adminMember);
+		
+		if(adminResult < 0 && deptResult < 0 && teamResult < 0 && jobResult < 0 && memberResult < 0) {
+			throw new MemberRegistException("게시글 등록에 실패하셨습니다.");
+		}
 	}
 
 
