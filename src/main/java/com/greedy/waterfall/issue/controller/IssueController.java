@@ -3,6 +3,7 @@ package com.greedy.waterfall.issue.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
@@ -38,6 +41,7 @@ import com.greedy.waterfall.issue.model.dto.IssueRegisterDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.service.IssueService;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 
 @RestController
@@ -69,15 +73,16 @@ public class IssueController {
 		return mv;
 	}
 	
-	@GetMapping("/list")
-	public ModelAndView issueList(HttpServletRequest request, ModelAndView mv) {
+	@GetMapping("/list/{taskNo}")
+	public ModelAndView issueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
-		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+//		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		
 		System.out.println(taskNo);
 		
 		List<IssueDTO> issueList = issueService.selectIssueList(taskNo);
 		
+		mv.addObject("taskNo", taskNo);
 		mv.addObject("issueList", issueList);
 		mv.addObject("intent", "/issue/list");
 		mv.setViewName("/issue/issueList");
@@ -117,88 +122,110 @@ public class IssueController {
 		return mv;
 	}
 	
-	@PostMapping("/regist")
-	public String registIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
-			RedirectAttributes rttr, @RequestParam List<IssueFileDTO> multiFiles, HttpSession session) {
-		
-		int register = (int) session.getAttribute("loginMember");
-		issue.setRegisterNo(register);
-		
-		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+
+//	@RequestMapping(value = "regist/{taskNo}", method = RequestMethod.POST)
+	@PostMapping("regist/{taskNo}")
+	public ModelAndView registIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request, ModelAndView mv,
+			@PathVariable("taskNo") int taskNo, RedirectAttributes rttr, /* @RequestParam List<IssueFileDTO> multiFiles, */ HttpSession session) {
+//		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+		System.out.println("업무 넘버는 : " + taskNo);
 		issue.setTaskNo(taskNo);
 		
-		System.out.println("MultiFiles : " + multiFiles);
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		issue.setProjectNo(projectNo);
 		
-		String root = request.getSession().getServletContext().getRealPath("resource");
+		int writerMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		System.out.println("작성자 넘버는 : " +  writerMemberNo);
+		issue.setRegisterNo(writerMemberNo);
 		
-		System.out.println("root : " + root);
+		issueService.registIssue(issue);
 		
-		String filePath = root + "/resources/issueUploadFiles";
+		rttr.addFlashAttribute("taskNo", taskNo);
 		
-		File mkdir = new File(filePath);
+		mv.setViewName("redirect:/issue/list/"+taskNo);
+	
+		return mv;
 		
-		if(!mkdir.exists()) {
-			mkdir.mkdirs();
-		}
+//		return "redirect:/list";
 		
-		if(((MultipartFile) multiFiles).getSize() > 0) {
-			
-			String originFileName = ((MultipartFile) multiFiles).getOriginalFilename();
-			String ext = originFileName.substring(originFileName.lastIndexOf("."));
-			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-			
-			System.out.println("originFileName" + originFileName);
-			System.out.println("savedName : " + savedName);
-			
-			IssueFileDTO issueFileDTO = new IssueFileDTO();
-			issueFileDTO.setSavedPath(filePath);
-			issueFileDTO.setOriginalName(originFileName);
-			issueFileDTO.setRandomName(savedName);
-			issue.setFile(issueFileDTO);
-			
-			try {
-				((MultipartFile) multiFiles).transferTo(new File(filePath + "\\" + savedName));
-				
-				System.out.println("이슈 등록 확인 " + issue);
-				
-				issueService.registIssue(issue);
-				
-				rttr.addFlashAttribute("message", "파일 업로드 성공");
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-				
-				new File(filePath + "/" + savedName).delete();
-				rttr.addFlashAttribute("message", "파일 업로드 실패");
-			}
-			
-		} else {
-			issueService.registIssue(issue);
-			
-			rttr.addFlashAttribute("message", "이슈 등록에 성공하셨습니다.");
-		}
+//		issue.setTaskNo(taskNo);
 		
-		return "redirect:/issue/list";
+//		System.out.println("MultiFiles : " + multiFiles);
+//		
+//		String root = request.getSession().getServletContext().getRealPath("resource");
+//		
+//		System.out.println("root : " + root);
+//		
+//		String filePath = root + "/resources/issueUploadFiles";
+//		
+//		File mkdir = new File(filePath);
+//		
+//		if(!mkdir.exists()) {
+//			mkdir.mkdirs();
+//		}
+//		
+//		
+//		if(((MultipartFile) multiFiles).getSize() > 0) {
+//			List<Map<String, String>> files = new ArrayList<>();
+//			for(int i = 0; i < multiFiles.size(); i++) {
+//				String originFileName = ((MultipartFile) multiFiles).getOriginalFilename();
+//				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+//				System.out.println("originFileName" + originFileName);
+//				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+//				System.out.println("savedName : " + savedName);
+//				
+//				IssueFileDTO issueFileDTO = new IssueFileDTO();
+//				issueFileDTO.setSavedPath(filePath);
+//				issueFileDTO.setOriginalName(originFileName);
+//				issueFileDTO.setRandomName(savedName);
+//				issue.setFile(issueFileDTO);
+//			}
+//			
+//			try {
+//				((MultipartFile) multiFiles).transferTo(new File(filePath + "\\" + issue.getFile("savedName")));
+//				
+//				System.out.println("이슈 등록 확인 " + issue);
+//				
+//				issueService.registIssue(issue);
+//				
+//				rttr.addFlashAttribute("message", "파일 업로드 성공");
+//			} catch (IllegalStateException | IOException e) {
+//				e.printStackTrace();
+//				
+//				new File(filePath + "/" + savedName).delete();
+//				rttr.addFlashAttribute("message", "파일 업로드 실패");
+//			}
+//			
+//		} else {
+//			issueService.registIssue(issue);
+//			
+//			rttr.addFlashAttribute("message", "이슈 등록에 성공하셨습니다.");
+//		}
+		
+		
+		
+
 	}
 	
-	@GetMapping(("/regist/task/{taskNo}"))
-	public ModelAndView selectTask(ModelAndView mv, @PathVariable("taskNo") int taskNo, HttpServletResponse response) throws IOException {
-
-		List<IssueDTO> taskList = issueService.selectTask(taskNo);
-		
-		System.out.println(taskList);
-		
-		System.out.println("taskNo : " + taskNo);
-		
-		for(int i = 0; i < taskList.size(); i++) {
-			System.out.println("taskList[i] : " + taskList.get(i));
-		}
-		
-		response.setContentType("application/json; charset=UTF-8");
-		ObjectMapper mapper = new ObjectMapper();
-		
-		mv.addObject("taskList", mapper.writeValueAsString(taskList));
-		mv.setViewName("jsonView");
-		return mv;
-	}
-
+//	@GetMapping("/regist/task/{taskNo}")
+//	public ModelAndView selectTask(ModelAndView mv, @PathVariable("taskNo") int taskNo, HttpServletResponse response) throws IOException {
+//
+//		List<IssueDTO> taskList = issueService.selectTask(taskNo);
+//		
+//		System.out.println(taskList);
+//		
+//		System.out.println("taskNo : " + taskNo);
+//		
+//		for(int i = 0; i < taskList.size(); i++) {
+//			System.out.println("taskList[i] : " + taskList.get(i));
+//		}
+//		
+//		response.setContentType("application/json; charset=UTF-8");
+//		ObjectMapper mapper = new ObjectMapper();
+//		
+//		mv.addObject("taskList", mapper.writeValueAsString(taskList));
+//		mv.setViewName("jsonView");
+//		return mv;
+//	}
+	
 }

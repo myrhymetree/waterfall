@@ -102,11 +102,11 @@
 		  , E.PROJECT_NAME
 		  , G.TASK_CATEGORY_NAME
      FROM TBL_ISSUE A 
-     JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
-     JOIN TBL_PROJECT E ON (A.PROJECT_NO = E.PROJECT_NO)
-     JOIN TBL_TASK F ON (A.TASK_NO = F.TASK_NO)
-     JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
-     JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
+     LEFT JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+     LEFT JOIN TBL_PROJECT E ON (A.PROJECT_NO = E.PROJECT_NO)
+     LEFT JOIN TBL_TASK F ON (A.TASK_NO = F.TASK_NO)
+     LEFT JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
+     LEFT JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
     WHERE A.TASK_NO = #{ taskNo }
       AND A.ISSUE_STATUS = 'Y' 
    </select>
@@ -242,31 +242,30 @@
   		   AND A.TASK_NO = #{ no }   
   	</select>
   	
-  	<insert id="" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO" >
+  	<insert id="registIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO" >
   		INSERT
 		  INTO TBL_ISSUE A
 	    ( 
 		  A.ISSUE_NO
 	    , A.ISSUE_NAME
-	    , A.ISSUE_CREATED_DATE
 	    , A.ISSUE_PROGRESS_STATUS
 		, A.ISSUE_IMPORTANCE
 		, A.ISSUE_CONTENT
+		, A.ISSUE_CREATED_DATE
 	    , A.ISSUE_DEADLINE
-	    , A.ISSUE_COMPLETED_DATE
 	    , A.ISSUE_REGISTER
 		, A.PROJECT_NO
 		, A.TASK_NO
 		)
 		VALUES
 		(
-		  ISSEU_NO.NEXTVAL
+		  ISSUE_NO.NEXTVAL
 		, #{ name }
 		, #{ progressStatus }
 		, #{ importance }
 		, #{ content }
+		, #{ createdDate }
 		, #{ deadline }
-		, #{ completedDate }
 		, #{ registerNo }
 		, #{ projectNo }
 		, #{ taskNo }

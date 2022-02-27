@@ -76,21 +76,6 @@ public class GuideController {
 		
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
 		
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
@@ -131,27 +116,6 @@ public class GuideController {
 		List<GuideDTO> guideList = guideService.selectAllGuideList(selectCriteria);
 		
 		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
-		System.out.println(guideList);
 		
 		mv.addObject("guideList", guideList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -190,9 +154,9 @@ public class GuideController {
 		
 		System.out.println("singleFile : " + singleFile);
 		
-		String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 파일서버를 따로둠
+		String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 		파일서버를 따로둠
 		
-//		String root1 = request.getSession().getServletContext().getContextPath();				// 상대경로
+//		String root1 = request.getSession().getServletContext().getContextPath();				// 상대경로방식, 하지만 이렇게 경로를 지정해놓으면 나중에 다운로드 시 db에 이 주소로 저장되어있기때문에 c 하위 폴더로 생성이 되기 때문에 주의가 필요함
 		
 //		String root2 = request.getServletContext().getRealPath("resources");					// 절대경로
 		
