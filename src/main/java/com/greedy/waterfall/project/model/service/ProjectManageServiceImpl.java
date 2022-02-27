@@ -131,6 +131,27 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 		return mapper.findNewMember(parameter);
 	}
 
+	@Override
+	public List<ProjectRoleDTO> findMemberRole(Map<String, Integer> memberInfo) {
+
+		return mapper.findMemberRole(memberInfo);
+	}
+
+	@Override
+	public boolean modifyProjectMember(ProjectManageMemberDTO modifyInfo) {
+		
+		if(removeOldRole(modifyInfo) && registRoleToProject(modifyInfo)) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	private boolean removeOldRole(ProjectManageMemberDTO modifyInfo) {
+		
+		return mapper.removeOldRole(modifyInfo) > 0 ? true: false;
+	}
+
 }
 
 

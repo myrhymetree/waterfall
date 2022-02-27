@@ -37,6 +37,7 @@
 	<select id="findProjectMember" resultMap="projectMemberResult">
         SELECT 
                A.PROJECT_NO
+             , C.MEMBER_NO
              , C.MEMBER_NAME
              , D.ROLE_NAME
              , E.PROJECT_MEM_STARTED_DATE
@@ -109,6 +110,16 @@
           FROM TBL_DEPT A
 	</select>
 	
+	<select id="findMemberRole" parameterType="hashmap" resultMap="projectRole">
+        SELECT
+               A.ROLE_NO
+             , B.ROLE_NAME
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+          JOIN TBL_ROLE_CATEGORY B ON(A.ROLE_NO = B.ROLE_NO)
+         WHERE A.PROJECT_NO = #{ projectNo }
+           AND A.MEMBER_NO = #{ memberNo }
+	</select>
+	
 	<insert id="registRoleToProject" parameterType="hashmap">
         INSERT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#registRoleToProject() */ 
           INTO TBL_ROLE_ASSIGNMENT_HISTORY A
@@ -149,6 +160,14 @@
         , #{ managerNo }
         )
 	</insert>
+	
+	<delete id="removeOldRole">
+        DELETE
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+         WHERE A.MEMBER_NO = #{ memberNo }
+           AND A.PROJECT_NO = #{ projectNo }
+	</delete>	
+
 </mapper>
 
 

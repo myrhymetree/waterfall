@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
@@ -75,6 +76,14 @@ public class ProjectManageController {
 	
 	private ProjectManageMemberDTO parsingMemberInfoForProjectRegist(List<String> projectRole,Map<String, String> registInfo ) {
 		
+		Iterator<String> key = registInfo.keySet().iterator();
+		while(key.hasNext()) {
+			String k = key.next();
+			String value = registInfo.get(k);
+			System.out.println(k + " : " + value);
+		}
+		
+		
 		ProjectManageMemberDTO memberInfo = new ProjectManageMemberDTO().builder()
 												.projectNo(parseInt(registInfo, "projectNo"))
 												.memberNo(parseInt(registInfo, "memberNo"))
@@ -99,6 +108,7 @@ public class ProjectManageController {
 		List<ProjectRoleDTO> memberRoleList = new ArrayList<ProjectRoleDTO>();
 		
 		for(int i = 0; i < projectRole.size(); i++) {
+			System.out.println(projectRole.get(i));
 			ProjectRoleDTO role = new ProjectRoleDTO().builder().roleNo(parseInt(projectRole, i)).build();
 			memberRoleList.add(role);
 		}
@@ -128,34 +138,58 @@ public class ProjectManageController {
 		return memberInfo;
 	}
 	
+	@GetMapping("/member/detail")
+	public ModelAndView findMemberDetail(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Map<String, Integer> memberInfo = new HashMap<String, Integer>();
+		memberInfo.put("memberNo", Integer.parseInt(request.getParameter("memberNo")));
+		memberInfo.put("projectNo", ((ProjectAuthorityDTO)request.getSession().getAttribute("projectAutority")).getProjectNo());
+		
+		List<ProjectRoleDTO> memberRoleList = pms.findMemberRole(memberInfo);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		ObjectMapper mapper = new ObjectMapper();
+		
+		mv.addObject("memberRoleList", mapper.writeValueAsString(memberRoleList));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+
+	@PostMapping("/member/modify")
+	public ModelAndView modifyMemberInProject(ModelAndView mv, @RequestParam("projectRole") List<String> projectRole
+			, @RequestParam Map<String, String> modifyInfo) {
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		sendToResultView(mv, pms.modifyProjectMember(parsingMemberInfoForProjectRegist(projectRole, modifyInfo)));
+		
+		return mv;
+	}
 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 

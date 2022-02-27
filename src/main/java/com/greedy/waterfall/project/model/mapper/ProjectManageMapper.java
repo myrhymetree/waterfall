@@ -24,5 +24,9 @@ public interface ProjectManageMapper {
 	int registRoleToProject(Map<String, Integer> map);
 
 	List<MemberDTO> findNewMember(Map<String, String> parameter);
+
+	List<ProjectRoleDTO> findMemberRole(Map<String, Integer> memberInfo);
+
+	int removeOldRole(ProjectManageMemberDTO modifyInfo);
 	
 }
