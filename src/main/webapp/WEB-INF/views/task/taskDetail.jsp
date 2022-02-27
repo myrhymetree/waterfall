@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>	
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,9 +16,6 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
 	crossorigin="anonymous"></script>
 <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-	crossorigin="anonymous"></script>
-<script
 	src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
@@ -30,12 +28,8 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
 	crossorigin="anonymous"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-	crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
 	crossorigin="anonymous"></script>
-<script src="js/datatables-simple-demo.js"></script>
 <link
 	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
 	rel="stylesheet" />
@@ -150,6 +144,9 @@ body {
 		
 	</div>
 	<script>
+	
+	
+	
 	<%-- hover event 추가 --%>
 	$(".folder_toggle").hover(function(){
 		$(this).css({"border" : "solid",
@@ -170,51 +167,67 @@ body {
 	}, function(){
 		$(this).css({"border-color" : "white"});
 	});
+	<%-- hover 이벤트 끝 --%>
 	
+	const startDate = "${parentTaskList[0].startDate}";
+	console.log(startDate);
+	
+	var parentTaskList = "${parentTaskList}";
+	console.log(parentTaskList.length);
+	
+	 var TaskList=new Array();
+	  <c:forEach items="${requestScope.parentTaskList}" var="task">
+	  	var startDate ="${task.startDate}";
+	  </c:forEach>
+	   
+	   console.log(TaskList);
 	
 		var tasks = [
+			
+			
+			
 			{
-				start: '2018-10-01',
-				end: '2018-10-08',
+				start: startDate,
+				end: '2022-02-28',
 				name: 'Redesign website',
 				id: "Task 0",
 				progress: 20
 			},
 			{
-				start: '2018-10-03',
-				end: '2018-10-06',
+				start: startDate,
+				end: '2022-02-28',
 				name: 'Write new content',
 				id: "Task 1",
 				progress: 5,
 				dependencies: 'Task 0'
 			},
 			{
-				start: '2018-10-04',
-				end: '2018-10-08',
+				start: startDate,
+				end: '2022-02-28',
 				name: 'Apply new styles',
 				id: "Task 2",
 				progress: 10,
 				dependencies: 'Task 1'
 			},
 			{
-				start: '2018-10-08',
-				end: '2018-10-09',
+				start: startDate,
+				end: '2022-02-28',
 				name: 'Review',
 				id: "Task 3",
 				progress: 5,
 				dependencies: 'Task 2'
 			},
 			{
-				start: '2018-10-08',
-				end: '2018-10-10',
+				start: startDate,
+				end: '2022-02-28',
 				name: 'Deploy',
 				id: "Task 4",
 				progress: 0,
 				dependencies: 'Task 2'
 			},
 			{
-				start: '2018-10-11',
-				end: '2018-10-11',
+				start: startDate,
+				end: '2022-02-28',
 				name: 'Go Live!',
 				id: "Task 5",
 				progress: 0,
@@ -222,8 +235,8 @@ body {
 				custom_class: 'bar-milestone'
 			},
 			{
-				start: '2014-01-05',
-				end: '2019-10-12',
+				start: startDate,
+				end: '2022-02-28',
 				name: 'Long term task',
 				id: "Task 6",
 				progress: 0
