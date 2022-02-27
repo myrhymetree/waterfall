@@ -114,7 +114,7 @@
 						</div>
 						<div class="mt-4">
 							<c:forEach var="projectRole" items="${ allRole }">
-								<label class="cklabel" style="margin: 1.5em"><input type="checkbox" class="check checkbok" value="${ projectRole.roleNo }">${ projectRole.roleName }</label>
+								<label class="cklabel" style="margin: 1.5em"><input name="projectRole" type="checkbox" class="check checkbok" value="${ projectRole.roleNo }">${ projectRole.roleName }</label>
 							</c:forEach>
                     	</div>
                      	<div class="row mt-3">
@@ -125,6 +125,7 @@
 	            	</div>
 	            	<input type="hidden" name="memberNo" id="memberNo">
 	            	<input type="hidden" name="managerNo" value="${ sessionScope.loginMember.no }" id="managerNo">
+	            	<input type="hidden" name="projectNo" value="${ sessionScope.projectAutority.projectNo }" id="projectNo">
 	            	
 	            	<div style="margin-ton: 2%;text-align: center">
 	            		<button type="submit" class="btn btn-secondary mb-2"><i class="far fa-edit me-1"></i>등록</button>
@@ -176,20 +177,22 @@
 	
 	$("#team").on("change", function() {
 		const teamCode = $(this).val();
+		const projectNo = ${ sessionScope.projectAutority.projectNo };
 		console.log(teamCode);
-		const url = "${pageContext.servletContext.contextPath}/project/regist/member/" + $(this).val();
+		const url = "${pageContext.servletContext.contextPath}/manage/member/find";
+		console.log(url);
 		$("#member option").remove();
 				const $memberPreOption = "<option value='' selected disabled>사원 선택</option>";
 				$("#member").append($memberPreOption);
 		$.ajax({
 			url: url,
 			type: "get",
-			data: {teamCode:teamCode},
+			data: {teamCode:teamCode, projectNo:projectNo},
 			success: function(data) {
 				
 				memberList = JSON.parse(data.memberList);
 				for(let i = 0; i < memberList.length; i++) {
-					const $memberTag = "<option value = '" + memberList[i].no + "'>" + memberList[i].name + "</option>"
+					const $memberTag = "<option value = '" + memberList[i].memberNo + "'>" + memberList[i].memberName + "</option>"
 					console.log($memberTag);
 						
 					$("#member").append($memberTag);

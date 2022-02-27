@@ -24,6 +24,7 @@ public class ProjectManageMemberDTO {
 	private int progressingTask;
 	private int registOutput;
 	private int registIssue;
+	private int managerNo;
 	private java.sql.Date joinDate;
 	private java.sql.Date quitDate;
 	

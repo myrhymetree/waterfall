@@ -29,6 +29,11 @@
 		<result property="roleName" column="ROLE_NAME"/>
 	</resultMap>
 	
+	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
+		<id property="memberNo" column="MEMBER_NO"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+	</resultMap>
+	
 	<select id="findProjectMember" resultMap="projectMemberResult">
         SELECT 
                A.PROJECT_NO
@@ -70,6 +75,25 @@
           JOIN TBL_PROJECT_MEM_HISTORY E ON (A.MEMBER_NO = E.MEMBER_NO)
          WHERE E.PROJECT_NO = #{ projectNo }
 	</select>
+    
+    <select id="findNewMember" resultMap="memberResult">
+        SELECT
+               B.MEMBER_NO
+             , B.MEMBER_NAME
+          FROM TBL_MEM_TEAM_HISTORY A
+          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+         WHERE A.TEAM_UPDATED_NAME = #{ teamCode }
+           AND A.TEAM_MEM_HISTORY_NO IN (SELECT MAX(C.TEAM_MEM_HISTORY_NO)
+                                           FROM TBL_MEM_TEAM_HISTORY C
+                                          GROUP BY C.MEMBER_NO
+                                          )
+           AND B.MEMBER_NO NOT IN (SELECT C.MEMBER_NO
+                                     FROM TBL_PROJECT_MEM_HISTORY C
+                                    WHERE C.PROJECT_NO = TO_NUMBER(#{ projectNo })
+                                      AND C.PROJECT_MEM_DROP_DATE IS  NULL
+                                  )    
+    </select>
+    
     <select id="findAllRole" resultMap="projectRole">
         SELECT
                A.ROLE_NO
@@ -85,6 +109,46 @@
           FROM TBL_DEPT A
 	</select>
 	
+	<insert id="registRoleToProject" parameterType="hashmap">
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#registRoleToProject() */ 
+          INTO TBL_ROLE_ASSIGNMENT_HISTORY A
+        (
+          A.MEMBER_NO
+        , A.ROLE_NO
+        , A.PROJECT_NO
+        , A.ROLE_HISTORY_NO
+        , A.MANAGER_NO
+        )
+        VALUES
+        (
+          #{ memberNo }
+        , #{ roleNo }
+        , #{ projectNo }
+        , ROLE_HISTORY_NO.NEXTVAL
+        , #{ managerNo }
+        )
+	</insert>
+	
+	
+	<insert id="registMemberToProject">
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#registMemberToProject() */
+          INTO TBL_PROJECT_MEM_HISTORY A
+        (
+          A.PROJECT_MEM_HISTORY_NO
+        , A.PROJECT_MEM_STARTED_DATE
+        , A.MEMBER_NO
+        , A.PROJECT_NO
+        , A.MANAGER_NO
+        )
+        VALUES
+        (
+          PROJECT_MEM_HISTORY_NO.NEXTVAL
+        , SYSDATE
+        , #{ memberNo }
+        , #{ projectNo }
+        , #{ managerNo }
+        )
+	</insert>
 </mapper>
 
 
