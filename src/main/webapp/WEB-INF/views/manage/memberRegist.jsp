@@ -124,7 +124,7 @@
 		            	</div>
 	            	</div>
 	            	<input type="hidden" name="memberNo" id="memberNo">
-	            	<input type="hidden" name="managerNo" id="managerNo">
+	            	<input type="hidden" name="managerNo" value="${ sessionScope.loginMember.no }" id="managerNo">
 	            	
 	            	<div style="margin-ton: 2%;text-align: center">
 	            		<button type="submit" class="btn btn-secondary mb-2"><i class="far fa-edit me-1"></i>등록</button>
@@ -136,7 +136,7 @@
 	</div>
 	<script>
 	
-	$("#save-member").on("click", function() {
+	$("#member").on("change", function() {
 		console.log($("#member option:selected").val());
 		console.log($("#member option:selected").text());
 		if("사원 선택" != $("#member option:selected").text()) {
@@ -194,6 +194,7 @@
 						
 					$("#member").append($memberTag);
 				}
+				console.log($("dept"));
 			},
 			error: function(data) {
 				console.log("ajax통신 실패 에러");

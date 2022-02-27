@@ -1,5 +1,6 @@
 package com.greedy.waterfall.project.controller;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -50,8 +51,30 @@ public class ProjectManageController {
 	}
 	
 	@PostMapping("/member/regist")
-	public ModelAndView registProjectMember(ModelAndView mv, @RequestParam("registData") Map<String, Object> registData) {
+	public ModelAndView registProjectMember(ModelAndView mv, @RequestParam Map<String, Object> parameter) {
 		
+		System.out.println("member/regist test 1");
+		Iterator<String> keys = parameter.keySet().iterator();
+		
+		while(keys.hasNext()) {
+			String strKey = keys.next();
+			Object strValue = parameter.get(strKey);
+			System.out.println(strKey + " : " + strValue);
+		}
+		System.out.println("member/regist test 2");
+		for(String strKey : parameter.keySet()) {
+			Object strValue = parameter.get(strKey);
+			System.out.println(strKey + " : " + strValue);
+		}
+		System.out.println("member/regist test 3");
+		for(Map.Entry<String, Object> entry : parameter.entrySet() ) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+			System.out.println(key + " : " + value);
+		}
+		parameter.forEach((key, value)-> {
+			System.out.println(key + " : " + value);
+		});
 		
 		
 		
