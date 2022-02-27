@@ -188,7 +188,7 @@
                                         </thead>
                                         <tbody>             <!-- ajax 참고해볼 것 360부분 선생님한테 한번 물어보기 -->
                                         <c:forEach var="adminMember" items="${ requestScope.adminMemberList }">
-                                    		<tr data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer">
+                                    		<tr id="listArea" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer">
                                         		<th scope="row">"${ adminMember.id }"</th>
                                         		<td>${ adminMember.name }</td>
                                         		<td>${ adminMember.dept.deptName }</td>
@@ -250,7 +250,36 @@
                    </div>
                  </form> 
               </div> --%>
-           
+		
+		<script>
+			
+		document.quertSelectorAll("#listArea rd") {
+			const $tds = document.querySelectorAll("#listArea td");
+			for(let i = 0; i < $tds.length; i++) {
+				$tds[i].onclick = function() {
+					const id = this.parentNode.children[0].innerText;
+					
+					$.ajax({
+						url: "/waterfall/member/modify",
+						type: "get",
+						data : { id : id }
+						success : function(data, textStatus, xhr) {
+							const modify = JSON.parse(data.modify);
+							
+							for(let index in modify) {
+								
+								
+							}
+							
+						}, error : function(data){
+							
+						}
+					});
+				}
+			}
+		}
+		
+		</script>           
                      
 </body>
 </html>
