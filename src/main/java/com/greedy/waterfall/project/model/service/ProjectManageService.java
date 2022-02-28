@@ -9,7 +9,7 @@ import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
 
 public interface ProjectManageService {
 
-	Map<String, Object> findProjectMember(int projectNo);
+	Map<String, Object> findProjectMember(Map<String, String> searchMap);
 
 	boolean registProjectMember(ProjectManageMemberDTO registInfo);
 

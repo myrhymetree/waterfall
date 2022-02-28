@@ -150,11 +150,10 @@ td {
 			<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>	
 			<div class="search-area">
 		    	<div class="search-set mt-2">
-		     		<form action="${ pageContext.servletContext.contextPath }/meeting/list" >
+		     		<form action="${ pageContext.servletContext.contextPath }/manage/member/list" >
 						<select id="searchCondition" name="searchCondition">
-							<option value="writer" ${ requestScope.selectCriteria.searchCondition eq "writer"? "selected": "" }>작성자</option>
-							<option value="title" ${ requestScope.selectCriteria.searchCondition eq "title"? "selected": "" }>제목</option>
-							<option value="content" ${ requestScope.selectCriteria.searchCondition eq "content"? "selected": "" }>내용</option>
+							<option value="memberName" ${ requestScope.selectCriteria.searchCondition eq "memberName"? "selected": "" }>이름</option>
+							<option value="roleName" ${ requestScope.selectCriteria.searchCondition eq "roleName"? "selected": "" }>역할</option>
 						</select> <input type="search" id="searchValue" name="searchValue">
 						<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
 					</form>

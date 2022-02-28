@@ -34,47 +34,105 @@
 		<result property="memberName" column="MEMBER_NAME"/>
 	</resultMap>
 	
-	<select id="findProjectMember" resultMap="projectMemberResult">
+	<select id="findProjectMemberCount" parameterType="hashmap" resultType="_int">
         SELECT 
-               A.PROJECT_NO
-             , C.MEMBER_NO
-             , C.MEMBER_NAME
-             , D.ROLE_NAME
-             , E.PROJECT_MEM_STARTED_DATE
-             , E.PROJECT_MEM_DROP_DATE
-             , (SELECT COUNT(*)
-                  FROM TBL_TASK F
-                 WHERE F.PROJECT_NO = A.PROJECT_NO
-                   AND F.MEMBER_NO = A.MEMBER_NO
-                   AND F.TASK_PROGRESS_STATUS = '완료'
-               ) AS COMPLETE_TASK
-             , (SELECT COUNT(*)
-                  FROM TBL_TASK G
-                 WHERE G.PROJECT_NO = A.PROJECT_NO
-                   AND G.MEMBER_NO = A.MEMBER_NO
-                   AND G.TASK_PROGRESS_STATUS = '진행중'
-               ) AS PROGRESSING_TASK
-             , (SELECT COUNT(*)
-                  FROM TBL_OUTPUT H
-                 WHERE H.PROJECT_NO = A.PROJECT_NO
-                   AND H.MEMBER_NO = A.MEMBER_NO
-               ) AS REGIST_OUTPUT
-             , (SELECT COUNT(*)
-                  FROM TBL_ISSUE I
-                 WHERE I.PROJECT_NO = A.PROJECT_NO
-                   AND I.ISSUE_REGISTER = A.MEMBER_NO
-               ) AS REGIST_ISSUE
-          FROM (SELECT B.PROJECT_NO
-                     , B.MEMBER_NO
-                     , B.ROLE_NO
-                  FROM TBL_ROLE_ASSIGNMENT_HISTORY B
-                 WHERE B.ROLE_NO != 8
-                   AND B.PROJECT_NO = #{ projectNo }
-               ) A
+               COUNT(COUNT(B.MEMBER_NO))
+          FROM TBL_PROJECT_MEM_HISTORY A
+          LEFT JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.MEMBER_NO = B.MEMBER_NO)
           JOIN TBL_MEMBER C ON (A.MEMBER_NO = C.MEMBER_NO)
-          JOIN TBL_ROLE_CATEGORY D ON (A.ROLE_NO = D.ROLE_NO)
-          JOIN TBL_PROJECT_MEM_HISTORY E ON (A.MEMBER_NO = E.MEMBER_NO)
-         WHERE E.PROJECT_NO = #{ projectNo }
+          JOIN TBL_ROLE_CATEGORY D ON (B.ROLE_NO = D.ROLE_NO)
+		<where>
+        	<if test="searchCondition == 'memberName'">   
+               C.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
+           	</if>
+        	<if test="searchCondition == 'roleName'">   
+               D.ROLE_NAME LIKE '%' || #{ searchValue } || '%'
+           	</if>
+           AND B.ROLE_NO != 8
+           AND B.PROJECT_NO = #{ projectNo }
+		</where>
+         GROUP BY B.MEMBER_NO
+	</select>
+	
+	<select id="findProjectMember" resultMap="projectMemberResult" parameterType="com.greedy.waterfall.common.paging.SelectCriteria">
+        SELECT 
+               A.RNUM
+             , A.PROJECT_NO
+             , A.MEMBER_NO
+             , A.MEMBER_NAME
+             , A.ROLE_NAME
+             , A.PROJECT_MEM_STARTED_DATE
+             , A.PROJECT_MEM_DROP_DATE
+             , A.COMPLETE_TASK
+             , A.PROGRESSING_TASK
+             , A.REGIST_OUTPUT
+             , A.REGIST_ISSUE
+          FROM (SELECT ROWNUM RNUM
+                     , B.PROJECT_NO
+                     , B.MEMBER_NO
+                     , B.MEMBER_NAME
+                     , B.ROLE_NAME
+                     , B.PROJECT_MEM_STARTED_DATE
+                     , B.PROJECT_MEM_DROP_DATE
+                     , B.COMPLETE_TASK
+                     , B.PROGRESSING_TASK
+                     , B.REGIST_OUTPUT
+                     , B.REGIST_ISSUE
+                  FROM (SELECT C.PROJECT_NO
+                             , E.MEMBER_NO
+                             , E.MEMBER_NAME
+                             , F.ROLE_NAME
+                             , G.PROJECT_MEM_STARTED_DATE
+                             , G.PROJECT_MEM_DROP_DATE
+                             , (SELECT COUNT(*)
+                                  FROM TBL_TASK H
+                                 WHERE H.PROJECT_NO = C.PROJECT_NO
+                                   AND H.MEMBER_NO = C.MEMBER_NO
+                                   AND H.TASK_PROGRESS_STATUS = '완료'
+                               ) AS COMPLETE_TASK
+                             , (SELECT COUNT(*)
+                                  FROM TBL_TASK I
+                                 WHERE I.PROJECT_NO = C.PROJECT_NO
+                                   AND I.MEMBER_NO = C.MEMBER_NO
+                                   AND I.TASK_PROGRESS_STATUS = '진행중'
+                               ) AS PROGRESSING_TASK
+                             , (SELECT COUNT(*)
+                                  FROM TBL_OUTPUT J
+                                 WHERE J.PROJECT_NO = C.PROJECT_NO
+                                   AND J.MEMBER_NO = C.MEMBER_NO
+                               ) AS REGIST_OUTPUT
+                             , (SELECT COUNT(*)
+                                  FROM TBL_ISSUE K
+                                 WHERE K.PROJECT_NO = C.PROJECT_NO
+                                   AND K.ISSUE_REGISTER = C.MEMBER_NO
+                               ) AS REGIST_ISSUE
+                          FROM (SELECT D.PROJECT_NO
+                                     , D.MEMBER_NO
+                                     , D.ROLE_NO
+                                  FROM TBL_ROLE_ASSIGNMENT_HISTORY D
+                                 WHERE D.ROLE_NO != 8
+                                   AND D.PROJECT_NO = #{ projectNo }
+                               ) C
+                          JOIN TBL_MEMBER E ON (C.MEMBER_NO = E.MEMBER_NO)
+                          JOIN TBL_ROLE_CATEGORY F ON (C.ROLE_NO = F.ROLE_NO)
+                          JOIN TBL_PROJECT_MEM_HISTORY G ON (C.MEMBER_NO = G.MEMBER_NO)
+                        <where>
+                          	<if test="searchCondition == 'memberName'">
+                               E.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
+                          	</if>
+                          	<if test="searchCondition == 'roleName'">
+                               F.ROLE_NAME LIKE '%' || #{ searchValue } || '%'
+                          	</if>
+                           AND G.PROJECT_NO = #{ projectNo }    
+         				</where>
+                         ORDER BY G.PROJECT_MEM_DROP_DATE
+                             , E.MEMBER_NAME
+                       ) B
+				<![CDATA[
+                 WHERE ROWNUM <= #{ endRow }
+				]]>
+               ) A
+ WHERE RNUM >= #{ startRow }
 	</select>
     
     <select id="findNewMember" resultMap="memberResult">
@@ -166,8 +224,7 @@
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
          WHERE A.MEMBER_NO = #{ memberNo }
            AND A.PROJECT_NO = #{ projectNo }
-	</delete>	
-
+	</delete>
 </mapper>
 
 

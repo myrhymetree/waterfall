@@ -1,13 +1,16 @@
 package com.greedy.waterfall.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.mapper.MeetingMapper;
+import com.greedy.waterfall.common.paging.Paging;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
 /**
@@ -24,9 +27,12 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 @Service
 public class MeetingServiceImpl implements MeetingService {
 	private final MeetingMapper mapper;
+	private final Paging paging;
 
-	public MeetingServiceImpl(MeetingMapper mapper) {
+	@Autowired
+	public MeetingServiceImpl(MeetingMapper mapper, Paging paging) {
 		this.mapper = mapper;
+		this.paging = paging;
 	}
 	
 	/**
@@ -37,9 +43,19 @@ public class MeetingServiceImpl implements MeetingService {
 	 * @author 홍성원
 	 */
 	@Override
-	public List<MeetingDTO> findMeetingBoardList(SelectCriteria selectCriteria) { 
+	public Map<String, Object> findMeetingBoardList(Map<String, String> searchMap) { 
+		Map<String, Object> findResult = new HashMap<String, Object>();
+		
+		searchMap.put("totalCount", Integer.toString(mapper.findMeetingTotalCount(searchMap)));
+		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap);
+		
+		List<MeetingDTO> meetingList = mapper.findMeetingList(selectCriteria);
+		
+		findResult.put("selecdtCriteria", selectCriteria);
+		findResult.put("meetingList", meetingList);
+		
 		/* 검색조건과 현재 페이지에 대한 정보를 담은 변수를 전달한 후 돌려받은 값을 반환한다. */
-		return mapper.findMeetingList(selectCriteria);
+		return findResult;
 	}
 
 	/**
@@ -88,22 +104,22 @@ public class MeetingServiceImpl implements MeetingService {
 		if(mapper.registMeetingBoard(parameter) > 0) {
 			result = true;
 			
-			/* 첨부파일을 담는 files가 null이 아니라면 첨부파일을 등록한다.*/
-			if(files != null) {
+		}
+		/* 첨부파일을 담는 files가 null이 아니라면 첨부파일을 등록한다.*/
+		if(result && files != null) {
+			
+			/* 첨부파일 등록 성공 갯수를 저장할 count 변수를 선언 후 0으로 초기화한다. */
+			int count = 0;
+			for(int i = 0; i < files.size(); i++) {
 				
-				/* 첨부파일 등록 성공 갯수를 저장할 count 변수를 선언 후 0으로 초기화한다. */
-				int count = 0;
-				for(int i = 0; i < files.size(); i++) {
-					
-					/* 각각의 첨부파일에 상위 게시글번호를 전달한 후 첨부파일을 등록한다. */
-					files.get(i).setRefBoardNo(parameter.getNo());
-					count += mapper.registMeetingFile(files.get(i));
-				}
-				/* 첨부파일의 갯수와, 첨부파일 등록 성공 갯수가 다를 시 등록에 실패한다. */
-				if(count != files.size()) {
-					result = false;
-				} 
+				/* 각각의 첨부파일에 상위 게시글번호를 전달한 후 첨부파일을 등록한다. */
+				files.get(i).setRefBoardNo(parameter.getNo());
+				count += mapper.registMeetingFile(files.get(i));
 			}
+			/* 첨부파일의 갯수와, 첨부파일 등록 성공 갯수가 다를 시 등록에 실패한다. */
+			if(count != files.size()) {
+				result = false;
+			} 
 		}
 		
 		return result;

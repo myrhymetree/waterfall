@@ -83,38 +83,21 @@ public class MeetingController {
 	@GetMapping("/list")
 	public ModelAndView findMeetingBoardList(ModelAndView mv, HttpServletRequest request) {
 		/* 페이징 처리를 위한 변수 선언 및 초기화 */
-		int pageNo = 1;														//입력받은 현재페이지가 없으면 1페이지를 보여준다.
-		int limit = 10;														//한 페이지에 출력될 게시물의 수로 초기화한다.
-		int buttonAmount = 5;												//한 페이지에 출력될 버튼의 갯수로 초기화한다.
-		int totalCount = 0;													//검색조건과 검색값에 해당하는 게시물의 갯수를 저장할 변수를 선언한다.
 		Map<String, String> searchMap = new HashMap<>();					//검색조건과 검색값을 담을 HashMap 변수를 선언한다.
-		SelectCriteria selectCriteria = null;								//검색 조건과, 페이징처리를 할 클래스변수를 선언한다.
-		int projectNo = ((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo();
-		/* request에서 전달받은 현재 페이지를 currentPage에 저장한다. */
+		String projectNo = Integer.toString(((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		String currentPage = request.getParameter("currentPage");
-		
-		/* 전달받은 검색조건과 검색값을  저장한 검색조건에 해당하는 게시물의 갯수를 저장한다.*/
 		String searchCondition = request.getParameter("searchCondition");	
 		String searchValue = request.getParameter("searchValue");			
 		
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
-		totalCount = meetingService.findMeetingTotalCount(searchMap);	
+		searchMap.put("projectNo", projectNo);
+		searchMap.put("currenPage", currentPage);
 
-		/* 현재페이지를 전달받으면 전달받은 값을 대입한다. */
-		if(currentPage != null && !"".equals(currentPage)) {
-			pageNo = Integer.parseInt(currentPage);
-		}
-
-		/* 검색여부에 따른 페이징처리를 한다.*/
-		if(searchCondition != null && !"".equals(searchValue)) {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
-		} else {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
-		}
-		selectCriteria.setProjectNo(projectNo);
 		/* 검색조건을 전달해, 게시물 목록을 반환받는다. */
-		List<MeetingDTO> meetingList = meetingService.findMeetingBoardList(selectCriteria);
+		Map<String, Object> findResult = meetingService.findMeetingBoardList(searchMap);
+		List<MeetingDTO> meetingList = (List<MeetingDTO>) findResult.get("meetingList");
+		SelectCriteria selectCriteria = (SelectCriteria) findResult.get("selectCriteria");
 		
 		/* 반환받은 게시물 목록과, 검색조건, 전달할 주소값을 저장한 뒤  반환 주소로 전달한다.*/
 		mv.addObject("meetingList", meetingList);

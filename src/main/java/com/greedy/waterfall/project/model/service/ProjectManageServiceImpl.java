@@ -9,6 +9,8 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.common.paging.Paging;
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.ProjectManageMemberDTO;
@@ -19,24 +21,31 @@ import com.greedy.waterfall.project.model.mapper.ProjectManageMapper;
 public class ProjectManageServiceImpl implements ProjectManageService{
 
 	private final ProjectManageMapper mapper;
-	
+	private final Paging paging;
+
 	@Autowired
-	public ProjectManageServiceImpl(ProjectManageMapper mapper) {
+	public ProjectManageServiceImpl(ProjectManageMapper mapper, Paging paging) {
 		this.mapper = mapper;
+		this.paging = paging;
+
 	}
 	
 	@Override
-	public Map<String, Object> findProjectMember(int projectNo) {
+	public Map<String, Object> findProjectMember(Map<String, String> searchMap) {
 
-		List<ProjectManageMemberDTO> memberList = mapper.findProjectMember(projectNo); 
+		Map<String, Object> manageProjectMemberInfo = new HashedMap();
+		
+		searchMap.put("totalCount", Integer.toString(mapper.findProjectMemberCount(searchMap)));
+		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap);
+		
+		List<ProjectManageMemberDTO> memberList = mapper.findProjectMember(selectCriteria); 
 		List<ProjectRoleDTO> allRole = mapper.findAllRole();
 		List<DeptDTO> allDept = mapper.findAllDept();
-		Map<String, Object> manageProjectMemberInfo = new HashedMap();
 		
 		manageProjectMemberInfo.put("memberList" , memberList);
 		manageProjectMemberInfo.put("allRole", allRole);
 		manageProjectMemberInfo.put("allDept", allDept);
-		
+		manageProjectMemberInfo.put("selectCriteria", selectCriteria);
 		return manageProjectMemberInfo;
 	}
 

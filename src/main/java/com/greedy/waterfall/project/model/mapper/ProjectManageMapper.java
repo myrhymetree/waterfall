@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.ProjectManageMemberDTO;
@@ -13,8 +14,10 @@ import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
 @Repository
 public interface ProjectManageMapper {
 
-	List<ProjectManageMemberDTO> findProjectMember(int projectNo);
+	List<ProjectManageMemberDTO> findProjectMember(SelectCriteria selectCriteria);
 
+	int findProjectMemberCount(Map<String, String> searchMap);
+	
 	List<ProjectRoleDTO> findAllRole();
 	
 	List<DeptDTO> findAllDept();
@@ -28,5 +31,6 @@ public interface ProjectManageMapper {
 	List<ProjectRoleDTO> findMemberRole(Map<String, Integer> memberInfo);
 
 	int removeOldRole(ProjectManageMemberDTO modifyInfo);
+
 	
 }

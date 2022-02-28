@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
@@ -34,34 +36,51 @@ public class ProjectManageController {
 
 	private final ProjectManageService pms;
 	
+	@Autowired
 	public ProjectManageController(ProjectManageService pms) {
 		this.pms = pms;
 	}
 	
+	/**
+	 * findProjectMember : 프로젝트 배정인원을 조회한다.
+	 * @param 배정인원의 정보 리스트를 저장할 변수를 전달받는다.
+	 * @return 배정인원의 정보와 응답할 주소를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@GetMapping("/member/list")
-	public ModelAndView findProjectMember(ModelAndView mv, HttpSession session) {
+	public ModelAndView findProjectMember(ModelAndView mv, HttpServletRequest request) {
+		Map<String, String> searchMap = new HashMap<>();					//검색조건과 검색값을 담을 HashMap 변수를 선언한다.
+
+		String projectNo = Integer.toString(((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		String currentPage = request.getParameter("currentPage");
+		String searchCondition = request.getParameter("searchCondition");	
+		String searchValue = request.getParameter("searchValue");			
+
+		searchMap.put("searchCondition", searchCondition);
+		searchMap.put("searchValue", searchValue);
+		searchMap.put("projectNo", projectNo);
+		searchMap.put("currenPage", currentPage);
 		
-		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
-		Map<String, Object> manageProjectMemberInfo = pms.findProjectMember(projectNo);
+		Map<String, Object> manageProjectMemberInfo = pms.findProjectMember(searchMap);
+		
 		List<ProjectManageMemberDTO> projectMemberList = (List<ProjectManageMemberDTO>) manageProjectMemberInfo.get("memberList");
 		List<ProjectRoleDTO> allRole = (List<ProjectRoleDTO>) manageProjectMemberInfo.get("allRole");
 		List<DeptDTO> allDept = (List<DeptDTO>) manageProjectMemberInfo.get("allDept");
+		SelectCriteria selectCriteria = (SelectCriteria) manageProjectMemberInfo.get("selectCriteria");
+		
 		mv.addObject("projectMemberList", projectMemberList);
+		mv.addObject("intent", "/manage/member/list");
+		mv.addObject("selectCriteria", selectCriteria);
 		mv.addObject("allRole", allRole);
 		mv.addObject("allDept", allDept);
 		mv.setViewName("/manage/memberList");
 		
-		for(int i = 0; i < allRole.size(); i++) {
-			System.out.println(allRole.get(i));
-			
-		}
-				
 		return mv;
 	}
 	
     @PostMapping("/member/regist")
-	public ModelAndView registProjectMember(ModelAndView mv,@RequestParam("projectRole") List<String> projectRole
-										, @RequestParam Map<String, String> registInfo) {
+	public ModelAndView registProjectMember(ModelAndView mv,@RequestParam("projectRole") List<String> projectRole, @RequestParam Map<String, String> registInfo) {
 
     	sendToResultView(mv, pms.registProjectMember(parsingMemberInfoForProjectRegist(projectRole, registInfo)));
 

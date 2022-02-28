@@ -20,7 +20,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
  */
 public interface MeetingService {
 
-	List<MeetingDTO> findMeetingBoardList(SelectCriteria selectCriteria);
+	Map<String, Object> findMeetingBoardList(Map<String, String> searchMap);
 
 	MeetingDTO findMeetingBoardDetail(int meetingNo);
 
