@@ -42,7 +42,7 @@
 	</c:choose>
 	
 <jsp:include page="/WEB-INF/views/issue/modal.jsp"/>
-
+<jsp:include page="/WEB-INF/views/issue/detailModal.jsp"/>
      <main>
          <div class="container-fluid px-4">
              <br>

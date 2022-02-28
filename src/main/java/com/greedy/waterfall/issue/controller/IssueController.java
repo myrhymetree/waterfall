@@ -212,25 +212,26 @@ public class IssueController {
 		return mv;
 	}
 	
-	@GetMapping("/regist/task/{taskNo}")
-	public ModelAndView selectTask(ModelAndView mv, @PathVariable("taskNo") int taskNo, HttpServletResponse response) throws IOException {
-
-		List<IssueDTO> taskList = issueService.selectTask(taskNo);
-		
-		System.out.println(taskList);
-		
-		System.out.println("taskNo : " + taskNo);
-		
-		for(int i = 0; i < taskList.size(); i++) {
-			System.out.println("taskList[i] : " + taskList.get(i));
-		}
-		
-		response.setContentType("application/json; charset=UTF-8");
-		ObjectMapper mapper = new ObjectMapper();
-		
-		mv.addObject("taskList", mapper.writeValueAsString(taskList));
-		mv.setViewName("jsonView");
-		return mv;
-	}
+// 뭐할려고 했던건지를 모르겠다...	
+//	@GetMapping("/regist/task/{taskNo}")
+//	public ModelAndView selectTask(ModelAndView mv, @PathVariable("taskNo") int taskNo, HttpServletResponse response) throws IOException {
+//
+//		List<IssueDTO> taskList = issueService.selectTask(taskNo);
+//		
+//		System.out.println(taskList);
+//		
+//		System.out.println("taskNo : " + taskNo);
+//		
+//		for(int i = 0; i < taskList.size(); i++) {
+//			System.out.println("taskList[i] : " + taskList.get(i));
+//		}
+//		
+//		response.setContentType("application/json; charset=UTF-8");
+//		ObjectMapper mapper = new ObjectMapper();
+//		
+//		mv.addObject("taskList", mapper.writeValueAsString(taskList));
+//		mv.setViewName("jsonView");
+//		return mv;
+//	}
 	
 }
