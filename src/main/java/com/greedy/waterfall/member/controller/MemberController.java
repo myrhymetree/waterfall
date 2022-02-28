@@ -232,14 +232,16 @@ public class MemberController {
 		return mv;                                                                                      					
 	}
 	
-	@GetMapping("/modify")
+	@GetMapping(value="modify")
 	@ResponseBody
 	public ModelAndView findMemberModify(HttpServletRequest request, HttpServletResponse response,
 			ModelAndView mv) {
 		
 		String id = request.getParameter("id");
-		AdminMemberDTO modify = memberService.findMemberModify(id);
+		id = id.replace("\"","");
 		
+		AdminMemberDTO modify = memberService.findMemberModify(id);
+			
 		response.setContentType("application/json; charset=UTF-8");
 		
 		Gson gson = new GsonBuilder()

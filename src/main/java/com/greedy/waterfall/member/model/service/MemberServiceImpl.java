@@ -96,9 +96,20 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public AdminMemberDTO findMemberModify(String id) {
-
-		AdminMemberDTO findModify = mapper.adminMemberModify(id); 
 		
+		System.out.println("확인용33" + id);
+		System.out.println("확인용33" + id);
+		System.out.println("확인용33" + id);
+		
+		AdminMemberDTO findModify = new AdminMemberDTO();
+		
+		findModify = mapper.adminMemberModify(id); 
+		System.out.println("확인용 find " + findModify);
+		System.out.println("확인용 find " + findModify);
+		System.out.println("확인용 find " + findModify);
+		System.out.println("확인용 find " + findModify);
+		System.out.println("확인용 find " + findModify);
+		System.out.println("확인용 find " + findModify);
 		
 		
 		return findModify;

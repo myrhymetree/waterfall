@@ -28,7 +28,7 @@
 		<association property="dept" resultMap="deptResultMap"/>
 		<association property="team" resultMap="teamResultMap"/>
 		<association property="job" resultMap="jobResultMap"/>		
-	</resultMap> 
+	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.member.model.dto.DeptDTO" id="deptResultMap">
 		<id property="deptCode" column="DEPT_CODE"/>
@@ -256,8 +256,19 @@
 		)  
 	</insert>
 	
-	<select id="adminMemberModify" resultMap="AdminMemberResultMap">
+	<select id="adminMemberModify" resultMap="AdminMemberResultMap" resultType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
 		SELECT
-		       
+		       A.MEMBER_NAME
+		     , A.MEMBER_ID
+		     , A.MEMBER_NO
+		     , C.DEPT_NAME
+		     , D.TEAM_NAME
+		     , E.JOB_NAME
+		  FROM TBL_MEMBER A
+		  JOIN TBL_MEMBER_COM_INFO B ON (B.MEMBER_NO = A.MEMBER_NO)     
+		  JOIN TBL_DEPT C ON (C.DEPT_CODE = B.DEPT_CODE)
+		  JOIN TBL_TEAM D ON (D.TEAM_CODE = B.TEAM_CODE)
+		  JOIN TBL_JOB_TITLE E ON (E.JOB_CODE = B.JOB_CODE)
+		 WHERE A.MEMBER_ID = #{ id }      
 	</select>
 </mapper>

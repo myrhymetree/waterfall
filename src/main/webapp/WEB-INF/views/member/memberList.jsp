@@ -65,35 +65,26 @@
                 <form>
                     <div class="modal-body" style="margin-top: 5%;">
                         <div>
-                            <input type="text" class="form-control" placeholder="아이디" id="clieck-point2" style="width: 70%; margin-left: 15%;">
+                            <input type="text" class="form-control" placeholder="아이디" id="id" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3" style="margin-top: 3%;"> 
                             <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
                             <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->          
-                             <input type="text" class="form-control" placeholder="이름" id="clieck-point" style="width: 70%; margin-left: 15%;">
+                             <input type="text" class="form-control" placeholder="이름" id="name" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3">                                   
                             <select class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option selected>부서</option>
-                                <option value="1">22001</option>
-                                <option value="2">22002</option>
-                                <option value="3">22003</option>
+                                <option id="dept"></option>
                             </select> 
                         </div>
                         <div class="mb-3">                                  
                             <select class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option selected>팀</option>
-                                <option value="1">22001</option>
-                                <option value="2">22002</option>
-                                <option value="3">22003</option>
+                                <option id="team"></option>
                             </select> 
                         </div>
                         <div class="mb-3">                              
-                            <select class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option selected>직급</option>
-                                <option value="1">22001</option>
-                                <option value="2">22002</option>
-                                <option value="3">22003</option>
+                            <select id="job" class="form-select" style="width: 70%; margin-left: 15%;">
+                                <option id="job"></option>
                             </select> 
                         </div>
                         <!-- 아래 텍스트박스는 글쓴이가 쓰는 만큼 늘어날 수 있다. 초기 크기 설정은 위에 일반 텍스트 박스 참조 -->
@@ -164,11 +155,11 @@
                                         		   계정생성 
                                         </button>  
                                     </div>
-                                    <div style="float: left;">
+                                    <!-- <div style="float: left;">
                                         <button class="ui secondary button" type="button" style="padding-left: 20px;" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                         		    계정수정
                                         </button>  
-                                    </div>
+                                    </div> -->
                                 </div>   
                                 <hr align="left" style="border: solid 2px rgb(0, 0, 0); width: 100%;">
                                 
@@ -253,38 +244,41 @@
 		
 		<script>
 			
-		document.quertSelectorAll("#listArea rd") {
-			const $tds = document.querySelectorAll("#listArea td");
-			for(let i = 0; i < $tds.length; i++) {
-				$tds[i].onclick = function() {
-					const id = this.parentNode.children[0].innerText;
+		if(document.querySelectorAll("#listArea td")) {
+				const $tds = document.querySelectorAll("#listArea td");
+				for(let i = 0; i < $tds.length; i++) {
+					$tds[i].onclick = function() {
+						const id = this.parentNode.children[0].innerText;
 					
-					$.ajax({
-						url: "/waterfall/member/modify",
-						type: "get",
-						data : { id : id },
-						success : function(data, textStatus, xhr) {
-							const modify = JSON.parse(data.modify);
+						$.ajax({
+							url: "modify",
+							type: "get",
+							data : { id : id },
+							success : function(data, textStatus, xhr) {
+								const modify = JSON.parse(data.modify);
 							
-							for(let index in modify) {
+								for(let index in modify) {
 							
-								const memberArray = Object.entries(modify);
+									const memberArray = Object.entries(modify);
 								
-								console.log(modify[0][1]);
-								$("#id").val(modifty);
-								$("#name").val(modify);
-								$("#exampleModal").modal("show");
+									console.log(memberArray);
+									$("#id").val(memberArray[1][1]);
+									$("#name").val(memberArray[2][1]);
+									$("#dept").val(memberArray[6][1]);
+									$("#team").val(memberArray[7][1]);
+									$("#job").val(memberArray[8][1]);
+									$("#exampleModal").modal("show");
 								
+								}
+							
+							}, error : function(data){
+								console.log("문제있네");
 							}
-							
-						}, error : function(data){
-							console.log("문제있네");
-						}
-					});
+						});
+					}
 				}
 			}
-		}
-		
+			
 		</script>           
                      
 </body>
