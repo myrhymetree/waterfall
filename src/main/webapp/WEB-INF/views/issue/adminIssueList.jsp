@@ -107,16 +107,16 @@
 
 <jsp:include page="../common/footer.jsp"/>
 <script>
-$("#registModal").click(function(){
+ $("#registModal").click(function(){
 
-		var projectNo = ${ requestScope.projectNo};
+		var projectNo = ${ requestScope.projectNo };
 		
 		console.log(projectNo);
 		
 		$("#projectNo").val(projectNo);
 
 		console.log("프로젝트 번호는 : " + projectNo);	
-});
+}); 
 
 </script>
 </body>

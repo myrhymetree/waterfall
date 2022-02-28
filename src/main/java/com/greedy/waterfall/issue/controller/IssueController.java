@@ -114,22 +114,14 @@ public class IssueController {
 	@PostMapping("/admin/regist/{taskNo}")
 	public ModelAndView adminRegistIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request, ModelAndView mv,
 			@PathVariable("taskNo") int taskNo, RedirectAttributes rttr,  @RequestParam List<MultipartFile> multiFiles) {
-//		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		System.out.println("업무 넘버는 : " + taskNo);
 		issue.setTaskNo(taskNo);
 		
-//		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
-//		issue.setProjectNo(projectNo);
-		
-		int projectNo =  (int) request.getAttribute("projectNo");
-		issue.setProjectNo(projectNo);
+		System.out.println("프로젝트 넘버는 :" + issue.getProjectNo());
 		
 		int writerMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		System.out.println("작성자 넘버는 : " +  writerMemberNo);
 		issue.setRegisterNo(writerMemberNo);
-		
-//		rttr.addFlashAttribute("taskNo", taskNo);		//없어도 문제없음
-		/* redirect:/issue/list로 보낼 때 taskNo를 못 가져오는 문제가 발생해서 이렇게 작성함  */
 		
 		System.out.println("MultiFiles : " + multiFiles);
 		
@@ -161,7 +153,6 @@ public class IssueController {
 				issueFileDTO.setSavedPath(filePath);
 				issueFileDTO.setOriginalName(originFileName);
 				issueFileDTO.setRandomName(savedName);
-//				issue.setFile(issueFileDTO);
 				fileList.add(issueFileDTO);
 				issue.setFile(fileList);
 				
@@ -341,7 +332,7 @@ public class IssueController {
 			System.out.println(message);
 		}
 
-		mv.setViewName("redirect:/issue/list/"+taskNo);
+//		mv.setViewName("redirect:/issue/list/"+taskNo);
 		return mv;
 	}
 	
