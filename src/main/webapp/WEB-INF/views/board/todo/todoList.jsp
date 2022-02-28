@@ -350,7 +350,7 @@ table, th, td {
 	<script>
 	
 		/* 상세 조회 모달 */
-		if(document.querySelectorAll("#listArea")) {
+		if(document.querySelectorAll("#listArea td")) {
 		      const $tds = document.querySelectorAll("#listArea td");
 		      console.log($tds);
 		      for(let i = 0; i < $tds.length; i++) {
@@ -367,7 +367,7 @@ table, th, td {
 		               data : { no : no },
 //		               success : function(data, textStatus, xhr) {
 		               success: function(data, status, xhr) {
-		             	  console.log(data)
+		             	  console.log(data);
 //		                  const todoDetail = JSON.parse(data.todoDetail);
 		             	  todoDetail = JSON.parse(data.todoDetail);
 		                  
@@ -415,6 +415,7 @@ table, th, td {
 		/* 삭제 버튼 클릭 게시글 삭제 */
 		$("#delete").click(function() {
 			const no = $("#read-no").val();
+			console.log(no);
 			location.href="${ pageContext.servletContext.contextPath }/todo/delete?no=" + no;
 		});
 	   

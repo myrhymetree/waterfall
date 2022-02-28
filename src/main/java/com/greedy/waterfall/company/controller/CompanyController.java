@@ -23,7 +23,9 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.TodoDTO;
+import com.greedy.waterfall.common.exception.company.JobModifyException;
 import com.greedy.waterfall.common.exception.company.JobRegistException;
+import com.greedy.waterfall.common.exception.company.JobRemoveException;
 
 @Controller
 @RequestMapping("/company")
@@ -81,25 +83,53 @@ public class CompanyController {
 		return "redirect:/company/job/list";
 	}
 	
-//	@GetMapping(value = "jobDetail")
-//	@ResponseBody
-//	public ModelAndView detailJob(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
-//		
-//		String code = request.getParameter("code");
-//		
-//		JobDTO jobDetail = companyService.detailJob(code);
-//		
-//		response.setContentType("application/json; charset=UTF-8");
-//		
-//		Gson gson = new GsonBuilder()
-//				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
-//				.setPrettyPrinting()
-//		        .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
-//		        .serializeNulls()
-//		        .disableHtmlEscaping()
-//		        .create();
-//		
-//		return mv;
-//	}
+	@GetMapping(value = "jobDetail")
+	@ResponseBody
+	public ModelAndView detailJob(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
+		
+		String code = request.getParameter("code");
+		
+		JobDTO jobDetail = companyService.detailJob(code);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+		        .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+		        .serializeNulls()
+		        .disableHtmlEscaping()
+		        .create();
+		
+		mv.addObject("jobDetail", gson.toJson(jobDetail));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	/* 직급 수정 */
+	@PostMapping("/job/update")
+	public String modifyJob(@ModelAttribute JobDTO job,
+			HttpServletRequest request, RedirectAttributes rttr) throws JobModifyException {
+		
+		companyService.modifyJob(job);
+		
+		rttr.addFlashAttribute("message", "직급 수정에 성공하셨습니다.");
+		
+		return "redirect:/company/job/list";
+	}
+	
+	/* 직급 삭제 */
+	@GetMapping("/job/delete")
+	public String removeJob(HttpServletRequest request, RedirectAttributes rttr) throws JobRemoveException {
+		
+		String code = request.getParameter("code");
+		
+		companyService.removeJob(code);
+		
+		rttr.addFlashAttribute("message", "직급 삭제에 성공하셨습니다!");
+		
+		return "redirect:/company/job/list";
+	}
 	 
 }

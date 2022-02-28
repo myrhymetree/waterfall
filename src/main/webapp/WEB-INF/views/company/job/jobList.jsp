@@ -206,15 +206,15 @@ td{
 								<label class="me-2" for="name-read">직급명</label>
 								<input type="text" id="name-read" name="name">
 							</div>
-							<div class="my-modal-input mb-4">
+							<!-- 직급코드 수정 안 됨 -->
+							<div class="my-modal-input mb-4" style="visibility: hidden">
 								<label class="me-2" for="code-read">직급코드</label>
-								<input type="text" id="code-read" name="code">
+								<input type="hidden" id="code-read" name="code">
 							</div>
 						</div>
 						<div class="my-modal-footer-read">
 							<button type="submit" class="btn btn-secondary">수정</button>
-							<button type="button" class="btn btn-secondary"
-								data-bs-dismiss="modal">취소</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 						</div>
 					</form>
 				</div>
@@ -246,14 +246,16 @@ td{
 						<tbody>
 							<c:forEach var="job" items="${ requestScope.jobList }">
 								<tr id="listArea">
-									<td> <c:out value="${ job.rank }" />
+									<td> <c:out value="${ job.rank }" /></td>
+									<td> <c:out value="${ job.name }" /></td>
+									<td> <c:out value="${ job.code }" /></td>
+									<td>
+										<button class="float button" id="modifyButton" data-bs-toggle="modal" data-bs-target="#readModal">수정</button>
+										<!-- <button class="float button" id="deleteButton">삭제</button> -->
+										<form action="${ pageContext.servletContext.contextPath }/company/job/update" method="POST" style="display: inline-block">
+											<input type="button" class="float button delBtn" id="deleteButton" value="삭제">
+										</form>
 									</td>
-									<td> <c:out value="${ job.name }" />
-									</td>
-									<td> <c:out value="${ job.code }" />
-									</td>
-									<td><button class="float button" id="modifyButton" data-bs-toggle="modal" data-bs-target="#readModal">수정</button>
-										<button class="float button" id="deleteButton">삭제</button></td>
 								</tr>
 							</c:forEach>
 							<%-- <tr>
@@ -277,28 +279,40 @@ td{
 	
 	<script>
 	/* 직급 수정 */
-	if(document.querySelectorAll("#listArea")) {
-		const $tds = document.querySelectorAll("#listArea td");
-		$("#modifyButton").onclick = function() {
-			const code = $tds[2].innerText;
-			
-			$.ajax({
-				url: "${ pageContext.servletContext.contextPath }/company/jobDetail?code=" + code,
-				type: "get",
-				data: { code : code },
-				success: function(data, status, xhr) {
-					console.log(data)
-					jobDetail = JSON.parse(data.jobDetail);
-					
-					$("#rank-read").val(jobDetail.rank);
-					$("#name-read").val(jobDetail.name);
-					$("#code-read").val(jobDetail.code);
-					$("#readModal").modal("show");
-				}
+	if(document.querySelectorAll("#listArea td button")) {
+		const $btns = document.querySelectorAll("#listArea td button");
+		console.log($btns);
+		for(let i = 0; i < $btns.length; i++) {
+			$btns[i].onclick = function() {
+				const code = this.parentNode.parentNode.children[2].innerText;
+				console.log(code);
 				
-			})
+				$.ajax({
+					url: "${ pageContext.servletContext.contextPath }/company/jobDetail?code=" + code,
+//					url: "jobDetail",
+					type: "get",
+					data: { code : code },
+					success: function(data, status, xhr) {
+						console.log(data);
+						jobDetail = JSON.parse(data.jobDetail);
+						
+						$("#rank-read").val(jobDetail.rank);
+						$("#name-read").val(jobDetail.name);
+						$("#code-read").val(jobDetail.code);
+						$("#readModal").modal("show");
+					}
+					
+				})
+			}
 		}
 	}
+	
+	/* 직급 삭제 */
+	$(".delBtn").click(function() {
+		const code = this.parentNode.parentNode.parentNode.children[2].innerText;
+		console.log(code);
+		location.href="${ pageContext.servletContext.contextPath }/company/job/delete?code=" + code;
+	});
 	</script>
 </body>
 </html>

@@ -36,10 +36,11 @@
 	<!-- 직급 조회 -->
 	<select id="findJob" resultMap="jobResultMap">
 		SELECT 
-		       JOB_CODE
+		       JOB_RANK
 		     , JOB_NAME
-		     , JOB_RANK
-		  FROM TBL_JOB_TITLE     
+		     , JOB_CODE
+		  FROM TBL_JOB_TITLE
+		 ORDER BY 1 ASC
 	</select>
 	
 	<!-- 직급 생성 -->
@@ -58,4 +59,30 @@
 		, #{ rank }
 		)
 	</insert>
+	
+	<!-- 직급 상세 -->
+	<select id="detailJob" resultMap="jobResultMap">
+		SELECT
+		       A.JOB_RANK
+		     , A.JOB_NAME
+		     , A.JOB_CODE
+		  FROM TBL_JOB_TITLE A
+		 WHERE A.JOB_CODE = #{ code }
+	</select>
+	
+	<!-- 직급 수정 -->
+	<update id="updateJob" parameterType="com.greedy.waterfall.company.model.dto.JobDTO">
+		UPDATE
+		       TBL_JOB_TITLE A
+		   SET A.JOB_RANK = #{ rank }
+		     , A.JOB_NAME = #{ name }
+		 WHERE A.JOB_CODE = #{ code }
+	</update>
+	
+	<!-- 직급 삭제 -->
+	<delete id="deleteJob" parameterType="String">
+		DELETE
+		  FROM TBL_JOB_TITLE A
+		 WHERE A.JOB_CODE = #{ code }
+	</delete>
 </mapper>
