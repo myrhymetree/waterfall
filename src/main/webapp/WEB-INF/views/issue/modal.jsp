@@ -164,7 +164,7 @@
 
 <!-- 등록 모달 encType="multipart/form-data"-->
 <div class="modal" id="registModal">
-    <form id="registForm" onsubmit="test()">
+    <form id="registForm" onsubmit="test()"  encType="multipart/form-data">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
 
@@ -224,7 +224,7 @@
 
             <div class="mt-4 row">
                 <div class="col-2 center" style="vertical-align: top;"><label>첨부파일</label></div>
-                <!-- <div class="col-10"><input type="file"  name="multiFiles" multiple></div> -->
+                <div class="col-10"><input type="file"  name="multiFiles" multiple></div>
             </div>
         </div>
 
