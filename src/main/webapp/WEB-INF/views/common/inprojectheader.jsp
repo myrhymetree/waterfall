@@ -64,6 +64,9 @@
 						<div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav">
 								<div class="menu-font2">
+									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/project/main/${ sessionScope.projectAutority.projectNo }">
+										프로젝트 메인								
+									</a>
 									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/project/list">
 										프로젝트 목록								
 									</a>

@@ -44,6 +44,7 @@ public interface ProjectService {
 	
 	boolean deleteProject(int projectNo);
 	
+	Map<String, Object> findProjectMainInfo(int projectNo);
 	
 	
 }

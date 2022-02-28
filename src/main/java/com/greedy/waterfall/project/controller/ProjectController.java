@@ -62,25 +62,10 @@ import com.greedy.waterfall.project.model.service.ProjectService;
 @SessionAttributes("projectAutority")
 public class ProjectController {
 	private final ProjectService projectService;
-	private final MeetingService meetingService;
-	private final TodoService todoService;
-	private final EduService eduService;
-	private final GuideService guideService;
-	private final NoticeService noticeService;
 	
 	@Autowired
-	public ProjectController(ProjectService projectService
-			, MeetingService meetingService
-			, TodoService todoService
-			, EduService eduService
-			, GuideService guideService
-			, NoticeService noticeService) {
+	public ProjectController(ProjectService projectService) {
 		this.projectService = projectService;
-		this.meetingService = meetingService;
-		this.todoService = todoService;
-		this.eduService = eduService;
-		this.guideService = guideService;
-		this.noticeService = noticeService;
 	}
 
 	@GetMapping("/regist")
@@ -276,27 +261,15 @@ public class ProjectController {
 		return mv;
 	}
 	
-	
 	@GetMapping("main/{projectNo}")
 	public ModelAndView sendProjectDetail(@PathVariable("projectNo") int projectNo, ModelAndView mv) {
-
-		List<MeetingDTO> ml= meetingService.findMainList(projectNo);
-		ProjectAuthorityDTO projectAutority = new ProjectAuthorityDTO()
-												.builder().pmNo(projectService.findPmNumber(projectNo))
-												.projectNo(projectNo).build();
-		System.out.println("projectAutority : " + projectAutority);
-		ProjectMainBoardDTO projectBoard = new ProjectMainBoardDTO().builder()
-											.meetingBoard(ml)
-											.build();
-		System.out.println("1");
-		for(int i = 0; i < ml.size(); i++) {
-			System.out.println(ml.get(i));
-			
-		}
-		System.out.println("2");
+		Map<String, Object> projectMainInfo = projectService.findProjectMainInfo(projectNo);
+		
+		ProjectMainBoardDTO projectBoard = (ProjectMainBoardDTO) projectMainInfo.get("projectBoard");
+		ProjectAuthorityDTO projectAutority = (ProjectAuthorityDTO) projectMainInfo.get("projectAutority");
+		
 		mv.addObject("projectBoard", projectBoard);
 		mv.addObject("projectAutority", projectAutority);
-		mv.addObject("projectNo", projectNo);
 		mv.setViewName("/project/projectMain");
 		
 		return mv;

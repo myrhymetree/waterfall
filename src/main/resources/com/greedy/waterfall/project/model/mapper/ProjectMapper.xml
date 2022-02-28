@@ -37,6 +37,10 @@
 		<id property="deptCode" column="DEPT_CODE"/>
 		<result property="deptName" column="DEPT_NAME"/>
 	</resultMap>
+	<resultMap type="com.greedy.waterfall.project.model.dto.BoardCategoryDTO" id="boardCategoryResult">
+		<id property="projectNo" column="PROJECT_NO"/>
+		<result property="categoryNo" column="CATEGORY_NO"/>
+	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.project.model.dto.TeamDTO" id="teamResult">
 		<id property="teamCode" column="TEAM_CODE"/>
@@ -53,6 +57,18 @@
 		<id property="no" column="MEMBER_NO"/>
 		<result property="name" column="MEMBER_NAME"/>
 	</resultMap>
+	<resultMap type="com.greedy.waterfall.board.model.dto.BoardDTO" id="boardResult">
+	 	<id property="no" column="BOARD_NO"/>
+	 	<result property="updatedDate" column="BOARD_UPDATED_DATE"/>
+	 	<result property="registedDate" column="BOARD_POSTING_DATE"/>
+	 	<result property="title" column="BOARD_TITLE"/>
+	 	<result property="content" column="BOARD_CONTENT"/>
+	 	<result property="status" column="BOARD_STATUS"/>
+	 	<result property="boardCategoryNo" column="BOARD_CATEGORY_NO"/>
+	 	<result property="boardCount" column="BOARD_COUNT"/>
+	 	<result property="projectNo" column="PROJECT_NO"/>
+	 	<result property="memberNo" column="MEMBER_NO"/>
+ 	</resultMap>
 	
 	<select id="findTeam" resultMap="teamResult">
         SELECT
@@ -274,8 +290,8 @@
         , 1
         )
 	</insert>
-	<select id="finePmNumber" resultType="_int">
-        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#finePmNumber() */
+	<select id="findPmNumber" resultType="_int">
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findPmNumber() */
                A.MEMBER_NO
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
          WHERE PROJECT_NO = #{ projectNo }
@@ -394,6 +410,40 @@
           FROM TBL_PROJECT A
          WHERE A.PROJECT_NO = #{ projectNo }
 	</delete>
+	
+	
+	<select id ="findMainBoardList" resultMap="boardResult" parameterType="_int">
+        SELECT 
+               RNUM
+             , A.BOARD_NO
+             , A.BOARD_UPDATED_DATE
+             , A.BOARD_POSTING_DATE
+             , A.BOARD_TITLE
+             , A.BOARD_CONTENT
+             , A.BOARD_STATUS
+             , A.BOARD_CATEGORY_NO
+             , A.PROJECT_NO
+             , A.MEMBER_NO
+          FROM (SELECT ROWNUM RNUM
+                     , B.BOARD_NO
+                     , B.BOARD_UPDATED_DATE
+                     , B.BOARD_POSTING_DATE
+                     , B.BOARD_TITLE
+                     , B.BOARD_CONTENT
+                     , B.BOARD_STATUS
+                     , B.BOARD_CATEGORY_NO
+                     , B.PROJECT_NO
+                     , B.MEMBER_NO
+                  FROM TBL_BOARD B
+                 WHERE B.PROJECT_NO = #{ projectNo }
+                           AND B.BOARD_CATEGORY_NO = #{ categoryNo }
+                   AND B.BOARD_STATUS = 'Y'
+                 ORDER BY B.BOARD_NO DESC
+               ) A         
+         		<![CDATA[ 
+         WHERE RNUM <= 5  
+		]]>
+	</select>
 </mapper>
 
 

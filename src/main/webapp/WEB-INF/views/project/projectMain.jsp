@@ -198,7 +198,7 @@ textarea {
             <%-- 프로젝트 가이드 시작 --%>
             <label style="margin-left: 11%">&emsp;&emsp;&emsp;프로젝트 가이드</label>
             <%-- + 버튼 --%>
-            <button class="float" id="addButton1">
+            <button class="float" id="addButton1" onclick="location.href='${ pageContext.servletContext.contextPath }/guide/list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
             </button>
             <%-- 프로젝트 가이드 끝 --%>
@@ -216,27 +216,23 @@ textarea {
                </div>
             	   
                <div class="main-box3">
-               sdfds<br>
-               sdfds<br>
-               sdfds<br>
-               sdfds<br>
-               sdfds<br>
-               sdfds<br>
+	               <c:forEach var="meeting" items="${ projectBoard.guideBoard }">
+	               	<br> 	${ meeting.title }
+	               </c:forEach>
                </div>
                
             </div>
             
             <%-- To Do 시작 --%>
             <label class="project-name2">To Do</label>
-            <button class="float button2" style="margin-right:300px;">
+            <button class="float button2" style="margin-right:300px;" onclick="location.href='${ pageContext.servletContext.contextPath }/todo/list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
             </button>
             <%-- To Do 끝 --%>
             
             <%-- 공지사항 시작 --%>
             <label class="project-name2 ">공지사항</label>
-            <button class="btn  float "
-               data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right:235px;" id="noticebutton">
+            <button class="btn  float " style="margin-right:235px;" id="noticebutton" onclick="location.href='${ pageContext.servletContext.contextPath }/notice/list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
             </button>
             <%-- 공지사항 끝 --%>
@@ -250,20 +246,36 @@ textarea {
             
             <%-- 교육 시작 --%>
             <label class="project-name2">교육</label>
-            <button class="float button2">
+            <button class="float button2" onclick="location.href='${ pageContext.servletContext.contextPath }/edu/list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
             </button>
             <%-- 교육 끝 --%>
             
             <div id="chartContent2">
                <%--To Do 박스--%>
-               <div class="main-box2"></div>
+               <div class="main-box2">
+	               <c:forEach var="meeting" items="${ projectBoard.todoBoard }">
+	               	<br> 	${ meeting.title }
+	               </c:forEach>
+               </div>
                <%--공지사항 박스 --%>
-               <div class="main-box2"></div>
+               <div class="main-box2">
+	               <c:forEach var="meeting" items="${ projectBoard.noticeBoard }">
+	               		<br> ${ meeting.title }
+	               </c:forEach>
+               </div>
                <%--회의록 박스 --%>
-               <div class="main-box2"></div>
+               <div class="main-box2">
+	               <c:forEach var="meeting" items="${ projectBoard.meetingBoard }">
+	               		<br> ${ meeting.title }
+	               </c:forEach>
+               </div>
                <%-- 교육 박스 --%>
-               <div class="main-box2"></div>
+               <div class="main-box2">
+	               <c:forEach var="meeting" items="${ projectBoard.eduBoard }">
+	               		<br> <c:out value="${ meeting.title }"/>
+	               </c:forEach>
+               </div>
             </div>
          </div>
       </main>

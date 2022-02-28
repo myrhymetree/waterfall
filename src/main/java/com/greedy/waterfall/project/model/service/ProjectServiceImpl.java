@@ -1,6 +1,7 @@
 package com.greedy.waterfall.project.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.MyProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectMainBoardDTO;
 import com.greedy.waterfall.project.model.dto.ProjectStatusDTO;
 import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
 import com.greedy.waterfall.project.model.dto.TeamDTO;
@@ -119,7 +123,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public int findPmNumber(int projectNo) {
 
-		return mapper.finePmNumber(projectNo);
+		return mapper.findPmNumber(projectNo);
 	}
 
 	/**
@@ -201,6 +205,33 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		return mapper.deleteProject(projectNo);
 	}
+	
+	@Override
+	public Map<String, Object> findProjectMainInfo(int projectNo) {
+		Map<String, Object> projectMainInfo = new HashMap<String, Object>();
+
+		ProjectAuthorityDTO projectAutority = new ProjectAuthorityDTO().builder()
+				.pmNo(mapper.findPmNumber(projectNo))
+				.projectNo(projectNo).build();
+		BoardCategoryDTO SearchCondition = new BoardCategoryDTO(projectNo);
+		
+		ProjectMainBoardDTO projectBoard = new ProjectMainBoardDTO().builder()
+				.guideBoard(mapper.findMainBoardList(SearchCondition.setBoardCategory(3)))
+				.meetingBoard(mapper.findMainBoardList(SearchCondition.setBoardCategory(4)))
+				.todoBoard(mapper.findMainBoardList(SearchCondition.setBoardCategory(5)))
+				.noticeBoard(mapper.findMainBoardList(SearchCondition.setBoardCategory(1)))
+				.eduBoard(mapper.findMainBoardList(SearchCondition.setBoardCategory(2)))
+				.build();
+
+		projectMainInfo.put("projectAutority", projectAutority);
+		projectMainInfo.put("projectBoard", projectBoard);
+		
+
+		return projectMainInfo;
+	}
+	
+	
+	
 }
 
 
