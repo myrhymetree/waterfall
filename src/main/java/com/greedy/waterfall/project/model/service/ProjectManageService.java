@@ -19,4 +19,6 @@ public interface ProjectManageService {
 
 	boolean modifyProjectMember(ProjectManageMemberDTO modifyInfo);
 
+	boolean removeMemberInProject(Map<String, Integer> removeInfo);
+
 }

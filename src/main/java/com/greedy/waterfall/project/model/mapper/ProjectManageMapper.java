@@ -32,5 +32,9 @@ public interface ProjectManageMapper {
 
 	int removeOldRole(ProjectManageMemberDTO modifyInfo);
 
+	int removeMemberRole(Map<String, Integer> removeInfo);
+
+	int removeMemberJoinHistory(Map<String, Integer> removeInfo);
+
 	
 }

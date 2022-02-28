@@ -182,6 +182,31 @@ public class ProjectManageController {
 		
 		return mv;
 	}
+	
+	@GetMapping("/member/remove/{memberNo}")
+	public ModelAndView removeMemberInProject(ModelAndView mv, @PathVariable("memberNo") int memberNo, HttpSession session) {
+		Map<String, Integer> removeInfo = new HashMap<String, Integer>();
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		removeInfo.put("memberNo", memberNo);
+		removeInfo.put("projectNo", projectNo);
+		sendToResultView(mv, pms.removeMemberInProject(removeInfo));
+		
+		return mv;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 	
 	

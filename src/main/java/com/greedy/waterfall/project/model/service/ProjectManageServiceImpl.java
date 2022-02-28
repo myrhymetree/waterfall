@@ -61,7 +61,7 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 		/* 프로젝트 인원배정내역에 등록한다. */
 		/* 프로젝트 역할배정내역에 등록한다. */ 
 		/* 인원배정과 역할배정내역 등록에 성공하면 성공값을 반환한다. */
-		if(registMemberToProject(registInfo) && registRoleToProject(registInfo)) {
+		if(isSuccess(mapper.registMemberToProject(registInfo)) && registRoleToProject(registInfo)) {
 			return true;
 		}
 		
@@ -69,17 +69,10 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 		return false;
 	}
 	
-	/**
-	 * registMemberToProject : 개발자를 프로젝트 배정내역에 추가한다.
-	 * @param 개발자의 번호와 프로젝트의 번호를 전달받는다.
-	 * @return 배정 성공여부를 반환한다.
-	 * 
-	 * @author 홍성원
-	 */
-	private boolean registMemberToProject(ProjectManageMemberDTO registInfo) {
+	private boolean isSuccess(int result) {
 		boolean isSuccess = false;
 		
-		if(mapper.registMemberToProject(registInfo)> 0) {
+		if(result > 0) {
 			return true;
 		}
 
@@ -159,6 +152,19 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 	private boolean removeOldRole(ProjectManageMemberDTO modifyInfo) {
 		
 		return mapper.removeOldRole(modifyInfo) > 0 ? true: false;
+	}
+
+	@Override
+	public boolean removeMemberInProject(Map<String, Integer> removeInfo) {
+
+		/* 멤버의 역할내역 모두 삭제 && 멤버의 하차일 업데이트 */
+		if(isSuccess(mapper.removeMemberRole(removeInfo)) && isSuccess(mapper.removeMemberJoinHistory(removeInfo))) {
+			
+			return true;
+		}
+		
+		
+		return false;
 	}
 
 }

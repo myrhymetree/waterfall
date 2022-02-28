@@ -123,9 +123,10 @@
                           	<if test="searchCondition == 'roleName'">
                                F.ROLE_NAME LIKE '%' || #{ searchValue } || '%'
                           	</if>
-                           AND G.PROJECT_NO = #{ projectNo }    
+                           AND G.PROJECT_NO = #{ projectNo } 
+                           AND G.PROJECT_MEM_DROP_DATE IS NULL   
          				</where>
-                         ORDER BY G.PROJECT_MEM_DROP_DATE
+                         ORDER BY G.PROJECT_MEM_STARTED_DATE
                              , E.MEMBER_NAME
                        ) B
 				<![CDATA[
@@ -225,6 +226,19 @@
          WHERE A.MEMBER_NO = #{ memberNo }
            AND A.PROJECT_NO = #{ projectNo }
 	</delete>
+	<delete id="removeMemberRole" parameterType="hashmap">
+        DELETE
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+         WHERE A.MEMBER_NO = #{ memberNo }
+           AND A.PROJECT_NO = #{ projectNo }
+	</delete>
+	<update id="removeMemberJoinHistory" parameterType="hashmap">
+        UPDATE
+               TBL_PROJECT_MEM_HISTORY A
+           SET A.PROJECT_MEM_DROP_DATE = SYSDATE
+         WHERE A.MEMBER_NO = #{ memberNo }
+           AND A.PROJECT_NO = #{ projectNo }
+	</update>
 </mapper>
 
 
