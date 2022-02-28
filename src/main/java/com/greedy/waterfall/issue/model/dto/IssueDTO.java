@@ -26,6 +26,7 @@ public class IssueDTO {
 	private String progressStatus;			//진행상태
 	private String importance;				//중요도
 	private String content;					//이슈내용
+	private String answer;					//이슈답변
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
 	private java.sql.Date deadline;		//이슈마감일
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
