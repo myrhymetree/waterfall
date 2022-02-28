@@ -44,6 +44,8 @@
          <beans:ref bean="jacksonMessageConverter"/>
       </beans:property>
    </beans:bean>
+   
+   
 
    <!-- <interceptors>
       <interceptor>
