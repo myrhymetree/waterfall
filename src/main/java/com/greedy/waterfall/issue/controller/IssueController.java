@@ -143,7 +143,7 @@ public class IssueController {
 		
 		System.out.println("MultiFiles : " + multiFiles);
 		
-		String root = request.getSession().getServletContext().getRealPath("resource");
+		String root = request.getSession().getServletContext().getRealPath("resources");
 		
 		System.out.println("root : " + root);
 		
@@ -158,7 +158,7 @@ public class IssueController {
 		/* 사진 개수 출력 완료 */
 		System.out.println("multiFiles.size() : " + multiFiles.size());
 
-		
+		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
 		if(multiFiles.size() > 0) {
 			for(int i = 0; i < multiFiles.size(); i++) {
 				String originFileName = multiFiles.get(i).getOriginalFilename();
@@ -171,16 +171,17 @@ public class IssueController {
 				issueFileDTO.setSavedPath(filePath);
 				issueFileDTO.setOriginalName(originFileName);
 				issueFileDTO.setRandomName(savedName);
-				issue.setFile(issueFileDTO);
+//				issue.setFile(issueFileDTO);
+				fileList.add(issueFileDTO);
+				issue.setFile(fileList);
 				
 				System.out.println("issue : " + issue);
-				issueService.registIssue(issue);
 			}
 			
 			try {
 				for(int i = 0; i < multiFiles.size(); i++) {
 					
-					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().getRandomName()));
+					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
 					
 					System.out.println("이슈 등록 확인 " + issue);
 					
@@ -191,16 +192,22 @@ public class IssueController {
 				e.printStackTrace();
 				
 				for(int i = 0; i < multiFiles.size(); i++) {
-					new File(filePath + "/" + issue.getFile().getRandomName()).delete();
+					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
 				}
 				rttr.addFlashAttribute("message", "파일 업로드 실패");
+			  }
+		
 		}
-			
+		
+		String message = "";
+		if(issueService.registIssue(issue)) {
+			message = "게시글을 등록했습니다.";
+			System.out.println(message);
 		} else {
-			issueService.registIssue(issue);
-			
-			rttr.addFlashAttribute("message", "이슈 등록에 성공하셨습니다.");
+			message = "게시글등록에 실패했습니다.";
+			System.out.println(message);
 		}
+
 		mv.setViewName("redirect:/issue/list/"+taskNo);
 		return mv;
 	}

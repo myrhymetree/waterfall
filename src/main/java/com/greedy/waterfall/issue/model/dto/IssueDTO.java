@@ -1,6 +1,9 @@
 package com.greedy.waterfall.issue.model.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.greedy.waterfall.board.model.dto.FileDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +41,7 @@ public class IssueDTO {
 	private int taskNo;						//업무 번호 (어떤 업무에서 발생한 이슈인지 확인)
 	private IssueTaskCodeManageDTO taskCode;		//업무이름을 저장하기 위한 DTO
 	private String taskCodeManageCode;
-	private IssueFileDTO file;				//File 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 GuideFileDTO로 생성
+	private List<IssueFileDTO> file;				//File 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 GuideFileDTO로 생성
 	private int fileNo;						//첨부파일 번호
 	private String originalName;			//첨부파일 이름
 }

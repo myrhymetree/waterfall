@@ -57,22 +57,36 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public void registIssue(IssueDTO issue) {
+	public boolean registIssue(IssueDTO issue) {
 		
-		int result = mapper.registIssue(issue);
+		boolean result = false;
 		
-		IssueFileDTO issueFileDTO = issue.getFile();
+		List<IssueFileDTO> files = issue.getFile();
+		System.out.println("IssueServiceImpl의 registIssue의 files 는  " + files);
+		if(mapper.registIssue(issue) > 0) {
+			result = true;
+
 		
-		if(issueFileDTO != null) {
-			issueFileDTO.setRefIssueNo(issue.getNo());
-//			mapper.insertIssueFile(issueFileDTO);
+			if(files != null) {
+				int count = 0;
+				for(int i = 0; i < files.size(); i++) {
+					
+					files.get(i).setRefIssueNo(issue.getNo());
+					count += mapper.registIssueFile(files.get(i));
+				}
+				if(count != files.size()) {
+					result = false;
+				} 
+				
+			}
 		}
-		
+		return result;
+	}
+}
+//			issueFileDTO.setRefIssueNo(issue.getNo());
+//			mapper.insertIssueFile(issueFileDTO);
 //		if(!(result > 0)) {
 //			throw new IssueRegistException("이슈 등록에 실패하셨습니다.");
 //		}
 		
 		
-	}
-
-}

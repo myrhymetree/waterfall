@@ -21,6 +21,6 @@ public interface IssueService {
 
 	List<IssueDTO> selectTask(int taskNo);
 
-	void registIssue(IssueDTO issue);
+	boolean registIssue(IssueDTO issue);
 
 }
