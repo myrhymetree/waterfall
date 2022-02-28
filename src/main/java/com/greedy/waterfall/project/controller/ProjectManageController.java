@@ -158,7 +158,7 @@ public class ProjectManageController {
 	}
 	
 	@GetMapping("/member/detail")
-	public ModelAndView findMemberDetail(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws IOException {
+ 	public ModelAndView findMemberDetail(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Map<String, Integer> memberInfo = new HashMap<String, Integer>();
 		memberInfo.put("memberNo", Integer.parseInt(request.getParameter("memberNo")));
 		memberInfo.put("projectNo", ((ProjectAuthorityDTO)request.getSession().getAttribute("projectAutority")).getProjectNo());
@@ -167,6 +167,16 @@ public class ProjectManageController {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		ObjectMapper mapper = new ObjectMapper();
+
+		
+		for(int i = 0; i < memberRoleList.size(); i++ ) {
+			System.out.println("role[" + i + "] : " + memberRoleList.get(i));
+		}
+		
+		
+		
+		
+		
 		
 		mv.addObject("memberRoleList", mapper.writeValueAsString(memberRoleList));
 		mv.setViewName("jsonView");
