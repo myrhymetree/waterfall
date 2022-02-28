@@ -94,6 +94,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public AdminMemberDTO findMemberModify(String id) {
+
+		AdminMemberDTO findModify = mapper.adminMemberModify(id); 
+		
+		
+		
+		return findModify;
+	}
+
+
 	
 
 }

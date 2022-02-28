@@ -262,17 +262,23 @@
 					$.ajax({
 						url: "/waterfall/member/modify",
 						type: "get",
-						data : { id : id }
+						data : { id : id },
 						success : function(data, textStatus, xhr) {
 							const modify = JSON.parse(data.modify);
 							
 							for(let index in modify) {
+							
+								const memberArray = Object.entries(modify);
 								
+								console.log(modify[0][1]);
+								$("#id").val(modifty);
+								$("#name").val(modify);
+								$("#exampleModal").modal("show");
 								
 							}
 							
 						}, error : function(data){
-							
+							console.log("문제있네");
 						}
 					});
 				}

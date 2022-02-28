@@ -27,5 +27,8 @@ public interface MemberService {
 
 	void adminMemberRegist(AdminMemberDTO adminMember) throws MemberRegistException;
 
+	AdminMemberDTO findMemberModify(String id);
+
+
 
 }

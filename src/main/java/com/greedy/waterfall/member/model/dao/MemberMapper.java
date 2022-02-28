@@ -37,5 +37,7 @@ public interface MemberMapper {
 
 	int memberRegist(AdminMemberDTO adminMember);
 
+	AdminMemberDTO adminMemberModify(String id);
+
 
 }

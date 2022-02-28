@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +27,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
 import com.greedy.waterfall.common.exception.member.MemberRegistException;
 import com.greedy.waterfall.common.paging.Pagenation;
@@ -226,7 +230,31 @@ public class MemberController {
 		mv.setViewName("redirect:/member/regist");
 		
 		return mv;                                                                                      					
-	}                																								
+	}
+	
+	@GetMapping("/modify")
+	@ResponseBody
+	public ModelAndView findMemberModify(HttpServletRequest request, HttpServletResponse response,
+			ModelAndView mv) {
+		
+		String id = request.getParameter("id");
+		AdminMemberDTO modify = memberService.findMemberModify(id);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls()
+				.disableHtmlEscaping()
+				.create();
+		
+		mv.addObject("modify", gson.toJson(modify));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
 	
 	
 }
