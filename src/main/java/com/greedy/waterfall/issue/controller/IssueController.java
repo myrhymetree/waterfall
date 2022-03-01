@@ -141,7 +141,7 @@ public class IssueController {
 		System.out.println("multiFiles.size() : " + multiFiles.size());
 
 		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
-		if(multiFiles.size() > 0) {
+		if(multiFiles.get(0).getSize() != 0) {
 			for(int i = 0; i < multiFiles.size(); i++) {
 				String originFileName = multiFiles.get(i).getOriginalFilename();
 				String ext = originFileName.substring(originFileName.lastIndexOf("."));
@@ -283,7 +283,7 @@ public class IssueController {
 		System.out.println("multiFiles.size() : " + multiFiles.size());
 
 		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
-		if(multiFiles.size() > 0) {
+		if(multiFiles.get(0).getSize() != 0) {
 			for(int i = 0; i < multiFiles.size(); i++) {
 				String originFileName = multiFiles.get(i).getOriginalFilename();
 				String ext = originFileName.substring(originFileName.lastIndexOf("."));
