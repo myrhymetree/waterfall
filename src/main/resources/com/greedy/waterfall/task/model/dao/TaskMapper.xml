@@ -40,7 +40,41 @@
 	<resultMap type="com.greedy.waterfall.task.model.dto.TaskCategoryDTO" id="taskCategoryResultMap">
 		<id property="categoryCode" column="TASK_CATEGORY_CODE"/>
 		<result property="categoryName" column="TASK_CATEGORY_NAME"/>
+		<result property="typeNo" column="TASK_CATEGORY_CODE_TYPE_NO"/>
 	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.ProjectMemberDTO" id="projectMemberResultMap">
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+		<result property="roleNumber" column="ROLE_NO"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.member.model.dto.MemberDTO" id="memberResultMap">
+		<id property="no" column="MEMBER_NO"/>
+		<result property="name" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.AllTaskCodeDTO" id="allTaskCodeResultMap">
+		<collection property="parentCategory" resultMap="parentCategoryResultMap"></collection>
+		<collection property="childCategory" resultMap="childCategoryResultMap"></collection>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.ParentTaskCategoryDTO" id="parentCategoryResultMap">
+		<result property="typeNo" column="TASK_CATEGORY_CODE_TYPE_NO"/>
+		<result property="parentCategoryCode" column="TASK_CATEGORY_CODE"/>
+		<result property="parentCategoryName" column="TASK_CATEGORY_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.ChildTaskCategoryDTO" id="childCategoryResultMap">
+		<result property="typeNo" column="TASK_CATEGORY_CODE_TYPE_NO"/>
+		<result property="childCategoryCode" column="TASK_CATEGORY_CODE"/>
+		<result property="childCategoryName" column="TASK_CATEGORY_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.task.model.dto.TaskRegistDTO" id="taskRegistResultMap">
+		<result property="parentTaskNo" column="TASK_NO"/>
+	</resultMap>
+	
 	
 	<select id="selectParentTaskList" resultMap="taskResultMap">
 		SELECT
@@ -69,4 +103,115 @@
 		   AND A.TASK_REF_NO = #{taskNo}
 		 	
 	</select>
+	
+	<select id="selectParentCategory" resultMap="parentCategoryResultMap">
+		SELECT
+		       A.TASK_CATEGORY_CODE
+		     , A.TASK_CATEGORY_NAME
+		  FROM TBL_TASK_CODE_MANAGE A
+		 WHERE TASK_CATEGORY_CODE_TYPE_NO = 1
+	</select>
+	
+	<select id="selectChildCategory" resultMap="childCategoryResultMap">
+		SELECT
+		       A.TASK_CATEGORY_CODE
+		     , A.TASK_CATEGORY_NAME
+		  FROM TBL_TASK_CODE_MANAGE A
+		 WHERE TASK_CATEGORY_CODE_TYPE_NO = 2
+	</select>
+	
+	<select id="selectAllProjectMember" resultMap="projectMemberResultMap">
+		SELECT 
+		       A.MEMBER_NO
+		     , B.MEMBER_NAME
+		     , C.ROLE_NO
+		  FROM TBL_PROJECT_MEM_HISTORY A
+		  JOIN TBL_MEMBER B ON(A.MEMBER_NO = B.MEMBER_NO)
+		  JOIN TBL_ROLE_ASSIGNMENT_HISTORY C ON(A.MEMBER_NO = C.MEMBER_NO)
+		 WHERE A.PROJECT_NO = #{ projectNo }
+		   AND C.ROLE_HISTORY_NO IN (SELECT MAX(ROLE_HISTORY_NO)
+		 	                                  FROM TBL_ROLE_ASSIGNMENT_HISTORY E
+		 	                                 WHERE E.PROJECT_NO = #{ projectNo }
+		 	                                 GROUP BY E.MEMBER_NO
+		 	                                          )
+	</select>
+	
+	<select id="selectParentTaskNo" resultType = "_int">
+		SELECT
+		       TASK_NO
+		  FROM TBL_TASK
+		 WHERE PROJECT_NO = #{ projectNo }
+		   AND TASK_CATEGORY_CODE = #{ parentTaskCode }
+	</select>
+	
+	<insert id="registTask">
+		INSERT
+  		  INTO TBL_TASK
+		     (
+		       TASK_NO
+		     , TASK_START_DATE
+		     , TASK_DEADLINE
+		     , TASK_PROGRESSION
+		     , TASK_PROGRESS_STATUS
+		     , TASK_TYPE_NO
+		     , PROJECT_NO
+		     , MEMBER_NO
+		     , TASK_CATEGORY_CODE
+		     , TASK_REF_NO
+		     , TASK_IMPORTANCE
+		     )
+		 VALUES
+		     (
+		       TASK_NO.NEXTVAL
+		     , #{ startDate }
+		     , #{ deadline }
+		     , #{ progressRatio }
+		     , #{ progressStatus }
+		     , #{ typeNo }
+		     , #{ projectNo }
+		     , #{ taskMember }
+		     , #{ taskCode }
+		     , #{ parentTaskNo }
+		     , #{ importance }
+		     )
+		    
+	</insert>
+	
+	<insert id="registHistory">
+		INSERT
+		  INTO TBL_TASK_HISTORY
+		     (
+		       TASK_HISTORY_NO
+		     , TASK_PROGRESS_STATUS
+		     , TASK_NO
+		     , MEMBER_NO
+		     , TASK_HISTORY_RECORD
+		     , TASK_UPDATED_DATE
+		     , TASK_UPDATED_CODE
+		     )
+		VALUES
+			 (
+			   TASK_HISTORY_NO.NEXTVAL
+			 , #{ progressStatus }
+			 , TASK_NO.CURRVAL
+			 , #{ taskMember }
+			 <if test="parentTaskCode == 'NULL'">
+			 , #{ parentTaskCode}
+			 </if>
+			 <if test="parentTaskCode != 'NULL'">
+			 , #{ taskCode }
+			 </if> 
+			 , SYSDATE
+			 , 1
+			 )
+	</insert>
+	
+	<select id="selectAllCategoryCode" resultMap="taskCategoryResultMap">
+		SELECT
+		       TASK_CATEGORY_CODE
+		     , TASK_CATEGORY_NAME
+		     , TASK_CATEGORY_CODE_TYPE_NO
+		  FROM TBL_TASK_CODE_MANAGE
+	</select>
+	
 </mapper>

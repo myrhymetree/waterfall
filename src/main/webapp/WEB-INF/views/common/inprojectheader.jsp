@@ -84,11 +84,18 @@
 						<div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav">
 								<div class="menu-font2">
-									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/task/list">
-										업무 조회								
+									<c:if test="${ sessionScope.loginMember.role eq 2 }">
+									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/task/timeline">
+										타임라인								
 									</a>
-									
+									</c:if>
+									<c:if test="${ sessionScope.loginMember.role eq 1 }">
+									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/task/timeline">
+										업무 관리							
+									</a>
+									</c:if>
 								</div>
+								
 
 							</nav>
 						</div>	

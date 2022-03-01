@@ -2,12 +2,19 @@ package com.greedy.waterfall.task.model.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.task.model.dao.TaskMapper;
+import com.greedy.waterfall.task.model.dto.AllTaskCodeDTO;
+import com.greedy.waterfall.task.model.dto.ChildTaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
+import com.greedy.waterfall.task.model.dto.ParentTaskCategoryDTO;
+import com.greedy.waterfall.task.model.dto.ProjectMemberDTO;
+import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskRegistDTO;
 
 /**
  * <pre>
@@ -29,7 +36,7 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public List<TaskDTO> findTaskList(TaskDTO taskDTO) {
+	public List<TaskDTO> findTaskTimeline(TaskDTO taskDTO) {
 		
 		/* 상위업무 List */
 		List<TaskDTO> parentTaskList = mapper.selectParentTaskList(taskDTO);
@@ -59,6 +66,56 @@ public class TaskServiceImpl implements TaskService{
 		
 		
 		return parentTaskList;
+	}
+
+	@Override
+	public AllTaskCodeDTO findAllTaskCode() {
+		
+		/*현재 존재하는 모든 업무 카테고리 코드 저장*/
+		
+		List<ParentTaskCategoryDTO> parentTaskCategory = mapper.selectParentCategory();
+		List<ChildTaskCategoryDTO> childTaskCategory = mapper.selectChildCategory();
+		
+		AllTaskCodeDTO allTaskCodeDTO = new AllTaskCodeDTO();
+		allTaskCodeDTO.setParentCategory(parentTaskCategory);
+		allTaskCodeDTO.setChildCategory(childTaskCategory);
+		
+		return allTaskCodeDTO;
+		
+		
+		 
+	}
+
+	@Override
+	public List<ProjectMemberDTO> findProjectMember(int projectNo) {
+		
+		List<ProjectMemberDTO> memberList = mapper.selectAllProjectMember(projectNo);
+		
+		return memberList;
+	}
+
+	@Override
+	public void registTask(TaskRegistDTO taskRegistDTO) {
+		
+		int parentTaskNo = mapper.selectParentTaskNo(taskRegistDTO);
+		
+		taskRegistDTO.setParentTaskNo(parentTaskNo);
+		
+		int result = mapper.registTask(taskRegistDTO);
+		
+		if(result > 0) {
+			mapper.registHistory(taskRegistDTO);
+		}
+		
+		
+	}
+
+	@Override
+	public List<TaskCategoryDTO> findAllCategoryCode() {
+		
+		List<TaskCategoryDTO> taskCategoryList = mapper.selectAllCategoryCode();
+		
+		return taskCategoryList;
 	}
 	
 	
