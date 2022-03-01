@@ -27,5 +27,23 @@ public interface MemberMapper {
 
 	List<TeamDTO> findTeamList(String deptCode);
 
+	int adminMemberRegist(AdminMemberDTO adminMember);
+
+	int deptMemberRegist(AdminMemberDTO adminMember);
+
+	int teamMemberRegist(AdminMemberDTO adminMember);
+
+	int jobMemberRegist(AdminMemberDTO adminMember);
+
+	int memberRegist(AdminMemberDTO adminMember);
+
+	AdminMemberDTO adminMemberModify(String id);
+
+	List<DeptDTO> adminDeptMember();
+
+	List<TeamDTO> adminTeamMember(String deptCode);
+
+	List<JobDTO> adminJobMember();
+
 
 }

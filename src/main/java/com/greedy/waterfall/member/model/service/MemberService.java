@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
+import com.greedy.waterfall.common.exception.member.MemberRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
 import com.greedy.waterfall.member.model.dto.DeptDTO;
@@ -23,6 +24,11 @@ public interface MemberService {
 	Map<String, Object> findDeptJobService();
 
 	List<TeamDTO> findTeamList(String deptCode);
+
+	void adminMemberRegist(AdminMemberDTO adminMember) throws MemberRegistException;
+
+	AdminMemberDTO findMemberModify(String id);
+
 
 
 }
