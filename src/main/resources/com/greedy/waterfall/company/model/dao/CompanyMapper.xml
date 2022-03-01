@@ -10,20 +10,20 @@
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.DeptDTO" id="deptResultMap">
-		<id property="deptCode" column="DEPT_CODE"/>
-		<result property="deptName" column="DEPT_NAME"/>
+		<id property="code" column="DEPT_CODE"/>
+		<result property="name" column="DEPT_NAME"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.TeamDTO" id="teamResultMap">
-		<id property="teamCode" column="TEAM_CODE"/>
-		<result property="teamName" column="TEAM_NAME"/>
+		<id property="code" column="TEAM_CODE"/>
+		<result property="name" column="TEAM_NAME"/>
 		<result property="deptCode" column="DEPT_CODE"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.JobDTO" id="jobResultMap">
-		<id property="jobCode" column="JOB_CODE"/>
-		<result property="jobName" column="JOB_NAME"/>
-		<result property="jobRank" column="JOB_RANK"/>
+		<id property="code" column="JOB_CODE"/>
+		<result property="name" column="JOB_NAME"/>
+		<result property="rank" column="JOB_RANK"/>
 	</resultMap>
 	
 	<select id="findDept" resultMap="deptResultMap">
@@ -33,11 +33,56 @@
 		  FROM TBL_DEPT
 	</select>
 	
+	<!-- 직급 조회 -->
 	<select id="findJob" resultMap="jobResultMap">
 		SELECT 
-		       JOB_CODE
+		       JOB_RANK
 		     , JOB_NAME
-		     , JOB_RANK
-		  FROM TBL_JOB_TITLE     
+		     , JOB_CODE
+		  FROM TBL_JOB_TITLE
+		 ORDER BY 1 ASC
 	</select>
+	
+	<!-- 직급 생성 -->
+	<insert id="insertJob" parameterType="com.greedy.waterfall.company.model.dto.JobDTO">
+		INSERT
+		  INTO TBL_JOB_TITLE A
+		(
+		  A.JOB_CODE
+		, A.JOB_NAME
+		, A.JOB_RANK
+		)
+		VALUES
+		(
+		  #{ code }
+		, #{ name }
+		, #{ rank }
+		)
+	</insert>
+	
+	<!-- 직급 상세 -->
+	<select id="detailJob" resultMap="jobResultMap">
+		SELECT
+		       A.JOB_RANK
+		     , A.JOB_NAME
+		     , A.JOB_CODE
+		  FROM TBL_JOB_TITLE A
+		 WHERE A.JOB_CODE = #{ code }
+	</select>
+	
+	<!-- 직급 수정 -->
+	<update id="updateJob" parameterType="com.greedy.waterfall.company.model.dto.JobDTO">
+		UPDATE
+		       TBL_JOB_TITLE A
+		   SET A.JOB_RANK = #{ rank }
+		     , A.JOB_NAME = #{ name }
+		 WHERE A.JOB_CODE = #{ code }
+	</update>
+	
+	<!-- 직급 삭제 -->
+	<delete id="deleteJob" parameterType="String">
+		DELETE
+		  FROM TBL_JOB_TITLE A
+		 WHERE A.JOB_CODE = #{ code }
+	</delete>
 </mapper>

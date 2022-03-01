@@ -14,4 +14,10 @@ public interface CompanyMapper {
 
 	int insertJob(JobDTO job);
 
+	JobDTO detailJob(String code);
+
+	int updateJob(JobDTO job);
+
+	int deleteJob(String code);
+
 }

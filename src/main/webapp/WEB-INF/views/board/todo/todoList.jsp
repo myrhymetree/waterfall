@@ -109,15 +109,15 @@ table, th, td {
 }
 .my-textarea-div {
   width: 440px;
-  height: 430px;
+  height: 400px;
 }
 #my-textarea {
   display: block;
   width: 100%;
   height: 100%;
 }
-.my-modal-footer input {
-  width: 220px;
+.my-modal-footer {
+  text-align: right;
 }
 .my-modal-footer button {
   color: #000;
@@ -125,7 +125,7 @@ table, th, td {
   padding: 5px 25px;
 }
 .my-modal-footer button:first-child {
-  margin-right: 264px;
+  margin-right: 5px;
 }
 
 /* 서브모달 */
@@ -134,13 +134,27 @@ table, th, td {
 }
 
 /* 게시글 조회 모달 */
+#read-title {
+  width: 392px;
+}
+#read-content {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .my-modal-footer-read {
-  text-align: center;
+  text-align: right;
+}
+.my-modal-footer-read input {
+  width: 84px;
+  height: 36px;
+  line-height: 1rem;
 }
 .my-modal-footer-read button {
   color: #000;
   background: none;
   padding: 5px 25px;
+  margin-left: 5px;
 }
 
 </style>
@@ -155,15 +169,15 @@ table, th, td {
 			<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
 			<div class="modal-content" style="top: 172px">
 				<form action="${ pageContext.servletContext.contextPath }/todo/regist" method="POST" encType="multipart/form-data">
-					<div class="my-modal-header mb-4">
+					<div class="my-modal-header mb-3">
 						<label class="me-2" for="title-write">제목</label>
 						<input type="text" id="title-write" name="title">
 					</div>
 					<div class="my-modal-body">
-						<div class="my-textarea-div mb-3">
+						<div class="my-textarea-div mb-2">
 							<textarea name="body" id="my-textarea" cols="30" rows="10"></textarea>
 						</div>
-						<div class="my-modal-upload">
+						<div class="my-modal-upload mb-3">
 	            			<input type="file" id="todoUploadInput" name="todoUpload" multiple>
 	            		</div>
 						<div class="my-modal-footer">
@@ -203,23 +217,22 @@ table, th, td {
 			<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
 			<div class="modal-content" style="top: 172px">
 				<form action="${ pageContext.servletContext.contextPath }/todo/update" method="POST">
-					<div class="my-modal-header mb-4">
+					<div class="my-modal-header mb-3">
 						<label class="me-2" for="read-title">제목</label>
                         <input type="text" id="read-title" name="title">
                         <input type="hidden" id="read-no" name="no">
 					</div>
 					<div class="my-modal-body">
-						<div class="my-textarea-div mb-3">
+						<div class="my-textarea-div mb-2">
 							<textarea name="content" id="read-content" cols="30" rows="10"></textarea>
 						</div>
-						<div class="my-modal-upload">
-	            			<input type="file" id="todoUploadOutput" name="todoUpload" multiple>
+						<div class="my-modal-upload mb-3" id="upload-file-area">
 	            		</div>
 					</div>
 					<div class="my-modal-footer-read">
-                        <button type="submit" class="btn btn-secondary">수정하기</button>
-						<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+						<input type="button" class="btn btn-secondary" id="delete" value="삭제">
+                        <button type="submit" class="btn btn-secondary">수정</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 					</div>
 				</form>
 			</div>
@@ -337,35 +350,62 @@ table, th, td {
 	<script>
 	
 		/* 상세 조회 모달 */
-		if (document.querySelectorAll("#listArea td")) {
+		if(document.querySelectorAll("#listArea td")) {
 		      const $tds = document.querySelectorAll("#listArea td");
 		      console.log($tds);
-		      for (let i = 0; i < $tds.length; i++) {
+		      for(let i = 0; i < $tds.length; i++) {
 		         $tds[i].onclick = function() {
 		            const no = this.parentNode.children[0].innerText;
-		            const ex = this.parentNode;
+//		            const ex = this.parentNode;
+		            const count = this.parentNode.children[2];
 		            console.log(no);
 		            
 		            $.ajax({
-		               url : "todoDetail",
+//		               url : "todoDetail",
+		               url: "${ pageContext.servletContext.contextPath }/todo/todoDetail?no="+ no,
 		               type : "get",
 		               data : { no : no },
-		               success : function(data, textStatus, xhr) {
-		             	  console.log(data)
-		                  const todoDetail = JSON.parse(data.todoDetail);
+//		               success : function(data, textStatus, xhr) {
+		               success: function(data, status, xhr) {
+		             	  console.log(data);
+//		                  const todoDetail = JSON.parse(data.todoDetail);
+		             	  todoDetail = JSON.parse(data.todoDetail);
 		                  
 //		                  for(let index in todoDetail) {
+						     $("#upload-file-area").empty();
 		                     $("#read-no").val(todoDetail.no);
 		                     console.log( $("#read-no").val());
 		                     $("#read-title").val(todoDetail.title);
 		                     $("#read-content").val(todoDetail.content);
 		                     $("#readModal").modal("show");
-		                     ex.children[2].innerText=todoDetail.count;
+//		                     ex.children[2].innerText = todoDetail.count;
+							 count.innerText = todoDetail.count;
 //		                  }
-		                  
-		               }, error : function(data) {
-		                     console.log(data);
-		                  }
+
+							 if(todoDetail.file != null) {
+								for(let i = 0; i < todoDetail.file.length; i++) {
+									const $fileName = todoDetail.file[i].fileOriginName;
+									const $fileNo = todoDetail.file[i].fileNo;
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									console.log($fileNo);
+									const $fileTag = "<a href='"+'${ pageContext.servletContext.contextPath }/todo/download/' + $fileNo + "'>"+$fileName+"</a>";
+									$("#upload-file-area").append($fileTag);
+									$("#upload-file-area").append("<br>");
+								}
+							 }
+							 
+//		               }, error : function(data) {
+//		                     console.log(data);
+//		                  }
+					   }, error: function(xhr, status, error) {
+						   	 console.log(xhr);
+					      }
 		            });
 		         }
 		      }
@@ -375,6 +415,7 @@ table, th, td {
 		/* 삭제 버튼 클릭 게시글 삭제 */
 		$("#delete").click(function() {
 			const no = $("#read-no").val();
+			console.log(no);
 			location.href="${ pageContext.servletContext.contextPath }/todo/delete?no=" + no;
 		});
 	   
