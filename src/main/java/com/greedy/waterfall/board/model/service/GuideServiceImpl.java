@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.board.model.guidemapper.GuideMapper;
@@ -134,16 +135,8 @@ public class GuideServiceImpl implements GuideService {
 	      
 	      GuideDTO guideDetail = new GuideDTO();
 	      
-	      
 	      if(result > 0) {
 	    	  guideDetail = mapper.selectGuideDetail(no);
-	         
-	         GuideFileDTO guideFileDTO = guideDetail.getFile();
-	       
-	         
-				/*
-				 * if(guideFileDTO.getNo() == 0) { guideDetail = mapper.selectGuideDetailPlusFile(no); }
-				 */
 	      }
 	      
 	      return guideDetail;
@@ -169,6 +162,26 @@ public class GuideServiceImpl implements GuideService {
 	      }
 		
 		return guideFileDetail;
+	}
+
+	@Override
+	public GuideFileDTO findFile(int no) {
+		
+		return mapper.findFile(no);
+	}
+
+	@Override
+	public GuideFileDTO removeGuideFile(int fileNumber) {
+		
+		GuideFileDTO guideFileDTO = mapper.findFile(fileNumber);
+		
+		int result = mapper.deleteGuideFile(fileNumber);
+		
+//		if(!(result > 0)) {
+//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
+//		}
+		
+		return guideFileDTO;
 	}
 
 }

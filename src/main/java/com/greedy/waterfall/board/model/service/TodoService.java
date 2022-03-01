@@ -3,6 +3,7 @@ package com.greedy.waterfall.board.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.TodoDTO;
 import com.greedy.waterfall.common.exception.TodoModifyException;
 import com.greedy.waterfall.common.exception.TodoRegistException;
@@ -28,5 +29,8 @@ public interface TodoService {
 	
 	/* 게시글 삭제 */
 	void removeTodo(int no) throws TodoRemoveException;
+	
+	/* 파일 다운로드 */
+	FileDTO findFile(int no);
 
 }

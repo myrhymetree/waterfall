@@ -9,6 +9,7 @@
 		<result property="title" column="BOARD_TITLE"/>
 		<result property="content" column="BOARD_CONTENT"/>
 		<result property="status" column="BOARD_STATUS"/>
+		<result property="projectNo" column="PROJECT_NO"/>
 		<result property="categoryNo" column="BOARD_CATEGORY_NO"/>
 		<result property="count" column="BOARD_COUNT"/>
 		
@@ -56,6 +57,7 @@
 		                     , C.BOARD_COUNT
 		                     , C.BOARD_POSTING_DATE
 		                     , C.BOARD_STATUS
+		                     , C.PROJECT_NO
 		                     , D.BOARD_CATEGORY_NO
 		                     , E.MEMBER_NAME
 		                  FROM TBL_BOARD C
@@ -72,6 +74,7 @@
 			                 	E.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
 			                 </if>
 			                 AND C.BOARD_STATUS = 'Y'
+			                 <!-- AND C.PROJECT_NO = #{ projectNo } -->
 			                 AND D.BOARD_CATEGORY_NO = 5
 		                </where>
 		                 ORDER BY C.BOARD_NO DESC
@@ -103,6 +106,7 @@
 	           B.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'	
 			</if>
 	       AND A.BOARD_STATUS = 'Y'
+	       <!-- AND A.PROJECT_NO = #{ projectNo } -->
 	       <!-- To Do 게시판 게시글만 카운트 -->
 	       AND A.BOARD_CATEGORY_NO = 5
     	</where>

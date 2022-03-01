@@ -16,4 +16,5 @@ import lombok.ToString;
 public class TaskCategoryDTO {
 	private String categoryCode;
 	private String categoryName;
+	private int typeNo;
 }

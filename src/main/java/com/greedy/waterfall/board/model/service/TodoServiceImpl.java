@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.TodoDTO;
 import com.greedy.waterfall.board.model.mapper.TodoMapper;
 import com.greedy.waterfall.common.exception.TodoModifyException;
@@ -88,6 +89,13 @@ public class TodoServiceImpl implements TodoService {
 		if(!(result > 0)) {
 			throw new TodoRemoveException("To Do 삭제에 실패하셨습니다.");
 		}
+	}
+	
+	/* 첨부 파일 */
+	@Override
+	public FileDTO findFile(int no) {
+
+		return mapper.findFile(no);
 	}
 
 }

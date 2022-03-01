@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +31,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.common.exception.member.LoginFailedException;
+import com.greedy.waterfall.common.exception.member.MemberRegistException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.AdminMemberDTO;
@@ -162,36 +165,98 @@ public class MemberController {
 	}
 	
 	@GetMapping("regist2/{deptCode}")
-	@ResponseBody
-	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,HttpServletResponse response) {
+	/* @ResponseBody */
+	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,HttpServletResponse response) throws JsonProcessingException {
 
-		response.setContentType("application/json; charset=UTF-8");
+//		response.setContentType("application/json; charset=UTF-8");
 		
 		List<TeamDTO> teamList = memberService.findTeamList(deptCode);
 		
-		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
-		System.out.println("확인용" + teamList);
+		response.setContentType("application/json; charset=UTF-8");
+		ObjectMapper mapper = new ObjectMapper();
+		
+		mv.addObject("teamList", mapper.writeValueAsString(teamList));
+		mv.setViewName("jsonView"); // 매퍼 안에 담긴 
+		
+//		Gson gson = new GsonBuilder()
+//			      .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+//			      .setPrettyPrinting()
+//			      .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+//			      .serializeNulls()
+//			      .disableHtmlEscaping()																			
+//			      .create();
+                                                                                                        	
+		//		mv.addObject("teamList", gson.toJson(teamList));										
+//		                                                                                                		 
+//		System.out.println("왜 안될까?" + mv);																	
+//		System.out.println("왜 안될까?" + mv);																	
+//		System.out.println("왜 안될까?" + mv);																		
+//		mv.setViewName("jsonView");																				
+//																										
+																										
+		return mv;                                                                                            	
+	}                                                                     										
+																													
+	@PostMapping("/regist3")                                                                                	
+	public ModelAndView registMember(ModelAndView mv, @RequestParam Map<String, String> parameter, HttpServletRequest request,
+			RedirectAttributes rttr) throws MemberRegistException {       																	
+	
+		String name = parameter.get("name");
+		String dept = parameter.get("dept");
+		String team = parameter.get("team");
+		String job = parameter.get("job");
+	
+		AdminMemberDTO adminMember = new AdminMemberDTO();
+		DeptDTO deptDTO = new DeptDTO();
+		TeamDTO teamDTO = new TeamDTO();
+		JobDTO jobDTO = new JobDTO();
+		
+		deptDTO.setDeptCode(dept);
+//		deptDTO.setDeptName(deptName);
+		
+		teamDTO.setTeamCode(team);
+		jobDTO.setJobCode(job);
+		
+		adminMember.setName(name);
+		adminMember.setDept(deptDTO);
+		adminMember.setTeam(teamDTO);
+		adminMember.setJob(jobDTO);
+				
+		memberService.adminMemberRegist(adminMember);
+		String message = "등록에 성공하셨습니다.";
+		
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/member/regist");
+		
+		return mv;                                                                                      					
+	}
+	
+	@GetMapping(value="modify")
+	@ResponseBody
+	public ModelAndView findMemberModify(HttpServletRequest request, HttpServletResponse response,
+			ModelAndView mv) {
+		
+		String id = request.getParameter("id");
+		id = id.replace("\"","");
+		
+		AdminMemberDTO modify = memberService.findMemberModify(id);
+			
+		response.setContentType("application/json; charset=UTF-8");
+		
 		Gson gson = new GsonBuilder()
-			      .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
-			      .setPrettyPrinting()
-			      .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
-			      .serializeNulls()
-			      .disableHtmlEscaping()
-			      .create();
-		mv.addObject("teamList", gson.toJson(teamList));
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls()
+				.disableHtmlEscaping()
+				.create();
 		
-		System.out.println("왜 안될까?" + mv);
-		System.out.println("왜 안될까?" + mv);
-		System.out.println("왜 안될까?" + mv);
+		mv.addObject("modify", gson.toJson(modify));
 		mv.setViewName("jsonView");
-		
 		
 		return mv;
 	}
-	
-	
-	
 	
 	
 }

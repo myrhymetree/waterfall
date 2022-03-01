@@ -22,6 +22,7 @@ public class TodoDTO {
 	private String title;
 	private String content;
 	private String status;
+	private int projectNo;
 	private int categoryNo;
 	private int count;
 	private MemberDTO writer;

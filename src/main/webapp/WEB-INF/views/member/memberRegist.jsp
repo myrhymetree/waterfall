@@ -68,7 +68,13 @@ label {
 }
    
 </style>
-
+<script>
+	
+	const message = '${ requestScope.message}';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 </head>
 <body>
 
@@ -89,9 +95,9 @@ label {
                         </div>
                         <hr align="left" style="border: solid 2px rgb(0, 0, 0); width: 100%;">
                         <div>
-                            <form action="" method="get">
+                            <form action="${pageContext.servletContext.contextPath}/member/regist3" method="post">
                                 <div class="mx-auto search-bar input-group mt-5">
-                                    <input type="text" class="form-control" placeholder="이름 입력" aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="이름 입력" aria-label="Recipient's username" aria-describedby="basic-addon2"
                                      style="border-left-width: auto; margin-left: 31%; margin-right: 31%;">
                                 </div>        
                                 <div class="mx-auto search-bar mt-5 form-check">
@@ -114,7 +120,7 @@ label {
                                             </td>
                                             <td align="center">
                                                 <select class="select-bar form-select" aria-label="Default select example" id="team" name="team">
-                                                    <option value="" selected disabled>팀 선택</option>
+                                                    <option value="">팀 선택</option>
                                                 </select>
                                             </td>
                                             <td align="center">
@@ -128,9 +134,9 @@ label {
                                         </tr>
                                     </table>                                                                      
                                 </div>
-                                <div class="mt-5 mx-auto" style="width: 8%">
+                                <!-- <div class="mt-5 mx-auto" style="width: 8%">
                                     <button class="ui secondary button">
-                                        추가
+                                    	    추가
                                     </button>
                                 </div>
                                 <div class="mt-5">
@@ -151,16 +157,16 @@ label {
                                             <td>머머머<label><i class="bi bi-x-circle-fill"></i></label></td>
                                         </tr>    
                                     </table>
-                                </div>
+                                </div> -->
                                 <div class="mt-5 mx-auto" style="width: 16%;" >
                                     <div style="float: left; width: 50%;">
-                                        <button class="ui secondary button" type="button" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">
-                                            등록
+                                        <button class="ui secondary button" type="submit">
+                                           	 등록
                                         </button>
                                     </div>    
                                     <div style="float: left; width: 50%;">
                                         <button class="ui secondary button">
-                                            취소
+                                          	  취소
                                         </button>                                                                                                                        
                                     </div> 
                                 </div>
@@ -186,18 +192,12 @@ label {
             									url : url,
             									type : "get",
             									data : {deptCode:deptCode},
-            									dataType:"text",
+            									
             									success: function(data,xhr){
-            										
-            										console.log(xhr);
-            										
+            										console.log(data);
             										const teamList = JSON.parse(data.teamList);
-            										JSON.stringfy(teamList);
-            										JSON.parse(sring);
-            										console.log(teamList);
-            										console.log(teamList);
-            										console.log(teamList);
-            										for(let i = 0; i < teamList.length; i++) {
+        											console.log(teamList);
+            										  for(let i = 0; i < teamList.length; i++) {
             											const $teamTag = "<option value = '" + teamList[i].teamCode + "'>" + teamList[i].teamName + "</option>";
             											
             											$("#team").append($teamTag);
@@ -205,7 +205,7 @@ label {
             									}, 
             									error: function(data,xhr){
             										alert("문제생김");
-            										
+            										console.log(data);
             										console.log(xhr);
             									}
             								});

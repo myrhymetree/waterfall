@@ -10,6 +10,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">      
 <title>직급 관리</title>
+<script>
+
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 <style>
 
 .main-content {
@@ -100,10 +108,119 @@
 td{
 	vertical-align: middle !important;
 }
+
+/* 모달 */
+.modal-content {
+  width: 635px;
+  height: 272px;
+  padding: 30px;
+}
+.my-modal-input label {
+  width: 60px;
+}
+.my-modal-input input {
+  width: 365px;
+}
+.my-modal-body {
+  margin-left: 0px;
+}
+.my-modal-footer {
+  text-align: right;
+}
+.my-modal-footer button {
+  color: #000;
+  background: none;
+  padding: 5px 25px;
+}
+.my-modal-footer button:first-child {
+  margin-right: 5px;
+}
+/* 수정 모달 */
+.my-modal-footer-read {
+  text-align: right;
+}
+.my-modal-footer-read button {
+  color: #000;
+  background: none;
+  padding: 5px 25px;
+}
+.my-modal-footer-read button:first-child {
+  margin-right: 5px;
+}
+
 </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+		<!-- 직급 추가 모달 -->
+		<div class="modal fade" id="writeModal" data-bs-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+				<div class="modal-content" style="top: 172px">
+					<form action="${ pageContext.servletContext.contextPath }/company/job/regist" method="POST">
+						<div class="my-modal-header mb-3">
+							<h3>직급 생성</h3>
+						</div>
+						<div class="my-modal-body">
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="rank-write">RANK</label>
+								<input type="text" id="rank-write" name="rank">
+							</div>
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="name-write">직급명</label>
+								<input type="text" id="name-write" name="name">
+							</div>
+							<div class="my-modal-input mb-4">
+								<label class="me-2" for="code-write">직급코드</label>
+								<input type="text" id="code-write" name="code">
+							</div>
+						</div>
+						<div class="my-modal-footer">
+							<button type="submit" class="btn btn-secondary"
+								data-bs-toggle="modal">등록</button>
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">취소</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 직급 수정 모달 -->
+		<div class="modal fade" id="readModal" data-bs-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+				<div class="modal-content" style="top: 172px">
+					<form action="${ pageContext.servletContext.contextPath }/company/job/update" method="POST">
+						<div class="my-modal-header mb-3">
+							<h3>직급 수정</h3>
+						</div>
+						<div class="my-modal-body">
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="rank-read">RANK</label>
+								<input type="text" id="rank-read" name="rank">
+							</div>
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="name-read">직급명</label>
+								<input type="text" id="name-read" name="name">
+							</div>
+							<!-- 직급코드 수정 안 됨 -->
+							<div class="my-modal-input mb-4" style="visibility: hidden">
+								<label class="me-2" for="code-read">직급코드</label>
+								<input type="hidden" id="code-read" name="code">
+							</div>
+						</div>
+						<div class="my-modal-footer-read">
+							<button type="submit" class="btn btn-secondary">수정</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
 		<main>
 			<!-- 메뉴바 내 콘텐트 영역 -->
 			<div class="main-content">
@@ -112,7 +229,7 @@ td{
 					<label style="font-size: 1.4rem; margin-right: 1200px;">
 						<i style='font-size: 24px' class='far'>&#xf2bb;</i>직급관리
 					</label>
-					<button class="float button" id="addButton">추가</button>
+					<button class="float button" id="addButton" data-bs-toggle="modal" data-bs-target="#writeModal">추가</button>
 					<hr>
 					<!-- 직급검색창-->
 					<br> 
@@ -122,18 +239,23 @@ td{
 							<tr>
 								<th>RANK</th>
 								<th>직급명</th>
+								<th>직급코드</th>
 								<th>관리</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach var="job" items="${ requestScope.jobList }">
-								<tr>
-									<td> <c:out value="${ job.jobRank }" />
+								<tr id="listArea">
+									<td> <c:out value="${ job.rank }" /></td>
+									<td> <c:out value="${ job.name }" /></td>
+									<td> <c:out value="${ job.code }" /></td>
+									<td>
+										<button class="float button" id="modifyButton" data-bs-toggle="modal" data-bs-target="#readModal">수정</button>
+										<!-- <button class="float button" id="deleteButton">삭제</button> -->
+										<form action="${ pageContext.servletContext.contextPath }/company/job/update" method="POST" style="display: inline-block">
+											<input type="button" class="float button delBtn" id="deleteButton" value="삭제">
+										</form>
 									</td>
-									<td> <c:out value="${ job.jobName }" />
-									</td>
-									<td><button class="float button" id="modifyButton">수정</button>
-										<button class="float button" id="deleteButton">삭제</button></td>
 								</tr>
 							</c:forEach>
 							<%-- <tr>
@@ -154,5 +276,43 @@ td{
 			</div>
 		</main>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+	
+	<script>
+	/* 직급 수정 */
+	if(document.querySelectorAll("#listArea td button")) {
+		const $btns = document.querySelectorAll("#listArea td button");
+		console.log($btns);
+		for(let i = 0; i < $btns.length; i++) {
+			$btns[i].onclick = function() {
+				const code = this.parentNode.parentNode.children[2].innerText;
+				console.log(code);
+				
+				$.ajax({
+					url: "${ pageContext.servletContext.contextPath }/company/jobDetail?code=" + code,
+//					url: "jobDetail",
+					type: "get",
+					data: { code : code },
+					success: function(data, status, xhr) {
+						console.log(data);
+						jobDetail = JSON.parse(data.jobDetail);
+						
+						$("#rank-read").val(jobDetail.rank);
+						$("#name-read").val(jobDetail.name);
+						$("#code-read").val(jobDetail.code);
+						$("#readModal").modal("show");
+					}
+					
+				})
+			}
+		}
+	}
+	
+	/* 직급 삭제 */
+	$(".delBtn").click(function() {
+		const code = this.parentNode.parentNode.parentNode.children[2].innerText;
+		console.log(code);
+		location.href="${ pageContext.servletContext.contextPath }/company/job/delete?code=" + code;
+	});
+	</script>
 </body>
 </html>

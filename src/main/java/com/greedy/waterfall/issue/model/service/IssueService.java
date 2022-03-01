@@ -9,11 +9,7 @@ import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 
 public interface IssueService {
 
-	int selectTotalCount(Map<String, String> searchMap);
-
-//	List<IssueDTO> selectAllIssueList(SelectCriteria selectCriteria);
-
-	List<ProjectIssueCountDTO> selectAllProjectList();
+	List<ProjectIssueCountDTO> selectAllProjectList(Map<String, Integer> managerNo);
 
 	List<IssueDTO> selectIssuesOfTask(int projectNo);
 
@@ -25,6 +21,8 @@ public interface IssueService {
 
 	List<IssueDTO> selectTask(int taskNo);
 
-	void registIssue(IssueDTO issue);
+	boolean registIssue(IssueDTO issue);
+
+	IssueDTO selectIssueDetail(int no);
 
 }

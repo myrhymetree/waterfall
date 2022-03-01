@@ -3,6 +3,7 @@ package com.greedy.waterfall.board.model.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.TodoDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
@@ -28,5 +29,8 @@ public interface TodoMapper {
 	
 	/* 게시글 삭제 */
 	int deleteTodo(int no);
+	
+	/* 첨부 파일 */
+	FileDTO findFile(int no);
 
 }

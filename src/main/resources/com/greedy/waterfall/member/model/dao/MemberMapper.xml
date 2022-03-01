@@ -28,7 +28,7 @@
 		<association property="dept" resultMap="deptResultMap"/>
 		<association property="team" resultMap="teamResultMap"/>
 		<association property="job" resultMap="jobResultMap"/>		
-	</resultMap> 
+	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.member.model.dto.DeptDTO" id="deptResultMap">
 		<id property="deptCode" column="DEPT_CODE"/>
@@ -38,6 +38,7 @@
 	<resultMap type="com.greedy.waterfall.member.model.dto.TeamDTO" id="teamResultMap">
 		<id property="teamCode" column="TEAM_CODE"/>
 		<result property="teamName" column="TEAM_NAME"/>
+		<result property="deptCode" column="DEPT_CODE"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.member.model.dto.JobDTO" id="jobResultMap">
@@ -155,4 +156,142 @@
 		 WHERE A.DEPT_CODE = #{ deptCode }
 	</select>
 	
+	<insert id="adminMemberRegist" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
+		INSERT
+		  INTO TBL_MEMBER A
+		(
+		  A.MEMBER_NO
+		, A.MEMBER_ID
+		, A.MEMBER_PWD
+		, A.MEMBER_STATUS
+		, A.MEMBER_NAME
+		, A.MEMBER_PWD_INIT_STATUS
+		, A.MEMBER_AUTHORIZATION_NO
+		)
+		VALUES
+	    (
+	      MEMBER_NO.NEXTVAL
+	    , MEMBER_ID.NEXTVAL
+	    , '$2a$12$k6UZtvzfjYMzS.5vcccTAeeNgjw30cOTeh79H2ZxSogYb31gH414e'
+		, 'Y'	
+	    , #{ name }
+	    , 'Y'
+	    , 2  
+	    )
+	    <selectKey keyProperty="no" resultType="_int" order="AFTER">
+	    	SELECT 
+	    		   MEMBER_NO.CURRVAL
+	          FROM DUAL		   
+	    </selectKey> 	
+	</insert>
+	
+	<insert id="deptMemberRegist">
+		INSERT
+		  INTO TBL_MEM_DEPT_HISTORY A
+		(
+		  A.DEPT_MEM_HISTORY_NO
+		, A.DEPT_CODE
+		, A.MEMBER_NO
+		, A.DEPT_UPDATED_NAME  	
+		)
+		VALUES
+		(
+		  DEPT_MEM_HISTORY_NO.NEXTVAL
+		, #{ dept.deptCode }
+		, #{ no }
+		, #{ dept.deptCode } 
+		)  
+	</insert>
+	
+	<insert	id="teamMemberRegist">
+		INSERT
+		  INTO TBL_MEM_TEAM_HISTORY A
+		(
+		  A.TEAM_MEM_HISTORY_NO
+		, A.TEAM_CODE
+		, A.MEMBER_NO
+		, A.TEAM_UPDATED_NAME  	
+		) 
+		VALUES
+		(
+		  TEAM_MEM_HISTORY_NO.NEXTVAL
+		, #{ team.teamCode }
+		, #{ no }
+		, #{ team.teamCode } 
+		) 
+	</insert>
+	
+	<insert id="jobMemberRegist">
+		INSERT
+		  INTO TBL_MEM_JOB_HISTORY A
+		(
+		  A.JOB_MEM_HISTORY_NO
+		, A.JOB_CODE
+		, A.MEMBER_NO
+		, A.JOB_UPDATED_TITLE  
+		)
+		VALUES
+		(
+		  JOB_MEM_HISTORY_NO.NEXTVAL
+		, #{ job.jobCode }
+		, #{ no }
+		, #{ job.jobCode }  
+		)  
+	</insert>
+	
+	<insert id="memberRegist">
+		INSERT
+		  INTO TBL_MEMBER_COM_INFO A
+		(
+		  A.MEMBER_NO
+		, A.DEPT_CODE
+		, A.TEAM_CODE
+		, A.JOB_CODE  
+		)
+		VALUES
+		(
+		  #{ no }
+		, #{ dept.deptCode }
+		, #{ team.teamCode }
+		, #{ job.jobCode }  
+		)  
+	</insert>
+	
+	<select id="adminMemberModify" resultMap="AdminMemberResultMap" resultType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
+		SELECT
+		       A.MEMBER_NAME
+		     , A.MEMBER_ID
+		     , A.MEMBER_NO
+		     , C.DEPT_NAME
+		     , D.TEAM_NAME
+		     , E.JOB_NAME
+		  FROM TBL_MEMBER A
+		  JOIN TBL_MEMBER_COM_INFO B ON (B.MEMBER_NO = A.MEMBER_NO)     
+		  JOIN TBL_DEPT C ON (C.DEPT_CODE = B.DEPT_CODE)
+		  JOIN TBL_TEAM D ON (D.TEAM_CODE = B.TEAM_CODE)
+		  JOIN TBL_JOB_TITLE E ON (E.JOB_CODE = B.JOB_CODE)
+		 WHERE A.MEMBER_ID = #{ id }      
+	</select>
+	
+	<select id="adminDeptMember" resultMap="deptResultMap">
+		SELECT
+		       A.DEPT_CODE
+		     , A.DEPT_NAME
+		  FROM TBL_DEPT A     
+	</select>
+	
+	<select id="adminTeamMember" resultMap="teamResultMap">
+		SELECT
+		       A.TEAM_CODE
+		     , A.TEAM_NAME
+		  FROM TBL_TEAM A
+		 WHERE A.DEPT_CODE = #{ deptCode }      
+	</select>
+	
+	<select id="adminJobMember" resultMap="jobResultMap">
+		SELECT
+		       A.JOB_CODE
+		     , A.JOB_NAME
+		  FROM TBL_JOB_TITLE A      
+	</select>
 </mapper>

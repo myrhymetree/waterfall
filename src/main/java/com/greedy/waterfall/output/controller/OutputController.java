@@ -70,8 +70,15 @@ public class OutputController {
 		
 	}
 	
+	/**
+	 * findAdminOutputList : 관리자 프로젝트 별 산출물 개수 조회
+	 * @param 
+	 * @return 산출물 정보를 담은 전체 프로젝트 리스트
+	 * 
+	 * @author 김서영
+	 */
 	@GetMapping("/admin/list")
-	public ModelAndView findAdminOutputList(HttpServletRequest request, ModelAndView mv, HttpSession session) {
+	public ModelAndView findAdminOutputList(ModelAndView mv, HttpSession session) {
 		
 		/* 프로젝트 당 존재하는 산출물 개수를 return 하자 */
 		
@@ -85,6 +92,13 @@ public class OutputController {
 	}
 	
 	
+	/**
+	 * findOutputDetail : 하위 업무 선택시 해당하는 업무의 산출물 상세 정보
+	 * @param 클릭한 task의 번호
+	 * @return 클릭한 업무에 해당하는 산출물 정보
+	 * 
+	 * @author 김서영
+	 */
 	@GetMapping(value = "/detail", produces = "application/json; charset= UTF-8")
 	@ResponseBody
 	public String findOutputDetail(HttpServletRequest request) {
@@ -107,6 +121,13 @@ public class OutputController {
 		return gson.toJson(outputDetail);
 	}
 	
+	/**
+	 * removeOutput : 클릭한 산출물 삭제
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 김서영
+	 */
 	@GetMapping("/delete")
 	public String removeOutput(HttpServletRequest request, RedirectAttributes rttr) {
 		

@@ -91,11 +91,16 @@
                 </main>
                 
 <script>
+
 $(function() {
 	$("#datatablesSimple td").click(function(){
 		 const taskNo = $(this).parent().children(":eq(0)").text();
 		 console.log(taskNo)
-		location.href = "${ pageContext.servletContext.contextPath }/issue/list?taskNo=" + taskNo;
+		 /* 첫번째 td에 저장된 값을 taskNo로 해서 전달하는 방식 */
+		 /* location.href = "${ pageContext.servletContext.contextPath }/issue/list?taskNo=" + taskNo; */
+		 
+		 /*PathVariable로 컨트롤러로 전달받는 방식임 */
+		location.href = "${ pageContext.servletContext.contextPath }/issue/list/" + taskNo;
 	});
 });
 </script>
