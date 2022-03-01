@@ -1,6 +1,6 @@
 package com.greedy.waterfall.member.model.dto;
 
-import java.sql.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +24,7 @@ public class AdminMemberDTO {
 	private DeptDTO dept; 
 	private TeamDTO team;
 	private JobDTO job;
-
+	private List<DeptDTO> DeptList;
+	private List<TeamDTO> teamList;
+	private List<JobDTO> jobList;
 }

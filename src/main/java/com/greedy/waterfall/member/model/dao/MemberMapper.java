@@ -39,5 +39,11 @@ public interface MemberMapper {
 
 	AdminMemberDTO adminMemberModify(String id);
 
+	List<DeptDTO> adminDeptMember();
+
+	List<TeamDTO> adminTeamMember(String deptCode);
+
+	List<JobDTO> adminJobMember();
+
 
 }

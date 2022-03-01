@@ -103,14 +103,18 @@ public class MemberServiceImpl implements MemberService {
 		
 		AdminMemberDTO findModify = new AdminMemberDTO();
 		
-		findModify = mapper.adminMemberModify(id); 
-		System.out.println("확인용 find " + findModify);
-		System.out.println("확인용 find " + findModify);
-		System.out.println("확인용 find " + findModify);
-		System.out.println("확인용 find " + findModify);
-		System.out.println("확인용 find " + findModify);
-		System.out.println("확인용 find " + findModify);
+		findModify = mapper.adminMemberModify(id);
+		List<DeptDTO> deptList = mapper.adminDeptMember();
+		System.out.println("확인용44" + deptList);
+		List<TeamDTO> teamList = mapper.adminTeamMember(findModify.getDept().getDeptCode());
+		System.out.println("확인용55" + teamList);
+		List<JobDTO> jobList = mapper.adminJobMember();
+		System.out.println("확인용66" + jobList);
 		
+		
+		findModify.setDeptList(deptList);
+		findModify.setTeamList(teamList);
+		findModify.setJobList(jobList);
 		
 		return findModify;
 	}

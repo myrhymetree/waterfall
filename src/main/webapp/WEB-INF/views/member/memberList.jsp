@@ -73,8 +73,8 @@
                              <input type="text" class="form-control" placeholder="이름" id="name" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3">                                   
-                            <select class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option id="dept"></option>
+                            <select id="dept" class="form-select" style="width: 70%; margin-left: 15%;">
+                                <option value=""></option>
                             </select> 
                         </div>
                         <div class="mb-3">                                  
@@ -257,19 +257,21 @@
 							success : function(data, textStatus, xhr) {
 								const modify = JSON.parse(data.modify);
 							
-								for(let index in modify) {
+								/* for(let index in modify) { */
 							
 									const memberArray = Object.entries(modify);
 								
 									console.log(memberArray);
 									$("#id").val(memberArray[1][1]);
 									$("#name").val(memberArray[2][1]);
-									$("#dept").val(memberArray[6][1]);
+									/* $("#dept").val(memberArray[6][1]); */
+									$("#dept").innerText(memberArray[6][1].deptName);
+									console.log(memberArray[6][1].deptName);
 									$("#team").val(memberArray[7][1]);
-									$("#job").val(memberArray[8][1]);
+									$("#job").val(memberArray[9][1]);
 									$("#exampleModal").modal("show");
-								
-								}
+								    /* $("#dept").append(memberArray[6][1].deptName); */
+								/* } */
 							
 							}, error : function(data){
 								console.log("문제있네");
