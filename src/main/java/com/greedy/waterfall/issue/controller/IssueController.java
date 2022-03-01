@@ -40,6 +40,7 @@ import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
 import com.greedy.waterfall.issue.model.dto.IssueRegisterDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
+import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.issue.model.service.IssueService;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
@@ -339,21 +340,32 @@ public class IssueController {
 	
 	@GetMapping(value="list/issueDetail", produces="application/json; charset=UTF-8")
 	@ResponseBody
-	public String findIssueDetail(HttpServletRequest request) {
+	public ModelAndView findIssueDetail(ModelAndView mv, HttpServletRequest request) {
 		
-		int no = Integer.parseInt(request.getParameter("no"));
-		System.out.println("detail에 들어오는 no " + no);
+		int no = Integer.parseInt(request.getParameter("no"));		//이슈번호
+		System.out.println("detail에 들어오는 이슈 no : " + no);
+		
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		System.out.println("detail에 들어오는 프로젝트 no : " + projectNo);
+		
 		IssueDTO issueDetail = issueService.selectIssueDetail(no);
+		
+		List<ProjectMemberDTO> projectMember = issueService.selectProjectMember(projectNo);
+		
 		System.out.println("상세조회 issueDetail : " + issueDetail);
 		Gson gson = new GsonBuilder()
-				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setDateFormat("yyyy-MM-dd")
 				.setPrettyPrinting()
 				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
 				.serializeNulls()
 				.disableHtmlEscaping()
 				.create();
 		
-		return gson.toJson(issueDetail);
+		mv.addObject("projectMember", projectMember);
+		mv.addObject("issueDetail", gson.toJson(issueDetail));
+		mv.addObject("projectMember", gson.toJson(projectMember));
+		mv.setViewName("jsonView");
+		return mv;
 	}
 	
 // 뭐할려고 했던건지를 모르겠다...	

@@ -83,6 +83,11 @@
   		<association property="project" resultMap="projectResultMap"/>
   	</resultMap>
   	
+  	<resultMap type="com.greedy.waterfall.issue.model.dto.ProjectMemberDTO" id="projectMemberResultMap">
+  		<id property="memberNo" column="MEMBER_NO"/>
+  		<result property="memberName" column="MEMBER_NAME"/>
+  	</resultMap>
+  	
   <select id="selectIssueList" parameterType="_int" resultMap="issueResultMap">
  	SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllIssueList() */
             A.ISSUE_NO
@@ -325,6 +330,16 @@
   LEFT JOIN TBL_MEMBER C ON (A.ISSUE_MANAGER = C.MEMBER_NO)
  WHERE A.ISSUE_STATUS = 'Y'
    AND A.ISSUE_NO = #{ no }
+	</select>
+	<select id="selectProjectMember" resultMap="projectMemberResultMap">
+	   SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectProjectMember() */
+	   DISTINCT 
+	   		     A.MEMBER_NO
+	           , B.MEMBER_NAME
+	       FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+	       JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+	      WHERE PROJECT_NO = #{ projectNo }
+	      ORDER BY B.MEMBER_NAME
 	</select>
   
   </mapper>

@@ -126,24 +126,66 @@ $(function() {
 	                  console.log(Object.entries(data));
 	                  
 	                  const guideArray = Object.entries(data);
-	                  const $registerName = guideArray[11][1].name;
-	                  console.log($registerName);
-	                  const $fileNo = guideArray[22][1];
-	                  console.log($fileNo);
+	                  const issueDetail = JSON.parse(data.issueDetail)
+	                  console.log(issueDetail);
+	                  const projectMember = JSON.parse(data.projectMember)	                  
+	                  console.log(projectMember);
 	                  
-	                  $("#read-no").val(guideArray[1][1]);      
-	                  $("#read-name").val(guideArray[2][1]);
-	                  $("#read-createdDate").val(guideArray[3][1]);
-	                  $("#read-progressStatus").val(guideArray[4][1]);
-	                  $("#read-importance").val(guideArray[5][1]);
-	                  $("#read-content").val(guideArray[6][1]);
-	                  $("#read-answer").val(guideArray[7][1]);
-	                  $("#read-deadline").val(guideArray[7][1]);
-	                  $("#read-completedDate").val(guideArray[8][1]);
-	                  $("#read-registerName").val(guideArray[11][1].name);
-//	                  $("#read-managerName").val(guideArray[12][1]);
-	                  $("#read-projectNo").val(guideArray[16][0].name);
-	                  $("#read-taskNo").val(guideArray[18][0].name);
+	                  const registerName = issueDetail.register.name;
+	                  console.log(registerName);
+	                  
+	                  const memberName = projectMember[0].memberName
+	                  console.log(memberName)
+//	                  const $fileNo = issueDetail.file;
+//	                  console.log($fileNo);
+					  
+					  console.log(projectMember.length);
+					  
+					  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	                  $("#register").empty();
+					  /* register에 select문에 기본값으로 주기 */
+	                  const $registerName = "<option value = '" + issueDetail.register.no + "' selected >" + issueDetail.register.name + "</option>";
+	                  $("#register").append($registerName);
+	                  
+	                  //register에 for문으로 전체 출력
+	                  for(let i = 0; i < projectMember.length; i++){
+	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                      $("#register").append($memberTag);
+	                  }
+	                  
+	                  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	                  $("#manager").empty();
+	                  /* manager에 select문에 기본값으로 주기 */
+	                  if(issueDetail.manager == null) {
+	                	  const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
+	                	  $("#manager").append($managerName);
+	                  } else {
+	                	  const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";
+		                  $("#manager").append($managerName);
+	                  }
+	                  
+	                  //manager에 for문으로 전체 출력
+	                  for(let i = 0; i < projectMember.length; i++){
+	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                      $("#manager").append($memberTag);
+	                  }
+	                  
+	                  
+//	                  $("#read-memberNo").val(projectMember.memberNo)
+	                  
+	                  $("#read-no").val(issueDetail.no);      
+	                  $("#read-name").val(issueDetail.name);
+	                  $("#read-createdDate").val(issueDetail.createdDate);
+	                  $("#read-deadline").val(issueDetail.deadline);
+	                  $("#read-progressStatus").val(issueDetail.progressStatus);
+	                  $("#read-importance").val(issueDetail.importance);
+	                  $("#read-content").val(issueDetail.content);
+	                  $("#read-answer").val(issueDetail.answer);
+	                  $("#read-completedDate").val(issueDetail.completedDate);
+//	                  $("#read-registerName").val(issueDetail.register.name);
+//	                  $("#read-managerName").val(issueDetail.manager.name); 
+	                  $("#read-projectNo").val(issueDetail.projectNo);
+	                  $("#read-taskNo").val(issueDetail.taskNo);
 //	                  $("#read-writerNo").val(guideArray[8][1]);
 //	                  $("#read-originalName").val(guideArray[14][1]);
 	                  $("#myModal").modal("show");

@@ -7,6 +7,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
+import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 
 public interface IssueMapper {
 
@@ -27,5 +28,7 @@ public interface IssueMapper {
 	int registIssueFile(IssueFileDTO issueFileDTO);
 
 	IssueDTO selectIssueDetail(int no);
+
+	List<ProjectMemberDTO> selectProjectMember(int projectNo);
 
 }

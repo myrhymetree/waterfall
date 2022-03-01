@@ -1,5 +1,7 @@
 package com.greedy.waterfall.issue.model.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
+import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.issue.model.mapper.IssueMapper;
 
 @Service
@@ -87,8 +90,20 @@ public class IssueServiceImpl implements IssueService {
 		
 		IssueDTO issueDetail = mapper.selectIssueDetail(no);
 		
+//		projectMemberMap = mapper.selectProjectMember();
+		
 		return issueDetail;
 	}
+
+	@Override
+	public List<ProjectMemberDTO> selectProjectMember(int projectNo) {
+		
+		List<ProjectMemberDTO> projectMemberList= mapper.selectProjectMember(projectNo);
+		
+		return projectMemberList;
+	}
+
+	
 }
 //			issueFileDTO.setRefIssueNo(issue.getNo());
 //			mapper.insertIssueFile(issueFileDTO);
