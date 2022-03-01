@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,9 +50,10 @@ public class TaskController {
 	 * @return 리턴값의 설명 작성 부분
 	 * 
 	 * @author 김서영
+	 * @throws JsonProcessingException 
 	 */
 	@GetMapping("/timeline")
-	public ModelAndView taskFindTimeline(HttpServletRequest request, ModelAndView mv, HttpSession session ) {
+	public ModelAndView taskFindTimeline(HttpServletRequest request, ModelAndView mv, HttpSession session ) throws JsonProcessingException {
 		
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 		
@@ -63,7 +67,6 @@ public class TaskController {
 		/* 상위업무에 해당하는 하위업무들 조회해오기 */
 		parentTaskList = taskService.findTaskTimeline(taskDTO);
 		
-		System.out.println("parentTaskList : " + parentTaskList);
 		
 		/* 상위업무,하위업무 categoryCode */
 		List<TaskCategoryDTO> taskCategoryList = taskService.findAllCategoryCode();
@@ -79,6 +82,8 @@ public class TaskController {
 		 * .setPrettyPrinting() .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
 		 * .serializeNulls() .disableHtmlEscaping() .create();
 		 */
+		
+		
 		
 		mv.addObject("parentTaskList", parentTaskList);
 		mv.addObject("taskCategoryList", taskCategoryList);

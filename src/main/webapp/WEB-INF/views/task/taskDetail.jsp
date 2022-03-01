@@ -439,8 +439,10 @@ ul {
 			});
 		});
 	<%-- hover 이벤트 끝 --%>
+	
+	
 		const startDate2 = "${parentTaskList[0].startDate}";
-		console.log(startDate);
+		console.log(startDate2);
 
 		var parentTaskList = "${parentTaskList}";
 		console.log(parentTaskList.length);
@@ -450,8 +452,61 @@ ul {
 		var startDate = "${task.startDate}";
 		console.log(startDate);
 		</c:forEach>
-
+		
+		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
+		var taskArray = new Array();
+		taskArray[${status.index}] = "${parentTaskList[status.index]}";
+		console.log(taskArray[${status.index}]);
+		</c:forEach>
+		
+		var startDateArray = new Array();
+		
+		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
+		startDateArray[${status.index}] = "${parentTaskList[status.index].startDate}";
+		console.log(startDateArray[${status.index}]);
+		</c:forEach>
+		
+		console.log(startDateArray);
+		
+		var deadlineArray = new Array();
+		
+		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
+		deadlineArray[${status.index}] = "${parentTaskList[status.index].deadline}";
+		</c:forEach>
+		console.log(deadlineArray)
+		
+		var parentTaskName = new Array();
+		
+		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
+		parentTaskName[${status.index}]= "${parentTaskList[status.index].taskCategory.categoryName}";
+		</c:forEach>
+		console.log(parentTaskName);
+		
+		var parentTaskNo = new Array();
+		
+		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
+		parentTaskNo[${status.index}] = "${parentTaskList[status.index].taskNo}";
+		</c:forEach>
+		console.log(parentTaskNo);
+		
+		var parentProgress = new Array();
+		
+		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
+		parentProgress[${status.index}] = "${parentTaskList[status.index].progression}";
+		</c:forEach>
+		console.log(parentProgress);
+		
+		console.log(taskArray.length);
+		
+		
+			
+		
+		
+		
 		var tasks = [
+		
+			
+		
 
 		{
 			start : startDate,
