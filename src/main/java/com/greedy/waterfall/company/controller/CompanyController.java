@@ -37,7 +37,8 @@ public class CompanyController {
 	public CompanyController(CompanyService companyService) {
 		this.companyService = companyService;
 	}
-
+	
+	/* 부서 조회 */
 	@GetMapping("/dept/list")
 	public ModelAndView deptSelectList(HttpServletRequest request, ModelAndView mv) {
 
@@ -45,12 +46,13 @@ public class CompanyController {
 		List<DeptDTO> deptList = companyService.findDept(selectCriteria);
 		mv.addObject("deptList", deptList);
 		mv.addObject("selectCriteria", selectCriteria);
-		mv.addObject("intent", "/company/dept/deptList");
+		mv.addObject("intent", "/company/dept/list");
 		mv.setViewName("/company/dept/deptList");
 
 		return mv;
 	}
-
+	
+	/* 직급 조회 */
 	@GetMapping("/job/list")
 	public ModelAndView jobSelectList(HttpServletRequest request, ModelAndView mv) {
 
@@ -63,7 +65,8 @@ public class CompanyController {
 
 		return mv;
 	}
-
+	
+	/* 직급 생성 */
 	@PostMapping("/job/regist")
 	public String registJob(@ModelAttribute JobDTO job, HttpServletRequest request, RedirectAttributes rttr)
 			throws JobRegistException {
@@ -83,6 +86,7 @@ public class CompanyController {
 		return "redirect:/company/job/list";
 	}
 	
+	/* 직급 상세 */
 	@GetMapping(value = "jobDetail")
 	@ResponseBody
 	public ModelAndView detailJob(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
