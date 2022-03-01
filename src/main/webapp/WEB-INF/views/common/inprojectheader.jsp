@@ -75,15 +75,33 @@
 
 							</nav>
 						</div>	
-						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapsePages3">
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-book-open"></i>
 							</div>
-							<div class="menu-font">타임라인</div>
+							<div class="menu-font">업무</div>
 							<div class="sb-sidenav-collapse-arrow">
 								<i class="fas fa-angle-down"></i>
 							</div>
 						</a>
+						<div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav">
+								<div class="menu-font2">
+									<c:if test="${ sessionScope.loginMember.role eq 2 }">
+									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/task/timeline">
+										타임라인								
+									</a>
+									</c:if>
+									<c:if test="${ sessionScope.loginMember.role eq 1 }">
+									<a class="nav-link collapsed" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="${ pageContext.servletContext.contextPath }/task/timeline">
+										업무 관리							
+									</a>
+									</c:if>
+								</div>
+								
+
+							</nav>
+						</div>	
 						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 							data-bs-target="#collapseLayouts4" aria-expanded="false"
 							aria-controls="collapseLayouts4">
