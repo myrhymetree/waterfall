@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.task.model.dto.AllTaskCodeDTO;
+import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
@@ -63,9 +64,13 @@ public class TaskController {
 		
 		taskDTO.setProjectNo(projectNo);
 		List<TaskDTO> parentTaskList = new ArrayList<TaskDTO>();
+		List<ChildTaskDTO> childTaskList = new ArrayList<ChildTaskDTO>();
 		
 		/* 상위업무에 해당하는 하위업무들 조회해오기 */
 		parentTaskList = taskService.findTaskTimeline(taskDTO);
+		
+		childTaskList = taskService.findChildTaskList(projectNo);
+		System.out.println("childTaskList : " + childTaskList);
 		
 		
 		/* 상위업무,하위업무 categoryCode */
@@ -86,6 +91,7 @@ public class TaskController {
 		
 		
 		mv.addObject("parentTaskList", parentTaskList);
+		mv.addObject("childTaskList", childTaskList);
 		mv.addObject("taskCategoryList", taskCategoryList);
 		mv.addObject("allTaskCode", allTaskCode);
 		mv.addObject("projectMemberList", projectMemberList );

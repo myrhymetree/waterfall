@@ -117,6 +117,14 @@ public class TaskServiceImpl implements TaskService{
 		
 		return taskCategoryList;
 	}
+
+	@Override
+	public List<ChildTaskDTO> findChildTaskList(int projectNo) {
+		
+		List<ChildTaskDTO> childTaskList = mapper.selectAllchildTask(projectNo);
+		
+		return childTaskList;
+	}
 	
 	
 }

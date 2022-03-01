@@ -30,4 +30,6 @@ public interface TaskMapper {
 
 	List<TaskCategoryDTO> selectAllCategoryCode();
 
+	List<ChildTaskDTO> selectAllchildTask(int projectNo);
+
 }

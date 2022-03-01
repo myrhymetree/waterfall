@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.greedy.waterfall.task.model.dto.AllTaskCodeDTO;
+import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
@@ -20,6 +21,8 @@ public interface TaskService {
 	void registTask(TaskRegistDTO taskRegistDTO);
 
 	List<TaskCategoryDTO> findAllCategoryCode();
+
+	List<ChildTaskDTO> findChildTaskList(int projectNo);
 
 
 }
