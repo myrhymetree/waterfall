@@ -119,8 +119,16 @@ public class MemberController {
 		}
 		
 		String searchCondition = request.getParameter("searchCondition");
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
 		String searchValue = request.getParameter("searchValue");
-		
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
 		Map<String, String> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
@@ -258,5 +266,38 @@ public class MemberController {
 		return mv;
 	}
 	
+	@PostMapping("/memberModify")
+	public ModelAndView memberModify(ModelAndView mv, @RequestParam Map<String, String> parameter, RedirectAttributes rttr) {
+		
+		String id = parameter.get("id");
+		String name = parameter.get("name");
+		String dept = parameter.get("dept");
+		String team = parameter.get("team");
+		String job = parameter.get("job");
+		
+		AdminMemberDTO adminMember = new AdminMemberDTO();
+		DeptDTO deptDTO = new DeptDTO();
+		TeamDTO teamDTO = new TeamDTO();
+		JobDTO jobDTO = new JobDTO();
+		
+		deptDTO.setDeptCode(dept);
+		teamDTO.setTeamCode(team);
+		jobDTO.setJobCode(job);
+		
+		adminMember.setId(id);
+		adminMember.setName(name);
+		adminMember.setDept(deptDTO);
+		adminMember.setTeam(teamDTO);
+		adminMember.setJob(jobDTO);
+		
+		memberService.memberModify(adminMember);
+		
+		String message = "수정에 성공하셨습니다.";
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/member/list");
+		
+		return mv;
+	}
 	
 }

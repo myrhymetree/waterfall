@@ -284,8 +284,7 @@
 		SELECT
 		       A.TEAM_CODE
 		     , A.TEAM_NAME
-		  FROM TBL_TEAM A
-		 WHERE A.DEPT_CODE = #{ deptCode }      
+		  FROM TBL_TEAM A  
 	</select>
 	
 	<select id="adminJobMember" resultMap="jobResultMap">
@@ -294,4 +293,15 @@
 		     , A.JOB_NAME
 		  FROM TBL_JOB_TITLE A      
 	</select>
+	
+	<update id="adminMember">
+		
+		UPDATE
+		  INTO TBL_MEMBER A
+	    ( 
+	      MEMBER_  
+	    )	  
+	
+	</update>
+	
 </mapper>

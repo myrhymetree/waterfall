@@ -29,6 +29,8 @@ public interface MemberService {
 
 	AdminMemberDTO findMemberModify(String id);
 
+	void memberModify(AdminMemberDTO adminMember);
+
 
 
 }

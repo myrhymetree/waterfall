@@ -62,7 +62,7 @@
                     <span class="modal-title" id="exampleModalLabel"><strong>계정수정</strong></span>
                 </div> 
             <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->
-                <form>
+                <form action="${ pageContext.servletContext.contextPath }/member/memberModify" method="post">
                     <div class="modal-body" style="margin-top: 5%;">
                         <div>
                             <input type="text" class="form-control" placeholder="아이디" id="id" style="width: 70%; margin-left: 15%;">
@@ -78,13 +78,13 @@
                             </select> 
                         </div>
                         <div class="mb-3">                                  
-                            <select class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option id="team"></option>
+                            <select id="team" class="form-select" style="width: 70%; margin-left: 15%;">
+                                <option value=""></option>
                             </select> 
                         </div>
                         <div class="mb-3">                              
                             <select id="job" class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option id="job"></option>
+                                <option value=""></option>
                             </select> 
                         </div>
                         <!-- 아래 텍스트박스는 글쓴이가 쓰는 만큼 늘어날 수 있다. 초기 크기 설정은 위에 일반 텍스트 박스 참조 -->
@@ -249,30 +249,58 @@
 				for(let i = 0; i < $tds.length; i++) {
 					$tds[i].onclick = function() {
 						const id = this.parentNode.children[0].innerText;
-					
+						$("#dept option").remove();
+						$("#job option").remove();
+						$("#team option").remove();
 						$.ajax({
 							url: "modify",
 							type: "get",
 							data : { id : id },
 							success : function(data, textStatus, xhr) {
 								const modify = JSON.parse(data.modify);
-							
-								/* for(let index in modify) { */
-							
-									const memberArray = Object.entries(modify);
+								const memberArray = Object.entries(modify);
+					
+								const deptList = memberArray[9][1];
+								const teamList = memberArray[10][1];
+							    const jobList = memberArray[11][1];		
+								console.log(memberArray);
+							    
+								$("#dept").append("<option value='" + memberArray[6][0] + "'>" + memberArray[6][1].deptName + "</option>");
+								$("#team").append("<option value='" + memberArray[7][0] + "'>" + memberArray[7][1].teamName + "</option>");
+								$("#job").append("<option value='" + memberArray[8][0] + "'>" + memberArray[8][1].jobName + "</option>");
 								
-									console.log(memberArray);
-									$("#id").val(memberArray[1][1]);
-									$("#name").val(memberArray[2][1]);
-									/* $("#dept").val(memberArray[6][1]); */
-									$("#dept").innerText(memberArray[6][1].deptName);
-									console.log(memberArray[6][1].deptName);
-									$("#team").val(memberArray[7][1]);
-									$("#job").val(memberArray[9][1]);
-									$("#exampleModal").modal("show");
-								    /* $("#dept").append(memberArray[6][1].deptName); */
-								/* } */
+								for(var i = 0; i < deptList.length; i++){
+									$("#dept").append("<option value='" + deptList[i].deptCode + "'>" + 
+											deptList[i].deptName + "</option>");
+									console.log(deptList);
+								}
+									
+								for(var i = 0; i < teamList.length; i++){
+									$("#team").append("<option value='" + teamList[i].teamCode + "'>" + 
+											teamList[i].teamName + "</option>");
+									console.log(teamList);
+								}
+									
+								for(var i = 0; i < jobList.length; i++){
+									$("#job").append("<option value='" + jobList[i].jobCode + "'>" + 
+											jobList[i].jobName + "</option>");
+									console.log(jobList);
+								}
+										
+									
+								$("#id").val(memberArray[1][1]);
+								$("#name").val(memberArray[2][1]);
+								/* $("#dept").val(memberArray[6][1]); */
+								/* $("#dept").innerText(memberArray[6][1].deptName);
+								$("#team").val(memberArray[7][1]);
+								$("#job").val(memberArray[9][1]); */
+								$("#exampleModal").modal("show");
+									
+													
 							
+									
+									
+									
 							}, error : function(data){
 								console.log("문제있네");
 							}
