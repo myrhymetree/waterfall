@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -31,6 +33,8 @@ import com.greedy.waterfall.board.model.noticedto.NoticeAttachmentDTO;
 import com.greedy.waterfall.board.model.service.NoticeService;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 /**
  * <pre>
@@ -43,6 +47,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
  */
 @Controller
 @RequestMapping("/notice")
+@SessionAttributes("projectAutority")
 public class NoticeController {
 
 	private final NoticeService noticeService;
@@ -57,11 +62,15 @@ public class NoticeController {
 	 * 
 	 * @param first  : HttpServletRequest(request)
 	 * @param second : ModelAndView(response)
-	 * @return : ModelAndView
+	 * @return : ModelAndView(noticeList, selectCriteria)
 	 */
 	@GetMapping("/list")
-	public ModelAndView noticeFindList(HttpServletRequest request, ModelAndView mv) {
-
+	public ModelAndView noticeFindList(HttpServletRequest request, ModelAndView mv,  HttpSession session) {
+		
+		/*session에 담겨있는 projectNo 저장*/
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		String projectNo2 = Integer.toString(((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
 
@@ -79,6 +88,10 @@ public class NoticeController {
 		Map<String, String> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
+		searchMap.put("projectNo", projectNo2);
+		
+		
+		
 
 		System.out.println("컨트롤러에서 검색조건 확인하기 : " + searchMap);
 
@@ -98,7 +111,8 @@ public class NoticeController {
 		} else {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
-
+		selectCriteria.setProjectNo(projectNo);
+		
 		System.out.println(selectCriteria);
 
 		List<NoticeDTO> noticeList = noticeService.findNoticeList(selectCriteria);
@@ -113,10 +127,9 @@ public class NoticeController {
 	}
 
 	/**
-	 * findNoticeDetail : 공지사항 상제 조회
+	 * findNoticeDetail : 공지사항 상세 조회
 	 * 
 	 * @param first  : HttpServletRequest(request)
-	 * @param second : ModelAndView(response)
 	 * @return : gson.toJson(noticeDetail) : 클릭한 게시물에 대한 정보를 담은 gson객체
 	 */
 	@GetMapping(value = "noticeDetail", produces = "application/json; charset= UTF-8")
@@ -150,13 +163,18 @@ public class NoticeController {
 	 */
 	@PostMapping("/regist")
 	public String registNotice(@ModelAttribute NoticeDTO notice, HttpServletRequest request, RedirectAttributes rttr
-			,@RequestParam MultipartFile noticeFile) {
+			,@RequestParam MultipartFile noticeFile, HttpSession session) {
 		
-		int memberNo = 1;
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 		String content = request.getParameter("content");
+		
 
 		notice.setMemberNo(memberNo);
+		notice.setProjectNo(projectNo);
 		System.out.println("content 확인" + content);
+		
+		
 		
 		/* 파일 저장될 root 설정 */
 		String root = request.getServletContext().getRealPath("resources");
@@ -223,13 +241,15 @@ public class NoticeController {
 	 * @author 김서영
 	 */
 	@PostMapping("/update")
-	public String modifyNotice(@ModelAttribute NoticeDTO notice, HttpServletRequest request) {
+	public String modifyNotice(@ModelAttribute NoticeDTO notice, HttpServletRequest request, HttpSession session) {
 
 		int no = Integer.parseInt(request.getParameter("no"));
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 
 		notice.setContent(request.getParameter("content"));
-		notice.setMemberNo(1);
-		notice.setProjectNo(3);
+		notice.setMemberNo(memberNo);
+		notice.setProjectNo(projectNo);
 
 		noticeService.modifyNotice(notice);
 

@@ -54,7 +54,7 @@ public class TaskController {
 	 * @throws JsonProcessingException 
 	 */
 	@GetMapping("/timeline")
-	public ModelAndView taskFindTimeline(HttpServletRequest request, ModelAndView mv, HttpSession session ) throws JsonProcessingException {
+	public ModelAndView taskFindTimeline(HttpServletRequest request, ModelAndView mv, HttpSession session )  {
 		
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 		
