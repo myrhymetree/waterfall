@@ -24,45 +24,42 @@
                    <div class="modal-body">
 
                         <div class="mt-4 row">
+                        	<input type="hidden" id="read-no" name="no">
+                        	<input type="hidden" id="#read-projectNo" name="projectNo">
+                        	<input type="hidden" id="#read-taskNo" name="taskNo">
+                        	
                             <div class="col-2 center"><label>이슈명</label></div>
-                            <div class="col"><input type="text" name="name"></div>
+                            <div class="col"><input type="text" id="read-name" name="name"></div>
                             <div class="col"></div>
                             <div class="col-2 center"><label>상태</label></div>
                             <div class="col-4">
-                                <select class="importance ms-auto" name="progressStatus">
+                                <select class="importance ms-auto" id="read-progressStatus" name="progressStatus">
                                     <option value="대기중">대기중</option>
-                                    <option value="처리중">확인중</option>
+                                    <option value="처리중">처리중</option>
                                     <option value="완료">완료</option>
                                 </select>
                             </div>
                         </div>
 
                        <div class="mt-4 row">
-                       		<div class="col-2 center"><label for="start-date">등록일</label></div>
-                            <div class="col"><input type="date" id="start-date" name="createdDate"></div>
+                       		<div class="col-2 center"><label for="read-createdDate">등록일</label></div>
+                            <div class="col"><input type="date" id="read-createdDate" name="createdDate"></div>
                        
-                            <div class="col-2 center"><label for="start-date">처리일</label></div>
-                            <div class="col-4"><input type="date" id="start-date" name="deadline"></div>
+                            <div class="col-2 center"><label for="read-deadline">처리일</label></div>
+                            <div class="col-4"><input type="date" id="read-deadline" name="deadline"></div>
                         </div>
 
                         <div class="mt-4 row">
                             <div class="col-2 center"><label>이슈 제기자</label></div>
                             <div class="col">
-                            	<select id="register" name="register">
-									<option value="" selected disabled>제기자 선택</option>
-									<c:forEach var="issue" items="${ issueList }">
-										<option value="${ issue.registerNo }"><c:out value="${ issue.register.name }"/></option>
-									</c:forEach>
+                            	<select class="importance ms-auto" id="register" name="register">
 								</select>
+									
                             </div>
                             
                             <div class="col-2 center"><label>이슈 담당자</label></div>
                             <div class="col">
-                            	<select id="register" name="register">
-									<option value="" selected disabled>담당자 선택</option>
-									<c:forEach var="issue" items="${ issueList }">
-										<option value="${ issue.managerNo }"><c:out value="${ issue.manager.name }"/></option>
-									</c:forEach>
+                            	<select class="importance ms-auto" id="manager" name="manager">
 								</select>
                             </div>
                         </div>
@@ -70,21 +67,24 @@
                         <div class="mt-4 row">
                             <div class="col-2 center"><label>중요도</label></div>
                             <div class="col-4">
-                            <select class="importance ms-auto" name="importance">
+                            <select class="importance ms-auto" id="read-importance" name="importance">
                                 <option value="낮음">낮음</option>
                                 <option value="보통">보통</option>
                                 <option value="긴급">긴급</option>
                             </select>
+                            
                             </div>
                         </div>
 
                         <div class="mt-4 row">
                             <div class="col-2 center" style="vertical-align: top;"><label>이슈내용</label></div>
-                <div class="col"><textarea name="" id="" cols="22" rows="auto" name="content"></textarea></div>
-                <div class="col-1"></div>
-                <div class="col-2 center" style="vertical-align: top;"><label>처리내용</label></div>
-                <div class="col-4"><textarea name="" id="" cols="22" rows="auto" name="content"></textarea></div>
-            </div>
+			                <div class="col-10"><textarea id="read-content" cols="80" rows="10" name="content"></textarea></div>
+			            </div>
+			            
+			            <div class="mt-4 row">
+			                <div class="col-2 center" style="vertical-align: top;"><label>처리내용</label></div>
+			                <div class="col-10"><textarea id="read-answer" cols="80" rows="10" name="answer"></textarea></div>
+			            </div>
 
             <div class="mt-4 row">
                 <div class="col-2 center" style="vertical-align: top;"><label>첨부파일</label></div>
@@ -161,59 +161,5 @@
     </div>
 </div>
 
-<script>
-$(function() {
-	   const $tds = document.querySelectorAll("#listArea td");   /* 이벤트 클릭 했을 때의 this  */
-	   console.log($tds);
-	   for (let i = 0; i < $tds.length; i++) {
-	      $tds[i].onclick = function() {
-	         const no = this.parentNode.children[0].innerText;
-	         const ex = this.parentNode; // this는 td의 부모인 tr
-	         console.log(no);
-	         
-	          $.ajax({
-	            url :"issueDetail",
-	            type : "get",
-	            data : { no : no },
-	            success : function(data, textStatus, xhr) {
-	               
-	                  console.log(data);
-	                  console.log(Object.entries(data));
-	                  
-	                  const guideArray = Object.entries(data);
-	                  
-	                  console.log(guideArray[3][1]);
-	                  const $fileNo = guideArray[13][1];
-	                  console.log($fileNo);
-	                  
-	                  $("#read-no").val(guideArray[0][1]);      
-	                  $("#read-title").val(guideArray[2][1]);
-	                  $("#read-content").val(guideArray[3][1]);
-	                  $("#read-writerNo").val(guideArray[8][1]);
-	                  $("#read-originalName").val(guideArray[14][1]);
-	                  $("#readModal").modal("show");
-	                  ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
-	                  
-	                  if($fileNo != null) {
-	                     
-	                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
-	                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
-	               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
-	                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
-	                     
-	                     $("#downloadarea").empty();
-	                     $("#downloadarea").append($downloadTag);
-	                     $("#downloadarea").append($deleteTag);
-//	                      $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
-	                  }
-	              }, 
-	              error:function(data) {
-	                  console.log(data);
-	               }
-	          });
-	         }
-	   }
-	});
-</script>
 </body>
 </html>

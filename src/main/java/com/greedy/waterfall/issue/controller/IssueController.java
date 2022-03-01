@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -48,6 +49,7 @@ import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 @RestController
 @RequestMapping("/issue")
+@SessionAttributes("adminProjectNo")		//이것때문에 세션에 못넣어준 현상 빈번했었음
 public class IssueController {
 	
 	private final IssueService issueService;
@@ -87,7 +89,7 @@ public class IssueController {
 		
 		List<IssueDTO> taskIssueList = issueService.selectIssuesOfTask(projectNo);
 		
-		
+		mv.addObject("adminProjectNo", projectNo);
 		mv.addObject("taskIssueList", taskIssueList);
 		mv.addObject("intent", "/issue/task");
 		mv.setViewName("/issue/adminTaskList");
@@ -193,6 +195,36 @@ public class IssueController {
 
 		mv.setViewName("redirect:/issue/admin/list/"+taskNo);
 		
+		return mv;
+	}
+	
+	@GetMapping(value="admin/list/adminIssueDetail", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public ModelAndView adminfindIssueDetail(ModelAndView mv, HttpServletRequest request) {
+		
+		int no = Integer.parseInt(request.getParameter("no"));		//이슈번호
+		System.out.println("detail에 들어오는 이슈 no : " + no);
+		
+		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
+		System.out.println("detail에 들어오는 프로젝트 no : " + projectNo);
+		
+		IssueDTO issueDetail = issueService.selectIssueDetail(no);
+		
+		List<ProjectMemberDTO> projectMember = issueService.selectProjectMember(projectNo);
+		
+		System.out.println("상세조회 issueDetail : " + issueDetail);
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls()
+				.disableHtmlEscaping()
+				.create();
+		
+		mv.addObject("projectMember", projectMember);
+		mv.addObject("issueDetail", gson.toJson(issueDetail));
+		mv.addObject("projectMember", gson.toJson(projectMember));
+		mv.setViewName("jsonView");
 		return mv;
 	}
 	
@@ -367,27 +399,5 @@ public class IssueController {
 		mv.setViewName("jsonView");
 		return mv;
 	}
-	
-// 뭐할려고 했던건지를 모르겠다...	
-//	@GetMapping("/regist/task/{taskNo}")
-//	public ModelAndView selectTask(ModelAndView mv, @PathVariable("taskNo") int taskNo, HttpServletResponse response) throws IOException {
-//
-//		List<IssueDTO> taskList = issueService.selectTask(taskNo);
-//		
-//		System.out.println(taskList);
-//		
-//		System.out.println("taskNo : " + taskNo);
-//		
-//		for(int i = 0; i < taskList.size(); i++) {
-//			System.out.println("taskList[i] : " + taskList.get(i));
-//		}
-//		
-//		response.setContentType("application/json; charset=UTF-8");
-//		ObjectMapper mapper = new ObjectMapper();
-//		
-//		mv.addObject("taskList", mapper.writeValueAsString(taskList));
-//		mv.setViewName("jsonView");
-//		return mv;
-//	}
 	
 }

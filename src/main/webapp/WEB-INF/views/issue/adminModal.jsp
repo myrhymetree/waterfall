@@ -76,7 +76,7 @@
                 <div class="col-2 center" style="vertical-align: top;"><label>첨부파일</label></div>
                 <div class="col-10"><input type="file"  name="multiFiles" multiple></div>
             </div>
-             <input type="text" id="projectNo" name="projectNo">
+             <input type="hidden" id="projectNo" name="projectNo">
              <%-- <%
 				request.getAttribute("issueList", issueList);
 			  %> --%>
