@@ -3,6 +3,7 @@ package com.greedy.waterfall.project.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.MyProjectDTO;
 import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
@@ -45,6 +46,8 @@ public interface ProjectService {
 	boolean deleteProject(int projectNo);
 	
 	Map<String, Object> findProjectMainInfo(int projectNo);
+
+	BoardDTO findBoardInfo(int boardNo);
 	
 	
 }

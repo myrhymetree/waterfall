@@ -10,6 +10,8 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.board.model.dto.BoardDTO;
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
@@ -228,6 +230,12 @@ public class ProjectServiceImpl implements ProjectService {
 		
 
 		return projectMainInfo;
+	}
+
+	@Override
+	public BoardDTO findBoardInfo(int boardNo) {
+
+		return mapper.findBoardInfo(boardNo);
 	}
 	
 	

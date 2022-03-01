@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.service.EduService;
 import com.greedy.waterfall.board.model.service.GuideService;
@@ -180,6 +182,21 @@ public class ProjectController {
 		
 		return mv;
 	}
+	
+	@GetMapping("/board/{boardNo}")
+	public ModelAndView findProjectMainBoard(ModelAndView mv, @PathVariable("boardNo") int boardNo, HttpServletResponse response) throws IOException {
+		
+		BoardDTO boardInfo = projectService.findBoardInfo(boardNo);
+
+		response.setContentType("application/json; charset=UTF-8");
+		ObjectMapper mapper = new ObjectMapper();
+		
+		mv.addObject("board", mapper.writeValueAsString(boardInfo));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
 	
 	@GetMapping("/regist/member/{teamCode}")
 	public ModelAndView findTeamMember(ModelAndView mv, @PathVariable("teamCode") String teamCode, HttpServletResponse response) throws IOException {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.greedy.waterfall.board.model.dto.BoardDTO;
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
@@ -123,7 +124,6 @@ public interface ProjectMapper {
 
 	List<BoardDTO> findMainBoardList(BoardCategoryDTO searchCondition);
 
+	BoardDTO findBoardInfo(int boardNo);
 
-	
-	
 }
