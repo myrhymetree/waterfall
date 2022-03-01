@@ -15,7 +15,7 @@
    <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
    <resources mapping="/resources/**" location="/resources/" />
 
-<<<<<<< HEAD
+
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
@@ -29,22 +29,7 @@
 	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<beans:property name="order" value="1"/>
 	</beans:bean>
-=======
-   <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-   <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-      <beans:property name="prefix" value="/WEB-INF/views/" />
-      <beans:property name="suffix" value=".jsp" />
-   </beans:bean>
-   
-   <context:component-scan base-package="com.greedy.waterfall"/>
-   
-   <beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
-   
-   <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
-      <beans:property name="order" value="1"/>
-   </beans:bean>
->>>>>>> feature/admin/modify
-
+ 
     <beans:bean id="fileDownloadView" class="com.greedy.waterfall.common.download.FileDownloadView" />
 
    <!-- 파일 업로드 -->
