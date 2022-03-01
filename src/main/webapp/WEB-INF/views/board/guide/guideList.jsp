@@ -141,33 +141,33 @@ table, th, td {
 /* 검색 인풋 버튼 */ 
 /* input::-ms-clear,
 input::-ms-reveal{
-	display:none;width:0;height:0;
+   display:none;width:0;height:0;
 } */
 
 /* input::-webkit-search-decoration,
 input::-webkit-search-cancel-button,
 input::-webkit-search-results-button,
 input::-webkit-search-results-decoration{
-	display:none;
+   display:none;
 } */
 
 /* input::-webkit-search-cancel-button {
-	display:none;
+   display:none;
 } */
 
 </style>
 <script>
-	/* 비즈니스 로직 성공 alert 메시지 처리 */
-	const message = '${ requestScope.message }';
-	if(message != null && message !== '') {
-		alert(message);
-	}
+   /* 비즈니스 로직 성공 alert 메시지 처리 */
+   const message = '${ requestScope.message }';
+   if(message != null && message !== '') {
+      alert(message);
+   }
 </script>
 </head>
 <body class="sb-nav-fixed">
-	<jsp:include page="../../common/inprojectheader.jsp"/>
-		
-	   <!-- 게시글 등록 모달 -->
+   <jsp:include page="../../common/inprojectheader.jsp"/>
+      
+      <!-- 게시글 등록 모달 -->
        <!-- Modal HTML  "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
         <div class="modal fade" id="writeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -212,14 +212,16 @@ input::-webkit-search-results-decoration{
 
         
 
-		 <!-- To Do 게시판 시작 -->
+       <!-- 가이드 게시판 시작 -->
                 <div class="todo">
                     <h2><span><i class="far fa-clipboard me-1"></i>가이드 게시판</span></h2>
                     <hr>
                     <div class="tbl-wrapper mx-auto">
                         <div class="write">
-                            <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#writeModal"><i class="far fa-edit me-1"></i>등록</button>
-                            <button type="button" class="btn btn-secondary mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-undo"></i></button>
+                           <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
+                               <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#writeModal"><i class="far fa-edit me-1"></i>등록</button>
+                               <button type="button" class="btn btn-secondary mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-undo"></i></button>
+                            </c:if>
                         </div>
                         <table class="todo-tbl">
                             <colgroup>
@@ -241,8 +243,8 @@ input::-webkit-search-results-decoration{
                             <tbody>
                                 <c:forEach var="guide" items="${ requestScope.guideList }" varStatus="status">
                                 <tr  id="listArea" class="guideSelect">
-                                    <td> <c:out value="${ guide.no }" />	
-                                    	<%-- <c:out value="${ status.index }"/> --%>
+                                    <td> <c:out value="${ guide.no }" />   
+                                       <%-- <c:out value="${ status.index }"/> --%>
                                     </td>
                                     <td><c:out value="${ guide.title }" /></td>
                                     <td><c:out value="${ guide.count}"/></td>
@@ -253,64 +255,63 @@ input::-webkit-search-results-decoration{
                             </tbody>
                         </table>
                                 <!-- 게시글 조회 모달 -->
-						        <div class="modal fade" id="readModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-						            <div class="modal-dialog">
-						                <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
-						                <div class="modal-content" style="top: 172px">
-						                    <form action="${ pageContext.servletContext.contextPath }/guide/update" method="POST">
-						                        <div class="my-modal-header mb-4">
-						                            <label class="me-2" for="title-write">제목</label>
-						                            <input type="text" id="read-title" name="title">
-						                            <input type="hidden" id="read-no" name="no">
-						                            <input type="hidden" id="read-writerNo" name="writerMemberNo">
-						                        </div>
-						                        <div class="my-modal-body">
-						                            <div class="my-textarea-div mb-3">
-						                                <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
-						                            </div>
-						                            
-						                            	<span><label>첨부파일</label></span>
-				                                        <div class="btn-group">
-				                                            <input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
-				                                            <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-				                                              <span class="caret"></span>
-				                                            </button>
-				                                            <div class="dropdown-menu">
-				                                              <a class="dropdown-item" href="#">다운로드</a>
-				                                              <a class="dropdown-item" href="#">삭제</a>
-				                                            </div>
-				                                         </div>
-						                        </div>
-						                        <br>
-						                        <div class="my-modal-footer-read">
-						                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-						                            <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( sessionScope.loginMember.no eq requestScope.guideList.writerMemberNo) }">
-						                            	<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
-						                            </c:if>
-						                            <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq requestScope.guideList.writerMemberNo)) }">
-				                            			<button type="submit" class="btn btn-secondary">수정하기</button>
-				                            		</c:if>
-						                        </div>
-						                    </form>
-						                </div>
-						            </div>
-						        </div>
-						        <!-- //게시글 조회 모달  -->
+                          <div class="modal fade" id="readModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                  <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+                                  <div class="modal-content" style="top: 172px">
+                                      <form action="${ pageContext.servletContext.contextPath }/guide/update" method="POST">
+                                          <div class="my-modal-header mb-4">
+                                              <label class="me-2" for="title-write">제목</label>
+                                              <input type="text" id="read-title" name="title">
+                                              <input type="hidden" id="read-no" name="no">
+                                              <input type="hidden" id="read-writerNo" name="writerMemberNo">
+                                          </div>
+                                          <div class="my-modal-body">
+                                              <div class="my-textarea-div mb-3">
+                                                  <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
+                                              </div>
+                                              
+                                                 <span><label>첨부파일</label></span>
+                                                    <div class="btn-group">
+                                                        <input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
+                                                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                                          <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu" id="downloadarea">
+                                                          z
+                                                        </div>
+                                                     </div>
+                                          </div>
+                                          <br>
+                                          <div class="my-modal-footer-read">
+                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+                                              <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
+                                                 <input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
+                                              </c:if>
+                                              <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo)) }">
+                                                 <button type="submit" class="btn btn-secondary">수정하기</button>
+                                              </c:if> 
+                                          </div>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- //게시글 조회 모달  -->
                         <div class="paging mt-3">
                             <jsp:include page="../../common/paging.jsp"/>
                         </div>
                         <div class="search-area">
-                        	<form id="loginForm" action="${ pageContext.servletContext.contextPath }/guide/list" method="get">
+                           <form id="loginForm" action="${ pageContext.servletContext.contextPath }/guide/list" method="get">
                             <div class="search-set mt-2">
                             <input type="hidden" name="currentPage" value="1">
                                 <select name="searchCondition" id="searchCondition">
                                     <option value="title" 
-                                    	${ requestScope.selectScope.selectCriteria.searchCondition eq "title"? "selected": "" }>제목</option>
+                                       ${ requestScope.selectScope.selectCriteria.searchCondition eq "title"? "selected": "" }>제목</option>
                                     <option value="content" 
-                                    	${ requestScope.selectScope.selectCriteria.searchCondition eq "content"? "selected": "" }>내용</option>
+                                       ${ requestScope.selectScope.selectCriteria.searchCondition eq "content"? "selected": "" }>내용</option>
                                 </select>
                                 <input type="search" id="searchvalue" name="searchValue"
-                                	value="<c:out value="${ requestScope.selectCriteria.searchValue }" />">
+                                   value="<c:out value="${ requestScope.selectCriteria.searchValue }" />">
                                 <button type="submit" id="submitButton"><i class="fas fa-search"></i></button>
                                 <!-- 검색 후 전체 게시글을 보려면 뒤로가기나 경로 기술 외에는 돌아갈 방법이 없어서 해결해야한다 -->
                                  
@@ -326,37 +327,37 @@ input::-webkit-search-results-decoration{
 $('#title-write').removeAttr('required');
 
  $(function(){
-	$("#submitButton").click(function(){
-		console.log("검색 버튼을 눌렀습니다.")
-		
-		url = $("#searchValue").val();
-		 if( url == null ) {
-			console.log("비어있음");
-			location.href="${ pageContext.servletContext.contextPath }/guide/list";
-			
-		} else {
-			console.log("값 있음");
-		}
-	});
+   $("#submitButton").click(function(){
+      console.log("검색 버튼을 눌렀습니다.")
+      
+      url = $("#searchValue").val();
+       if( url == null ) {
+         console.log("비어있음");
+         location.href="${ pageContext.servletContext.contextPath }/guide/list";
+         
+      } else {
+         console.log("값 있음");
+      }
+   });
 }); 
 
 /* 페이지 갱신 버튼 */
 function backButton_click() {
-	console.log("gude/list 이동");
-	location.href="${ pageContext.servletContext.contextPath }/guide/list";
+   console.log("gude/list 이동");
+   location.href="${ pageContext.servletContext.contextPath }/guide/list";
 }
 
 /* 게시글 삭제 이벤트 */
 $(function(){
-	   $("#delete").click(function(){
-	      const no = $("#read-no").val();
-	      location.href="${ pageContext.servletContext.contextPath }/guide/delete?no=" + no;
-	      
-		});
+      $("#delete").click(function(){
+         const no = $("#read-no").val();
+         location.href="${ pageContext.servletContext.contextPath }/guide/delete?no=" + no;
+         
+      });
 });
 
 $(function() {
-   const $tds = document.querySelectorAll("#listArea td");	/* 이벤트 클릭 했을 때의 this  */
+   const $tds = document.querySelectorAll("#listArea td");   /* 이벤트 클릭 했을 때의 this  */
    console.log($tds);
    for (let i = 0; i < $tds.length; i++) {
       $tds[i].onclick = function() {
@@ -370,31 +371,45 @@ $(function() {
             data : { no : no },
             success : function(data, textStatus, xhr) {
                
-               for(let index in data) {		//여기 this는  다름
                   console.log(data);
                   console.log(Object.entries(data));
                   
                   const guideArray = Object.entries(data);
                   
                   console.log(guideArray[3][1]);
+                  const $fileNo = guideArray[13][1];
+                  console.log($fileNo);
                   
-                  $("#read-no").val(guideArray[0][1]);		
+                  $("#read-no").val(guideArray[0][1]);      
                   $("#read-title").val(guideArray[2][1]);
                   $("#read-content").val(guideArray[3][1]);
                   $("#read-writerNo").val(guideArray[8][1]);
                   $("#read-originalName").val(guideArray[14][1]);
                   $("#readModal").modal("show");
-                  ex.children[2].innerText=guideArray[9][1];		//ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
-               }
-           	}, error:function(data) {
+                  ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
+                  
+                  if($fileNo != null) {
+                     
+                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
+                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
+               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
+                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
+                     
+                     $("#downloadarea").empty();
+                     $("#downloadarea").append($downloadTag);
+                     $("#downloadarea").append($deleteTag);
+//                      $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
+                  }
+              }, 
+              error:function(data) {
                   console.log(data);
                }
           });
-   		}
-	}
+         }
+   }
 });
 
 </script>
-	<jsp:include page="../../common/footer.jsp"/>
+   <jsp:include page="../../common/footer.jsp"/>
 </body>
 </html>

@@ -2,6 +2,8 @@ package com.greedy.waterfall.board.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.board.model.service.GuideService;
@@ -71,21 +76,6 @@ public class GuideController {
 		
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
-		System.out.println("projectNo 있냐? " + projectNo);
 		
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
@@ -125,7 +115,7 @@ public class GuideController {
 		
 		List<GuideDTO> guideList = guideService.selectAllGuideList(selectCriteria);
 		
-		GuideDTO guide = new GuideDTO();
+		System.out.println(guideList);
 		
 		mv.addObject("guideList", guideList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -164,9 +154,9 @@ public class GuideController {
 		
 		System.out.println("singleFile : " + singleFile);
 		
-//		String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 파일서버를 따로둠
+		String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 		파일서버를 따로둠
 		
-		String root1 = request.getSession().getServletContext().getContextPath();				// 상대경로
+//		String root1 = request.getSession().getServletContext().getContextPath();				// 상대경로방식, 하지만 이렇게 경로를 지정해놓으면 나중에 다운로드 시 db에 이 주소로 저장되어있기때문에 c 하위 폴더로 생성이 되기 때문에 주의가 필요함
 		
 //		String root2 = request.getServletContext().getRealPath("resources");					// 절대경로
 		
@@ -174,14 +164,13 @@ public class GuideController {
 		
 		
 //		System.out.println("root : " + root);		//절대경로 반환
-		System.out.println("root : " + root1);		
+		System.out.println("root : " + root);		
 		
 //		String filePath = root + "/uploadFiles";
 		
-		String filePath1 = root1 + "/resources/guideUploadFiles";
+		String filePath = root + "/guideUploadFiles";
 		
-//		File mkdir = new File(filePath);
-		File mkdir = new File(filePath1);
+		File mkdir = new File(filePath);
 		
 		/* 폴더 생성 */
 		if(!mkdir.exists()) {
@@ -200,16 +189,15 @@ public class GuideController {
 			
 			/* file 정보 저장해서 DTO에 insert */
 			GuideFileDTO guideFileDTO = new GuideFileDTO();
-//			guideFileDTO.setSavedPath(filePath);
-			guideFileDTO.setSavedPath(filePath1);
+			guideFileDTO.setSavedPath(filePath);
 			guideFileDTO.setOriginalName(originFileName);
 			guideFileDTO.setRandomName(savedName);
 			guide.setFile(guideFileDTO);
 			
 			/* 파일 저장 */
 			try {
-//				singleFile.transferTo(new File(filePath + "\\" + savedName));
-				singleFile.transferTo(new File(filePath1 + "/" + savedName));
+				singleFile.transferTo(new File(filePath + "\\" + savedName));
+//				singleFile.transferTo(new File(filePath1 + "/" + savedName));
 				
 				System.out.println("등록 용 가이드 확인 " + guide);
 				
@@ -220,8 +208,8 @@ public class GuideController {
 				e.printStackTrace();
 				
 				/* 실패 시 파일 삭제*/
-//				new File(filePath + "\\" + savedName).delete();
-				new File(filePath1 + "/" + savedName).delete();
+				new File(filePath + "\\" + savedName).delete();
+//				new File(filePath + "/" + savedName).delete();
 				rttr.addFlashAttribute("message", "파일 업로드 실패");
 			}
 		
@@ -290,23 +278,68 @@ public class GuideController {
     @ResponseBody
     public String findguideDetail(HttpServletRequest request) {
     
-    int no = Integer.parseInt(request.getParameter("no"));
-    System.out.println("detail에 들어오는 no " + no);
-    GuideDTO guideDetail = guideService.selectGuideDetail(no);
-    GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
-    System.out.println("상세조회 guideDetail : " + guideDetail);
-    Gson gson = new GsonBuilder()
-          .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
-          .setPrettyPrinting()
-          .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
-          .serializeNulls()
-          .disableHtmlEscaping()
-          .create();
-   
-    if(guideFileDetail == null) {
-    	return gson.toJson(guideDetail);
-    }
+	    int no = Integer.parseInt(request.getParameter("no"));
+	    System.out.println("detail에 들어오는 no " + no);
+	    GuideDTO guideDetail = guideService.selectGuideDetail(no);
+	    GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
+	    System.out.println("상세조회 guideDetail : " + guideDetail);
+	    System.out.println("상세조회 guideDetail : " + guideFileDetail);
+	    System.out.println((((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getPmNo()));
+	    System.out.println((((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()));
+	    Gson gson = new GsonBuilder()
+	          .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+	          .setPrettyPrinting()
+	          .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+	          .serializeNulls()
+	          .disableHtmlEscaping()
+	          .create();
+	   
+	    if(guideFileDetail == null) {
+	    	return gson.toJson(guideDetail);
+	    }
     
-   return gson.toJson(guideFileDetail); }
+    	return gson.toJson(guideFileDetail); 
+   }
 	
+	@GetMapping("/download/{fileNo}")
+	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
+		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		GuideFileDTO file = guideService.findFile(no);
+		fileInfo.put("filePath", file.getSavedPath());
+		System.out.println(file.getSavedPath());
+		System.out.println(file.getRandomName());
+		fileInfo.put("fileOriginName", file.getOriginalName());
+		fileInfo.put("fileRandomName", file.getRandomName());
+		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
+	}
+	
+	@GetMapping("/deleteFile/{fileNo}")
+	public String deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session, 
+			RedirectAttributes rttr, ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
+		int fileNumber = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		GuideFileDTO guideFileDTO = guideService.removeGuideFile(fileNumber); 
+		
+		String root = session.getServletContext().getRealPath("resources");	
+		
+		String filePath = root + "/guideUploadFiles";
+		
+		File file = new File(filePath + "\\" + guideFileDTO.getRandomName());
+		
+		if(file.exists()) {
+			file.delete();
+		}
+		
+		
+		mv.addObject("intent", "/guide/deleteFile");
+		mv.setViewName("/board/guide/guideList");
+		
+		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
+		
+		return "redirect:/guide/list"; 
+		
+	}
 }

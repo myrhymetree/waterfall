@@ -8,10 +8,13 @@
 <title>Insert title here</title>
 </head>
 <body>
+<script>
+
+</script>
 
 <!-- 등록 모달 encType="multipart/form-data"-->
 <div class="modal" id="registModal">
-    <form id="registForm" onsubmit="test()"  encType="multipart/form-data">
+    <form id="registForm" name="registForm" onsubmit="test()"  encType="multipart/form-data">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
 
@@ -73,6 +76,10 @@
                 <div class="col-2 center" style="vertical-align: top;"><label>첨부파일</label></div>
                 <div class="col-10"><input type="file"  name="multiFiles" multiple></div>
             </div>
+             <input type="text" id="projectNo" name="projectNo">
+             <%-- <%
+				request.getAttribute("issueList", issueList);
+			  %> --%>
         </div>
 
         <!-- Modal footer -->
@@ -132,92 +139,33 @@
 var taskNo = getParameterByName('taskNo');
 
 console.log("업무번호는 : " + taskNo)  */
+/* if (document.referrer) {
+	 var myReferer = document.referrer;
+	}
+
+	function getParameterByName(name) { name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), 
+	results = regex.exec(myReferer); return results == null ? "" : 
+	decodeURIComponent(results[1].replace(/\+/g, " ")); 
+	}
+	
+	var projectNo = getParameterByName('projectNo'); */
 
 
+	/* document.registForm.projectNo.value=projectNo; */
+	/* document.getElementById('projectNo').value = projectNo; */
+	
   function test(e) { 
 	
-	const $taskNo = ${ requestScope.taskNo  }
-	console.log($taskNo);
+	const $taskNo = ${ requestScope.taskNo }
+	console.log("taskNo :" + $taskNo);
 
 	 console.log("호출됨"); 
 	 var form = document.forms["registForm"];
 	 console.log(form);
-	 /* form.action = "${ pageContext.servletContext.contextPath }/issue/regist/" + taskNo; */
-	 form.action = "${ pageContext.servletContext.contextPath }/issue/regist/" + $taskNo;
+	 form.action = "${ pageContext.servletContext.contextPath }/issue/admin/regist/" + $taskNo;
 	 form.method="POST";	 
  }
- 
-/* 쿼리스트링 형태의 taskNo를 파라미터에서 추출해주는 함수와 form에 있는 data를 submit 했을 때 발생하는 이벤트 */
-	
-/* 	$("#save-pm").on("click", function() {
-		console.log($("#member option:selected").val());
-		console.log($("#member option:selected").text());
-		if("사원 선택" != $("#member option:selected").text()) {
-			$("#pm-name-area").val($("#member option:selected").text());
-			$("#pmNumber").val($("#member option:selected").val());
-			console.log($("#pmNumber").val());
-		}
-
-	}); */
-/* 	$("#task").on("change", function() {
-		const taskNo = $(this).val();
-		console.log(taskNo);
-		const url = "${pageContext.servletContext.contextPath}/issue/regist/task/" + $(this).val();
-		/* $("#team option").remove();
-		console.log(taskNo)
-		$.ajax({
-			url: url,
-			type: "get",
-			data: { taskNo : taskNo },
-			success: function(data) {
-				console.table(JSON.parse(data.taskList));
- 				const $teamPreOption = "<option value='' selected disabled>팀 선택</option>";
-				$("#team").append($teamPreOption);
-				const $memberPreOption = "<option value='' selected disabled>사원 선택</option>";
-				$("#member").append($memberPreOption);
-				taskList = JSON.parse(data.taskList);
-				for(let i = 0; i < taskList.length; i++) {
-					const $taskTag = "<option value = '" + taskList[i].taskNo + "'>" + teamList[i].task.taskName + "</option>" 
-					$("#task").append($taskTag);
-				}
-			},
-			error: function(data) {
-				console.log("ajax통신 실패 에러");
-			}
-		});
-	}); */
-	
-	
-/* 	$("#team").on("change", function() {
-		const teamCode = $(this).val();
-		console.log(teamCode);
-		const url = "${pageContext.servletContext.contextPath}/project/regist/member/" + $(this).val();
-		$("#member option").remove();
-				const $memberPreOption = "<option value='' selected disabled>사원 선택</option>";
-				$("#member").append($memberPreOption);
-		$.ajax({
-			url: url,
-			type: "get",
-			data: {teamCode:teamCode},
-			success: function(data) {
-				
-				memberList = JSON.parse(data.memberList);
-				for(let i = 0; i < memberList.length; i++) {
-					const $memberTag = "<option value = '" + memberList[i].no + "'>" + memberList[i].name + "</option>"
-					console.log($memberTag);
-						
-					$("#member").append($memberTag);
-				}
-			},
-			error: function(data) {
-				console.log("ajax통신 실패 에러");
-			}
-		});
-	}); */
-	
-/* 	$(".readonly").keydown(function(e){
-        e.preventDefault();
-    }); */
 	
 </script>               
 

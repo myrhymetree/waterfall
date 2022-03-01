@@ -33,7 +33,6 @@
 </head>
 <body>
 <jsp:include page="../common/inprojectheader.jsp"/>
-
      <main>
          <div class="container-fluid px-4">
              <br>

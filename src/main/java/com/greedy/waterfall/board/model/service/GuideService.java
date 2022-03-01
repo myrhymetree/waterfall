@@ -3,6 +3,7 @@ package com.greedy.waterfall.board.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.exception.GuideModifyException;
@@ -36,5 +37,9 @@ public interface GuideService {
 	GuideDTO selectGuideDetail(int no);
 
 	GuideDTO selectGuideFileDetail(int no);
+
+	GuideFileDTO findFile(int no);
+
+	GuideFileDTO removeGuideFile(int fileNumber);
 
 }
