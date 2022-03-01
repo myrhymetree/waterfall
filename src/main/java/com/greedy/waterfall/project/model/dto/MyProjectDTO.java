@@ -2,6 +2,8 @@ package com.greedy.waterfall.project.model.dto;
 
 import java.util.List;
 
+import com.greedy.waterfall.common.paging.SelectCriteria;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,6 +34,8 @@ public class MyProjectDTO {
 	private List<ProjectDTO> manageProject;
 	private List<ProjectDTO> joinProject;
 	private List<ProjectDTO> removedProject;
+	
+	private SelectCriteria selectCriteria;
 	
 	
 	

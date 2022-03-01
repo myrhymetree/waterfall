@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.board.model.dto.FileDTO;
+import com.greedy.waterfall.common.paging.Paging;
+import com.greedy.waterfall.common.paging.PagingDTO;
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
@@ -42,21 +45,29 @@ import com.greedy.waterfall.project.model.mapper.ProjectMapper;
 public class ProjectServiceImpl implements ProjectService {
 
 	private final ProjectMapper mapper;
-	
+	private final Paging paging;
+
 	@Autowired
-	public ProjectServiceImpl(ProjectMapper mapper) {
+	public ProjectServiceImpl(ProjectMapper mapper, Paging paging) {
 		this.mapper = mapper;
+		this.paging = paging;
 	}
 	
 	@Override
-	public MyProjectDTO findMyProject(MemberDTO member) {
+	public MyProjectDTO findMyProject(Map<String, String> searchMap, MemberDTO member) {
+		
 		List<ProjectDTO> manageProject = new ArrayList<ProjectDTO>();
 		List<ProjectDTO> joinProject = new ArrayList<ProjectDTO>();
 		List<ProjectDTO> removedProject = new ArrayList<ProjectDTO>();
-		
+		SelectCriteria selectCriteria = null;
 		if(member != null) {
 			if("1".equals(member.getRole())) {
-				manageProject = mapper.findAllManageProject();
+				searchMap.put("totalCount", Integer.toString(mapper.findAllManageProjectCount(searchMap)));
+
+				PagingDTO pagingSetting = new PagingDTO().builder().limit(5).buttonAmount(5).memberNo(member.getNo()).build();
+				
+				selectCriteria = paging.setPagingCondition(searchMap, pagingSetting);
+				manageProject = mapper.findAllManageProject(selectCriteria);
 				removedProject = mapper.findAllRemovedProject();
 			} else {
 				manageProject = mapper.findManagaProject(member.getNo());
@@ -68,6 +79,7 @@ public class ProjectServiceImpl implements ProjectService {
 													.manageProject(manageProject)
 													.joinProject(joinProject)
 													.removedProject(removedProject)
+													.selectCriteria(selectCriteria)
 													.build();
 		
 		return projectList;
@@ -234,12 +246,21 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public BoardDTO findBoardInfo(int boardNo) {
-
-		return mapper.findBoardInfo(boardNo);
+		BoardDTO boardInfo = mapper.findBoardInfo(boardNo);
+		int categoryNo = boardInfo.getBoardCategoryNo();
+		String boardCategoryName = "";
+		switch(categoryNo) {
+			case 1: boardCategoryName = "공지사항"; break;
+			case 2: boardCategoryName = "교육 게시판"; break;
+			case 3: boardCategoryName = "프로젝트 가이드"; break;
+			case 4: boardCategoryName = "회의록 게시판"; break;
+			case 5: boardCategoryName = "TO DO"; break;
+		}
+		
+		boardInfo.setBoardCategoryName(boardCategoryName);
+		
+		return boardInfo;
 	}
-	
-	
-	
 }
 
 

@@ -22,7 +22,7 @@ import com.greedy.waterfall.project.model.dto.TeamDTO;
  */
 public interface ProjectService {
 
-	MyProjectDTO findMyProject(MemberDTO member);
+	MyProjectDTO findMyProject(Map<String, String> searchMap, MemberDTO member);
 
 	Map<String, Object> findRegistForm();
 

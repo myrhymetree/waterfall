@@ -147,7 +147,7 @@ td {
                             <div class="search-set mt-2">
 	                            <form action="${ pageContext.servletContext.contextPath }/meeting/list" >
 									<select id="searchCondition" name="searchCondition">
-										<option value="writer" ${ requestScope.selectCriteria.searchCondition eq "writer"? "selected": "" }>작성자</option>
+										<option value="writer" ${ requestScope.selectCriteria.searchCondition eq 'writer'? 'selected': '' }>작성자</option>
 										<option value="title" ${ requestScope.selectCriteria.searchCondition eq "title"? "selected": "" }>제목</option>
 										<option value="content" ${ requestScope.selectCriteria.searchCondition eq "content"? "selected": "" }>내용</option>
 									</select> <input type="search" id="searchValue" name="searchValue">
@@ -188,14 +188,6 @@ td {
 								for(let i = 0;i < meeting.file.length; i++) {
 									const $fileName = meeting.file[i].fileOriginName;
 									const $fileNo = meeting.file[i].fileNo;
-									console.log($fileNo);
-									console.log($fileNo);
-									console.log($fileNo);
-									console.log($fileNo);
-									console.log($fileNo);
-									console.log($fileNo);
-									console.log($fileNo);
-									console.log($fileNo);
 									const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
 									$("#upload-file-area").append($fileTag);
 									$("#upload-file-area").append("<br>");

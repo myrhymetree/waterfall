@@ -83,7 +83,26 @@
 		<result property="refBoardNo" column="REF_BOARD_NO"/>
 		<result property="fileCategoryNo" column="FILE_CATEGORY_NO"/>
 	</resultMap>
- 	
+	
+	
+	
+	<select id="findAllManageProjectCount" resultType="_int" parameterType="hashmap">
+        SELECT
+        	COUNT(*)
+         FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+          JOIN TBL_PROJECT C ON (A.PROJECT_NO = C.PROJECT_NO)
+  		<where>
+        	<if test="searchCondition == 'projectName'">   
+                C.PROJECT_NAME LIKE '%' || #{ searchValue } || '%'
+           	</if>
+            <if test="searchCondition == 'pmName'">           
+                B.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
+           </if>	
+           AND A.ROLE_NO = 8
+           AND C.PROJECT_STATUS = 'Y'
+		</where>
+	</select> 	
  	
 	<select id="findTeam" resultMap="teamResult">
         SELECT
@@ -123,7 +142,8 @@
 	
 	<select id="findAllManageProject" resultMap="projectResult">
         SELECT 
-               A.PROJECT_NO
+               RNUM
+             , A.PROJECT_NO
              , A.PROJECT_NAME
              , A.PROJECT_START_DATE
              , A.PROJECT_DEADLINE
@@ -131,12 +151,46 @@
              , A.PROJECT_STATUS
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
-             , C.MEMBER_NAME
-          FROM TBL_PROJECT A
-          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
-          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
-         WHERE B.ROLE_NO = 8
-           AND A.PROJECT_STATUS = 'Y'
+             , A.MEMBER_NAME
+          FROM (SELECT ROWNUM RNUM 
+                     , B.PROJECT_NO
+                     , B.PROJECT_NAME
+                     , B.PROJECT_START_DATE
+                     , B.PROJECT_DEADLINE
+                     , B.PROJECT_PROGRESSION
+                     , B.PROJECT_STATUS
+                     , B.PROJECT_COMPLETED_DATE
+                     , B.PROJECT_PROGRESS_STATUS_CODE
+                     , B.MEMBER_NAME
+                  FROM (SELECT C.PROJECT_NO
+                             , C.PROJECT_NAME
+                             , C.PROJECT_START_DATE
+                             , C.PROJECT_DEADLINE
+                             , C.PROJECT_PROGRESSION
+                             , C.PROJECT_STATUS
+                             , C.PROJECT_COMPLETED_DATE
+                             , C.PROJECT_PROGRESS_STATUS_CODE
+                             , E.MEMBER_NAME
+                          FROM TBL_PROJECT C
+                          JOIN TBL_ROLE_ASSIGNMENT_HISTORY D ON (C.PROJECT_NO = D.PROJECT_NO)
+                          JOIN TBL_MEMBER E ON(D.MEMBER_NO = E.MEMBER_NO)
+						<where>  
+                        	<if test="searchCondition == 'projectName'">
+                               C.PROJECT_NAME LIKE '%' || #{ searchValue } || '%'
+                          	</if>  
+                          	<if test="searchCondition == 'pmName'">
+                               E.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
+                          	</if>
+          		           AND D.ROLE_NO = 8
+                           AND C.PROJECT_STATUS = 'Y'
+        				</where>
+                         ORDER BY C.PROJECT_NO
+                       ) B
+				<![CDATA[
+                 WHERE ROWNUM <= #{ endRow }      
+				]]>
+               ) A
+         WHERE RNUM >= #{ startRow }	
 	</select> 
 	<select id="findAllRemovedProject" resultMap="projectResult">
         SELECT 

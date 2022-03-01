@@ -41,8 +41,8 @@ public class BoardDTO {
 	private int projectNo;					//해당 프로젝트 번호
 	private int memberNo;					//작성자 번호
 	private int boardCount;					//게시물 조회수
-	
 	private MemberDTO member;		//게시자의 이름을 저장하는 DTO
 	private List<FileDTO> file;				//해당 게시판의 첨부파일의 정보를 저장하는 DTO
 	
+	private String boardCategoryName;
 }

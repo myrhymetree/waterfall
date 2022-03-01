@@ -1,11 +1,13 @@
 package com.greedy.waterfall.project.model.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
 import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.board.model.dto.FileDTO;
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
@@ -34,11 +36,6 @@ public interface ProjectMapper {
 	
 	List<ProjectStatusDTO> findAllProjectStatus();
 
-	
-	
-	
-	
-
 	List<DeptDTO> findAllDept();
 	
 	List<TeamDTO> findTeam(String deptCode);
@@ -52,16 +49,14 @@ public interface ProjectMapper {
 
 	int registMemberProject(RegistProjectDTO newProject);
 
-	
-	
-	
 	//어드민 프로젝트 전체 조회
 //	List<ProjectDTO> findAllProject();
 	
-	List<ProjectDTO> findAllManageProject();
+	List<ProjectDTO> findAllManageProject(SelectCriteria selectCriteria);
 
 	List<ProjectDTO> findAllRemovedProject();
 
+	int findAllManageProjectCount(Map<String, String> searchMap);
 	
 	
 	
@@ -125,5 +120,6 @@ public interface ProjectMapper {
 	List<BoardDTO> findMainBoardList(BoardCategoryDTO searchCondition);
 
 	BoardDTO findBoardInfo(int boardNo);
+
 
 }

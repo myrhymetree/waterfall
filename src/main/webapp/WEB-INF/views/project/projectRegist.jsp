@@ -61,7 +61,7 @@
 						</select>
 					</span>
 					<span>
-					    <input id="save-pm" type="button" value="변경">
+					    <input id="save-pm" type="button" value="등록">
 					</span>
 				</div>
 				<div class="mt-3">

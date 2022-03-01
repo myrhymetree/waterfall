@@ -26,7 +26,7 @@
 
 .my-textarea-div {
    width: 440px;
-   height: 430px;
+   height: 300px;
 }
 
 #my-textarea {
@@ -37,7 +37,7 @@
 #read-content {
    display: block;
    width: 100%;
-   height: 100%;
+   height: 300px;
 }
 
 .my-modal-footer button {
@@ -76,7 +76,7 @@
                 <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
                    <div class="modal-content" style="top: 172px" >
                         <div class="my-modal-header mb-4">
-                            <label class="me-2" for="boardcategory"></label><br>
+                            <h2 id="board-category-name"></h2><br>
                             <label class="me-2" for="title-write">제목</label>
                             <input style="width:90%" type="text" id="read-title" name="title">
                         </div>
@@ -86,16 +86,15 @@
 							<label style="margin-left:25%"class="mb-4">조회수</label>
 							<input type="text" style="width:15%;margin-left:2%" id="read-boardcount" readonly>
 						</div>
-                        <div class="my-modal-body">
+                        <div class="my-modal-body" style="width:200px">
                             <div class="my-textarea-div mb-3">
                                 <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
                             </div>
                         </div>
+                        <div class="my-modal-upload mb-4" id="upload-file-area">
+	            		</div>
                         <div class="my-modal-footer-read">
-                           <input type="file" id="noticeFile" name="noticeFile" >
-                           <br>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-                            <input type="hidden" id="read-no" name="no"> 
                         </div>
                     </div>
             </div>

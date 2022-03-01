@@ -322,12 +322,24 @@ textarea {
 				url: $url,
 				success: function(data) {
 					const $boardInfo = JSON.parse(data.board);
-					console.log($boardInfo);
+					$("#upload-file-area").empty();
+					$("#board-category-name").empty();
+
 					$("#read-title").val($boardInfo.title);
 					$("#read-membername").val($boardInfo.member.name);
 					$("#read-boardcount").val($boardInfo.boardCount);
 					$("#read-content").val($boardInfo.content);
-					console.log($boardInfo.member.name);	
+					console.log($boardInfo.member.name);
+					if($boardInfo.file != null) {
+						for(let i = 0;i < $boardInfo.file.length; i++) {
+							const $fileName = $boardInfo.file[i].fileOriginName;
+							const $fileNo = $boardInfo.file[i].fileNo;
+							const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
+							$("#upload-file-area").append($fileTag);
+							$("#upload-file-area").append("<br>");
+						}
+					}
+					$("#board-category-name").append($boardInfo.boardCategoryName);
 				},
 				error: function() {
 					alert('project main board error');

@@ -7,6 +7,5 @@ public interface Paging {
 	SelectCriteria setPagingCondition(Map<String, String> searchMap);
 	
 	SelectCriteria setPagingCondition(Map<String, String> searchMap, PagingDTO pageSetting);
-	
-	
+
 }
