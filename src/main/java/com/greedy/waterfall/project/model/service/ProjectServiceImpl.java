@@ -2,7 +2,6 @@ package com.greedy.waterfall.project.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.dto.BoardDTO;
-import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.common.paging.Paging;
 import com.greedy.waterfall.common.paging.PagingDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
@@ -246,7 +244,17 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public BoardDTO findBoardInfo(int boardNo) {
+		int increseBoardCountResult = mapper.increaseBoardCount(boardNo);
+		if(increseBoardCountResult <= 0) {
+			return null;
+		}
 		BoardDTO boardInfo = mapper.findBoardInfo(boardNo);
+		
+		return findBoardCategoryName(boardInfo);
+	}
+	
+	private BoardDTO findBoardCategoryName(BoardDTO boardInfo) {
+
 		int categoryNo = boardInfo.getBoardCategoryNo();
 		String boardCategoryName = "";
 		switch(categoryNo) {
@@ -259,8 +267,11 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		boardInfo.setBoardCategoryName(boardCategoryName);
 		
+		
 		return boardInfo;
 	}
+	
+	
 }
 
 

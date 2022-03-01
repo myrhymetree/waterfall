@@ -121,5 +121,7 @@ public interface ProjectMapper {
 
 	BoardDTO findBoardInfo(int boardNo);
 
+	int increaseBoardCount(int boardNo);
+
 
 }
