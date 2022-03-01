@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -334,6 +335,25 @@ public class IssueController {
 
 //		mv.setViewName("redirect:/issue/list/"+taskNo);
 		return mv;
+	}
+	
+	@GetMapping(value="list/issueDetail", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String findIssueDetail(HttpServletRequest request) {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		System.out.println("detail에 들어오는 no " + no);
+		IssueDTO issueDetail = issueService.selectIssueDetail(no);
+		System.out.println("상세조회 issueDetail : " + issueDetail);
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls()
+				.disableHtmlEscaping()
+				.create();
+		
+		return gson.toJson(issueDetail);
 	}
 	
 // 뭐할려고 했던건지를 모르겠다...	

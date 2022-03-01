@@ -41,9 +41,10 @@
 		<c:otherwise><jsp:include page="../common/inprojectheader.jsp"/></c:otherwise>
 	</c:choose>
 	
-<jsp:include page="/WEB-INF/views/issue/adminModal.jsp"/>
-<jsp:include page="/WEB-INF/views/issue/adminDetailModal.jsp"/>
+	<jsp:include page="/WEB-INF/views/issue/adminModal.jsp"/>
+	<jsp:include page="/WEB-INF/views/issue/adminDetailModal.jsp"/>
      <main>
+		<button type="button" class="btn btn-pink mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-backward"></i></button>
          <div class="container-fluid px-4">
              <br>
              <br>
@@ -107,6 +108,12 @@
 
 <jsp:include page="../common/footer.jsp"/>
 <script>
+/* 이전페이지 돌아가기 버튼 */
+function backButton_click() {
+   console.log("이전 페이지 이동");
+   location.href= document.referrer;
+}
+
  $("#registModal").click(function(){
 
 		var projectNo = ${ requestScope.projectNo };

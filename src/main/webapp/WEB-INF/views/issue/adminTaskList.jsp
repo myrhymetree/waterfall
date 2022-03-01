@@ -30,70 +30,77 @@
 	<c:otherwise><jsp:include page="../common/inprojectheader.jsp"/></c:otherwise>
 	</c:choose>
 	
-                <main>
-                    <div class="container-fluid px-4">
-                        <br>
-                        <br>
-                        <h1 class="mt-4"><i class="fas fa-exclamation-circle"></i>이슈</h1>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                	프로젝트 별 업무 목록
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                   <colgroup>
-                                        <col style="width:10%"/>
-                                        <col style="width:20%"/>
-                                        <col style="width:15%"/>
-                                        <col style="width:15%"/>
-                                        <col style="width:15%"/>
-                                        <col style="width:15%"/>
-                                        <col style="width:10%"/>
-                                    </colgroup>
-                                    <!-- <colgroup>
-                                        <col style="width:10%"/>
-                                        <col style="width:50%"/>
-                                        <col style="width:10%"/>
-                                        <col style="width:10%"/>
-                                        <col style="width:20%"/>
-                                    </colgroup> -->
-                                    <thead>
-                                    
-                                        <tr>
-                                            <th>No</th>
-                                            <th>업무 명</th>
-                                            <th>총 이슈</th>
-                                            <th>해결 전 이슈</th>
-                                            <th>해결 중인 이슈</th>
-                                            <th>해결 완료된 이슈</th>
-                                            <th>담당자</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-			                             <c:forEach var="task" items="${ requestScope.taskIssueList }" varStatus="status">
-				                             <tr>
-				                                 <td><c:out value="${ task.task.no }"/></td>
-				                                 <td><c:out value="${ task.taskCode.taskCategoryName }"/></td>
-				                                 <td><c:out value="${ task.allIssueCount }"/></td>
-				                                 <td><c:out value="${ task.pendingIssueCount }"/></td>
-				                                 <td><c:out value="${ task.processingIssueCount }"/></td>
-				                                 <td><c:out value="${ task.completedIssueCount }"/></td>
-				                                 <td><c:out value="${ task.managerName }"/></td>
-				                             </tr>
-										</c:forEach>
-                                        
-                                    </tbody>
-                                       
-                                        <tfoot>
-                                        </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </main>
+    <main>
+    	<button type="button" class="btn btn-pink mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-backward"></i></button>
+        <div class="container-fluid px-4">
+            <br>
+            <br>
+            <h1 class="mt-4"><i class="fas fa-exclamation-circle"></i>이슈</h1>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    	프로젝트 별 업무 목록
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                       <colgroup>
+                            <col style="width:10%"/>
+                            <col style="width:20%"/>
+                            <col style="width:15%"/>
+                            <col style="width:15%"/>
+                            <col style="width:15%"/>
+                            <col style="width:15%"/>
+                            <col style="width:10%"/>
+                        </colgroup>
+                        <!-- <colgroup>
+                            <col style="width:10%"/>
+                            <col style="width:50%"/>
+                            <col style="width:10%"/>
+                            <col style="width:10%"/>
+                            <col style="width:20%"/>
+                        </colgroup> -->
+                        <thead>
+                        
+                            <tr>
+                                <th>No</th>
+                                <th>업무 명</th>
+                                <th>총 이슈</th>
+                                <th>해결 전 이슈</th>
+                                <th>해결 중인 이슈</th>
+                                <th>해결 완료된 이슈</th>
+                                <th>담당자</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    <c:forEach var="task" items="${ requestScope.taskIssueList }" varStatus="status">
+                     <tr>
+                         <td><c:out value="${ task.task.no }"/></td>
+                         <td><c:out value="${ task.taskCode.taskCategoryName }"/></td>
+                         <td><c:out value="${ task.allIssueCount }"/></td>
+                         <td><c:out value="${ task.pendingIssueCount }"/></td>
+                         <td><c:out value="${ task.processingIssueCount }"/></td>
+                         <td><c:out value="${ task.completedIssueCount }"/></td>
+                         <td><c:out value="${ task.managerName }"/></td>
+                     </tr>
+				    </c:forEach>
+                            
+                        </tbody>
+                           
+                            <tfoot>
+                            </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
                 
 <script>
+/* 이전페이지 돌아가기 버튼 */
+function backButton_click() {
+   console.log("이전 페이지 이동");
+   location.href= location.href = "${ pageContext.servletContext.contextPath }/issue/project";
+}
+
 $(function() {
 	$("#datatablesSimple td").click(function(){
 		 const taskNo = $(this).parent().children(":eq(0)").text();

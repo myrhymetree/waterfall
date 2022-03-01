@@ -65,7 +65,6 @@ public class IssueServiceImpl implements IssueService {
 		System.out.println("IssueServiceImpl의 registIssue의 files 는  " + files);
 		if(mapper.registIssue(issue) > 0) {
 			result = true;
-
 		
 			if(files != null) {
 				int count = 0;
@@ -81,6 +80,14 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public IssueDTO selectIssueDetail(int no) {
+		
+		IssueDTO issueDetail = mapper.selectIssueDetail(no);
+		
+		return issueDetail;
 	}
 }
 //			issueFileDTO.setRefIssueNo(issue.getNo());

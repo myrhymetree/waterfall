@@ -135,16 +135,8 @@ public class GuideServiceImpl implements GuideService {
 	      
 	      GuideDTO guideDetail = new GuideDTO();
 	      
-	      
 	      if(result > 0) {
 	    	  guideDetail = mapper.selectGuideDetail(no);
-	         
-	         GuideFileDTO guideFileDTO = guideDetail.getFile();
-	       
-	         
-				/*
-				 * if(guideFileDTO.getNo() == 0) { guideDetail = mapper.selectGuideDetailPlusFile(no); }
-				 */
 	      }
 	      
 	      return guideDetail;

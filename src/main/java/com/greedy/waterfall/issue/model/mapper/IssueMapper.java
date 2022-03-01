@@ -26,4 +26,6 @@ public interface IssueMapper {
 
 	int registIssueFile(IssueFileDTO issueFileDTO);
 
+	IssueDTO selectIssueDetail(int no);
+
 }

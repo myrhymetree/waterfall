@@ -302,5 +302,29 @@
         , 3
         ) 
 	</insert>
+	
+	<select id="selectIssueDetail" resultMap="issueResultMap">
+	  SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectIssueDetail() */
+	         A.ISSUE_NO
+	       , A.ISSUE_NAME
+	       , A.ISSUE_CREATED_DATE
+	       , A.ISSUE_PROGRESS_STATUS
+	       , A.ISSUE_IMPORTANCE
+	       , A.ISSUE_CONTENT
+	       , A.ISSUE_ANSWER
+	       , A.ISSUE_DEADLINE
+	       , A.ISSUE_COMPLETED_DATE
+	       , A.ISSUE_REGISTER
+	       , A.PROJECT_NO
+	       , A.TASK_NO
+	       , B.MEMBER_NAME AS REGISTER_NAME
+	       , A.ISSUE_MANAGER
+	       , C.MEMBER_NAME AS MANAGER_NAME
+	   FROM TBL_ISSUE A
+  LEFT JOIN TBL_MEMBER B ON (A.ISSUE_REGISTER = B.MEMBER_NO)
+  LEFT JOIN TBL_MEMBER C ON (A.ISSUE_MANAGER = C.MEMBER_NO)
+ WHERE A.ISSUE_STATUS = 'Y'
+   AND A.ISSUE_NO = #{ no }
+	</select>
   
   </mapper>

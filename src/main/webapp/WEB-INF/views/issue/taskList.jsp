@@ -91,6 +91,7 @@
                 </main>
                 
 <script>
+
 $(function() {
 	$("#datatablesSimple td").click(function(){
 		 const taskNo = $(this).parent().children(":eq(0)").text();

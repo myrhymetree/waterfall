@@ -23,4 +23,6 @@ public interface IssueService {
 
 	boolean registIssue(IssueDTO issue);
 
+	IssueDTO selectIssueDetail(int no);
+
 }
