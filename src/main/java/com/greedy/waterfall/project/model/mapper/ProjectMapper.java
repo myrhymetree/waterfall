@@ -1,10 +1,13 @@
 package com.greedy.waterfall.project.model.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
 import com.greedy.waterfall.board.model.dto.BoardDTO;
+import com.greedy.waterfall.board.model.dto.FileDTO;
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
@@ -27,16 +30,11 @@ import com.greedy.waterfall.project.model.dto.TeamDTO;
 @Repository
 public interface ProjectMapper {
 
-	List<ProjectDTO> findManagaProject(int no);
+	List<ProjectDTO> findManagaProject(SelectCriteria selectCriteria);
 
-	List<ProjectDTO> findJoinProject(int no);
+	List<ProjectDTO> findJoinProject(SelectCriteria subselectCriteria);
 	
 	List<ProjectStatusDTO> findAllProjectStatus();
-
-	
-	
-	
-	
 
 	List<DeptDTO> findAllDept();
 	
@@ -51,16 +49,14 @@ public interface ProjectMapper {
 
 	int registMemberProject(RegistProjectDTO newProject);
 
-	
-	
-	
 	//어드민 프로젝트 전체 조회
 //	List<ProjectDTO> findAllProject();
 	
-	List<ProjectDTO> findAllManageProject();
+	List<ProjectDTO> findAllManageProject(SelectCriteria selectCriteria);
 
-	List<ProjectDTO> findAllRemovedProject();
+	List<ProjectDTO> findAllRemovedProject(SelectCriteria subselectCriteria);
 
+	int findAllManageProjectCount(Map<String, String> searchMap);
 	
 	
 	
@@ -123,7 +119,15 @@ public interface ProjectMapper {
 
 	List<BoardDTO> findMainBoardList(BoardCategoryDTO searchCondition);
 
+	BoardDTO findBoardInfo(int boardNo);
 
-	
-	
+	int increaseBoardCount(int boardNo);
+
+	int findManageProjectCount(Map<String, String> searchMap);
+
+	int findAllJoinProjectCount(Map<String, String> searchMap);
+
+	int findAllRemovedProjectCount(Map<String, String> searchMap);
+
+
 }

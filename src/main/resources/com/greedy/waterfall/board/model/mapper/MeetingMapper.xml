@@ -157,7 +157,7 @@
                               D.MEMBER_NAME LIKE '%'|| #{ searchValue } || '%'
 							</if> 
                           AND C.BOARD_CATEGORY_NO = 4
-                          AND C.BOARD_STATUS = 'Y'
+                          AND C.BOARD_STATUS = 'Y'	
                           AND C.PROJECT_NO = #{ projectNo }
 						</where>	      
                         ORDER BY C.BOARD_NO DESC

@@ -4,15 +4,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- jQuery library -->
-<script
-   src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <!-- Latest compiled JavaScript -->
-<link rel="stylesheet"
-   href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-   integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-   crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
 <!-- Google Material Icons-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -20,10 +17,8 @@
    href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <!-- chart -->
-<script
-   src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js"></script>
-<script
-   src="https://cdn.anychart.com/releases/8.10.0/js/anychart-pie.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-pie.min.js"></script>
 
 <style>
 #output_header {
@@ -180,6 +175,7 @@ textarea {
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp"/>
+	<jsp:include page="/WEB-INF/views/project/projectMainBoardModal.jsp"/>
 
 	<div >
       <main>
@@ -198,7 +194,7 @@ textarea {
             <%-- 프로젝트 가이드 시작 --%>
             <label style="margin-left: 11%">&emsp;&emsp;&emsp;프로젝트 가이드</label>
             <%-- + 버튼 --%>
-            <button class="float" id="addButton1" onclick="location.href='${ pageContext.servletContext.contextPath }/guide/list'">
+            <button class="float" id="addButton1" onclick="location.href='${ pageContext.servletContext.contextPath }/edu /list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
             </button>
             <%-- 프로젝트 가이드 끝 --%>
@@ -216,10 +212,15 @@ textarea {
                </div>
             	   
                <div class="main-box3">
-	               <c:forEach var="meeting" items="${ projectBoard.guideBoard }">
-	               	<br> 	${ meeting.title }
-	               </c:forEach>
-               </div>
+	               <table style="margin-left:8%;margin-top:8%" id="main-board-modal">
+		               <c:forEach var="guide" items="${ projectBoard.guideBoard }">
+							<tr data-bs-toggle="modal" data-bs-target="#project-main-board-modal">
+								<td>${ guide.title }</td>
+								<td><input type="hidden" value="${ guide.no }"></td>
+							</tr>
+		               </c:forEach>
+	               </table>
+				</div>
                
             </div>
             
@@ -254,27 +255,47 @@ textarea {
             <div id="chartContent2">
                <%--To Do 박스--%>
                <div class="main-box2">
-	               <c:forEach var="meeting" items="${ projectBoard.todoBoard }">
-	               	<br> 	${ meeting.title }
-	               </c:forEach>
+	               <table style="margin-left:8%;margin-top:8%" id="main-board-modal">
+		               <c:forEach var="todo" items="${ projectBoard.todoBoard }">
+							<tr data-bs-toggle="modal" data-bs-target="#project-main-board-modal">
+								<td>${ todo.title }</td>
+								<td><input type="hidden" value="${ todo.no }"></td>
+							</tr>
+		               </c:forEach>
+	               </table>
                </div>
                <%--공지사항 박스 --%>
                <div class="main-box2">
-	               <c:forEach var="meeting" items="${ projectBoard.noticeBoard }">
-	               		<br> ${ meeting.title }
-	               </c:forEach>
+	               <table style="margin-left:8%;margin-top:8%" id="main-board-modal">
+		               <c:forEach var="notice" items="${ projectBoard.noticeBoard }">
+							<tr data-bs-toggle="modal" data-bs-target="#project-main-board-modal">
+								<td>${ notice.title }</td>
+								<td><input type="hidden" value="${ notice.no }"></td>
+							</tr>
+		               </c:forEach>
+	               </table>
                </div>
                <%--회의록 박스 --%>
                <div class="main-box2">
-	               <c:forEach var="meeting" items="${ projectBoard.meetingBoard }">
-	               		<br> ${ meeting.title }
-	               </c:forEach>
+	               <table style="margin-left:8%;margin-top:8%" id="main-board-modal">
+		               <c:forEach var="meeting" items="${ projectBoard.meetingBoard }">
+							<tr data-bs-toggle="modal" data-bs-target="#project-main-board-modal">
+								<td>${ meeting.title }</td>
+								<td><input type="hidden" value="${ meeting.no }"></td>
+							</tr>
+		               </c:forEach>
+	               </table>
                </div>
                <%-- 교육 박스 --%>
                <div class="main-box2">
-	               <c:forEach var="meeting" items="${ projectBoard.eduBoard }">
-	               		<br> <c:out value="${ meeting.title }"/>
-	               </c:forEach>
+	               <table style="margin-left:8%;margin-top:8%" id="main-board-modal">
+		               <c:forEach var="edu" items="${ projectBoard.eduBoard }">
+							<tr data-bs-toggle="modal" data-bs-target="#project-main-board-modal">
+								<td>${ edu.title }</td>
+								<td><input type="hidden" value="${ edu.no }"></td>
+							</tr>
+		               </c:forEach>
+	               </table>
                </div>
             </div>
          </div>
@@ -288,6 +309,52 @@ textarea {
 	
 	
 	<script>
+	
+		$("td").click(function() {
+			boardNo = this.parentNode.children[1].children[0].value;
+			console.log(boardNo);
+			
+			$url = "${ pageContext.servletContext.contextPath }/project/board/" + boardNo;
+			console.log($url);
+			
+			$.ajax({
+				type: "get",
+				url: $url,
+				success: function(data) {
+					const $boardInfo = JSON.parse(data.board);
+					$("#upload-file-area").empty();
+					$("#board-category-name").empty();
+
+					$("#read-title").val($boardInfo.title);
+					$("#read-membername").val($boardInfo.member.name);
+					$("#read-boardcount").val($boardInfo.boardCount);
+					$("#read-content").val($boardInfo.content);
+					console.log($boardInfo.member.name);
+					if($boardInfo.file != null) {
+						for(let i = 0;i < $boardInfo.file.length; i++) {
+							const $fileName = $boardInfo.file[i].fileOriginName;
+							const $fileNo = $boardInfo.file[i].fileNo;
+							const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
+							$("#upload-file-area").append($fileTag);
+							$("#upload-file-area").append("<br>");
+						}
+					}
+					$("#board-category-name").append($boardInfo.boardCategoryName);
+				},
+				error: function() {
+					alert('project main board error');
+				}
+			});
+		});
+
+
+
+
+
+
+	
+	
+	
       anychart.onDocumentReady(function() {
                // add data(도넛 차트 각각의 업무 개수 - 개수 다 더해서 퍼센트로 나타내줍니다)
                var data = anychart.data.set([ [ '진행중 업무', 20 ],

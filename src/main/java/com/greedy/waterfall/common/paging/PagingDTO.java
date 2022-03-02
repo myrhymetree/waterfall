@@ -17,5 +17,6 @@ public class PagingDTO {
 
 	private int limit;
 	private int buttonAmount;
+	private int memberNo;
 	
 }

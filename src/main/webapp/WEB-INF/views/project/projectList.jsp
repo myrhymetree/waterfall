@@ -8,75 +8,121 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+
+
+<style>
+
+tr {
+height: 24px;
+}
+</style>
+
+
+
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">
-			<i class="fas fa-project-diagram"></i> 프로젝트
+			<i class="fas fa-project-diagram"></i> 프로젝트 목록
 		</h1>
 		<div class="mb-2">
-			<div class="col" style="width: 50%; text-align: left;">
-				<button type="button" onclick="location.href='${ pageContext.servletContext.contextPath }/project/manage'" class="btn btn-outline-secondary">프로젝트 관리</button>
-			</div>
-		</div>
-	
-		<div class="card mb-4 mt-3">
-			<div class="card-header" style="width: 100%;">
-				<div class="row">
-					<div class="col"
-						style="width: 50%; text-align: left; font-weight: bold; font-size: 1.3em">
-						<label>관리중인 프로젝트</label>
-					</div>
-	
+			<c:if test="${ !empty projectList.manageProject}">
+				<div class="col" style="width: 50%; text-align: left;">
+					<button type="button" onclick="location.href='${ pageContext.servletContext.contextPath }/project/manage'" class="btn btn-outline-secondary">프로젝트 관리</button>
 				</div>
-			</div>
-			<div class="card-body">
-				<table style="width: 100%; text-align: center;">
-					<colgroup>
-						<col style="width: 20%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 1%" />
-	
-					</colgroup>
-					<thead>
-						<tr>
-							<th>프로젝트명</th>
-							<th>담당자</th>
-							<th>진행률</th>
-							<th>산출물</th>
-							<th>이슈</th>
-							<th>시작일</th>
-							<th>마감일</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="project" items="${ projectList.manageProject }">
-							<tr>
-								<td><c:out value="${ project.name}" /></td>
-								<td><c:out value="${ project.member.memberName}" /></td>
-								<td><c:out value="${ project.progression }" /></td>
-								<td>대기</td>
-								<td>대기</td>
-								<td><c:out value="${ project.startDate }" /></td>
-								<td><c:out value="${ project.deadLine }" /></td>
-								<td><input type="hidden" value="${ project.no }" name="projectNo"></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</div>
+			</c:if>	
 		</div>
+		
+		<c:if test="${ !empty projectList.manageProject or requestScope.selecCriteria.searchCondition ne '' }">
+			<div class="card mb-4 mt-3">
+				<div class="card-header" style="width: 100%;">
+					<div class="row">
+						<div class="col"
+							style="width: 50%; text-align: left; font-weight: bold; font-size: 1.3em">
+							<label>관리중인 프로젝트</label>
+						</div>
+						<div class="col" style="margin-left: 50%">
+							<form action="${ pageContext.servletContext.contextPath }/project/list" >
+								<select id="searchCondition" name="searchCondition">
+									<option value="projectName" ${ requestScope.selectCriteria.searchCondition eq "projectName"? "selected": "" }>프로젝트명</option>
+									<c:if test="${ sessionScope.loginMember.role eq 1 }">
+										<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
+									</c:if>
+								</select> 
+								<input type="search" id="searchValue" name="searchValue" value="${ requestScope.selectCriteria.searchValue }">
+								<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
+							</form>	
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<table style="width: 100%;font-size:1.1em; text-align: center;">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 10%" />
+							<col style="width: 1%" />
+		
+						</colgroup>
+						<thead>
+							<tr>
+								<th>프로젝트명</th>
+								<th>담당자</th>
+								<th>진행률</th>
+								<th>산출물</th>
+								<th>이슈</th>
+								<th>시작일</th>
+								<th>마감일</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="project" items="${ projectList.manageProject }">
+								<tr>
+									<td><c:out value="${ project.name}" /></td>
+									<td><c:out value="${ project.member.memberName}" /></td>
+									<td><c:out value="${ project.progression }" /></td>
+									<td>대기</td>
+									<td>대기</td>
+									<td><c:out value="${ project.startDate }" /></td>
+									<td><c:out value="${ project.deadLine }" /></td>
+									<td><input type="hidden" value="${ project.no }" name="projectNo"></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+				<jsp:include page="/WEB-INF/views/project/projectmanagepaging.jsp"/>
+				<br>
+			</div>
+		</c:if>
 		<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role ne '1'}">
 			<div class="card mb-4 mt-3">
 				<div class="card-header">
-					<label style="font-size: 1.3em; font-weight: bold">참여중인 프로젝트</label>
+					<div class="row">
+						<div class="col">
+							<label style="font-size: 1.3em; font-weight: bold">참여중인 프로젝트</label>
+						</div>
+						<div class="col" style="margin-left: 50%">
+							<form action="${ pageContext.servletContext.contextPath }/project/list" >
+								<select id="subsearchCondition" name="subsearchCondition">
+									<option value="projectName" ${ requestScope.selectCriteria.searchCondition eq "projectName"? "selected": "" }>프로젝트명</option>
+									<c:if test="${ sessionScope.loginMember.role eq 1 }">
+										<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
+									</c:if>
+								</select> 
+								<input type="search" id="subsearchValue" name="subsearchValue" value="${ requestScope.selectCriteria.searchValue }">
+								<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
+							</form>	
+						</div>
+					</div>	
 				</div>
 				<div class="card-body">
 					<table style="width: 100%; text-align: center;">
@@ -119,6 +165,8 @@
 						</tbody>
 					</table>
 				</div>
+					<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>
+					<br>
 			</div>
 		</c:if>
 	</div>

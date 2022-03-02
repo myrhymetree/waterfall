@@ -186,7 +186,7 @@ td {
 					success: function(data) {
 						$roleList = JSON.parse(data.memberRoleList);
 						console.log($roleList);
-						for(var i = 0; i < 7; i++) {
+						for(var i = 1; i < 8; i++) {
 							$target = "#role" + i;
 							$($target).attr("checked", false);
 						}

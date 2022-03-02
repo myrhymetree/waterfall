@@ -98,7 +98,7 @@ public class MeetingController {
 		Map<String, Object> findResult = meetingService.findMeetingBoardList(searchMap);
 		List<MeetingDTO> meetingList = (List<MeetingDTO>) findResult.get("meetingList");
 		SelectCriteria selectCriteria = (SelectCriteria) findResult.get("selectCriteria");
-		
+
 		/* 반환받은 게시물 목록과, 검색조건, 전달할 주소값을 저장한 뒤  반환 주소로 전달한다.*/
 		mv.addObject("meetingList", meetingList);
 		mv.addObject("selectCriteria", selectCriteria);

@@ -129,11 +129,7 @@
                          ORDER BY G.PROJECT_MEM_STARTED_DATE
                              , E.MEMBER_NAME
                        ) B
-				<![CDATA[
-                 WHERE ROWNUM <= #{ endRow }
-				]]>
                ) A
- WHERE RNUM >= #{ startRow }
 	</select>
     
     <select id="findNewMember" resultMap="memberResult">

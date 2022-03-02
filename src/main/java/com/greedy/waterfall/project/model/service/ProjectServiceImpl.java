@@ -2,7 +2,6 @@ package com.greedy.waterfall.project.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +9,10 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.board.model.dto.BoardDTO;
+import com.greedy.waterfall.common.paging.Paging;
+import com.greedy.waterfall.common.paging.PagingDTO;
+import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
@@ -40,25 +43,50 @@ import com.greedy.waterfall.project.model.mapper.ProjectMapper;
 public class ProjectServiceImpl implements ProjectService {
 
 	private final ProjectMapper mapper;
-	
+	private final Paging paging;
+
 	@Autowired
-	public ProjectServiceImpl(ProjectMapper mapper) {
+	public ProjectServiceImpl(ProjectMapper mapper, Paging paging) {
 		this.mapper = mapper;
+		this.paging = paging;
 	}
 	
 	@Override
-	public MyProjectDTO findMyProject(MemberDTO member) {
+	public MyProjectDTO findMyProject(Map<String, String> searchMap, MemberDTO member) {
+		
 		List<ProjectDTO> manageProject = new ArrayList<ProjectDTO>();
 		List<ProjectDTO> joinProject = new ArrayList<ProjectDTO>();
 		List<ProjectDTO> removedProject = new ArrayList<ProjectDTO>();
-		
+		SelectCriteria selectCriteria = null;
+		SelectCriteria subselectCriteria = null;
 		if(member != null) {
 			if("1".equals(member.getRole())) {
-				manageProject = mapper.findAllManageProject();
-				removedProject = mapper.findAllRemovedProject();
+				searchMap.put("totalCount", Integer.toString(mapper.findAllManageProjectCount(searchMap)));
+				searchMap.put("subtotalCount", Integer.toString(mapper.findAllRemovedProjectCount(searchMap)));
+
+				PagingDTO pagingSetting = new PagingDTO().builder().limit(5).buttonAmount(5).memberNo(member.getNo()).build();
+				
+				selectCriteria = paging.setPagingCondition(searchMap, pagingSetting);
+				subselectCriteria = paging.setSubPagingCondition(searchMap, pagingSetting);
+				
+				manageProject = mapper.findAllManageProject(selectCriteria);
+				removedProject = mapper.findAllRemovedProject(subselectCriteria);
 			} else {
-				manageProject = mapper.findManagaProject(member.getNo());
-				joinProject = mapper.findJoinProject(member.getNo());
+				System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());
+				searchMap.put("memberNo", Integer.toString(member.getNo()));
+
+				searchMap.put("totalCount", Integer.toString(mapper.findManageProjectCount(searchMap)));
+				searchMap.put("subtotalCount", Integer.toString(mapper.findManageProjectCount(searchMap)));
+				
+				PagingDTO pagingSetting = new PagingDTO().builder().limit(5).buttonAmount(5).memberNo(member.getNo()).build();
+				
+				selectCriteria = paging.setPagingCondition(searchMap, pagingSetting);
+				subselectCriteria = paging.setSubPagingCondition(searchMap, pagingSetting);
+				
+				System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);
+				
+				manageProject = mapper.findManagaProject(selectCriteria);
+				joinProject = mapper.findJoinProject(subselectCriteria);
 				
 			}
 		}
@@ -66,7 +94,41 @@ public class ProjectServiceImpl implements ProjectService {
 													.manageProject(manageProject)
 													.joinProject(joinProject)
 													.removedProject(removedProject)
+													.selectCriteria(selectCriteria)
+													.subselectCriteria(subselectCriteria)
 													.build();
+		
+		
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
 		
 		return projectList;
 	}
@@ -229,9 +291,34 @@ public class ProjectServiceImpl implements ProjectService {
 
 		return projectMainInfo;
 	}
+
+	@Override
+	public BoardDTO findBoardInfo(int boardNo) {
+		int increseBoardCountResult = mapper.increaseBoardCount(boardNo);
+		if(increseBoardCountResult <= 0) {
+			return null;
+		}
+		BoardDTO boardInfo = mapper.findBoardInfo(boardNo);
+		
+		return findBoardCategoryName(boardInfo);
+	}
 	
-	
-	
+	private BoardDTO findBoardCategoryName(BoardDTO boardInfo) {
+
+		int categoryNo = boardInfo.getBoardCategoryNo();
+		String boardCategoryName = "";
+		switch(categoryNo) {
+			case 1: boardCategoryName = "공지사항"; break;
+			case 2: boardCategoryName = "교육 게시판"; break;
+			case 3: boardCategoryName = "프로젝트 가이드"; break;
+			case 4: boardCategoryName = "회의록 게시판"; break;
+			case 5: boardCategoryName = "TO DO"; break;
+		}
+		
+		boardInfo.setBoardCategoryName(boardCategoryName);
+		
+		return boardInfo;
+	}
 }
 
 

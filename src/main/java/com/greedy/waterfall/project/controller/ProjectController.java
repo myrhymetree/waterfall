@@ -1,9 +1,11 @@
 package com.greedy.waterfall.project.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.service.EduService;
 import com.greedy.waterfall.board.model.service.GuideService;
@@ -129,15 +133,36 @@ public class ProjectController {
 	
 	/* 회원의 정보를 세션에서 받아서 권한이 있는 프로젝트를 조회한다. */
 	@RequestMapping("/managelist")
-	public ModelAndView findManageProjectList(ModelAndView mv, HttpSession session) {
+	public ModelAndView findManageProjectList(ModelAndView mv, HttpServletRequest request) {
 		/* 회원의 정보로 프로젝트를 조회 */
-		MemberDTO member = (MemberDTO) session.getAttribute("loginMember");
-		MyProjectDTO project = projectService.findMyProject(member);
+		MemberDTO member = (MemberDTO) request.getSession().getAttribute("loginMember");
+		Map<String, String> searchMap = new HashMap<>();
+
+		String currentPage = request.getParameter("currentPage");
+		String searchCondition = request.getParameter("searchCondition");	
+		String searchValue = request.getParameter("searchValue");			
+		String subcurrentPage = request.getParameter("subcurrentPage");
+		String subsearchCondition = request.getParameter("subsearchCondition");	
+		String subsearchValue = request.getParameter("subsearchValue");			
+		
+		searchMap.put("searchCondition", searchCondition);
+		searchMap.put("searchValue", searchValue);
+		searchMap.put("currentPage", currentPage);
+		searchMap.put("subsearchCondition", subsearchCondition);
+		searchMap.put("subsearchValue", subsearchValue);
+		searchMap.put("subcurrentPage", subcurrentPage);
+
+		
+		MyProjectDTO project = projectService.findMyProject(searchMap, member);
 		List<ProjectDTO> manageProject = project.getManageProject();
 		List<ProjectDTO> removedProject = project.getRemovedProject();
-				
+
+		
+		mv.addObject("subselectCriteria", project.getSubselectCriteria());
+		mv.addObject("selectCriteria", project.getSelectCriteria());
 		mv.addObject("manageProject", manageProject);
 		mv.addObject("removedProject", removedProject);
+		mv.addObject("intent", "/project/managelist");
 		mv.setViewName("/project/projectManage");
 		return mv;
 	}
@@ -150,11 +175,38 @@ public class ProjectController {
 	 * @author 홍성원
 	 */
 	@GetMapping("/list")
-	public ModelAndView findProjectList(HttpSession session, ModelAndView mv) {
+	public ModelAndView findProjectList(HttpServletRequest request, ModelAndView mv) {
 		/* 회원번호로 조회 */
-		MemberDTO member = (MemberDTO) session.getAttribute("loginMember");
-		MyProjectDTO project = projectService.findMyProject(member);
+		MemberDTO member = (MemberDTO) request.getSession().getAttribute("loginMember");
+		
+		
+		System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);
+		
+		
+		
+		Map<String, String> searchMap = new HashMap<>();
+
+		String currentPage = request.getParameter("currentPage");
+		String searchCondition = request.getParameter("searchCondition");	
+		String searchValue = request.getParameter("searchValue");			
+		String subcurrentPage = request.getParameter("subcurrentPage");
+		String subsearchCondition = request.getParameter("subsearchCondition");	
+		String subsearchValue = request.getParameter("subsearchValue");			
+		
+		searchMap.put("searchCondition", searchCondition);
+		searchMap.put("searchValue", searchValue);
+		searchMap.put("currentPage", currentPage);
+		searchMap.put("subsearchCondition", subsearchCondition);
+		searchMap.put("subsearchValue", subsearchValue);
+		searchMap.put("subcurrentPage", subcurrentPage);
+
+		MyProjectDTO project = projectService.findMyProject(searchMap, member);
+		List<ProjectDTO> manageProject = project.getManageProject();
+		mv.addObject("manageProject", manageProject);
+		mv.addObject("selectCriteria", project.getSelectCriteria());
+		mv.addObject("subselectCriteria", project.getSubselectCriteria());
 		mv.addObject("projectList", project);
+		mv.addObject("intent", "/project/list");
 		mv.setViewName("/project/projectList");
 
 		return mv;
@@ -181,16 +233,25 @@ public class ProjectController {
 		return mv;
 	}
 	
+	@GetMapping("/board/{boardNo}")
+	public ModelAndView findProjectMainBoard(ModelAndView mv, @PathVariable("boardNo") int boardNo, HttpServletResponse response) throws IOException {
+		
+		BoardDTO boardInfo = projectService.findBoardInfo(boardNo);
+
+		response.setContentType("application/json; charset=UTF-8");
+		ObjectMapper mapper = new ObjectMapper();
+		mv.addObject("board", mapper.writeValueAsString(boardInfo));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	
 	@GetMapping("/regist/member/{teamCode}")
 	public ModelAndView findTeamMember(ModelAndView mv, @PathVariable("teamCode") String teamCode, HttpServletResponse response) throws IOException {
 		
 		List<MemberDTO> memberList = projectService.findTeamMember(teamCode);
 		
-		System.out.println("teamCode : " + teamCode);
-		System.out.println();
-		for(int i = 0; i < memberList.size(); i++) {
-			System.out.println("     memberList[i] : " + memberList.get(i));
-		}
 		response.setContentType("application/json; charset=UTF-8");
 		ObjectMapper mapper = new ObjectMapper();
 		

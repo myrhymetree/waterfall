@@ -51,7 +51,7 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		List<MeetingDTO> meetingList = mapper.findMeetingList(selectCriteria);
 		
-		findResult.put("selecdtCriteria", selectCriteria);
+		findResult.put("selectCriteria", selectCriteria);
 		findResult.put("meetingList", meetingList);
 		
 		/* 검색조건과 현재 페이지에 대한 정보를 담은 변수를 전달한 후 돌려받은 값을 반환한다. */
