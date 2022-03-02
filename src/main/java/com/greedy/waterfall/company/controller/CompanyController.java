@@ -18,14 +18,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.company.model.dto.DeptDTO;
 import com.greedy.waterfall.company.model.dto.JobDTO;
+import com.greedy.waterfall.company.model.dto.TeamDTO;
 import com.greedy.waterfall.company.model.service.CompanyService;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.greedy.waterfall.board.model.dto.TodoDTO;
+import com.greedy.waterfall.common.exception.company.DeptRegistException;
 import com.greedy.waterfall.common.exception.company.JobModifyException;
 import com.greedy.waterfall.common.exception.company.JobRegistException;
 import com.greedy.waterfall.common.exception.company.JobRemoveException;
+import com.greedy.waterfall.common.exception.company.TeamRegistException;
 
 @Controller
 @RequestMapping("/company")
@@ -50,6 +52,42 @@ public class CompanyController {
 		mv.setViewName("/company/dept/deptList");
 
 		return mv;
+	}
+	
+	/* 부서 생성 */
+	@PostMapping("/dept/regist")
+	public String registDept(@ModelAttribute DeptDTO dept, HttpServletRequest request, RedirectAttributes rttr) 
+			throws DeptRegistException {
+		
+		String code = request.getParameter("code");
+		String name = request.getParameter("name");
+		
+		dept.setCode(code);
+		dept.setName(name);
+		
+		companyService.registDept(dept);
+		
+		rttr.addFlashAttribute("message", "부서 등록에 성공하셨습니다!");
+		
+		return "redirect:/company/dept/list";
+	}
+	
+	/* 팀 생성 */
+	@PostMapping("/team/regist")
+	public String registTeam(@ModelAttribute TeamDTO team, HttpServletRequest request, RedirectAttributes rttr) 
+			throws TeamRegistException {
+		
+		String code = request.getParameter("code");
+		String name = request.getParameter("name");
+
+		team.setCode(code);
+		team.setName(name);
+		
+		companyService.registTeam(team);
+		
+		rttr.addFlashAttribute("message", "팀 등록에 성공하셨습니다!");
+		
+		return "redirect:/company/dept/list";
 	}
 	
 	/* 직급 조회 */

@@ -2,16 +2,23 @@ package com.greedy.waterfall.company.model.service;
 
 import java.util.List;
 
+import com.greedy.waterfall.common.exception.company.DeptRegistException;
 import com.greedy.waterfall.common.exception.company.JobModifyException;
 import com.greedy.waterfall.common.exception.company.JobRegistException;
 import com.greedy.waterfall.common.exception.company.JobRemoveException;
+import com.greedy.waterfall.common.exception.company.TeamRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.company.model.dto.DeptDTO;
 import com.greedy.waterfall.company.model.dto.JobDTO;
+import com.greedy.waterfall.company.model.dto.TeamDTO;
 
 public interface CompanyService {
 
 	List<DeptDTO> findDept(SelectCriteria selectCriteria);
+
+	void registDept(DeptDTO dept) throws DeptRegistException;
+
+	void registTeam(TeamDTO team) throws TeamRegistException;
 
 	List<JobDTO> findJob(SelectCriteria selectCriteria);
 
@@ -22,5 +29,5 @@ public interface CompanyService {
 	void modifyJob(JobDTO job) throws JobModifyException;
 
 	void removeJob(String code) throws JobRemoveException;
-
+	
 }

@@ -12,6 +12,14 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <title>부서 관리</title>
+<script>
+
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 <style>
 #output_header {
 	position: absolute;
@@ -177,10 +185,108 @@ textarea {
 	margin-left: 35px;
 	margin-right: 35px;
 }
+
+/* 모달 */
+.modal-content {
+  width: 635px;
+  height: 272px;
+  padding: 30px;
+}
+.my-modal-input label {
+  width: 60px;
+}
+.my-modal-input input, select {
+  width: 365px;
+}
+.my-modal-body {
+  margin-left: 0px;
+}
+.my-modal-footer {
+  text-align: right;
+}
+.my-modal-footer button {
+  color: #000;
+  background: none;
+  padding: 5px 25px;
+}
+.my-modal-footer button:first-child {
+  margin-right: 5px;
+}
 </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+		
+		<!-- 부서 추가 모달 -->
+		<%-- <div class="modal fade" id="writeModal" data-bs-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+				<div class="modal-content" style="top: 172px">
+					<form action="${ pageContext.servletContext.contextPath }/company/dept/regist" method="POST">
+						<div class="my-modal-header mb-3">
+							<h3>부서 생성</h3>
+						</div>
+						<div class="my-modal-body">
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="name-write">부서명</label>
+								<input type="text" id="name-write" name="name">
+							</div>
+							<div class="my-modal-input mb-4">
+								<label class="me-2" for="code-write">부서코드</label>
+								<input type="text" id="code-write" name="code">
+							</div>
+						</div>
+						<div class="my-modal-footer">
+							<button type="submit" class="btn btn-secondary"
+								data-bs-toggle="modal">등록</button>
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">취소</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div> --%>
+		
+		<!-- 팀 추가 모달 -->
+		<div class="modal fade" id="writeModal" data-bs-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+				<div class="modal-content" style="top: 172px">
+					<form action="${ pageContext.servletContext.contextPath }/company/team/regist" method="POST">
+						<div class="my-modal-header mb-3">
+							<h3>팀 추가</h3>
+						</div>
+						<div class="my-modal-body">
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="dept-select">상위부서</label>
+								<select id="dept-select" name="dept">
+									<c:forEach var="dept" items="${ requestScope.deptList }">
+										<option><c:out value="${ dept.name }" /></option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="name-write">팀명</label>
+								<input type="text" id="name-write" name="name">
+							</div>
+							<div class="my-modal-input mb-4">
+								<label class="me-2" for="code-write">팀코드</label>
+								<input type="text" id="code-write" name="code">
+							</div>
+						</div>
+						<div class="my-modal-footer">
+							<button type="submit" class="btn btn-secondary"
+								data-bs-toggle="modal">등록</button>
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">취소</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
 		<main>
 			<div id="output_header">
 				<i style='font-size: 24px' class='fas'>&#xf4fe;</i>부서관리
@@ -194,7 +300,7 @@ textarea {
 								<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;부서
 								추가
 							</button>
-							<button  rel="float" class="button float" id="dept-add">
+							<button  rel="float" class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#writeModal">
 								<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;팀
 								추가
 							</button>
@@ -204,7 +310,8 @@ textarea {
 							<button  rel="float" class="button float" id="dept-delete">
 								<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
 							</button>
-							<br> <label type="button" class="folder_toggle"
+							
+							<!-- <br> <label type="button" class="folder_toggle"
 								data-toggle="collapse" data-target="#demo"><i
 								style='font-size: 24px' class='fas'>&#xf07b;</i>어쩌고</label>
 							<div id="demo" class="collapse">
@@ -237,7 +344,13 @@ textarea {
 								<p>
 									저쩌고잉<br> 저꾸쩌<br> 드를어<br>
 								</p>
-							</div>
+							</div> -->
+							
+							<c:forEach var="dept" items="${ requestScope.deptList }">
+								<ul id="listArea" style="list-style: none">
+									<li><i style='font-size: 24px' class='fas'>&#xf07b;</i><c:out value="${ dept.name }" /></li>
+								</ul>
+							</c:forEach>
 						</div>
 					</div>
 
