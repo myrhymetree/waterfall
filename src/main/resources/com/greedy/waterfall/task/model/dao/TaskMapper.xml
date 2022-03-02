@@ -189,7 +189,12 @@
 		     , #{ projectNo }
 		     , #{ taskMember }
 		     , #{ taskCode }
+		     <if test="parentTaskNo == 0">
+		     , NULL
+		     </if>
+		     <if test="parentTaskNo != 0">
 		     , #{ parentTaskNo }
+		      </if>
 		     , #{ importance }
 		     )
 		    

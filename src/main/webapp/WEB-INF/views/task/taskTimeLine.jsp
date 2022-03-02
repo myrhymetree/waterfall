@@ -380,7 +380,7 @@ ul {
 			<select class="importance ms-2" name="importance" required>
 				<option value="" selected disabled>선택</option>
 				<option value="낮음">낮음</option>
-				<option value="보퉁">보퉁</option>
+				<option value="보통">보통</option>
 				<option value="긴급">긴급</option>
 			</select>
 		</p>
@@ -412,7 +412,7 @@ ul {
 	<!-- 업무 생성 끝 -->
 	
 	<%-- 업무 조회 모달 --%>
-	<div class="layer">
+	<%-- <div class="layer">
 		<p class="text-end mt-3">
 		</p>
 		<p>
@@ -479,9 +479,8 @@ ul {
 			<input type="hidden" name="typeNo" value="1">
 		</p>
 			
-			<button class="addTask" type="submit">업무 생성</button>
 			<button class="close">업무 나가기</button>
-	</div>
+	</div> --%>
 	<%--업무 조회 모달 끝 --%>
 	<script>
 	<%-- hover event 추가 --%>
@@ -517,12 +516,12 @@ ul {
 		<%--Gantt Chart data--%>
 
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
-		var taskArray = new Array();
+		const taskArray = new Array();
 		taskArray[${status.index}] = "${parentTaskList[status.index]}";
 		console.log(taskArray[${status.index}]);
 		</c:forEach>
 		
-		var startDateArray = new Array();
+		const startDateArray = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		startDateArray[${status.index}] = "${parentTaskList[status.index].startDate}";
@@ -531,28 +530,28 @@ ul {
 		
 		console.log(startDateArray);
 		
-		var deadlineArray = new Array();
+		const deadlineArray = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		deadlineArray[${status.index}] = "${parentTaskList[status.index].deadline}";
 		</c:forEach>
 		console.log(deadlineArray)
 		
-		var parentTaskName = new Array();
+		const parentTaskName = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		parentTaskName[${status.index}]= "${parentTaskList[status.index].taskCategory.categoryName}";
 		</c:forEach>
 		console.log(parentTaskName);
 		
-		var parentTaskNo = new Array();
+		const parentTaskNo = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		parentTaskNo[${status.index}] = "${parentTaskList[status.index].taskNo}";
 		</c:forEach>
 		console.log(parentTaskNo);
 		
-		var parentProgress = new Array();
+		const parentProgress = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		parentProgress[${status.index}] = "${parentTaskList[status.index].progression}";
@@ -562,55 +561,52 @@ ul {
 		
 		//하위업무 정보 시작
 		console.log("========================하위업무=================================")
-		var childTaskList = new Array();
+		const childTaskList = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskList[${status.index}] = "${childTaskList[status.index]}";
 		</c:forEach>
 		console.log(childTaskList.length);
 		
-		var childStartDateArr = new Array();
+		const childStartDateArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childStartDateArr[${status.index}] = "${childTaskList[status.index].startDate}";
 		</c:forEach>
 		console.log(childStartDateArr);
 		
-		var childDeadlineArr = new Array();
+		const childDeadlineArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childDeadlineArr[${status.index}] = "${childTaskList[status.index].deadline}";
 		</c:forEach>
 		console.log(childDeadlineArr);
 		
-		var childTaskName = new Array();
+		const childTaskName = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskName[${status.index}] = "${childTaskList[status.index].taskCategory.categoryName}";
 		</c:forEach>
 		console.log(childTaskName);
 		
-		var childTaskNoArr = new Array();
+		const childTaskNoArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskNoArr[${status.index}] = "${childTaskList[status.index].taskNo}";
 		</c:forEach>
 		console.log(childTaskNoArr);
 		
-		var childTaskProgressionArr = new Array();
+		const childTaskProgressionArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskProgressionArr[${status.index}] = "${childTaskList[status.index].progression}";
 		</c:forEach>
 		console.log(childTaskProgressionArr);
 		
-		var childDependenciesArr = new Array();
+		const childDependenciesArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childDependenciesArr[${status.index}] = "${childTaskList[status.index].parentTaskNo}";
 		</c:forEach>
 		console.log(childDependenciesArr);
 		
 		
-		console.log(taskArray.length);
+		console.log(taskArray.length)
 		
-		var taskArray = new Array();
-		console.log(taskArray)
-		
-		for(let i = 0; i < 5 ; i++){
+		for(let i = 0; i < taskArray.length; i++){
 			taskArray.push(
 				{ start : startDateArray[i],
                 end : deadlineArray[i],
@@ -657,16 +653,6 @@ ul {
 			$(".layer").css("display", "block");
 			$(".layer-bg").css("display", "block");
 			
-			$.ajax({
-				url : "/waterfall/task/findModalInfo",
-				type : "get",
-				data : {"taskNo" : no},
-				success : function(data, textStatus, xhr){
-					console.log(data);
-					
-					$("")
-				}
-			})
 		});
 		$(".layer .close").click(function() {
 			$(".layer").css("display", "none");
