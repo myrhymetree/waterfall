@@ -31,8 +31,18 @@
         SELECT 
                COUNT(*)
           FROM TBL_BOARD A
-	      WHERE A.BOARD_STATUS = 'Y'
+          
+    	  <where>
+    	  	<if test="searchCondition == 'content'">
+	           A.BOARD_CONTENT LIKE '%' || #{ searchValue } || '%' 	
+			</if>
+			<if test="searchCondition == 'title'">
+	           A.BOARD_TITLE LIKE '%' || #{ searchValue } || '%' 	
+			</if>
+	        AND A.BOARD_STATUS = 'Y'
 	        AND A.BOARD_CATEGORY_NO = 1
+	        AND A.PROJECT_NO = #{ projectNo }
+	      </where>
 	</select>
 	<select id="selectNoticeList" resultMap="noticeResultMap">
 		SELECT 
@@ -45,9 +55,7 @@
              , A.MEMBER_NO
              , D.MEMBER_NAME
              , A.BOARD_COUNT
-             , A.BOARD_POSTING_DATE
              , A.BOARD_STATUS
-             , A.PROJECT_NO
           FROM (SELECT ROWNUM RNUM
                      , B.BOARD_NO
                      , B.BOARD_UPDATED_DATE
@@ -57,7 +65,6 @@
                      , B.BOARD_COUNT
                      , B.BOARD_POSTING_DATE
                      , B.BOARD_STATUS
-                     , B.PROJECT_NO
                   FROM (SELECT C.BOARD_NO
                   			 , C.BOARD_UPDATED_DATE
                              , C.BOARD_TITLE
@@ -66,7 +73,6 @@
                              , C.BOARD_COUNT
                              , C.BOARD_POSTING_DATE
                              , C.BOARD_STATUS
-                             , C.PROJECT_NO
                           FROM TBL_BOARD C
                          <where>
                          	<if test="searchCondition == 'title'">
@@ -77,6 +83,7 @@
 							</if>
                            AND C.BOARD_STATUS = 'Y'	
                            AND C.BOARD_CATEGORY_NO = 1
+                           AND C.PROJECT_NO = #{ projectNo }
                          </where>
                           ORDER BY C.BOARD_NO DESC
                         ) B
@@ -86,7 +93,7 @@
                ) A
          JOIN TBL_MEMBER D  ON (A.MEMBER_NO = D.MEMBER_NO)      
         WHERE A.RNUM >= #{ startRow }
-        ORDER BY 1 ASC   
+        ORDER BY A.BOARD_NO DESC   
 	</select>
 	<update id="incrementNoticeCount">
 		UPDATE 
@@ -132,8 +139,8 @@
           BOARD_NO.NEXTVAL
         , #{ title }
         , #{ content }
-        , 1
-        , 3
+        , #{ memberNo }
+        , #{ projectNo }
         , 1
         )
         <selectKey keyProperty="no" resultType="Integer" order="AFTER">

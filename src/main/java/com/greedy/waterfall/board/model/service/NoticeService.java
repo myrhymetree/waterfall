@@ -20,7 +20,6 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 
 public interface NoticeService {
 
-	int findTotalCount(Map<String, String> searchMap);
 
 	List<NoticeDTO> findNoticeList(SelectCriteria selectCriteria);
 
@@ -31,6 +30,8 @@ public interface NoticeService {
 	void modifyNotice(NoticeDTO notice);
 
 	void removeNotice(int no);
+
+	int findTotalCount(Map<String, String> searchMap);
 
 	
 	

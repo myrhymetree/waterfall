@@ -61,18 +61,18 @@
 .box {
 	width: 1600px !important;
 	height: 800px;
-	margin: 30px;
 	display: flex;
+	margin: 30px;
 }
 
 .box2 {
 	width: 1400px;
 	height: 800px;
 	margin-left: 50px;
+	font-size: 18px;
 }
 
 #box1_body {
-	font-size: 18px;
 	width: 180px;
 }
 
@@ -292,9 +292,11 @@ ul {
 		<div class="box">
 			<div id="box1_body">
 				<div class="sect1 mt-3">
-					<p>
-						<span class="layerPopup"><img src="${ pageContext.servletContext.contextPath }/resources/assets/img/generate.png">업무생성</span>
-					</p>
+					<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+						<p>
+							<span class="layerPopup"><img src="${ pageContext.servletContext.contextPath }/resources/assets/img/generate.png">업무생성</span>
+						</p>
+					</c:if>
 				</div>
 				<%-- 상위업무 forEach --%>
 
@@ -402,7 +404,7 @@ ul {
 			<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
 			<input type="hidden" name="typeNo" value="1">
 		</p>
-		
+			
 			<button class="addTask" type="submit">업무 생성</button>
 			<button class="close">업무 나가기</button>
 	</div>
@@ -447,12 +449,6 @@ ul {
 		var parentTaskList = "${parentTaskList}";
 		console.log(parentTaskList.length);
 
-		var TaskList = new Array();
-		<c:forEach items="${requestScope.parentTaskList}" var="task">
-		var startDate = "${task.startDate}";
-		console.log(startDate);
-		</c:forEach>
-		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		var taskArray = new Array();
 		taskArray[${status.index}] = "${parentTaskList[status.index]}";
@@ -495,69 +491,82 @@ ul {
 		parentProgress[${status.index}] = "${parentTaskList[status.index].progression}";
 		</c:forEach>
 		console.log(parentProgress);
+		// 상위업무 정보 끝
+		
+		//하위업무 정보 시작
+		console.log("========================하위업무=================================")
+		var childTaskList = new Array();
+		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
+		childTaskList[${status.index}] = "${childTaskList[status.index]}";
+		</c:forEach>
+		console.log(childTaskList.length);
+		
+		var childStartDateArr = new Array();
+		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
+		childStartDateArr[${status.index}] = "${childTaskList[status.index].startDate}";
+		</c:forEach>
+		console.log(childStartDateArr);
+		
+		var childDeadlineArr = new Array();
+		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
+		childDeadlineArr[${status.index}] = "${childTaskList[status.index].deadline}";
+		</c:forEach>
+		console.log(childDeadlineArr);
+		
+		var childTaskName = new Array();
+		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
+		childTaskName[${status.index}] = "${childTaskList[status.index].taskCategory.categoryName}";
+		</c:forEach>
+		console.log(childTaskName);
+		
+		var childTaskNoArr = new Array();
+		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
+		childTaskNoArr[${status.index}] = "${childTaskList[status.index].taskNo}";
+		</c:forEach>
+		console.log(childTaskNoArr);
+		
+		var childTaskProgressionArr = new Array();
+		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
+		childTaskProgressionArr[${status.index}] = "${childTaskList[status.index].progression}";
+		</c:forEach>
+		console.log(childTaskProgressionArr);
+		
+		var childDependenciesArr = new Array();
+		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
+		childDependenciesArr[${status.index}] = "${childTaskList[status.index].parentTaskNo}";
+		</c:forEach>
+		console.log(childDependenciesArr);
+		
 		
 		console.log(taskArray.length);
 		
+		var taskArray = new Array();
+		console.log(taskArray)
 		
-			
+		for(let i = 0; i < 5 ; i++){
+			taskArray.push({ start : startDateArray[i],
+                end : deadlineArray[i],
+                name : parentTaskName[i],
+                id : parentTaskNo[i],
+                progress : Number(parentProgress[i])
+                })
+		}
+		
+		for(let i = 0; i < childTaskList.length; i++){
+			taskArray.push({ start : childStartDateArr[i],
+                end : childDeadlineArr[i],
+                name : childTaskName[i],
+                id : childTaskNoArr[i],
+                progress : Number(childTaskProgressionArr[i]),
+                dependencies : childDependenciesArr[i]
+                })
+		}
 		
 		
 		
-		var tasks = [
 		
-			
 		
-
-		{
-			start : startDate,
-			end : '2022-02-28',
-			name : 'Redesign website',
-			id : "Task 0",
-			progress : 20
-		}, {
-			start : startDate,
-			end : '2022-02-28',
-			name : 'Write new content',
-			id : "Task 1",
-			progress : 5,
-			dependencies : 'Task 0'
-		}, {
-			start : startDate,
-			end : '2022-02-28',
-			name : 'Apply new styles',
-			id : "Task 2",
-			progress : 10,
-			dependencies : 'Task 1'
-		}, {
-			start : startDate,
-			end : '2022-02-28',
-			name : 'Review',
-			id : "Task 3",
-			progress : 5,
-			dependencies : 'Task 2'
-		}, {
-			start : startDate,
-			end : '2022-02-28',
-			name : 'Deploy',
-			id : "Task 4",
-			progress : 0,
-			dependencies : 'Task 2'
-		}, {
-			start : startDate,
-			end : '2022-02-28',
-			name : 'Go Live!',
-			id : "Task 5",
-			progress : 0,
-			dependencies : 'Task 4',
-			custom_class : 'bar-milestone'
-		}, {
-			start : startDate,
-			end : '2022-02-28',
-			name : 'Long term task',
-			id : "Task 6",
-			progress : 0
-		} ]
-		var gantt_chart = new Gantt(".gantt-target", tasks, {
+		var gantt_chart = new Gantt(".gantt-target", taskArray, {
 			on_click : function(task) {
 				console.log(task);
 			},

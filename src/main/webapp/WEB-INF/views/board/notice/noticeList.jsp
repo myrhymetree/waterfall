@@ -386,8 +386,10 @@ td {
                         <div class="my-modal-footer-read">
                            <input type="file" id="noticeFile" name="noticeFile" >
                            <br>
+                           <c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
                            <button type="submit" class="btn btn-secondary">수정하기</button>
                            <button id="delete" class="btn btn-secondary">삭제하기</button>
+                           </c:if>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
                             <input type="hidden" id="read-no" name="no"> 
                         </div>
