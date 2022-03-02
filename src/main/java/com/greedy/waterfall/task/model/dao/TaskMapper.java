@@ -32,4 +32,6 @@ public interface TaskMapper {
 
 	List<ChildTaskDTO> selectAllchildTask(int projectNo);
 
+	ChildTaskDTO selectChildTask(int taskNo);
+
 }

@@ -61,18 +61,18 @@
 .box {
 	width: 1600px !important;
 	height: 800px;
-	margin: 30px;
 	display: flex;
+	margin: 30px;
 }
 
 .box2 {
 	width: 1400px;
 	height: 800px;
 	margin-left: 50px;
+	font-size: 18px;
 }
 
 #box1_body {
-	font-size: 18px;
 	width: 180px;
 }
 
@@ -292,9 +292,11 @@ ul {
 		<div class="box">
 			<div id="box1_body">
 				<div class="sect1 mt-3">
-					<p>
-						<span class="layerPopup"><img src="${ pageContext.servletContext.contextPath }/resources/assets/img/generate.png">업무생성</span>
-					</p>
+					<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+						<p>
+							<span class="layerPopup"><img src="${ pageContext.servletContext.contextPath }/resources/assets/img/generate.png">업무생성</span>
+						</p>
+					</c:if>
 				</div>
 				<%-- 상위업무 forEach --%>
 
@@ -402,7 +404,7 @@ ul {
 			<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
 			<input type="hidden" name="typeNo" value="1">
 		</p>
-		
+			
 			<button class="addTask" type="submit">업무 생성</button>
 			<button class="close">업무 나가기</button>
 	</div>

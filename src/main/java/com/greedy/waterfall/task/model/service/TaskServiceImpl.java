@@ -19,7 +19,7 @@ import com.greedy.waterfall.task.model.dto.TaskRegistDTO;
 /**
  * <pre>
  * Class : TaskServiceImpl
- * Comment : 클래스 설명 작성부분
+ * Comment : task 로직 구현 부분
  * 
  * History
  * 2022. 2. 26.  (김서영)
@@ -35,6 +35,13 @@ public class TaskServiceImpl implements TaskService{
 		this.mapper = mapper;
 	}
 
+	/**
+	 * findTaskTimeline : GanttChart및 초기 페이지 조회시 필요한 정보들 조회
+	 * @param TaskDTO taskDTO : projectNo이 담긴 TaskDTO
+	 * @return parentTaskList 상위업무 내 하위업무를 포함한 data
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public List<TaskDTO> findTaskTimeline(TaskDTO taskDTO) {
 		
@@ -56,6 +63,7 @@ public class TaskServiceImpl implements TaskService{
 				childTaskList.get(j).setProjectNo(taskDTO.getProjectNo());
 			}
 		}
+		/*위에서 조회한 상위업무의 번호를 통해 하위업무 list 조회*/
 		for(int i = 0; i < parentTaskList.size(); i++) {
 			childTaskList = mapper.selectChildTaskList(parentTaskList.get(i).getTaskNo());
 			parentTaskList.get(i).setChildList(childTaskList);
@@ -68,6 +76,13 @@ public class TaskServiceImpl implements TaskService{
 		return parentTaskList;
 	}
 
+	/**
+	 * findAllTaskCode : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public AllTaskCodeDTO findAllTaskCode() {
 		
@@ -86,6 +101,13 @@ public class TaskServiceImpl implements TaskService{
 		 
 	}
 
+	/**
+	 * findProjectMember : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public List<ProjectMemberDTO> findProjectMember(int projectNo) {
 		
@@ -94,6 +116,13 @@ public class TaskServiceImpl implements TaskService{
 		return memberList;
 	}
 
+	/**
+	 * registTask : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public void registTask(TaskRegistDTO taskRegistDTO) {
 		
@@ -110,6 +139,13 @@ public class TaskServiceImpl implements TaskService{
 		
 	}
 
+	/**
+	 * findAllCategoryCode : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public List<TaskCategoryDTO> findAllCategoryCode() {
 		
@@ -118,12 +154,30 @@ public class TaskServiceImpl implements TaskService{
 		return taskCategoryList;
 	}
 
+	/**
+	 * findChildTaskList : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public List<ChildTaskDTO> findChildTaskList(int projectNo) {
 		
 		List<ChildTaskDTO> childTaskList = mapper.selectAllchildTask(projectNo);
 		
 		return childTaskList;
+	}
+
+	@Override
+	public ChildTaskDTO findTaskDetail(int taskNo) {
+		
+		ChildTaskDTO childTask = new ChildTaskDTO();
+		TaskDTO parnetTask = childTask.getParentTask();
+		
+		childTask = mapper.selectChildTask(taskNo);
+		
+		return null;
 	}
 	
 	

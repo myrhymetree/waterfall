@@ -24,5 +24,7 @@ public interface TaskService {
 
 	List<ChildTaskDTO> findChildTaskList(int projectNo);
 
+	ChildTaskDTO findTaskDetail(int taskNo);
+
 
 }

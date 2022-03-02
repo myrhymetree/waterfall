@@ -232,4 +232,23 @@
 		  FROM TBL_TASK_CODE_MANAGE
 	</select>
 	
+	<select id="selectChildTask" resultMap="childTaskResultMap">
+		SELECT
+		       A.TASK_REF_NO
+		     , A.TASK_START_DATE
+		     , A.TASK_DEADLINE
+		     , A.TASK_PROGRESSION
+		     , A.TASK_PROGRESS_STATUS
+		     , A.TASK_TYPE_NO
+		     , A.TASK_STATUS
+		     , A.PROJECT_NO
+		     , A.MEMBER_NO
+		     , A.TASK_CATEGORY_CODE
+		     , B.TASK_CATEGORY_NAME
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE )
+		 WHERE A.TASK_STATUS = 'Y'
+		   AND A.TASK_NO = #{ taskNo }
+	</select>
+	
 </mapper>
