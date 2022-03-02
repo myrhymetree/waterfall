@@ -156,7 +156,9 @@ public class ProjectController {
 		MyProjectDTO project = projectService.findMyProject(searchMap, member);
 		List<ProjectDTO> manageProject = project.getManageProject();
 		List<ProjectDTO> removedProject = project.getRemovedProject();
-				
+
+		
+		mv.addObject("subselectCriteria", project.getSubselectCriteria());
 		mv.addObject("selectCriteria", project.getSelectCriteria());
 		mv.addObject("manageProject", manageProject);
 		mv.addObject("removedProject", removedProject);

@@ -36,7 +36,7 @@ height: 24px;
 			</c:if>	
 		</div>
 		
-		<c:if test="${ !empty projectList.manageProject}">
+		<c:if test="${ !empty projectList.manageProject or requestScope.selecCriteria.searchCondition ne '' }">
 			<div class="card mb-4 mt-3">
 				<div class="card-header" style="width: 100%;">
 					<div class="row">
@@ -45,18 +45,17 @@ height: 24px;
 							<label>관리중인 프로젝트</label>
 						</div>
 						<div class="col" style="margin-left: 50%">
-						<form action="${ pageContext.servletContext.contextPath }/project/list" >
-							<select id="searchCondition" name="searchCondition">
-								<option value="projectName" ${ requestScope.selectCriteria.searchCondition eq "projectName"? "selected": "" }>프로젝트명</option>
-								<c:if test="${ sessionScope.loginMember.role eq 1 }">
-									<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
-								</c:if>
-							</select> 
-							<input type="search" id="searchValue" name="searchValue" value="${ requestScope.selectCriteria.searchValue }">
-							<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
-						</form>	
-					</div>
-		
+							<form action="${ pageContext.servletContext.contextPath }/project/list" >
+								<select id="searchCondition" name="searchCondition">
+									<option value="projectName" ${ requestScope.selectCriteria.searchCondition eq "projectName"? "selected": "" }>프로젝트명</option>
+									<c:if test="${ sessionScope.loginMember.role eq 1 }">
+										<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
+									</c:if>
+								</select> 
+								<input type="search" id="searchValue" name="searchValue" value="${ requestScope.selectCriteria.searchValue }">
+								<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
+							</form>	
+						</div>
 					</div>
 				</div>
 				<div class="card-body">
@@ -107,7 +106,23 @@ height: 24px;
 		<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role ne '1'}">
 			<div class="card mb-4 mt-3">
 				<div class="card-header">
-					<label style="font-size: 1.3em; font-weight: bold">참여중인 프로젝트</label>
+					<div class="row">
+						<div class="col">
+							<label style="font-size: 1.3em; font-weight: bold">참여중인 프로젝트</label>
+						</div>
+						<div class="col" style="margin-left: 50%">
+							<form action="${ pageContext.servletContext.contextPath }/project/list" >
+								<select id="subsearchCondition" name="subsearchCondition">
+									<option value="projectName" ${ requestScope.selectCriteria.searchCondition eq "projectName"? "selected": "" }>프로젝트명</option>
+									<c:if test="${ sessionScope.loginMember.role eq 1 }">
+										<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
+									</c:if>
+								</select> 
+								<input type="search" id="subsearchValue" name="subsearchValue" value="${ requestScope.selectCriteria.searchValue }">
+								<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
+							</form>	
+						</div>
+					</div>	
 				</div>
 				<div class="card-body">
 					<table style="width: 100%; text-align: center;">

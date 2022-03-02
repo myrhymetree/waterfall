@@ -142,7 +142,7 @@
 	</where>          
         GROUP BY E.PROJECT_NO
 	</select>
-	<select id="findAllRemovedProjectCount">
+	<select id="findAllRemovedProjectCount" resultType="_int">
         SELECT
                COUNT(*)
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
@@ -249,8 +249,8 @@
          WHERE RNUM >= #{ startRow }	
 	</select> 
 	<select id="findAllRemovedProject" resultMap="projectResult">
-        SELECT 
-               A.PROJECT_NO
+        SELECT RNUM
+             , A.PROJECT_NO
              , A.PROJECT_NAME
              , A.PROJECT_START_DATE
              , A.PROJECT_DEADLINE
@@ -258,12 +258,46 @@
              , A.PROJECT_STATUS
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
-             , C.MEMBER_NAME
-          FROM TBL_PROJECT A
-          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
-          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
-         WHERE B.ROLE_NO = 8
-           AND A.PROJECT_STATUS = 'N'
+             , A.MEMBER_NAME
+          FROM (SELECT ROWNUM RNUM
+                     , B.PROJECT_NO
+                     , B.PROJECT_NAME
+                     , B.PROJECT_START_DATE
+                     , B.PROJECT_DEADLINE
+                     , B.PROJECT_PROGRESSION
+                     , B.PROJECT_STATUS
+                     , B.PROJECT_COMPLETED_DATE
+                     , B.PROJECT_PROGRESS_STATUS_CODE
+                     , B.MEMBER_NAME
+                  FROM (SELECT C.PROJECT_NO
+                             , C.PROJECT_NAME
+                             , C.PROJECT_START_DATE
+                             , C.PROJECT_DEADLINE
+                             , C.PROJECT_PROGRESSION
+                             , C.PROJECT_STATUS
+                             , C.PROJECT_COMPLETED_DATE
+                             , C.PROJECT_PROGRESS_STATUS_CODE
+                             , E.MEMBER_NAME
+                          FROM TBL_PROJECT C
+                          JOIN TBL_ROLE_ASSIGNMENT_HISTORY D ON (C.PROJECT_NO = D.PROJECT_NO)
+                          JOIN TBL_MEMBER E ON(D.MEMBER_NO = E.MEMBER_NO)
+						<where>                          
+   							<if test="searchCondition == 'projectName'">                                              
+                               C.PROJECT_NAME LIKE '%' || #{ searchValue } || '%'                  
+                            </if>                        
+   							<if test="searchCondition == 'pmName'">                                              
+                               E.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'                  
+                            </if>                     
+                           AND D.ROLE_NO = 8
+                           AND C.PROJECT_STATUS = 'N'
+						</where>
+                         ORDER BY C.PROJECT_NO DESC
+                       ) B
+				<![CDATA[
+                 WHERE ROWNUM <= #{ endRow }
+				]]>
+               ) A
+         WHERE RNUM >= #{ startRow }
 	</select> 
 	
 	<select id="findManagaProject" resultMap="projectResult">
@@ -324,7 +358,8 @@
  
 	<select id="findJoinProject" resultMap="projectResult">
         SELECT 
-               A.PROJECT_NO
+               RNUM
+             , A.PROJECT_NO
              , A.PROJECT_NAME
              , A.PROJECT_START_DATE
              , A.PROJECT_DEADLINE
@@ -332,23 +367,52 @@
              , A.PROJECT_STATUS
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
-             , C.MEMBER_NAME
-          FROM TBL_PROJECT A
-          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
-          JOIN TBL_MEMBER C ON(B.MEMBER_NO = C.MEMBER_NO)
-         WHERE A.PROJECT_NO IN (SELECT D.PROJECT_NO
-                                  FROM TBL_ROLE_ASSIGNMENT_HISTORY D
-                                 WHERE D.MEMBER_NO =  #{ no }
-                                   AND D.ROLE_HISTORY_NO  NOT IN (SELECT MAX(E.ROLE_HISTORY_NO)
-                                                              FROM TBL_ROLE_ASSIGNMENT_HISTORY E
-                                                             WHERE E.ROLE_NO = 8
-                                                             GROUP BY E.ROLE_HISTORY_NO 
-                                                           )
-                                   
-                               )
-           AND B.ROLE_NO = 8
-           AND A.PROJECT_STATUS = 'Y'        
-         ORDER BY A.PROJECT_NO DESC
+             , A.MEMBER_NAME
+          FROM (SELECT ROWNUM RNUM
+                     , B.PROJECT_NO
+                     , B.PROJECT_NAME
+                     , B.PROJECT_START_DATE
+                     , B.PROJECT_DEADLINE
+                     , B.PROJECT_PROGRESSION
+                     , B.PROJECT_STATUS
+                     , B.PROJECT_COMPLETED_DATE
+                     , B.PROJECT_PROGRESS_STATUS_CODE
+                     , B.MEMBER_NAME
+                  FROM (SELECT D.PROJECT_NO
+                             , D.PROJECT_NAME
+                             , D.PROJECT_START_DATE
+                             , D.PROJECT_DEADLINE
+                             , D.PROJECT_PROGRESSION
+                             , D.PROJECT_STATUS
+                             , D.PROJECT_COMPLETED_DATE
+                             , D.PROJECT_PROGRESS_STATUS_CODE
+                             , E.MEMBER_NAME
+                          FROM TBL_PROJECT_MEM_HISTORY C
+                          JOIN TBL_PROJECT D ON (C.PROJECT_NO = D.PROJECT_NO)
+                          JOIN TBL_MEMBER E ON (C.MEMBER_NO = E.MEMBER_NO)
+					<where>                         
+                    	<if test="searchCondition == 'pmName'">
+                               E.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
+						</if>                           
+						<if test="searchCondition == 'projectName'">                           
+                               D.PROJECT_NAME LIKE '%' || #{ searchValue } || '%'
+                        </if>   
+                           AND D.PROJECT_NO IN (SELECT F.PROJECT_NO
+                                                  FROM TBL_ROLE_ASSIGNMENT_HISTORY F
+                                                 WHERE F.MEMBER_NO = #{ projectNo }
+                                                   AND F.ROLE_NO != 8
+                                                 GROUP BY F.PROJECT_NO
+                                                )
+                           AND D.PROJECT_STATUS = 'Y'
+                           AND C.MEMBER_NO = #{ projectNo }
+						</where>
+                         ORDER BY D.PROJECT_NO
+                       ) B
+				<![CDATA[
+                 WHERE ROWNUM <= #{ endRow }
+				]]>
+               ) A  
+         WHERE RNUM >= #{ startRow }
  	</select>
 	
 

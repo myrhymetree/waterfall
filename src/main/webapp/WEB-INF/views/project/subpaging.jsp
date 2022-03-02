@@ -33,7 +33,7 @@
 			}
 			</script>
 			<c:forEach var="p" begin="${ requestScope.subselectCriteria.startPage }" end="${ requestScope.subselectCriteria.endPage }" step="1">
-				<c:if test="${ requestScope.selectCriteria.pageNo eq p }">
+				<c:if test="${ requestScope.subselectCriteria.pageNo eq p }">
 					<button disabled><c:out value="${ p }"/></button>
 				</c:if>
 				<c:if test="${ requestScope.subselectCriteria.pageNo ne p }">

@@ -95,7 +95,40 @@ public class ProjectServiceImpl implements ProjectService {
 													.joinProject(joinProject)
 													.removedProject(removedProject)
 													.selectCriteria(selectCriteria)
+													.subselectCriteria(subselectCriteria)
 													.build();
+		
+		
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
+		System.out.println("subselectCriteria : "  + subselectCriteria);
 		
 		return projectList;
 	}

@@ -32,7 +32,6 @@ public interface ProjectMapper {
 
 	List<ProjectDTO> findManagaProject(SelectCriteria selectCriteria);
 
-	//1
 	List<ProjectDTO> findJoinProject(SelectCriteria subselectCriteria);
 	
 	List<ProjectStatusDTO> findAllProjectStatus();
@@ -55,7 +54,6 @@ public interface ProjectMapper {
 	
 	List<ProjectDTO> findAllManageProject(SelectCriteria selectCriteria);
 
-	//1
 	List<ProjectDTO> findAllRemovedProject(SelectCriteria subselectCriteria);
 
 	int findAllManageProjectCount(Map<String, String> searchMap);
