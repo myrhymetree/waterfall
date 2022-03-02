@@ -36,6 +36,7 @@ public class MyProjectDTO {
 	private List<ProjectDTO> removedProject;
 	
 	private SelectCriteria selectCriteria;
+	private SelectCriteria subselectCriteria;
 	
 	
 	

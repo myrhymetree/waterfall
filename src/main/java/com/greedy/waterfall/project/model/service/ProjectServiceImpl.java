@@ -58,18 +58,35 @@ public class ProjectServiceImpl implements ProjectService {
 		List<ProjectDTO> joinProject = new ArrayList<ProjectDTO>();
 		List<ProjectDTO> removedProject = new ArrayList<ProjectDTO>();
 		SelectCriteria selectCriteria = null;
+		SelectCriteria subselectCriteria = null;
 		if(member != null) {
 			if("1".equals(member.getRole())) {
 				searchMap.put("totalCount", Integer.toString(mapper.findAllManageProjectCount(searchMap)));
+				searchMap.put("subtotalCount", Integer.toString(mapper.findAllRemovedProjectCount(searchMap)));
 
 				PagingDTO pagingSetting = new PagingDTO().builder().limit(5).buttonAmount(5).memberNo(member.getNo()).build();
 				
 				selectCriteria = paging.setPagingCondition(searchMap, pagingSetting);
+				subselectCriteria = paging.setSubPagingCondition(searchMap, pagingSetting);
+				
 				manageProject = mapper.findAllManageProject(selectCriteria);
-				removedProject = mapper.findAllRemovedProject();
+				removedProject = mapper.findAllRemovedProject(subselectCriteria);
 			} else {
-				manageProject = mapper.findManagaProject(member.getNo());
-				joinProject = mapper.findJoinProject(member.getNo());
+				System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());System.out.println("memberNo in member at serviceImpl : " + member.getNo());
+				searchMap.put("memberNo", Integer.toString(member.getNo()));
+
+				searchMap.put("totalCount", Integer.toString(mapper.findManageProjectCount(searchMap)));
+				searchMap.put("subtotalCount", Integer.toString(mapper.findManageProjectCount(searchMap)));
+				
+				PagingDTO pagingSetting = new PagingDTO().builder().limit(5).buttonAmount(5).memberNo(member.getNo()).build();
+				
+				selectCriteria = paging.setPagingCondition(searchMap, pagingSetting);
+				subselectCriteria = paging.setSubPagingCondition(searchMap, pagingSetting);
+				
+				System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);System.out.println("selectCriteria : " + selectCriteria);
+				
+				manageProject = mapper.findManagaProject(selectCriteria);
+				joinProject = mapper.findJoinProject(subselectCriteria);
 				
 			}
 		}
@@ -267,11 +284,8 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		boardInfo.setBoardCategoryName(boardCategoryName);
 		
-		
 		return boardInfo;
 	}
-	
-	
 }
 
 

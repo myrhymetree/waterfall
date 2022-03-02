@@ -141,10 +141,16 @@ public class ProjectController {
 		String currentPage = request.getParameter("currentPage");
 		String searchCondition = request.getParameter("searchCondition");	
 		String searchValue = request.getParameter("searchValue");			
+		String subcurrentPage = request.getParameter("subcurrentPage");
+		String subsearchCondition = request.getParameter("subsearchCondition");	
+		String subsearchValue = request.getParameter("subsearchValue");			
 		
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
 		searchMap.put("currentPage", currentPage);
+		searchMap.put("subsearchCondition", subsearchCondition);
+		searchMap.put("subsearchValue", subsearchValue);
+		searchMap.put("subcurrentPage", subcurrentPage);
 
 		
 		MyProjectDTO project = projectService.findMyProject(searchMap, member);
@@ -170,20 +176,33 @@ public class ProjectController {
 	public ModelAndView findProjectList(HttpServletRequest request, ModelAndView mv) {
 		/* 회원번호로 조회 */
 		MemberDTO member = (MemberDTO) request.getSession().getAttribute("loginMember");
+		
+		
+		System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);System.out.println("loginMember : " +  member);
+		
+		
+		
 		Map<String, String> searchMap = new HashMap<>();
 
 		String currentPage = request.getParameter("currentPage");
 		String searchCondition = request.getParameter("searchCondition");	
 		String searchValue = request.getParameter("searchValue");			
-
+		String subcurrentPage = request.getParameter("subcurrentPage");
+		String subsearchCondition = request.getParameter("subsearchCondition");	
+		String subsearchValue = request.getParameter("subsearchValue");			
+		
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
 		searchMap.put("currentPage", currentPage);
+		searchMap.put("subsearchCondition", subsearchCondition);
+		searchMap.put("subsearchValue", subsearchValue);
+		searchMap.put("subcurrentPage", subcurrentPage);
 
 		MyProjectDTO project = projectService.findMyProject(searchMap, member);
 		List<ProjectDTO> manageProject = project.getManageProject();
 		mv.addObject("manageProject", manageProject);
 		mv.addObject("selectCriteria", project.getSelectCriteria());
+		mv.addObject("subselectCriteria", project.getSubselectCriteria());
 		mv.addObject("projectList", project);
 		mv.addObject("intent", "/project/list");
 		mv.setViewName("/project/projectList");

@@ -30,9 +30,10 @@ import com.greedy.waterfall.project.model.dto.TeamDTO;
 @Repository
 public interface ProjectMapper {
 
-	List<ProjectDTO> findManagaProject(int no);
+	List<ProjectDTO> findManagaProject(SelectCriteria selectCriteria);
 
-	List<ProjectDTO> findJoinProject(int no);
+	//1
+	List<ProjectDTO> findJoinProject(SelectCriteria subselectCriteria);
 	
 	List<ProjectStatusDTO> findAllProjectStatus();
 
@@ -54,7 +55,8 @@ public interface ProjectMapper {
 	
 	List<ProjectDTO> findAllManageProject(SelectCriteria selectCriteria);
 
-	List<ProjectDTO> findAllRemovedProject();
+	//1
+	List<ProjectDTO> findAllRemovedProject(SelectCriteria subselectCriteria);
 
 	int findAllManageProjectCount(Map<String, String> searchMap);
 	
@@ -122,6 +124,12 @@ public interface ProjectMapper {
 	BoardDTO findBoardInfo(int boardNo);
 
 	int increaseBoardCount(int boardNo);
+
+	int findManageProjectCount(Map<String, String> searchMap);
+
+	int findAllJoinProjectCount(Map<String, String> searchMap);
+
+	int findAllRemovedProjectCount(Map<String, String> searchMap);
 
 
 }

@@ -69,4 +69,37 @@ public class PagingPage implements Paging {
 		return selectCriteria;
 	}
 
+	@Override
+	public SelectCriteria setSubPagingCondition(Map<String, String> searchMap, PagingDTO pagingSetting) {
+		
+		SelectCriteria selectCriteria = null;								//검색 조건과, 페이징처리를 할 클래스변수를 선언한다.
+		int pageNo = 1;														//입력받은 현재페이지가 없으면 1페이지를 보여준다.
+		int limit =  pagingSetting.getLimit();								//한 페이지에 출력될 게시물의 수로 초기화한다.
+		int buttonAmount = pagingSetting.getButtonAmount();					//한 페이지에 출력될 버튼의 갯수로 초기화한다.
+		int projectNo = pagingSetting.getMemberNo();
+		
+		int totalCount = Integer.parseInt(searchMap.get("subtotalCount"));			
+		String currentPage = searchMap.get("subcurrentPage");
+		String searchCondition = searchMap.get("subsearchCondition");	
+		String searchValue = searchMap.get("subsearchValue");			
+		
+		if(searchMap.get("projectNo") != null) {
+			projectNo = Integer.parseInt(searchMap.get("projectNo"));
+		}
+		
+		/* 현재페이지를 전달받으면 전달받은 값을 대입한다. */
+		if(currentPage != null && !"".equals(currentPage)) {
+			pageNo = Integer.parseInt(currentPage);
+		}
+
+		/* 검색여부에 따른 페이징처리를 한다.*/
+		if(searchCondition != null && !"".equals(searchValue)) {
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue, projectNo);
+		} else {
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, projectNo);
+		}
+		
+		return selectCriteria;
+	}
+
 }

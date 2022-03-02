@@ -48,7 +48,9 @@ height: 24px;
 						<form action="${ pageContext.servletContext.contextPath }/project/list" >
 							<select id="searchCondition" name="searchCondition">
 								<option value="projectName" ${ requestScope.selectCriteria.searchCondition eq "projectName"? "selected": "" }>프로젝트명</option>
-								<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
+								<c:if test="${ sessionScope.loginMember.role eq 1 }">
+									<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
+								</c:if>
 							</select> 
 							<input type="search" id="searchValue" name="searchValue" value="${ requestScope.selectCriteria.searchValue }">
 							<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
@@ -58,7 +60,7 @@ height: 24px;
 					</div>
 				</div>
 				<div class="card-body">
-					<table style="width: 100%; text-align: center;">
+					<table style="width: 100%;font-size:1.1em; text-align: center;">
 						<colgroup>
 							<col style="width: 20%" />
 							<col style="width: 10%" />
@@ -97,8 +99,9 @@ height: 24px;
 							</c:forEach>
 						</tbody>
 					</table>
-					<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>
 				</div>
+				<jsp:include page="/WEB-INF/views/project/projectmanagepaging.jsp"/>
+				<br>
 			</div>
 		</c:if>
 		<c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role ne '1'}">
@@ -147,6 +150,8 @@ height: 24px;
 						</tbody>
 					</table>
 				</div>
+					<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>
+					<br>
 			</div>
 		</c:if>
 	</div>

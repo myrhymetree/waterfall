@@ -98,6 +98,54 @@
 		function pageButtonAction(text) {
 			location.href = link + "?currentPage=" + text + searchText;
 		}
+		
+		/* 검색 조건 유무에 따른 경로 처리 */
+		if(${ !empty requestScope.subselectCriteria.searchCondition? true: false }) {
+			searchText += "&subsearchCondition=${ requestScope.subselectCriteria.searchCondition }";
+		}
+		
+		/* 검색 내용 유무에 따른 경로 처리 */
+		if(${ !empty requestScope.subselectCriteria.searchValue? true: false }) {
+			searchText += "&subsearchValue=${ requestScope.subselectCriteria.searchValue }";
+		}
+			
+		/* 첫 페이지 버튼 click 이벤트 처리 */
+		if(document.getElementById("substartPage")) {
+			const $startPage = document.getElementById("startPage");
+			$startPage.onclick = function() {
+				location.href = link + "?subcurrentPage=1" + searchText;
+			}
+		}
+		
+		/* 이전 페이지 버튼 click 이벤트 처리 */
+		if(document.getElementById("subprevPage")) {
+			const $prevPage = document.getElementById("subprevPage");
+			$prevPage.onclick = function() {
+				location.href = link + "?subcurrentPage=${ requestScope.subselectCriteria.pageNo - 1 }" + searchText;
+			}
+		}
+		
+		/* 다음 페이지 버튼 click 이벤트 처리 */
+		if(document.getElementById("subnextPage")) {
+			const $nextPage = document.getElementById("subnextPage");
+			$nextPage.onclick = function() {
+				location.href = link + "?subcurrentPage=${ requestScope.subselectCriteria.pageNo + 1 }" + searchText;
+			}
+		}
+		
+		/* 마지막 페이지 버튼 click 이벤트 처리 */
+		if(document.getElementById("submaxPage")) {
+			const $maxPage = document.getElementById("submaxPage");
+			$maxPage.onclick = function() {
+				location.href = link + "?subcurrentPage=${ requestScope.subselectCriteria.maxPage }" + searchText;
+			}
+		}
+		
+		/* 페이지 번호 버튼 click 이벤트 처리 */
+		function subpageButtonAction(text) {
+			alert("123");
+			location.href = link + "?subcurrentPage=" + text + searchText;
+		}
 	</script>
 </body>
 </html>

@@ -92,18 +92,26 @@
 				</table>
 			</div>
 			<jsp:include page="/WEB-INF/views/project/projectmanagepaging.jsp"/>
-			
+			<br>
 		</div>
 		<div classs="mt-2 mb-2"></div>
 		<c:if test="${ sessionScope.loginMember.role eq 1 }" >
 			<div class="card mb-4 mt-3">
 				<div class="card-header" style="width: 100%;">
 					<div class="row">
-						<div class="col"
-							style="width: 50%; text-align: left; font-weight: bold; font-size: 1.3em">
+						<div class="col" style="width: 50%; text-align: left; font-weight: bold; font-size: 1.3em">
 							<label>삭제된 프로젝트</label>
 						</div>
-		
+						<div class="col" style="margin-left: 50%">
+							<form action="${ pageContext.servletContext.contextPath }/project/managelist" >
+								<select id="subsearchCondition" name="subsearchCondition">
+									<option value="projectName" ${ requestScope.subselectCriteria.searchCondition eq "projectName"? "selected": "" }>프로젝트명</option>
+									<option value="pmName" ${ requestScope.subselectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
+								</select> 
+								<input type="search" id="subsearchValue" name="subsearchValue" value="${ requestScope.subselectCriteria.searchValue }">
+								<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
+							</form>	
+						</div>
 					</div>
 				</div>
 				<div class="card-body">
@@ -145,7 +153,10 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					
 				</div>
+				<jsp:include page="/WEB-INF/views/project/subpaging.jsp"/>
+				<br>
 			</div>
 		</c:if>			
 	</div>
