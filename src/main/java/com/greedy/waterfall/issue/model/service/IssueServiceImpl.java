@@ -103,12 +103,25 @@ public class IssueServiceImpl implements IssueService {
 		return projectMemberList;
 	}
 
-	
+	@Override
+	public IssueFileDTO findFile(int no) {
+		
+		return mapper.findFile(no);
+	}
+
+	@Override
+	public IssueFileDTO removeGuideFile(int fileNumber) {
+		IssueFileDTO issueFileDTO = mapper.findFile(fileNumber);
+		
+		int result = mapper.deleteIssueFile(fileNumber);
+				
+		//		if(!(result > 0)) {
+		//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
+		//		}
+		
+		return issueFileDTO;
+	}
 }
-//			issueFileDTO.setRefIssueNo(issue.getNo());
-//			mapper.insertIssueFile(issueFileDTO);
-//		if(!(result > 0)) {
-//			throw new IssueRegistException("이슈 등록에 실패하셨습니다.");
-//		}
+
 		
 		

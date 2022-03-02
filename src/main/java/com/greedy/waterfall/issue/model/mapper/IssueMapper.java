@@ -31,4 +31,8 @@ public interface IssueMapper {
 
 	List<ProjectMemberDTO> selectProjectMember(int projectNo);
 
+	IssueFileDTO findFile(int no);
+
+	int deleteIssueFile(int fileNumber);
+
 }

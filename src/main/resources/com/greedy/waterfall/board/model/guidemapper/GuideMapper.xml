@@ -200,8 +200,8 @@
              , C.FILE_ORIGIN_NAME
              , C.FILE_PATH
           FROM TBL_BOARD A
-          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-          JOIN TBL_FILE C ON (A.BOARD_NO = C.REF_BOARD_NO)
+          LEFT JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+          LEFT JOIN TBL_FILE C ON (A.BOARD_NO = C.REF_BOARD_NO)
          WHERE A.BOARD_NO = #{ guideNo }
    </select>
    
@@ -219,13 +219,13 @@
              , A.BOARD_STATUS
              , A.PROJECT_NO
           FROM TBL_BOARD A
-          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+          LEFT JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
          WHERE A.BOARD_NO = #{ guideNo }
    </select>
    
    <!-- 첨부파일번호로 첨부파일 전체 정보를 조회한다. -->
 	<select id="findFile" resultMap="fileResultMap">
-        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#fineFile() */
+        SELECT /* com.greedy.waterfall.board.model.mapper.GuideMapper#fineFile() */
                A.FILE_NO
              , A.FILE_PATH
              , A.FILE_ORIGIN_NAME

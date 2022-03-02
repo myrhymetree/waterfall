@@ -3,6 +3,8 @@ package com.greedy.waterfall.issue.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
+import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
@@ -49,7 +52,7 @@ import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 @RestController
 @RequestMapping("/issue")
-@SessionAttributes("adminProjectNo")		//이것때문에 세션에 못넣어준 현상 빈번했었음
+@SessionAttributes({"adminProjectNo", "taskNo"})		//이것때문에 세션에 못넣어준 현상 빈번했었음
 public class IssueController {
 	
 	private final IssueService issueService;
@@ -365,7 +368,7 @@ public class IssueController {
 			message = "게시글등록에 실패했습니다.";
 			System.out.println(message);
 		}
-
+		
 		mv.setViewName("redirect:/issue/list/"+taskNo);
 		return mv;
 	}
@@ -399,6 +402,50 @@ public class IssueController {
 		mv.addObject("projectMember", gson.toJson(projectMember));
 		mv.setViewName("jsonView");
 		return mv;
+	}
+	
+	@GetMapping("/download/{fileNo}")
+	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
+		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		IssueFileDTO file = issueService.findFile(no);
+		fileInfo.put("filePath", file.getSavedPath());
+		System.out.println(file.getSavedPath());
+		System.out.println(file.getRandomName());
+		fileInfo.put("fileOriginName", file.getOriginalName());
+		fileInfo.put("fileRandomName", file.getRandomName());
+		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
+	}
+	
+	@GetMapping("/deleteFile/{fileNo}")
+	public ModelAndView deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session, 
+			RedirectAttributes rttr, ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
+		
+		int taskNo = (int) session.getAttribute("taskNo");
+		System.out.println("delete에 들어오는 업무 no : " + taskNo);
+		
+		int fileNumber = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		IssueFileDTO issueFileDTO = issueService.removeGuideFile(fileNumber); 
+		
+		String root = session.getServletContext().getRealPath("resources");	
+		
+		String filePath = root + "/guideUploadFiles";
+		
+		File file = new File(filePath + "\\" + issueFileDTO.getRandomName());
+		
+		if(file.exists()) {
+			file.delete();
+		}
+		
+		mv.addObject("intent", "/issue/deleteFile");
+		mv.setViewName("redirect:/issue/list/" + taskNo);
+		
+		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
+		
+		return mv; 
 	}
 	
 }

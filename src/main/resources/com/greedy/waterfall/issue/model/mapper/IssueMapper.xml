@@ -356,5 +356,25 @@
 	      WHERE PROJECT_NO = #{ projectNo }
 	      ORDER BY B.MEMBER_NAME
 	</select>
+	
+	<select id="findFile" resultMap="fileResultMap">
+        SELECT /* com.greedy.waterfall.issue.model.mapper.IssueMapper#fineFile() */
+               A.FILE_NO
+             , A.FILE_PATH
+             , A.FILE_ORIGIN_NAME
+             , A.FILE_RANDOM_NAME
+             , A.FILE_STATUS
+             , A.REF_ISSUE_NO
+             , A.REF_TASK_NO
+             , A.REF_ISSUE_NO
+          FROM TBL_FILE A
+         WHERE A.FILE_NO = #{ fileNo }
+	</select>
+	
+	<delete id="deleteIssueFile" parameterType="_int">
+    DELETE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#deleteIssueFile() */
+  	  FROM TBL_File A
+     WHERE A.FILE_NO = #{ fileNo }
+	</delete>
   
   </mapper>

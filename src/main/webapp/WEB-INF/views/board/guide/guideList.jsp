@@ -278,7 +278,6 @@ input::-webkit-search-results-decoration{
                                                           <span class="caret"></span>
                                                         </button>
                                                         <div class="dropdown-menu" id="downloadarea">
-                                                          z
                                                         </div>
                                                      </div>
                                           </div>
@@ -398,7 +397,6 @@ $(function() {
                      $("#downloadarea").empty();
                      $("#downloadarea").append($downloadTag);
                      $("#downloadarea").append($deleteTag);
-//                      $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
                   }
               }, 
               error:function(data) {
