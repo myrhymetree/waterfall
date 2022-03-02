@@ -366,7 +366,7 @@ public class IssueController {
 			System.out.println(message);
 		}
 
-//		mv.setViewName("redirect:/issue/list/"+taskNo);
+		mv.setViewName("redirect:/issue/list/"+taskNo);
 		return mv;
 	}
 	
@@ -381,6 +381,7 @@ public class IssueController {
 		System.out.println("detail에 들어오는 프로젝트 no : " + projectNo);
 		
 		IssueDTO issueDetail = issueService.selectIssueDetail(no);
+		System.out.println("issueDetail : " + issueDetail);
 		
 		List<ProjectMemberDTO> projectMember = issueService.selectProjectMember(projectNo);
 		

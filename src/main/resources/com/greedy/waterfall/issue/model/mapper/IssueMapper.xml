@@ -20,6 +20,7 @@
         <result property="projectNo" column="PROJECT_NO"/>
         <result property="taskNo" column="TASK_NO"/>
         
+        <association property="file" resultMap="fileResultMap"></association>
         <association property="register" resultMap="registerResultMap"/>
         <association property="manager" resultMap="managerResultMap"/>
         <association property="project" resultMap="projectResultMap"/>
@@ -86,6 +87,15 @@
   	<resultMap type="com.greedy.waterfall.issue.model.dto.ProjectMemberDTO" id="projectMemberResultMap">
   		<id property="memberNo" column="MEMBER_NO"/>
   		<result property="memberName" column="MEMBER_NAME"/>
+  	</resultMap>
+  	
+  	<resultMap type="com.greedy.waterfall.issue.model.dto.IssueFileDTO" id="fileResultMap">
+  		<id property="no" column="FILE_NO"/>
+  		<result property="refIssueNo" column="REF_ISSUE_NO"></result>
+  		<result property="savedPath" column="FILE_PATH"></result>
+  		<result property="originalName" column="FILE_ORIGIN_NAME"></result>
+  		<result property="randomName" column="FILE_RANDOM_NAME"></result>
+  		<result property="status" column="FILE_STATUS"></result>
   	</resultMap>
   	
   <select id="selectIssueList" parameterType="_int" resultMap="issueResultMap">
@@ -325,12 +335,17 @@
 	       , B.MEMBER_NAME AS REGISTER_NAME
 	       , A.ISSUE_MANAGER
 	       , C.MEMBER_NAME AS MANAGER_NAME
+	       , D.FILE_NO
+	       , D.FILE_ORIGIN_NAME
+	       , D.FILE_PATH
 	   FROM TBL_ISSUE A
   LEFT JOIN TBL_MEMBER B ON (A.ISSUE_REGISTER = B.MEMBER_NO)
   LEFT JOIN TBL_MEMBER C ON (A.ISSUE_MANAGER = C.MEMBER_NO)
+  LEFT JOIN TBL_FILE D ON (A.ISSUE_NO = D.REF_ISSUE_NO)
  WHERE A.ISSUE_STATUS = 'Y'
    AND A.ISSUE_NO = #{ no }
 	</select>
+	
 	<select id="selectProjectMember" resultMap="projectMemberResultMap">
 	   SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectProjectMember() */
 	   DISTINCT 
