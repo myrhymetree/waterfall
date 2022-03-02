@@ -127,7 +127,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		return findModify;
 	}
-
+	
 
 	@Override
 	public void memberModify(AdminMemberDTO adminMember) {
