@@ -311,11 +311,17 @@
 	<insert id="adminDept" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
 		<selectKey keyProperty="postDept,no" resultType="com.greedy.waterfall.member.model.dto.AdminMemberDTO" order="BEFORE">
 	    	SELECT 
-	    		   A.DEPT_CODE AS postDept
-	    		 , A.MEMBER_NO AS no 
-	          FROM TBL_MEM_DEPT_HISTORY A
-	          JOIN TBL_MEMBER B ON (B.MEMBER_NO = A.MEMBER_NO)
-	         WHERE B.MEMBER_ID = #{ id } 		   
+	    		   C.DEPT_CODE AS postDept
+	    		 , C.MEMBER_NO AS no
+	          FROM ( SELECT
+ 						    A.DEPT_CODE
+ 						  , A.MEMBER_NO
+ 					   FROM TBL_MEM_DEPT_HISTORY A
+ 					   JOIN TBL_MEMBER B ON (B.MEMBER_NO = A.MEMBER_NO)
+ 					  WHERE B.MEMBER_ID = #{ id }
+ 					  ORDER BY A.DEPT_UPDATED_DATE DESC  	   	             
+ 	               )C
+ 	          WHERE ROWNUM = 1      		    		   
 	    </selectKey> 
 		INSERT
 		  INTO TBL_MEM_DEPT_HISTORY A   
@@ -334,12 +340,71 @@
 		)        
 	</insert>
 	
-	<insert id="adminTeam">
+	<insert id="adminTeam" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
 		<selectKey keyProperty="postTeam" resultType="com.greedy.waterfall.member.model.dto.AdminMemberDTO" order="BEFORE">
 			SELECT
-			       A.TEAM_CODE AS postTeam  
-			  FROM TBL_MEM_TEAM_HISTORY A
-			 WHERE A.MEMBER_NO = #{ no }       
+			       B.TEAM_CODE AS postTeam
+			  FROM ( SELECT
+			                A.TEAM_CODE
+			           FROM TBL_MEM_TEAM_HISTORY A   
+			          WHERE A.MEMBER_NO = #{ no }
+			          ORDER BY A.TEAM_UPDATED_DATE DESC
+			        ) B
+			  WHERE ROWNUM = 1            
 		</selectKey>
+		INSERT
+		  INTO TBL_MEM_TEAM_HISTORY A
+		(
+		  A.TEAM_MEM_HISTORY_NO
+		, A.TEAM_CODE
+		, A.MEMBER_NO
+		, A.TEAM_UPDATED_NAME  
+		)
+		VALUES
+		(
+		  TEAM_MEM_HISTORY_NO.NEXTVAL
+		, #{ postTeam }
+		, #{ no }
+		, #{ team.teamCode }   
+		)   
 	</insert>
+	
+	<insert id="adminJob" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
+		<selectKey keyProperty="postJob" resultType="com.greedy.waterfall.member.model.dto.AdminMemberDTO" order="BEFORE">
+			SELECT
+			       B.JOB_CODE AS postJob
+			  FROM ( SELECT
+			                A.JOB_CODE
+			           FROM TBL_MEM_JOB_HISTORY A
+			          WHERE A.MEMBER_NO = #{ no }
+			          ORDER BY A.JOB_UPDATED_DATE DESC			                
+			       ) B
+			 WHERE ROWNUM = 1          
+		</selectKey>
+		INSERT
+		  INTO TBL_MEM_JOB_HISTORY A
+		(
+		  A.JOB_MEM_HISTORY_NO
+		, A.JOB_CODE
+		, A.MEMBER_NO
+		, A.JOB_UPDATED_TITLE		  
+		)
+		VALUES
+		(
+		  JOB_MEM_HISTORY_NO.NEXTVAL
+		, #{ postJob }
+		, #{ no }
+		, #{ job.jobCode }  
+		)  
+	</insert>
+	
+	<update id="oneMember" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
+		UPDATE
+		       TBL_MEMBER_COM_INFO A
+		   SET A.DEPT_CODE = #{ dept.deptCode }
+		     , A.TEAM_CODE = #{ team.teamCode }
+		     , A.JOB_CODE = #{ job.jobCode }
+		 WHERE A.MEMBER_NO = #{ no }        
+	</update>
+	
 </mapper>

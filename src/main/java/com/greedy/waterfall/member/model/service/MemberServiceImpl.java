@@ -134,9 +134,12 @@ public class MemberServiceImpl implements MemberService {
 		System.out.println("실행 첫번째 성공");
 		int adminMemberResult = mapper.adminMember(adminMember);
 		System.out.println("실행 두번째 성공");
+		System.out.println("실행 두번쨰 " + "" + adminMember.getNo());
 		int deptResult = mapper.adminDept(adminMember);
 		System.out.println("실행 세번째 성공");
+		System.out.println("실행 세번째 " + "" + adminMember.getNo());
 		int teamResult = mapper.adminTeam(adminMember);
+		System.out.println("실행 네번째 " + "" + adminMember.getNo());
 		int jobResult = mapper.adminJob(adminMember);
 		int memberResult = mapper.oneMember(adminMember);
 		
