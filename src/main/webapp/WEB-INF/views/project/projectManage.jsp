@@ -80,8 +80,8 @@
 								<td><c:out value="${ project.name}" /></td>
 								<td><c:out value="${ project.member.memberName}" /></td>
 								<td><c:out value="${ project.progression }" /></td>
-								<td><c:out value="${ project.outputCount }" /></td>
-								<td><c:out value="${ project.issueCount }" /></td>
+								<td>대기</td>
+								<td>대기</td>
 								<td><c:out value="${ project.startDate }" /></td>
 								<td><c:out value="${ project.deadLine }" /></td>
 								<td><button class="btn btn-danger">삭제</button></td>
@@ -144,8 +144,8 @@
 									<td><c:out value="${ project.name}" /></td>
 									<td><c:out value="${ project.member.memberName}" /></td>
 									<td><c:out value="${ project.progression }" /></td>
-									<td><c:out value="${ project.outputCount }" /></td>
-									<td><c:out value="${ project.issueCount }" /></td>
+									<td>대기</td>
+									<td>대기</td>
 									<td><c:out value="${ project.startDate }" /></td>
 									<td><c:out value="${ project.deadLine }" /></td>
 									<td ><input type="hidden" value="${ project.no }"></td>

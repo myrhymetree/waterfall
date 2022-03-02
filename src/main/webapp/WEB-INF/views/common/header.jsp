@@ -4,17 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-a:link {
-  color : ORANGERED;
-}
-a:hover {
-  color : BLACK;
-}
-a:active {
-  color : YELLOWGREEN;
-}
-</style>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -94,7 +83,14 @@ a:active {
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                                 	<div class="menu-font2">
-                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/project/list">프로젝트 목록</a>
+                                	<a href=" ${ pageContext.servletContext.contextPath }/project/list"> 프로젝트</a>
+<%--                                 		<c:forEach var="project" items="${ requestScope.projectList }"> --%>
+<!--                                     			<a class="nav-link collapsed" z data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth"> -->
+<%--                                       		  <c:out value="${ project.name }" /> --%>
+<!--                                         			<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div> -->
+<%--                                      	  	  <input type="hidden" value="${ project.no }"/> --%>
+<!--                                     			</a> -->
+<%--                                    		 </c:forEach> --%>
                                 	</div>                               
                                 </nav>
                             </div>                          
