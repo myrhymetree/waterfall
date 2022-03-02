@@ -89,8 +89,8 @@ height: 24px;
 									<td><c:out value="${ project.name}" /></td>
 									<td><c:out value="${ project.member.memberName}" /></td>
 									<td><c:out value="${ project.progression }" /></td>
-									<td>대기</td>
-									<td>대기</td>
+									<td><c:out value="${ project.outputCount }" /></td>
+									<td><c:out value="${ project.issueCount }" /></td>
 									<td><c:out value="${ project.startDate }" /></td>
 									<td><c:out value="${ project.deadLine }" /></td>
 									<td><input type="hidden" value="${ project.no }" name="projectNo"></td>
@@ -155,8 +155,8 @@ height: 24px;
 									<td><c:out value="${ project.name}" /></td>
 									<td><c:out value="${ project.member.memberName}" /></td>
 									<td><c:out value="${ project.progression }" /></td>
-									<td>대기</td>
-									<td>대기</td>
+									<td><c:out value="${ project.outputCount }" /></td>
+									<td><c:out value="${ project.issueCount }" /></td>
 									<td><c:out value="${ project.startDate }" /></td>
 									<td><c:out value="${ project.deadLine }" /></td>
 									<td><input type="hidden" value="${ project.no }" name="projectNo"></td>

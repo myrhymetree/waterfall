@@ -37,6 +37,10 @@ public class ProjectDTO {
    private java.sql.Date completed;   //종료일
    private String statusCode;          //상태코드
    
+   private int outputCount;
+   private int issueCount;
+   
+   
    private MeetingMemberDTO member;
    
 
