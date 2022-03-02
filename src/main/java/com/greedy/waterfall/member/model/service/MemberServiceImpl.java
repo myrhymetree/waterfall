@@ -45,6 +45,15 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<AdminMemberDTO> findAdminMember(SelectCriteria selectCriteria) {
 		
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
+		System.out.println("확인용 서치" + " " + selectCriteria);
 		List<AdminMemberDTO> adminMemberList = mapper.findAdminMemberList(selectCriteria);
 		
 		return adminMemberList;
@@ -88,7 +97,7 @@ public class MemberServiceImpl implements MemberService {
 		int jobResult = mapper.jobMemberRegist(adminMember);	
 		int memberResult = mapper.memberRegist(adminMember);
 		
-		if(adminResult < 0 && deptResult < 0 && teamResult < 0 && jobResult < 0 && memberResult < 0) {
+		if(adminResult < 0 || deptResult < 0 || teamResult < 0 || jobResult < 0 || memberResult < 0) {
 			throw new MemberRegistException("게시글 등록에 실패하셨습니다.");
 		}
 	}
@@ -106,7 +115,7 @@ public class MemberServiceImpl implements MemberService {
 		findModify = mapper.adminMemberModify(id);
 		List<DeptDTO> deptList = mapper.adminDeptMember();
 		System.out.println("확인용44" + deptList);
-		List<TeamDTO> teamList = mapper.adminTeamMember(findModify.getDept().getDeptCode());
+		List<TeamDTO> teamList = mapper.adminTeamMember();
 		System.out.println("확인용55" + teamList);
 		List<JobDTO> jobList = mapper.adminJobMember();
 		System.out.println("확인용66" + jobList);
@@ -117,6 +126,21 @@ public class MemberServiceImpl implements MemberService {
 		findModify.setJobList(jobList);
 		
 		return findModify;
+	}
+	
+
+	@Override
+	public void memberModify(AdminMemberDTO adminMember) {
+		System.out.println("실행 첫번째 성공");
+		int adminMemberResult = mapper.adminMember(adminMember);
+		System.out.println("실행 두번째 성공");
+		int deptResult = mapper.adminDept(adminMember);
+		System.out.println("실행 세번째 성공");
+		int teamResult = mapper.adminTeam(adminMember);
+		int jobResult = mapper.adminJob(adminMember);
+		int memberResult = mapper.oneMember(adminMember);
+		
+		
 	}
 
 

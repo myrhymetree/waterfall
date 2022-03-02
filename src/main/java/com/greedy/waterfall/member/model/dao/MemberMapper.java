@@ -41,9 +41,19 @@ public interface MemberMapper {
 
 	List<DeptDTO> adminDeptMember();
 
-	List<TeamDTO> adminTeamMember(String deptCode);
+	List<TeamDTO> adminTeamMember();
 
 	List<JobDTO> adminJobMember();
+
+	int adminMember(AdminMemberDTO adminMember);
+
+	int adminDept(AdminMemberDTO adminMember);
+
+	int adminTeam(AdminMemberDTO adminMember);
+
+	int adminJob(AdminMemberDTO adminMember);
+
+	int oneMember(AdminMemberDTO adminMember);
 
 
 }

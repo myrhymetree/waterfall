@@ -27,4 +27,8 @@ public class AdminMemberDTO {
 	private List<DeptDTO> DeptList;
 	private List<TeamDTO> teamList;
 	private List<JobDTO> jobList;
+	private String postDept;
+	private String postTeam;
+	private String postJob;
+	
 }

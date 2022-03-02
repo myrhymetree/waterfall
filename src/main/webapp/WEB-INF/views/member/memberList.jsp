@@ -62,36 +62,36 @@
                     <span class="modal-title" id="exampleModalLabel"><strong>계정수정</strong></span>
                 </div> 
             <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->
-                <form>
+                <form action="${ pageContext.servletContext.contextPath }/member/memberModify" method="post">
                     <div class="modal-body" style="margin-top: 5%;">
                         <div>
-                            <input type="text" class="form-control" placeholder="아이디" id="id" style="width: 70%; margin-left: 15%;">
+                            <input type="text" class="form-control" placeholder="아이디" id="id" name="id" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3" style="margin-top: 3%;"> 
                             <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
                             <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->          
-                             <input type="text" class="form-control" placeholder="이름" id="name" style="width: 70%; margin-left: 15%;">
+                             <input type="text" class="form-control" placeholder="이름" id="name" name="name" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3">                                   
-                            <select id="dept" class="form-select" style="width: 70%; margin-left: 15%;">
+                            <select id="dept" name="dept" class="form-select" style="width: 70%; margin-left: 15%;">
                                 <option value=""></option>
                             </select> 
                         </div>
                         <div class="mb-3">                                  
-                            <select class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option id="team"></option>
+                            <select id="team" name="team" class="form-select" style="width: 70%; margin-left: 15%;">
+                                <option value=""></option>
                             </select> 
                         </div>
                         <div class="mb-3">                              
-                            <select id="job" class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option id="job"></option>
+                            <select id="job" name="job" class="form-select" style="width: 70%; margin-left: 15%;">
+                                <option value=""></option>
                             </select> 
                         </div>
                         <!-- 아래 텍스트박스는 글쓴이가 쓰는 만큼 늘어날 수 있다. 초기 크기 설정은 위에 일반 텍스트 박스 참조 -->
                         <!-- <div class="mb-3">
                             <label for="message-text" class="col-form-label">Message:</label>
                             <textarea class="form-control" id="message-text"></textarea>
-                        </div> -->
+                        </div> --> 
                         <!-- 셀렉트 박스 크기 조절 위에 참고 하면 충분히 합니다. -->
                         <!-- <div>
                             <select class="form-select">
@@ -104,7 +104,7 @@
                     </div>
                     <!-- 모달의 바디 끝  -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">등록</button>
+                        <button type="submit" class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">등록</button>
                         <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                     </div>
                 </form>
@@ -249,30 +249,58 @@
 				for(let i = 0; i < $tds.length; i++) {
 					$tds[i].onclick = function() {
 						const id = this.parentNode.children[0].innerText;
-					
+						$("#dept option").remove();
+						$("#job option").remove();
+						$("#team option").remove();
 						$.ajax({
 							url: "modify",
 							type: "get",
 							data : { id : id },
 							success : function(data, textStatus, xhr) {
 								const modify = JSON.parse(data.modify);
-							
-								/* for(let index in modify) { */
-							
-									const memberArray = Object.entries(modify);
+								const memberArray = Object.entries(modify);
+					
+								const deptList = memberArray[9][1];
+								const teamList = memberArray[10][1];
+							    const jobList = memberArray[11][1];		
+								console.log(memberArray);
+							    
+								$("#dept").append("<option value='" + memberArray[6][0] + "'>" + memberArray[6][1].deptName + "</option>");
+								$("#team").append("<option value='" + memberArray[7][0] + "'>" + memberArray[7][1].teamName + "</option>");
+								$("#job").append("<option value='" + memberArray[8][0] + "'>" + memberArray[8][1].jobName + "</option>");
 								
-									console.log(memberArray);
-									$("#id").val(memberArray[1][1]);
-									$("#name").val(memberArray[2][1]);
-									/* $("#dept").val(memberArray[6][1]); */
-									$("#dept").innerText(memberArray[6][1].deptName);
-									console.log(memberArray[6][1].deptName);
-									$("#team").val(memberArray[7][1]);
-									$("#job").val(memberArray[9][1]);
-									$("#exampleModal").modal("show");
-								    /* $("#dept").append(memberArray[6][1].deptName); */
-								/* } */
+								for(var i = 0; i < deptList.length; i++){
+									$("#dept").append("<option value='" + deptList[i].deptCode + "'>" + 
+											deptList[i].deptName + "</option>");
+									console.log(deptList);
+								}
+									
+								for(var i = 0; i < teamList.length; i++){
+									$("#team").append("<option value='" + teamList[i].teamCode + "'>" + 
+											teamList[i].teamName + "</option>");
+									console.log(teamList);
+								}
+									
+								for(var i = 0; i < jobList.length; i++){
+									$("#job").append("<option value='" + jobList[i].jobCode + "'>" + 
+											jobList[i].jobName + "</option>");
+									console.log(jobList);
+								}
+										
+									
+								$("#id").val(memberArray[1][1]);
+								$("#name").val(memberArray[2][1]);
+								/* $("#dept").val(memberArray[6][1]); */
+								/* $("#dept").innerText(memberArray[6][1].deptName);
+								$("#team").val(memberArray[7][1]);
+								$("#job").val(memberArray[9][1]); */
+								$("#exampleModal").modal("show");
+									
+													
 							
+									
+									
+									
 							}, error : function(data){
 								console.log("문제있네");
 							}
