@@ -11,7 +11,7 @@
 <script src="${ pageContext.servletContext.contextPath }/resources/js/datatables-simple-demo.js"></script>
 <script src="${ pageContext.servletContext.contextPath }/resources/assets/demo/chart-area-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-auto-replace-svg="nest"></script>
@@ -125,6 +125,109 @@ function backButton_click() {
 		console.log("프로젝트 번호는 : " + projectNo);	
 }); 
 
+ $(function() {
+	   const $tds = document.querySelectorAll("#listArea td");   /* 이벤트 클릭 했을 때의 this  */
+	   console.log($tds);
+	   for (let i = 0; i < $tds.length; i++) {
+	      $tds[i].onclick = function() {
+	         const no = this.parentNode.children[0].innerText;
+	         const ex = this.parentNode; // this는 td의 부모인 tr
+	         console.log(no);
+	         
+	          $.ajax({
+	            url :"adminIssueDetail",
+	            type : "get",
+	            data : { no : no },
+	            success : function(data, textStatus, xhr) {
+	               
+	                  console.log(data);
+	                  console.log(Object.entries(data));
+	                  
+	                  const guideArray = Object.entries(data);
+	                  const issueDetail = JSON.parse(data.issueDetail)
+	                  console.log(issueDetail);
+	                  const projectMember = JSON.parse(data.projectMember)	                  
+	                  console.log(projectMember);
+	                  
+	                  const registerName = issueDetail.register.name;
+	                  console.log(registerName);
+	                  
+	                  const memberName = projectMember[0].memberName
+	                  console.log(memberName)
+//	                  const $fileNo = issueDetail.file;
+//	                  console.log($fileNo);
+					  
+					  console.log(projectMember.length);
+					  
+					  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	                  $("#register").empty();
+					  /* register에 select문에 기본값으로 주기 */
+	                  const $registerName = "<option value = '" + issueDetail.register.no + "' selected >" + issueDetail.register.name + "</option>";
+	                  $("#register").append($registerName);
+	                  
+	                  //register에 for문으로 전체 출력
+	                  for(let i = 0; i < projectMember.length; i++){
+	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                      $("#register").append($memberTag);
+	                  }
+	                  
+	                  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	                  $("#manager").empty();
+	                  /* manager에 select문에 기본값으로 주기 */
+	                  if(issueDetail.manager == null) {
+	                	  const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
+	                	  $("#manager").append($managerName);
+	                  } else {
+	                	  const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";
+		                  $("#manager").append($managerName);
+	                  }
+	                  
+	                  //manager에 for문으로 전체 출력
+	                  for(let i = 0; i < projectMember.length; i++){
+	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                      $("#manager").append($memberTag);
+	                  }
+	                  
+	                  
+//	                  $("#read-memberNo").val(projectMember.memberNo)
+	                  
+	                  $("#read-no").val(issueDetail.no);      
+	                  $("#read-name").val(issueDetail.name);
+	                  $("#read-createdDate").val(issueDetail.createdDate);
+	                  $("#read-deadline").val(issueDetail.deadline);
+	                  $("#read-progressStatus").val(issueDetail.progressStatus);
+	                  $("#read-importance").val(issueDetail.importance);
+	                  $("#read-content").val(issueDetail.content);
+	                  $("#read-answer").val(issueDetail.answer);
+	                  $("#read-completedDate").val(issueDetail.completedDate);
+//	                  $("#read-registerName").val(issueDetail.register.name);
+//	                  $("#read-managerName").val(issueDetail.manager.name); 
+	                  $("#read-projectNo").val(issueDetail.projectNo);
+	                  $("#read-taskNo").val(issueDetail.taskNo);
+//	                  $("#read-writerNo").val(guideArray[8][1]);
+//	                  $("#read-originalName").val(guideArray[14][1]);
+	                  $("#myModal").modal("show");
+	                  
+//	                  if($fileNo != null) {
+//	                     
+//	                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
+//	                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
+//	               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
+//	                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
+//	                     
+//	                     $("#downloadarea").empty();
+//	                     $("#downloadarea").append($downloadTag);
+//	                     $("#downloadarea").append($deleteTag);
+//	                      $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
+//	                  }
+	              }, 
+	              error:function(data) {
+	                  console.log(data);
+	               }
+	          });
+	         }
+	   }
+	});
 </script>
 </body>
 </html>

@@ -114,7 +114,7 @@ $(function() {
 	      $tds[i].onclick = function() {
 	         const no = this.parentNode.children[0].innerText;
 	         const ex = this.parentNode; // this는 td의 부모인 tr
-	         console.log(no);
+	         console.log("이슈 번호는 : " + no);
 	         
  	          $.ajax({
 	            url :"issueDetail",
@@ -126,40 +126,124 @@ $(function() {
 	                  console.log(Object.entries(data));
 	                  
 	                  const guideArray = Object.entries(data);
-	                  const $registerName = guideArray[11][1].name;
-	                  console.log($registerName);
-	                  const $fileNo = guideArray[22][1];
-	                  console.log($fileNo);
+	                  const issueDetail = JSON.parse(data.issueDetail)
+	                  console.log(issueDetail);
+	                  const projectMember = JSON.parse(data.projectMember)	                  
+	                  console.log(projectMember);
 	                  
-	                  $("#read-no").val(guideArray[1][1]);      
-	                  $("#read-name").val(guideArray[2][1]);
-	                  $("#read-createdDate").val(guideArray[3][1]);
-	                  $("#read-progressStatus").val(guideArray[4][1]);
-	                  $("#read-importance").val(guideArray[5][1]);
-	                  $("#read-content").val(guideArray[6][1]);
-	                  $("#read-answer").val(guideArray[7][1]);
-	                  $("#read-deadline").val(guideArray[7][1]);
-	                  $("#read-completedDate").val(guideArray[8][1]);
-	                  $("#read-registerName").val(guideArray[11][1].name);
-//	                  $("#read-managerName").val(guideArray[12][1]);
-	                  $("#read-projectNo").val(guideArray[16][0].name);
-	                  $("#read-taskNo").val(guideArray[18][0].name);
-//	                  $("#read-writerNo").val(guideArray[8][1]);
-//	                  $("#read-originalName").val(guideArray[14][1]);
+	                  const registerName = issueDetail.register.name;
+	                  console.log("이슈 등록인의 이름은 : " + registerName);
+	                  
+	                  const memberName = projectMember[0].memberName
+	                  console.log("프로젝트 구성인원 목록의 첫 이름은 : " + memberName)
+	                  const fileNo = issueDetail.file;
+	                  console.log(fileNo);
+	                  console.log("파일의 length는 : " +  issueDetail.file.length);
+					  console.log("프로젝트 구성인원의 length는 : " + projectMember.length);
+					  
+					  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	                  $("#register").empty();
+					  /* register에 select문에 기본값으로 주기 */
+	                  const $registerName = "<option value = '" + issueDetail.register.no + "' selected >" + issueDetail.register.name + "</option>";
+	                  $("#register").append($registerName);
+	                  
+	                  //register에 for문으로 전체 출력
+	                  for(let i = 0; i < projectMember.length; i++){
+	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                      $("#register").append($memberTag);
+	                  }
+	                  
+	                  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	                  $("#manager").empty();
+	                  /* manager에 select문에 기본값으로 주기 */
+	                  if(issueDetail.manager == null) {
+	                	  const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
+	                	  $("#manager").append($managerName);
+	                  } else {
+	                	  const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";
+		                  $("#manager").append($managerName);
+	                  }
+	                  
+	                  //manager에 for문으로 전체 출력
+	                  for(let i = 0; i < projectMember.length; i++){
+	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                      $("#manager").append($memberTag);
+	                  }
+	                  
+	                  
+//	                  $("#read-memberNo").val(projectMember.memberNo)
+	                  
+	                  $("#read-no").val(issueDetail.no);      
+	                  $("#read-name").val(issueDetail.name);
+	                  $("#read-createdDate").val(issueDetail.createdDate);
+	                  $("#read-deadline").val(issueDetail.deadline);
+	                  $("#read-progressStatus").val(issueDetail.progressStatus);
+	                  $("#read-importance").val(issueDetail.importance);
+	                  $("#read-content").val(issueDetail.content);
+	                  $("#read-answer").val(issueDetail.answer);
+	                  $("#read-completedDate").val(issueDetail.completedDate);
+	                  $("#read-projectNo").val(issueDetail.projectNo);
+	                  $("#read-taskNo").val(issueDetail.taskNo);
 	                  $("#myModal").modal("show");
 	                  
-//	                  if($fileNo != null) {
-//	                     
+	                  $("#downloadZone").empty();
+	                  if(issueDetail.file.length != 0) {
+	                	  
+	                	  const fileName = issueDetail.file[0].originalName;
+						  console.log("첫번째 파일의 이름은  : " + fileName);
+						  
+ 	                	 for(let i = 0; i < issueDetail.file.length; i++) {
+//						  eval("const $div1Tag" + " = '$div1Tag" + i + "';")
+//						  $div1Tag = "<div class = 'mt-4 row' id = 'div1Tag'></div>";
+//	                	  $("#modal-body").append($div1Tag);
+	                	      
+//	                	  eval("const $div2Tag" + " = '$div2Tag" + i + "';")
+//	                	  $div2Tag = "<div id='div2Tag' class='col-2 center' style='vertical-align: top;'><label>첨부파일</label></div>";
+//	                	  $("#div1Tag").append($div2Tag);
+	                	  
+//	                	  eval("const $div3Tag" + " = '$div3Tag" + i + "';")
+//	                	  $div3Tag = "<div id='div3Tag' class='col-3'></div>";
+//	                	  $("#div1Tag").append($div3Tag);
+	                	  
+//	                	  eval("const $div4Tag" + " = '$div4Tag" + i + "';")
+//	                	  $div4Tag = "<div class='btn-group' id='attaachmentNameArea'></div>"
+//	                	  $("#div3Tag").append($div4Tag);
+	                	  
+//	                	  eval("const $inputTag" + " = '$inputTag" + i + "';")
+//	                	  $inputTag = "<input type='button' class='btn btn-outline-dark' id = '" + issueDetail.file[i].originalName + "' name='" + issueDetail.file[i].originalName + "'>";	 
+//	                	  $("#attaachmentNameArea").append($inputTag);
+	                	  
+	                	  
+//	                	  eval("const $buttonsTag" + " = '$buttonsTag" + i + "';")
+//	                	  $buttonTag =
+//	                	  "<button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button>";
+//	                	  $("#attaachmentNameArea").append($buttonTag);
+//	                	  eval("const read-originalName" + i + " = 'read-originalName" + i + "';")
+//	                	  window['read-originalName'+ i] = "read-originalName " + i;
+						  
+						  const $fileNo = issueDetail.file[i].no;
+						  console.log("파일 번호는 : " + issueDetail.file[i].no);
+						  console.log("파일 이름은 : " + issueDetail.file[i].originalName);
+						  
+	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='read-originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+	              		  $("#downloadZone").append($buttonsTag);
+	              		  
+//	              		  $("#read-originalName").val(issueDetail.file[i].originalName);
+	                	 
 //	                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
 //	                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
 //	               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
 //	                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
-//	                     
+//	                    
+ 						
+// 						 $("#eval(d1 " + i")").empty();
+//						 $("modal-body").append(eval("const $d1" + i));
 //	                     $("#downloadarea").empty();
 //	                     $("#downloadarea").append($downloadTag);
 //	                     $("#downloadarea").append($deleteTag);
-//	                      $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
-//	                  }
+//	                     $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
+						}
+	                  }
 	              }, 
 	              error:function(data) {
 	                  console.log(data);

@@ -21,12 +21,13 @@
         </div>
 
         <!-- Modal body -->
-                   <div class="modal-body">
+                   <div class="modal-body" id="modal-body">
 
                         <div class="mt-4 row">
                         	<input type="hidden" id="read-no" name="no">
                         	<input type="hidden" id="#read-projectNo" name="projectNo">
                         	<input type="hidden" id="#read-taskNo" name="taskNo">
+                        	
                             <div class="col-2 center"><label>이슈명</label></div>
                             <div class="col"><input type="text" id="read-name" name="name"></div>
                             <div class="col"></div>
@@ -44,28 +45,21 @@
                        		<div class="col-2 center"><label for="read-createdDate">등록일</label></div>
                             <div class="col"><input type="date" id="read-createdDate" name="createdDate"></div>
                        
-                            <div class="col-2 center"><label for="read-progressStatus">처리일</label></div>
-                            <div class="col-4"><input type="date" id="read-progressStatus" name="deadline"></div>
+                            <div class="col-2 center"><label for="read-deadline">처리일</label></div>
+                            <div class="col-4"><input type="date" id="read-deadline" name="deadline"></div>
                         </div>
 
                         <div class="mt-4 row">
                             <div class="col-2 center"><label>이슈 제기자</label></div>
                             <div class="col">
-                            	<select name="register">
-									<option id="#read-registerName" selected disabled/>
-									<c:forEach var="issue" items="${ issueList }">
-										<option value="${ issue.registerNo }"><c:out value="${ issue.register.name }"/></option>
-									</c:forEach>
+                            	<select class="importance ms-auto" id="register" name="register">
 								</select>
+									
                             </div>
                             
                             <div class="col-2 center"><label>이슈 담당자</label></div>
                             <div class="col">
-                            	<select id="register" name="register">
-									<option value="" selected disabled>담당자 선택</option>
-									<c:forEach var="issue" items="${ issueList }">
-										<option value="${ issue.managerNo }"><c:out value="${ issue.manager.name }"/></option>
-									</c:forEach>
+                            	<select class="importance ms-auto" id="manager" name="manager">
 								</select>
                             </div>
                         </div>
@@ -78,48 +72,23 @@
                                 <option value="보통">보통</option>
                                 <option value="긴급">긴급</option>
                             </select>
+                            
                             </div>
                         </div>
-
+						
                         <div class="mt-4 row">
                             <div class="col-2 center" style="vertical-align: top;"><label>이슈내용</label></div>
-			                <div class="col"><textarea id="read-content" cols="22" rows="auto" name="content"></textarea></div>
-			                <div class="col-1"></div>
-			                <div class="col-2 center" style="vertical-align: top;"><label>처리내용</label></div>
-			                <div class="col-4"><textarea id="read-answer" cols="22" rows="auto" name="answer"></textarea></div>
+			                <div class="col-10"><textarea id="read-content" cols="80" rows="10" name="content"></textarea></div>
 			            </div>
-
-            <div class="mt-4 row">
-                <div class="col-2 center" style="vertical-align: top;"><label>첨부파일</label></div>
-                <div class="col-3">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-dark">첨부파일.word</button>
-                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-                          <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">다운로드</a>
-                          <a class="dropdown-item" href="#">삭제</a>
-                        </div>
-                      </div>
-                </div>
-                <div class="col-1"></div>
-                <div class="col-2 center" style="vertical-align: top;"><label>첨부파일</label></div>
-                <div class="col-3">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-dark">첨부파일.word</button>
-                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-                          <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">다운로드</a>
-                          <a class="dropdown-item" href="#">삭제</a>
-                        </div>
-                    </div>
-              </div>
-        </div>
-
-        </div>
+			            
+			            <div class="mt-4 row">
+			                <div class="col-2 center" style="vertical-align: top;"><label>처리내용</label></div>
+			                <div class="col-10"><textarea id="read-answer" cols="80" rows="10" name="answer"></textarea></div>
+			            </div>
+						
+						<div id="downloadZone">
+						</div>
+        </div> 	
 
         <!-- Modal footer -->
         <div class="modal-footer row">
@@ -164,8 +133,5 @@
     </div>
 </div>
 
-<script>
-
-</script>
 </body>
 </html>

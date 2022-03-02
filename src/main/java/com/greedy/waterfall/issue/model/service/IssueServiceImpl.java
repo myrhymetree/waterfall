@@ -1,5 +1,7 @@
 package com.greedy.waterfall.issue.model.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
+import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.issue.model.mapper.IssueMapper;
 
 @Service
@@ -87,13 +90,38 @@ public class IssueServiceImpl implements IssueService {
 		
 		IssueDTO issueDetail = mapper.selectIssueDetail(no);
 		
+//		projectMemberMap = mapper.selectProjectMember();
+		
 		return issueDetail;
 	}
+
+	@Override
+	public List<ProjectMemberDTO> selectProjectMember(int projectNo) {
+		
+		List<ProjectMemberDTO> projectMemberList= mapper.selectProjectMember(projectNo);
+		
+		return projectMemberList;
+	}
+
+	@Override
+	public IssueFileDTO findFile(int no) {
+		
+		return mapper.findFile(no);
+	}
+
+	@Override
+	public IssueFileDTO removeGuideFile(int fileNumber) {
+		IssueFileDTO issueFileDTO = mapper.findFile(fileNumber);
+		
+		int result = mapper.deleteIssueFile(fileNumber);
+				
+		//		if(!(result > 0)) {
+		//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
+		//		}
+		
+		return issueFileDTO;
+	}
 }
-//			issueFileDTO.setRefIssueNo(issue.getNo());
-//			mapper.insertIssueFile(issueFileDTO);
-//		if(!(result > 0)) {
-//			throw new IssueRegistException("이슈 등록에 실패하셨습니다.");
-//		}
+
 		
 		

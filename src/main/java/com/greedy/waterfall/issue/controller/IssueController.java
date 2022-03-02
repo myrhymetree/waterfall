@@ -3,6 +3,8 @@ package com.greedy.waterfall.issue.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,12 +37,14 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
+import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
 import com.greedy.waterfall.issue.model.dto.IssueRegisterDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
+import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.issue.model.service.IssueService;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
@@ -47,6 +52,7 @@ import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 @RestController
 @RequestMapping("/issue")
+@SessionAttributes({"adminProjectNo", "taskNo"})		//이것때문에 세션에 못넣어준 현상 빈번했었음
 public class IssueController {
 	
 	private final IssueService issueService;
@@ -86,7 +92,7 @@ public class IssueController {
 		
 		List<IssueDTO> taskIssueList = issueService.selectIssuesOfTask(projectNo);
 		
-		
+		mv.addObject("adminProjectNo", projectNo);
 		mv.addObject("taskIssueList", taskIssueList);
 		mv.addObject("intent", "/issue/task");
 		mv.setViewName("/issue/adminTaskList");
@@ -192,6 +198,36 @@ public class IssueController {
 
 		mv.setViewName("redirect:/issue/admin/list/"+taskNo);
 		
+		return mv;
+	}
+	
+	@GetMapping(value="admin/list/adminIssueDetail", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public ModelAndView adminfindIssueDetail(ModelAndView mv, HttpServletRequest request) {
+		
+		int no = Integer.parseInt(request.getParameter("no"));		//이슈번호
+		System.out.println("detail에 들어오는 이슈 no : " + no);
+		
+		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
+		System.out.println("detail에 들어오는 프로젝트 no : " + projectNo);
+		
+		IssueDTO issueDetail = issueService.selectIssueDetail(no);
+		
+		List<ProjectMemberDTO> projectMember = issueService.selectProjectMember(projectNo);
+		
+		System.out.println("상세조회 issueDetail : " + issueDetail);
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls()
+				.disableHtmlEscaping()
+				.create();
+		
+		mv.addObject("projectMember", projectMember);
+		mv.addObject("issueDetail", gson.toJson(issueDetail));
+		mv.addObject("projectMember", gson.toJson(projectMember));
+		mv.setViewName("jsonView");
 		return mv;
 	}
 	
@@ -332,50 +368,84 @@ public class IssueController {
 			message = "게시글등록에 실패했습니다.";
 			System.out.println(message);
 		}
-
-//		mv.setViewName("redirect:/issue/list/"+taskNo);
+		
+		mv.setViewName("redirect:/issue/list/"+taskNo);
 		return mv;
 	}
 	
 	@GetMapping(value="list/issueDetail", produces="application/json; charset=UTF-8")
 	@ResponseBody
-	public String findIssueDetail(HttpServletRequest request) {
+	public ModelAndView findIssueDetail(ModelAndView mv, HttpServletRequest request) {
 		
-		int no = Integer.parseInt(request.getParameter("no"));
-		System.out.println("detail에 들어오는 no " + no);
+		int no = Integer.parseInt(request.getParameter("no"));		//이슈번호
+		System.out.println("detail에 들어오는 이슈 no : " + no);
+		
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		System.out.println("detail에 들어오는 프로젝트 no : " + projectNo);
+		
 		IssueDTO issueDetail = issueService.selectIssueDetail(no);
+		System.out.println("issueDetail : " + issueDetail);
+		
+		List<ProjectMemberDTO> projectMember = issueService.selectProjectMember(projectNo);
+		
 		System.out.println("상세조회 issueDetail : " + issueDetail);
 		Gson gson = new GsonBuilder()
-				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setDateFormat("yyyy-MM-dd")
 				.setPrettyPrinting()
 				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
 				.serializeNulls()
 				.disableHtmlEscaping()
 				.create();
 		
-		return gson.toJson(issueDetail);
+		mv.addObject("projectMember", projectMember);
+		mv.addObject("issueDetail", gson.toJson(issueDetail));
+		mv.addObject("projectMember", gson.toJson(projectMember));
+		mv.setViewName("jsonView");
+		return mv;
 	}
 	
-// 뭐할려고 했던건지를 모르겠다...	
-//	@GetMapping("/regist/task/{taskNo}")
-//	public ModelAndView selectTask(ModelAndView mv, @PathVariable("taskNo") int taskNo, HttpServletResponse response) throws IOException {
-//
-//		List<IssueDTO> taskList = issueService.selectTask(taskNo);
-//		
-//		System.out.println(taskList);
-//		
-//		System.out.println("taskNo : " + taskNo);
-//		
-//		for(int i = 0; i < taskList.size(); i++) {
-//			System.out.println("taskList[i] : " + taskList.get(i));
-//		}
-//		
-//		response.setContentType("application/json; charset=UTF-8");
-//		ObjectMapper mapper = new ObjectMapper();
-//		
-//		mv.addObject("taskList", mapper.writeValueAsString(taskList));
-//		mv.setViewName("jsonView");
-//		return mv;
-//	}
+	@GetMapping("/download/{fileNo}")
+	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
+		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		IssueFileDTO file = issueService.findFile(no);
+		fileInfo.put("filePath", file.getSavedPath());
+		System.out.println(file.getSavedPath());
+		System.out.println(file.getRandomName());
+		fileInfo.put("fileOriginName", file.getOriginalName());
+		fileInfo.put("fileRandomName", file.getRandomName());
+		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
+	}
+	
+	@GetMapping("/deleteFile/{fileNo}")
+	public ModelAndView deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session, 
+			RedirectAttributes rttr, ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
+		
+		int taskNo = (int) session.getAttribute("taskNo");
+		System.out.println("delete에 들어오는 업무 no : " + taskNo);
+		
+		int fileNumber = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		IssueFileDTO issueFileDTO = issueService.removeGuideFile(fileNumber); 
+		
+		String root = session.getServletContext().getRealPath("resources");	
+		
+		String filePath = root + "/guideUploadFiles";
+		
+		File file = new File(filePath + "\\" + issueFileDTO.getRandomName());
+		
+		if(file.exists()) {
+			file.delete();
+		}
+		
+		mv.addObject("intent", "/issue/deleteFile");
+		mv.setViewName("redirect:/issue/list/" + taskNo);
+		
+		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
+		
+		return mv; 
+	}
 	
 }
