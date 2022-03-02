@@ -65,25 +65,25 @@
                 <form action="${ pageContext.servletContext.contextPath }/member/memberModify" method="post">
                     <div class="modal-body" style="margin-top: 5%;">
                         <div>
-                            <input type="text" class="form-control" placeholder="아이디" id="id" style="width: 70%; margin-left: 15%;">
+                            <input type="text" class="form-control" placeholder="아이디" id="id" name="id" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3" style="margin-top: 3%;"> 
                             <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
                             <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->          
-                             <input type="text" class="form-control" placeholder="이름" id="name" style="width: 70%; margin-left: 15%;">
+                             <input type="text" class="form-control" placeholder="이름" id="name" name="name" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3">                                   
-                            <select id="dept" class="form-select" style="width: 70%; margin-left: 15%;">
+                            <select id="dept" name="dept" class="form-select" style="width: 70%; margin-left: 15%;">
                                 <option value=""></option>
                             </select> 
                         </div>
                         <div class="mb-3">                                  
-                            <select id="team" class="form-select" style="width: 70%; margin-left: 15%;">
+                            <select id="team" name="team" class="form-select" style="width: 70%; margin-left: 15%;">
                                 <option value=""></option>
                             </select> 
                         </div>
                         <div class="mb-3">                              
-                            <select id="job" class="form-select" style="width: 70%; margin-left: 15%;">
+                            <select id="job" name="job" class="form-select" style="width: 70%; margin-left: 15%;">
                                 <option value=""></option>
                             </select> 
                         </div>
@@ -91,7 +91,7 @@
                         <!-- <div class="mb-3">
                             <label for="message-text" class="col-form-label">Message:</label>
                             <textarea class="form-control" id="message-text"></textarea>
-                        </div> -->
+                        </div> --> 
                         <!-- 셀렉트 박스 크기 조절 위에 참고 하면 충분히 합니다. -->
                         <!-- <div>
                             <select class="form-select">
@@ -104,7 +104,7 @@
                     </div>
                     <!-- 모달의 바디 끝  -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">등록</button>
+                        <button type="submit" class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">등록</button>
                         <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                     </div>
                 </form>

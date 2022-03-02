@@ -270,10 +270,17 @@ public class MemberController {
 	public ModelAndView memberModify(ModelAndView mv, @RequestParam Map<String, String> parameter, RedirectAttributes rttr) {
 		
 		String id = parameter.get("id");
+		System.out.println("id" + id);
 		String name = parameter.get("name");
+		System.out.println("name" + name);
 		String dept = parameter.get("dept");
+		System.out.println("dept" + dept);
 		String team = parameter.get("team");
+		System.out.println("team" + team);
 		String job = parameter.get("job");
+		System.out.println("job" + job);
+		
+		id = id.replace("\"", "");
 		
 		AdminMemberDTO adminMember = new AdminMemberDTO();
 		DeptDTO deptDTO = new DeptDTO();
@@ -289,7 +296,8 @@ public class MemberController {
 		adminMember.setDept(deptDTO);
 		adminMember.setTeam(teamDTO);
 		adminMember.setJob(jobDTO);
-		
+		System.out.println("adminMember" + adminMember);
+		System.out.println("adminMember" + adminMember);
 		memberService.memberModify(adminMember);
 		
 		String message = "수정에 성공하셨습니다.";

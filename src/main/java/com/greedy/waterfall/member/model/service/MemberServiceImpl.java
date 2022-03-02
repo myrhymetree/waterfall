@@ -131,9 +131,11 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void memberModify(AdminMemberDTO adminMember) {
-
-		int adminMemberResult = mapper.adminMember(adminMember); 
+		System.out.println("실행 첫번째 성공");
+		int adminMemberResult = mapper.adminMember(adminMember);
+		System.out.println("실행 두번째 성공");
 		int deptResult = mapper.adminDept(adminMember);
+		System.out.println("실행 세번째 성공");
 		int teamResult = mapper.adminTeam(adminMember);
 		int jobResult = mapper.adminJob(adminMember);
 		int memberResult = mapper.oneMember(adminMember);

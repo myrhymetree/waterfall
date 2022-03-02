@@ -23,7 +23,8 @@
 		<result property="name" column="MEMBER_NAME"/>
 		<result property="phone" column="PHONE"/>
 		<result property="email" column="EMAIL"/>
-		<result property="createDate" column="MEMBER_CREATED_DATE"/>		
+		<result property="createDate" column="MEMBER_CREATED_DATE"/>
+		<result property="postDept" column="DEPT_CODE"/>		
 	
 		<association property="dept" resultMap="deptResultMap"/>
 		<association property="team" resultMap="teamResultMap"/>
@@ -44,6 +45,12 @@
 	<resultMap type="com.greedy.waterfall.member.model.dto.JobDTO" id="jobResultMap">
 		<id property="jobCode" column="JOB_CODE"/>
 		<result property="jobName" column="JOB_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.member.model.dto.DeptHistoryDTO" id="deptHistoryResultMap">
+		<id property="no" column="MEMBER_NO"/>
+		<result property="updateDept" column="DEPT_UPDATED_NAME"/>
+		<result property="deptCode" column="DEPT_CODE"/>
 	</resultMap>
 	
 	<select id="selectEncryptedPwd" resultType="java.lang.String">
@@ -295,13 +302,44 @@
 	</select>
 	
 	<update id="adminMember">
-		
 		UPDATE
-		  INTO TBL_MEMBER A
-	    ( 
-	      MEMBER_  
-	    )	  
-	
+		       TBL_MEMBER A
+		   SET A.MEMBER_NAME = #{ name }
+		 WHERE A.MEMBER_ID = #{ id }        
 	</update>
 	
+	<insert id="adminDept" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
+		<selectKey keyProperty="postDept,no" resultType="com.greedy.waterfall.member.model.dto.AdminMemberDTO" order="BEFORE">
+	    	SELECT 
+	    		   A.DEPT_CODE AS postDept
+	    		 , A.MEMBER_NO AS no 
+	          FROM TBL_MEM_DEPT_HISTORY A
+	          JOIN TBL_MEMBER B ON (B.MEMBER_NO = A.MEMBER_NO)
+	         WHERE B.MEMBER_ID = #{ id } 		   
+	    </selectKey> 
+		INSERT
+		  INTO TBL_MEM_DEPT_HISTORY A   
+		(
+		  A.DEPT_MEM_HISTORY_NO
+		, A.DEPT_CODE
+		, A.MEMBER_NO
+		, A.DEPT_UPDATED_NAME      
+		)      
+		VALUES
+		(
+		  DEPT_MEM_HISTORY_NO.NEXTVAL
+		, #{ postDept }
+		, #{ no }
+		, #{ dept.deptCode }  
+		)        
+	</insert>
+	
+	<insert id="adminTeam">
+		<selectKey keyProperty="postTeam" resultType="com.greedy.waterfall.member.model.dto.AdminMemberDTO" order="BEFORE">
+			SELECT
+			       A.TEAM_CODE AS postTeam  
+			  FROM TBL_MEM_TEAM_HISTORY A
+			 WHERE A.MEMBER_NO = #{ no }       
+		</selectKey>
+	</insert>
 </mapper>
