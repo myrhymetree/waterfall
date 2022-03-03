@@ -88,7 +88,7 @@ public class MemberController {
 			model.addAttribute("loginMember", memberService.findMember(member));
 		}
 		
-		return "redirect:/member/login2";
+		return "redirect:/menu/main";
 	}
 		
 	@GetMapping("logout")

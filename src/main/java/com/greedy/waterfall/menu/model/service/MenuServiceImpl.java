@@ -1,5 +1,9 @@
 package com.greedy.waterfall.menu.model.service;
 
-public class MenuServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class MenuServiceImpl implements MenuService{
 
 }
+ 

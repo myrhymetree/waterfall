@@ -29,7 +29,7 @@ height: 24px;
 			<i class="fas fa-project-diagram"></i> 프로젝트 목록
 		</h1>
 		<div class="mb-2">
-			<c:if test="${ !empty projectList.manageProject}">
+			<c:if test="${ !empty projectList.manageProject or sessionScope.loginMember.role eq 1}">
 				<div class="col" style="width: 50%; text-align: left;">
 					<button type="button" onclick="location.href='${ pageContext.servletContext.contextPath }/project/manage'" class="btn btn-outline-secondary">프로젝트 관리</button>
 				</div>
