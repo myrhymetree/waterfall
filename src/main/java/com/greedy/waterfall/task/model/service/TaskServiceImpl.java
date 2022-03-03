@@ -192,11 +192,15 @@ public class TaskServiceImpl implements TaskService{
 	public ChildTaskDTO findTaskDetail(int taskNo) {
 		
 		ChildTaskDTO childTask = new ChildTaskDTO();
-		TaskDTO parnetTask = childTask.getParentTask();
+		TaskDTO parentTask = childTask.getParentTask();
 		
 		childTask = mapper.selectChildTask(taskNo);
+		int parentNo = childTask.getParentTaskNo();
+		parentTask = mapper.selectParentTask(parentNo);
 		
-		return null;
+		childTask.setParentTask(parentTask);
+		
+		return childTask;
 	}
 	
 	

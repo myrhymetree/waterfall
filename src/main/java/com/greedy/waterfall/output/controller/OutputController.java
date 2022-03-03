@@ -56,7 +56,8 @@ public class OutputController {
 		TaskDTO taskDTO = new TaskDTO();
 		//taskDTO.setProjectNo(projectNo);
 		
-		int projectNo = 3;
+		/* 현재 진행중인 프로젝트의 번호를 세션에서 가져온다 */
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 		
 		taskDTO.setProjectNo(projectNo);
 		List<TaskDTO> parentTaskList = new ArrayList<>();
@@ -101,7 +102,9 @@ public class OutputController {
 	 */
 	@GetMapping(value = "/detail", produces = "application/json; charset= UTF-8")
 	@ResponseBody
-	public String findOutputDetail(HttpServletRequest request) {
+	public String findOutputDetail(HttpServletRequest request, HttpSession session) {
+		
+		 
 		
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		

@@ -48,7 +48,9 @@
 	src="https://unpkg.com/frappe-gantt@0.6.0/src/index.js"></script>
 <script type="text/javascript"
 	src="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.3.0/frappe-gantt.min.js"></script>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
 
 
 <style>
@@ -85,7 +87,7 @@
 }
 
 body {
-	font-family: sans-serif;
+	font-family: 'Noto Sans KR', sans-serif;
 	background: #ccc;
 }
 
@@ -166,8 +168,8 @@ a {
 
 .layer {
 	display: none;
-	width: 777px;
-	height: 580px;
+	width: 850px;
+	height: 650px;
 	background: #fff;
 	border: 1px solid black;
 	position: absolute;
@@ -176,9 +178,25 @@ a {
 	transform: translate(-50%, -50%);
 	z-index: 2500;
 	/* font-size: 1rem; */
-	padding-left: 30px;
-	padding-right: 30px;
 	cursor: pointer;
+	border-radius:10px;
+	overflow : auto;
+}
+.add{
+	display: none;
+	width: 770px;
+	height: 530px; !important
+	background: #fff;
+	border: 1px solid black;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2500;
+	/* font-size: 1rem; */
+	cursor: pointer;
+	border-radius:10px;
+	overflow : auto;
 }
 
 #layoutSidenav_content .task-regist .layer p {
@@ -269,17 +287,85 @@ ul {
 	font-size: 1rem;
 }
 
-.addTask {
-	padding: 0;
-	background-color: transparent;
-	border: 0;
-    font-weight: 700;
-    line-height: 1;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    opacity: .5;
-    
+
+.header{
+	background-color: #3E3C3C;
+	color : white;
+	padding:10px;
+	border-radius:10px;
 }
+.button {
+			@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
+			-webkit-appearance: none;
+            -moz-appearance: none ;
+            appearance: none ;
+
+            margin: 0;
+            padding-left: 0.7rem;
+            padding-right: 0.7rem;
+            padding-top : 0.4rem;
+            padding-bottom:0.4rem;
+
+            font-family: "Noto Sans KR ", sans-serif ;
+            font-size: 1rem ;
+            font-weight: 400;
+            text-align: center ;
+            text-decoration: none ;
+
+            display: inline-block ;
+            width: auto ;
+
+            border: none ;
+            border-radius: 4px ;
+
+            cursor: pointer ;
+            transition: 0.5s ;
+
+            box-shadow: 3px 3px 3px gray ;
+
+            margin: 10px ;
+        
+	
+}
+.float {
+	display: inline-block;
+	transition-duration: 0.3s;
+	transition-property: transform;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	transform: translateZ(0);
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+
+.float:hover {
+	transform: translateY(-7px);
+}
+#footerBtn{
+	padding-left: 500px;
+}
+#readModal{
+}
+
+#parentTaskDetail{
+	width : 30%;
+	float : left;
+	
+}
+
+#childTaskDetail{
+	width : 50%;
+	float : right;
+	
+	
+}
+.task{
+	border:solid;
+	padding:5px;
+	border-color:gray;
+	border-radius:5px;
+	border-width : 1px;
+	
+}
+
 </style>
 </head>
 <body>
@@ -338,150 +424,208 @@ ul {
 	</div>
 	<!-- 업무 생성 레이어 -->
 	<form action="${ pageContext.servletContext.contextPath }/task/regist" method="post">
-	<div class="layer">
-		<p class="text-end mt-3">
-		</p>
-		<p>
-			<select class="task-register-code" name="taskCode" required>
-			<option value="" selected disabled >선택</option>
-			<c:forEach var="taskList" items="${requestScope.taskCategoryList }" varStatus="status" >
-				<option value="${taskList.categoryCode }" ><c:out value="${ taskList.categoryName }"/></option>
-			</c:forEach>	
-			</select> <span class="trash"><i class="far fa-trash-alt ms-2"></i></span>
-		</p>
-		<p>
-			<label>종속관계</label>
-			<select class="relation ms-2 me-5" name="parentTaskCode" required>
-			<option value="" selected disabled >선택</option>
-			<c:forEach var="taskCode" items="${requestScope.allTaskCode.parentCategory }" varStatus="status">
-				<option value="${taskCode.parentCategoryCode }" ><c:out value="${taskCode.parentCategoryName }"/></option>
-			</c:forEach>
-				<option value= "NULL">미지정</option>
-			</select>
-			<label>담당자</label><i class="far fa-user ms-2"></i>
-			<select class="in-charge ms-0" name="taskMember" required>
-				<option value="" selected disabled>선택</option>
-				<c:forEach var="projectMember" items="${requestScope.projectMemberList }" varStatus="status">
-				<option value="${projectMember.memberNo }" ><c:out value="${projectMember.memberName }"/></option>
-				</c:forEach>
-			</select>
-		</p>
-		<p>
-			<label for="start-date">시작일</label><i
-				class="far fa-calendar-alt ms-2"></i>
-				<input type="date" id="start-date" name="startDate" required>
-		</p>
-		<p>
-			<label for="end-date">종료일</label><i class="far fa-calendar-alt ms-2"></i>
-			<input type="date" id="end-date" name="deadline" required>
-		</p>
-		<p>
-			<label>중요도</label>
-			<select class="importance ms-2" name="importance" required>
-				<option value="" selected disabled>선택</option>
-				<option value="낮음">낮음</option>
-				<option value="보통">보통</option>
-				<option value="긴급">긴급</option>
-			</select>
-		</p>
-		<p>
-			<label>진행상태</label> <select class="status ms-2" name="progressStatus" required>
-				<option value="" selected disabled>선택</option>
-				<option value="진행전">진행전</option>
-				<option value="진행중">진행중</option>
-				<option value="테스트중">테스트중</option>
-				<option value="진행완료">진행완료</option>
-				<option value="보류">보류</option>
-			</select>
-		</p>
-		<p>
-			<label>진행률</label>
-			<input class="rate ms-2" type="number" name="progressRatio" value="0" min="0" max="100" >%
-		</p>
+	<div>
 		
-		<p>
-			<label>마일스톤</label>
-			<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
-			<input type="hidden" name="typeNo" value="1">
-		</p>
+		<div class="layer add" id="addModal">
+		<div class="header">업무 생성</div>
+			<div style="margin-left:30px;">
+				<p class="text-end mt-3">
+				</p>
+				<p>
+					<label>업무선택</label>
+					<select class="task-register-code" name="taskCode" required>
+					<option value="" selected disabled >선택</option>
+					<c:forEach var="taskList" items="${requestScope.taskCategoryList }" varStatus="status" >
+						<option value="${taskList.categoryCode }" ><c:out value="${ taskList.categoryName }"/></option>
+					</c:forEach>	
+					</select> <span class="trash"><i class="far fa-trash-alt ms-2"></i></span>
+				</p>
+				<p>
+					<label>종속관계</label>
+					<select class="relation ms-2 me-5" name="parentTaskCode" required>
+					<option value="" selected disabled >선택</option>
+					<c:forEach var="taskCode" items="${requestScope.allTaskCode.parentCategory }" varStatus="status">
+						<option value="${taskCode.parentCategoryCode }" ><c:out value="${taskCode.parentCategoryName }"/></option>
+					</c:forEach>
+						<option value= "NULL">미지정</option>
+					</select>
+					<label>담당자</label><i class="far fa-user ms-2"></i>
+					<select class="in-charge ms-0" name="taskMember" required>
+						<option value="" selected disabled>선택</option>
+						<c:forEach var="projectMember" items="${requestScope.projectMemberList }" varStatus="status">
+						<option value="${projectMember.memberNo }" ><c:out value="${projectMember.memberName }"/></option>
+						</c:forEach>
+					</select>
+				</p>
+				<p>
+					<label for="start-date">시작일</label><i
+						class="far fa-calendar-alt ms-2"></i>
+						<input type="date" id="start-date" name="startDate" required>
+				</p>
+				<p>
+					<label for="end-date">종료일</label><i class="far fa-calendar-alt ms-2"></i>
+					<input type="date" id="end-date" name="deadline" required>
+				</p>
+				<p>
+					<label>중요도</label>
+					<select class="importance ms-2" name="importance" required>
+						<option value="" selected disabled>선택</option>
+						<option value="낮음">낮음</option>
+						<option value="보통">보통</option>
+						<option value="긴급">긴급</option>
+					</select>
+				</p>
+				<p>
+					<label>진행상태</label> <select class="status ms-2" name="progressStatus" required>
+						<option value="" selected disabled>선택</option>
+						<option value="진행전">진행전</option>
+						<option value="진행중">진행중</option>
+						<option value="테스트중">테스트중</option>
+						<option value="진행완료">진행완료</option>
+						<option value="보류">보류</option>
+					</select>
+				</p>
+				<p>
+					<label>진행률</label>
+					<input class="rate ms-2" type="number" name="progressRatio" value="0" min="0" max="100" >%
+				</p>
+				
+				<p>
+					<label>마일스톤</label>
+					<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
+					<input type="hidden" name="typeNo" value="1">
+				</p>
+				</div>
+					<div id="footerBtn">
+						<button class="addTask button float" type="submit" style="padding:4px; " rel="float">업무 생성</button>
+						<button id="close" class="button float" style="padding:4px; margin-right:30px;" rel="float">업무 나가기</button>
+					</div>
 			
-			<button class="addTask" type="submit">업무 생성</button>
-			<button class="close">업무 나가기</button>
+		</div>
 	</div>
 	</form>
 	<!-- 업무 생성 끝 -->
-	
-	<%-- 업무 조회 모달 --%>
-	<%-- <div class="layer">
-		<p class="text-end mt-3">
-		</p>
-		<p>
-			<select class="task-register-code" name="taskCode" required>
-			<option value="" selected disabled >선택</option>
-			<c:forEach var="taskList" items="${requestScope.taskCategoryList }" varStatus="status" >
-				<option value="${taskList.categoryCode }" ><c:out value="${ taskList.categoryName }"/></option>
-			</c:forEach>	
-			</select> <span class="trash"><i class="far fa-trash-alt ms-2"></i></span>
-		</p>
-		<p>
-			<label>종속관계</label>
-			<select class="relation ms-2 me-5" name="parentTaskCode" required>
-			<option value="" selected disabled >선택</option>
-			<c:forEach var="taskCode" items="${requestScope.allTaskCode.parentCategory }" varStatus="status">
-				<option value="${taskCode.parentCategoryCode }" ><c:out value="${taskCode.parentCategoryName }"/></option>
-			</c:forEach>
-				<option value= "NULL">미지정</option>
-			</select>
-			<label>담당자</label><i class="far fa-user ms-2"></i>
-			<select class="in-charge ms-0" name="taskMember" required>
-				<option value="" selected disabled>선택</option>
-				<c:forEach var="projectMember" items="${requestScope.projectMemberList }" varStatus="status">
-				<option value="${projectMember.memberNo }" ><c:out value="${projectMember.memberName }"/></option>
-				</c:forEach>
-			</select>
-		</p>
-		<p>
-			<label for="start-date">시작일</label><i
-				class="far fa-calendar-alt ms-2"></i>
-				<input type="date" id="start-date" name="startDate" required>
-		</p>
-		<p>
-			<label for="end-date">종료일</label><i class="far fa-calendar-alt ms-2"></i>
-			<input type="date" id="end-date" name="deadline" required>
-		</p>
-		<p>
-			<label>중요도</label>
-			<select class="importance ms-2" name="importance" required>
-				<option value="" selected disabled>선택</option>
-				<option value="낮음">낮음</option>
-				<option value="보퉁">보퉁</option>
-				<option value="긴급">긴급</option>
-			</select>
-		</p>
-		<p>
-			<label>진행상태</label> <select class="status ms-2" name="progressStatus" required>
-				<option value="" selected disabled>선택</option>
-				<option value="진행전">진행전</option>
-				<option value="진행중">진행중</option>
-				<option value="테스트중">테스트중</option>
-				<option value="진행완료">진행완료</option>
-				<option value="보류">보류</option>
-			</select>
-		</p>
-		<p>
-			<label>진행률</label>
-			<input class="rate ms-2" type="number" name="progressRatio" value="0" min="0" max="100" >%
-		</p>
 		
-		<p>
-			<label>마일스톤</label>
-			<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
-			<input type="hidden" name="typeNo" value="1">
-		</p>
-			
-			<button class="close">업무 나가기</button>
-	</div> --%>
+	 <%-- 업무 조회 모달 --%>
+	<div>
+		<div class="layer" id="readModal">
+		<div class="header">업무 조회</div>
+			<div style="margin-left:30px;">
+				<p class="text-end mt-3">
+				</p>
+				<div class="detail" id="parentTaskDetail">
+				<label class="task">상위업무</label>
+					<p>
+						<label>업무명</label>
+						<input id="parentTaskName" type="text" name="parentTaskName"/>
+					</p>
+					<p>
+						<label>담당자</label>
+						<input id="parentTaskManager" type="text" name="parentTaskManager"/>
+					</p>	
+					<p>
+						<label>시작일</label>
+						<input type="date" id="parent-start-date" name="parentStartDate">
+					</p>	
+					<p>
+						<label>마감일</label>
+						<input type="date" id="parent-end-date" name="parentDeadline">
+					</p>
+					<p>
+						<label>중요도</label>
+						<input type="text" id="parnetImportance" name="parentImportance">
+					</p>
+					<p>
+						<label>진행률</label>
+						<input id="parentProgress" class="rate ms-2" type="number" name="parentProgress" value="0" min="0" max="100" >%
+					</p>
+					<p>
+						<label>마일스톤</label>
+						<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
+						<input type="hidden" name="typeNo" value="1">
+					</p>
+					<p>
+						<label>이슈 등록</label>
+							<label id="addIssue">
+							<button>등록</button>
+							<input type="hidden" name="parentTaskNo">
+							</label>
+							
+					</p>
+					
+					<p>
+						<label>산출물 등록</label>
+							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+								<input id="addOutput" type="file" name="outputFile">
+							</c:if>
+							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
+								<input id="addOutput" type="file" name="outputFile" readonly>
+							</c:if>
+					</p>
+				</div>
+				<div class="detail"id="childTaskDetail">
+				<label class="task">하위업무</label>
+					<p>
+						<label>업무명</label>
+						<input id="childTaskName" type="text" name="childTaskName"/>
+					</p>
+					
+					<p>
+						<label>담당자</label>
+						<input id="childTaskManager" type="text" name="childTaskManager"/>
+					</p>
+					
+					<p>
+						<label>시작일</label>
+						<input type="date" id="child-start-date" name="childStartDate">
+					</p>
+					
+					<p>
+						<label>마감일</label>
+						<input type="date" id="child-end-date" name="childDeadline">
+					</p>
+					
+					<p>
+						<label>중요도</label>
+						<input type="text" id="childImportance" name="childImportance">
+					</p>
+					
+					<p>
+						<label>진행률</label>
+						<input class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" >%
+					</p>
+					
+					<p>
+						<label>마일스톤</label>
+						<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
+						<input type="hidden" name="typeNo" value="1">
+					</p>
+					
+					<p>
+						<label>이슈 등록</label>
+							<label id="addIssue">
+							<button>등록</button>
+							<input type="hidden" name="childTaskNo">
+							</label>
+					</p>
+					
+					<p>
+						<p>산출물 등록</p>
+							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+								<input id="addOutput" type="file" name="outputFile">
+							</c:if>
+							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
+								<input id="addOutput" type="file" name="outputFile" readonly>
+							</c:if>
+					</p>
+					</div>
+						<button id="close" class="button float" style="float: none; padding:4px; margin-right:30px; margin-left: 600px;"  rel="float">업무 나가기</button>
+				
+			</div>
+		</div>
+	</div>
 	<%--업무 조회 모달 끝 --%>
+	
 	<script>
 	<%-- hover event 추가 --%>
 		$(".folder_toggle").hover(function() {
@@ -511,17 +655,37 @@ ul {
 				"border-color" : "white"
 			});
 		});
+		
+		$(".addTask").hover(function(){
+			$(this).css({
+				"border" : "solid",
+				"border-color" : "gray",
+			    "border-radius" : "5px",
+			    "border-width" : "1px"});
+			},function(){
+				$(this).css({"border-color" : "white"});
+		});
+		
+		$(".close").hover(function(){
+			$(this).css({
+				"border" : "solid",
+				"border-color" : "gray",
+			    "border-radius" : "5px",
+			    "border-width" : "1px"});
+			}, function(){
+				$(this).css({"border-color" : "white"});
+		});
 	<%-- hover 이벤트 끝 --%>
 	
 		<%--Gantt Chart data--%>
 
+		var parentTaskArray = new Array();
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
-		const taskArray = new Array();
-		taskArray[${status.index}] = "${parentTaskList[status.index]}";
-		console.log(taskArray[${status.index}]);
+		parentTaskArray[${status.index}] = "${parentTaskList[status.index]}";
+		console.log(parentTaskArray[${status.index}]);
 		</c:forEach>
 		
-		const startDateArray = new Array();
+		var startDateArray = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		startDateArray[${status.index}] = "${parentTaskList[status.index].startDate}";
@@ -530,28 +694,28 @@ ul {
 		
 		console.log(startDateArray);
 		
-		const deadlineArray = new Array();
+		var deadlineArray = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		deadlineArray[${status.index}] = "${parentTaskList[status.index].deadline}";
 		</c:forEach>
 		console.log(deadlineArray)
 		
-		const parentTaskName = new Array();
+		var parentTaskName = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		parentTaskName[${status.index}]= "${parentTaskList[status.index].taskCategory.categoryName}";
 		</c:forEach>
 		console.log(parentTaskName);
 		
-		const parentTaskNo = new Array();
+		var parentTaskNo = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		parentTaskNo[${status.index}] = "${parentTaskList[status.index].taskNo}";
 		</c:forEach>
 		console.log(parentTaskNo);
 		
-		const parentProgress = new Array();
+		var parentProgress = new Array();
 		
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
 		parentProgress[${status.index}] = "${parentTaskList[status.index].progression}";
@@ -561,52 +725,54 @@ ul {
 		
 		//하위업무 정보 시작
 		console.log("========================하위업무=================================")
-		const childTaskList = new Array();
+		var childTaskList = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskList[${status.index}] = "${childTaskList[status.index]}";
 		</c:forEach>
 		console.log(childTaskList.length);
 		
-		const childStartDateArr = new Array();
+		var childStartDateArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childStartDateArr[${status.index}] = "${childTaskList[status.index].startDate}";
 		</c:forEach>
 		console.log(childStartDateArr);
 		
-		const childDeadlineArr = new Array();
+		var childDeadlineArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childDeadlineArr[${status.index}] = "${childTaskList[status.index].deadline}";
 		</c:forEach>
 		console.log(childDeadlineArr);
 		
-		const childTaskName = new Array();
+		var childTaskName = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskName[${status.index}] = "${childTaskList[status.index].taskCategory.categoryName}";
 		</c:forEach>
 		console.log(childTaskName);
 		
-		const childTaskNoArr = new Array();
+		var childTaskNoArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskNoArr[${status.index}] = "${childTaskList[status.index].taskNo}";
 		</c:forEach>
 		console.log(childTaskNoArr);
 		
-		const childTaskProgressionArr = new Array();
+		var childTaskProgressionArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childTaskProgressionArr[${status.index}] = "${childTaskList[status.index].progression}";
 		</c:forEach>
 		console.log(childTaskProgressionArr);
 		
-		const childDependenciesArr = new Array();
+		var childDependenciesArr = new Array();
 		<c:forEach items="${childTaskList}" var="childTask" varStatus ="status">
 		childDependenciesArr[${status.index}] = "${childTaskList[status.index].parentTaskNo}";
 		</c:forEach>
 		console.log(childDependenciesArr);
 		
 		
+		
+		var taskArray = new Array();
 		console.log(taskArray.length)
 		
-		for(let i = 0; i < taskArray.length; i++){
+		for(let i = 0; i < parentTaskArray.length ; i++){
 			taskArray.push(
 				{ start : startDateArray[i],
                 end : deadlineArray[i],
@@ -650,14 +816,24 @@ ul {
 
 		// 모달 이벤트
 		$(".layerPopup").click(function() {
-			$(".layer").css("display", "block");
+			$("#addModal").css("display", "block");
 			$(".layer-bg").css("display", "block");
 			
+			
 		});
-		$(".layer .close").click(function() {
-			$(".layer").css("display", "none");
+		$(".layer #close").click(function() {
+			$("#addModal").css("display", "none");
 			$(".layer-bg").css("display", "none");
 		});
+		
+		$(".layer #close").click(function() {
+			$("#readModal").css("display", "none");
+			$(".layer-bg").css("display", "none");
+		});
+		
+		
+		
+		
 		
 		/* 상세조회 이벤트 */
 		const $labels = document.querySelectorAll("#childTask label");
@@ -667,12 +843,53 @@ ul {
 		
 		for(let i = 0; i < $labels.length; i++){
 			const taskNo = $($taskNo[i]).val();
+			console.log(taskNo);
 			$($labels[i]).click(function() {
 				$.ajax({
 					url : "/waterfall/task/detail",
 					type : "get",
-					data : {"taskNo" : no},
+					data : {"taskNo" : taskNo},
 					success : function(data, textStatus, xhr) {
+						const taskDetail = JSON.parse(data.taskDetail);
+						console.log(taskDetail);
+						console.log(taskDetail.parentTask.managerName);
+						console.log(taskDetail.managerName);
+						console.log(taskDetail.parentTask.startDate);
+						
+						//상위업무
+						$("input[name=parentTaskName]").val(taskDetail.parentTask.taskCategory.categoryName);
+						
+						$("input[name=parentTaskManager]").val(taskDetail.parentTask.managerName);
+						
+						$("input[name=parentStartDate]").val(taskDetail.parentTask.startDate);
+						
+						$("input[name=parentDeadline]").val(taskDetail.parentTask.deadline);
+						
+						$("input[name=parentImportance]").val(taskDetail.parentTask.importance);
+						
+						$("input[name=parentProgress]").val(taskDetail.parentTask.progression);
+						
+						$("input[name=parentTaskNo]").val(taskDetail.parentTask.taskNo);
+						
+						//하위 업무
+						$("input[name=childTaskName]").val(taskDetail.taskCategory.categoryName);
+						
+						$("input[name=childTaskManager]").val(taskDetail.managerName);
+						
+						$("input[name=childStartDate]").val(taskDetail.startDate);
+						
+						$("input[name=childDeadline]").val(taskDetail.deadline);
+						
+						$("input[name=childImportance]").val(taskDetail.importance);
+						
+						$("input[name=childProgress]").val(taskDetail.progression);
+						
+						$("input[name=childTaskNo]").val(taskDetail.taskNo);
+						
+						$("#readModal").css("display", "block");
+						$(".layer-bg").css("display", "block");
+						
+					}, error:function(data){
 						console.log(data);
 					}
 					

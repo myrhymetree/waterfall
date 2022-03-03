@@ -16,6 +16,8 @@
 		<result property="taskCode" column="TASK_CATEGORY_CODE"/>
 		<result property="projectNo" column="PROJECT_NO"/>
 		<result property="managerNo" column="MEMBER_NO"/>
+		<result property="managerName" column="MEMBER_NAME"/>
+		<result property="importance" column="TASK_IMPORTANCE"/>
 		
 		<association property="taskCategory" resultMap="taskCategoryResultMap"></association>
 		<collection property="childList" resultMap="childTaskResultMap"></collection>
@@ -32,7 +34,9 @@
 		<result property="taskCode" column="TASK_CATEGORY_CODE"/>
 		<result property="projectNo" column="PROJECT_NO"/>
 		<result property="managerNo" column="MEMBER_NO"/>
+		<result property="managerName" column="MEMBER_NAME"/>
 		<result property="typeNo" column="TASK_TYPE_NO"/>
+		<result property="importance" column="TASK_IMPORTANCE"/>
 		
 		<association property="taskCategory" resultMap="taskCategoryResultMap"></association>
 	</resultMap>
@@ -247,13 +251,36 @@
 		     , A.TASK_TYPE_NO
 		     , A.TASK_STATUS
 		     , A.PROJECT_NO
+		     , A.TASK_IMPORTANCE
 		     , A.MEMBER_NO
+		     , C.MEMBER_NAME
 		     , A.TASK_CATEGORY_CODE
 		     , B.TASK_CATEGORY_NAME
 		  FROM TBL_TASK A
 		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE )
+		  JOIN TBL_MEMBER C ON(A.MEMBER_NO = C.MEMBER_NO)
 		 WHERE A.TASK_STATUS = 'Y'
 		   AND A.TASK_NO = #{ taskNo }
+	</select>
+	
+	<select id="selectParentTask" resultMap="taskResultMap">
+		SELECT
+		       A.TASK_START_DATE
+		     , A.TASK_DEADLINE
+		     , A.TASK_PROGRESSION
+		     , A.TASK_PROGRESS_STATUS
+		     , A.TASK_TYPE_NO
+		     , A.TASK_STATUS
+		     , A.TASK_IMPORTANCE
+		     , A.MEMBER_NO
+		     , C.MEMBER_NAME
+		     , A.TASK_CATEGORY_CODE
+		     , B.TASK_CATEGORY_NAME
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE)
+		  JOIN TBL_MEMBER C ON(A.MEMBER_NO = C.MEMBER_NO) 
+		   AND A.TASK_STATUS = 'Y'
+		   AND A.TASK_NO = #{ parentNo }
 	</select>
 	
 </mapper>
