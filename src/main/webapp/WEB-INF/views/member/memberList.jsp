@@ -46,6 +46,15 @@
  
        
 </style>
+<script>
+
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -105,7 +114,8 @@
                     <!-- 모달의 바디 끝  -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">등록</button>
-                        <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button style="margin-right: 5px;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <input type="button" class="btn btn-secondary" id="delete" value="삭제하기" style="margin-right: 25%;">
                     </div>
                 </form>
             </div>
@@ -200,7 +210,7 @@
 					                        
 					                        <!-- 검색폼  -->   
 					                </div>
-					                <div class="search-area">
+					                <div class="search-area" align="center">
 					                  <form id="loginForm" action="${ pageContext.servletContext.contextPath }/member/list" method="get">
 					                     <div class="search-set mt-2">
 					                      <input type="hidden" name="currentPage" value="1">
@@ -308,7 +318,14 @@
 					}
 				}
 			}
-			
+		
+		$(function() {
+		 	$("#delete").click(function() {
+		 		const id = $("#id").val();
+		 		
+		 		location.href="${ pageContext.servletContext.contextPath }/member/delete?id=" + id; 
+		 	});
+		});
 		</script>           
                      
 </body>

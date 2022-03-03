@@ -55,5 +55,9 @@ public interface MemberMapper {
 
 	int oneMember(AdminMemberDTO adminMember);
 
+	int removeMember(String id);
+
+	int removeMemberInfo(String id);
+
 
 }
