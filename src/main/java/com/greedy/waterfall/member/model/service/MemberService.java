@@ -31,6 +31,8 @@ public interface MemberService {
 
 	void memberModify(AdminMemberDTO adminMember);
 
+	void removeMember(String id);
+
 
 
 }

@@ -407,4 +407,21 @@
 		 WHERE A.MEMBER_NO = #{ no }        
 	</update>
 	
+	<update id="removeMember">
+		UPDATE
+		       TBL_MEMBER A
+		   SET A.MEMBER_STATUS = 'N'
+		     , A.MEMBER_RETIRED_DATE = SYSDATE  
+		 WHERE A.MEMBER_ID = #{ id }       
+	</update>
+	
+	<delete id="removeMemberInfo" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO"> 
+		DELETE  
+		  FROM TBL_MEMBER_COM_INFO
+		 WHERE MEMBER_NO IN ( SELECT
+		                             A.MEMBER_NO
+		                        FROM TBL_MEMBER A
+		                       WHERE A.MEMBER_ID = #{ id }
+	                    	)            
+	</delete>
 </mapper>

@@ -147,6 +147,16 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public void removeMember(String id) {
+
+		int MemberResult = mapper.removeMember(id);
+		System.out.println("memberResult" + "" + MemberResult);
+		int MemberInfoResult = mapper.removeMemberInfo(id);
+		System.out.println("MemberInfoResult" + "" + MemberInfoResult);
+	}
+
+
 	
 
 }

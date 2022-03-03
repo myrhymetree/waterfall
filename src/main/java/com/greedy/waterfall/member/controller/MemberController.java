@@ -2,6 +2,7 @@ package com.greedy.waterfall.member.controller;
 
 
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -305,6 +306,22 @@ public class MemberController {
 		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/member/list");
 		
+		return mv;
+	}
+	
+	@GetMapping("/delete")
+	public ModelAndView removeMember(ModelAndView mv, HttpServletRequest request, RedirectAttributes rttr) {
+		
+		String id = request.getParameter("id");
+		System.out.println("id 확인용" + "" + id);
+		id = id.replace("\"", "");
+		System.out.println("id 확인용 두번째" + "" + id);
+		memberService.removeMember(id);
+		
+		String message = "삭제에 성공하셨습니다.";
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/member/list");
 		return mv;
 	}
 	

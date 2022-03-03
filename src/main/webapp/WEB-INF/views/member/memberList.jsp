@@ -114,7 +114,8 @@
                     <!-- 모달의 바디 끝  -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">등록</button>
-                        <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button style="margin-right: 5px;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <input type="button" class="btn btn-secondary" id="delete" value="삭제하기" style="margin-right: 25%;">
                     </div>
                 </form>
             </div>
@@ -317,7 +318,14 @@
 					}
 				}
 			}
-			
+		
+		$(function() {
+		 	$("#delete").click(function() {
+		 		const id = $("#id").val();
+		 		
+		 		location.href="${ pageContext.servletContext.contextPath }/member/delete?id=" + id; 
+		 	});
+		});
 		</script>           
                      
 </body>
