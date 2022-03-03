@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.common.exception.GuideModifyException;
 import com.greedy.waterfall.common.exception.issue.IssueRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
@@ -120,6 +121,16 @@ public class IssueServiceImpl implements IssueService {
 		//		}
 		
 		return issueFileDTO;
+	}
+
+	@Override
+	public void modifyIssue(IssueDTO issue) {
+		
+		int result = mapper.updateIssue(issue);
+		
+//		if(!(result > 0)) {
+//			throw new GuideModifyException("가이드 게시글 수정에 실패하셨습니다.");
+//		}
 	}
 }
 

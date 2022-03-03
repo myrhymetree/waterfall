@@ -372,9 +372,25 @@
 	</select>
 	
 	<delete id="deleteIssueFile" parameterType="_int">
-    DELETE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#deleteIssueFile() */
-  	  FROM TBL_File A
-     WHERE A.FILE_NO = #{ fileNo }
+     DELETE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#deleteIssueFile() */
+  	   FROM TBL_File A
+      WHERE A.FILE_NO = #{ fileNo }
 	</delete>
+	
+	<update id="updateIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+	 UPDATE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#updateIssue() */
+	        TBL_ISSUE A
+	    SET A.ISSUE_NAME = #{ name }  
+	      , A.ISSUE_CREATED_DATE = #{ createdDate }
+	      , A.ISSUE_PROGRESS_STATUS = #{ progressStatus }
+	      , A.ISSUE_IMPORTANCE = #{ importance }
+	      , A.ISSUE_CONTENT = #{ content }
+	      , A.ISSUE_ANSWER = #{ answer }
+	      , A.ISSUE_DEADLINE = #{ deadline } 
+	      , A.ISSUE_COMPLETED_DATE = #{ completedDate } 
+	      , A.ISSUE_REGISTER = #{ registerNo }
+	      , A.ISSUE_MANAGER = #{ managerNo }
+	  WHERE A.ISSUE_NO = #{ no }
+	</update>
   
   </mapper>

@@ -197,8 +197,10 @@ table, th, td {
                         </div>
                         <div class="my-modal-footer-read">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-                            <input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
-                            <button type="submit" class="btn btn-secondary">수정하기</button>
+                            	<input type="button" class="btn btn-secondary" id="delete" value="삭제하기">
+                            <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">	
+                            	<button type="submit" class="btn btn-secondary">수정하기</button>
+                            </c:if>	
                         </div>
                     </form>
                 </div>

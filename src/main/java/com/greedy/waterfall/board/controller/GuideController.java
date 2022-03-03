@@ -333,13 +333,11 @@ public class GuideController {
 			file.delete();
 		}
 		
-		
 		mv.addObject("intent", "/guide/deleteFile");
 		mv.setViewName("/board/guide/guideList");
 		
 		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
 		
 		return "redirect:/guide/list"; 
-		
 	}
 }

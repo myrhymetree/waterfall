@@ -14,6 +14,7 @@ import lombok.ToString;
 @Builder
 public class ProjectMemberDTO {
 
-   private int memberNo;
-   private String  memberName;
+	private int memberNo;
+	private String  memberName;
 }
+

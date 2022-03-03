@@ -52,7 +52,7 @@
                      	업무 당 이슈 목록
 					 <button class="btn btn-outline-dark" data-toggle="modal" data-target="#registModal" style="float: right;">등록</button>
                  </div>
-                 <div class="card-body">
+                 <div class="card-body" id="card-body">
                      <table id="datatablesSimple">
                         <colgroup>
                              <col style="width:5%"/>
@@ -78,7 +78,7 @@
                                  <th style="text-align: center;">이슈배정</th>
                              </tr>
                          </thead>
-                         <tbody>
+                         <tbody id="tbody">
                          	<c:forEach var="issue" items="${ requestScope.issueList }" varStatus="status">
                              <tr id="listArea" class="issueSelect">
                                  <td><c:out value="${ issue.no }"/></td>
@@ -107,14 +107,9 @@ function backButton_click() {
 	   location.href= document.referrer;
 	}
 	
-$(function() {
-	   const $tds = document.querySelectorAll("#listArea td");   /* 이벤트 클릭 했을 때의 this  */
-	   console.log($tds);
-	   for (let i = 0; i < $tds.length; i++) {
-	      $tds[i].onclick = function() {
-	         const no = this.parentNode.children[0].innerText;
-	         const ex = this.parentNode; // this는 td의 부모인 tr
-	         console.log("이슈 번호는 : " + no);
+$(document).ready(function() {
+	$('#datatablesSimple tbody').on('click', 'tr', function () {
+		var no = this.children[0].innerText;
 	         
  	          $.ajax({
 	            url :"issueDetail",
@@ -140,6 +135,8 @@ $(function() {
 	                  console.log(fileNo);
 	                  console.log("파일의 length는 : " +  issueDetail.file.length);
 					  console.log("프로젝트 구성인원의 length는 : " + projectMember.length);
+					  
+					  console.log(projectMember.length);
 					  
 					  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
 	                  $("#register").empty();
@@ -169,7 +166,6 @@ $(function() {
 	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
 	                      $("#manager").append($memberTag);
 	                  }
-	                  
 	                  
 //	                  $("#read-memberNo").val(projectMember.memberNo)
 	                  
@@ -220,12 +216,12 @@ $(function() {
 //	                	  $("#attaachmentNameArea").append($buttonTag);
 //	                	  eval("const read-originalName" + i + " = 'read-originalName" + i + "';")
 //	                	  window['read-originalName'+ i] = "read-originalName " + i;
-						  
+						  $("#read-fileNo").val(issueDetail.file[i].no);
 						  const $fileNo = issueDetail.file[i].no;
 						  console.log("파일 번호는 : " + issueDetail.file[i].no);
 						  console.log("파일 이름은 : " + issueDetail.file[i].originalName);
 						  
-	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='read-originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
 	              		  $("#downloadZone").append($buttonsTag);
 	              		  
 //	              		  $("#read-originalName").val(issueDetail.file[i].originalName);
@@ -249,8 +245,7 @@ $(function() {
 	                  console.log(data);
 	               }
 	          });
-	         }
-	   }
+	   });
 	});
 </script>
 <jsp:include page="../common/footer.jsp"/>
