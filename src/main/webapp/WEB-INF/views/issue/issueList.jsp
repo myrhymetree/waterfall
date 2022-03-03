@@ -52,7 +52,7 @@
                      	업무 당 이슈 목록
 					 <button class="btn btn-outline-dark" data-toggle="modal" data-target="#registModal" style="float: right;">등록</button>
                  </div>
-                 <div class="card-body">
+                 <div class="card-body" id="card-body">
                      <table id="datatablesSimple">
                         <colgroup>
                              <col style="width:5%"/>
@@ -78,7 +78,7 @@
                                  <th style="text-align: center;">이슈배정</th>
                              </tr>
                          </thead>
-                         <tbody>
+                         <tbody id="tbody">
                          	<c:forEach var="issue" items="${ requestScope.issueList }" varStatus="status">
                              <tr id="listArea" class="issueSelect">
                                  <td><c:out value="${ issue.no }"/></td>
@@ -107,14 +107,9 @@ function backButton_click() {
 	   location.href= document.referrer;
 	}
 	
-$(function() {
-	   const $tds = document.querySelectorAll("#listArea td");   /* 이벤트 클릭 했을 때의 this  */
-	   console.log($tds);
-	   for (let i = 0; i < $tds.length; i++) {					/* 페이지 안넘어가는 이유 일지도 모름 , 한번 알아봐야됨*/
-	      $tds[i].onclick = function() {
-	         const no = this.parentNode.children[0].innerText;
-	         const ex = this.parentNode; // this는 td의 부모인 tr
-	         console.log("이슈 번호는 : " + no);
+$(document).ready(function() {
+	$('#datatablesSimple tbody').on('click', 'tr', function () {
+		var no = this.children[0].innerText;
 	         
  	          $.ajax({
 	            url :"issueDetail",
@@ -250,8 +245,7 @@ $(function() {
 	                  console.log(data);
 	               }
 	          });
-	         }
-	   }
+	   });
 	});
 </script>
 <jsp:include page="../common/footer.jsp"/>

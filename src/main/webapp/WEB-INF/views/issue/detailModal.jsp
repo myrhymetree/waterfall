@@ -10,6 +10,7 @@
 <body>
 
 <!-- 조회 모달 -->
+<form action="${ pageContext.servletContext.contextPath }/issue/update"  method="post" encType="multipart/form-data">
 <div class="modal" id="myModal">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -21,7 +22,6 @@
         </div>
 
         <!-- Modal body -->
-				   <form action="${ pageContext.servletContext.contextPath }/issue/update" method="POST">
                    <div class="modal-body" id="modal-body">
                         <div class="mt-4 row">
                         	<input type="hidden" id="read-no" name="no">
@@ -89,51 +89,18 @@
 						
 						<div id="downloadZone">
 						</div>
-        </div> 	 
-
-        <!-- Modal footer -->
+        		  </div>
         <div class="modal-footer row">
                 <div class="col-5">
-                    <button type="submit" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">수정</button>
+                    <button type="submit" class="btn btn-outline-dark">수정</button>
                 </div>
                 <div class="col-4">
                     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
                 </div>
         </div>
-        </form>
     </div>
     </div>
 </div>
-
-<!-- 모달 확인 버튼 누를 시 나오는 모달 -->
-<div class="modal" id="mySubModal">
-    <div class="modal-dialog">
-    <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-        <h4 class="modal-title">이슈</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-        	정보를 저장하시겠습니까?
-        </div>
-
-        <!-- Modal footer -->
-        <div class="modal-footer row">
-            <div class="col-5">
-            <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">확인</button>
-            </div>
-            <div class="col-4">
-            <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="text-align: left;">취소</button>
-            </div>
-        </div>
-
-    </div>
-    </div>
-</div>
-
+</form> 	 
 </body>
 </html>

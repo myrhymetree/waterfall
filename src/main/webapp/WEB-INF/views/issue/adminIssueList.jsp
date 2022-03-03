@@ -23,9 +23,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link href="css/styles.css" rel="stylesheet" />
 <style>
 	td { vertical-align: middle !important;
@@ -55,7 +53,7 @@
                      	업무 당 이슈 목록
 					 <button class="btn btn-outline-dark" data-toggle="modal" data-target="#registModal" id="registModal" style="float: right;">등록</button>
                  </div>
-                 <div class="card-body">
+                 <div class="card-body" id="card-body">
                      <table id="datatablesSimple">
                         <colgroup>
                              <col style="width:5%"/>
@@ -81,7 +79,7 @@
                                  <th style="text-align: center;">이슈배정</th>
                              </tr>
                          </thead>
-                         <tbody>
+                         <tbody id="tbody">
                          	<c:forEach var="issue" items="${ requestScope.issueList }" varStatus="status">
                              <tr id="listArea" class="issueSelect">
                                  <td><c:out value="${ issue.no }"/></td>
@@ -124,93 +122,87 @@ function backButton_click() {
 
 		console.log("프로젝트 번호는 : " + projectNo);	
 }); 
+ 
+ 
+ $(document).ready(function() {
+		
+	 $('#datatablesSimple tbody').on('click', 'tr', function () {
+		var no = this.children[0].innerText;
 
- $(function() {
-	   const $tds = document.querySelectorAll("#listArea td");   /* 이벤트 클릭 했을 때의 this  */
-	   console.log($tds);
-	   for (let i = 0; i < $tds.length; i++) {
-	      $tds[i].onclick = function() {
-	         const no = this.parentNode.children[0].innerText;
-	         const ex = this.parentNode; // this는 td의 부모인 tr
-	         console.log(no);
-	         
-	          $.ajax({
-	            url :"adminIssueDetail",
-	            type : "get",
-	            data : { no : no },
-	            success : function(data, textStatus, xhr) {
+		 $.ajax({
+	         url :"adminIssueDetail",
+	         type : "get",
+	         data : { no : no },
+	         success : function(data, textStatus, xhr) {
+	            
+	               console.log(data);
+	               console.log(Object.entries(data));
 	               
-	                  console.log(data);
-	                  console.log(Object.entries(data));
-	                  
-	                  const guideArray = Object.entries(data);
-	                  const issueDetail = JSON.parse(data.issueDetail)
-	                  console.log(issueDetail);
-	                  const projectMember = JSON.parse(data.projectMember)	                  
-	                  console.log(projectMember);
-	                  
-	                  const registerName = issueDetail.register.name;
-	                  console.log("이슈 등록인의 이름은 : " + registerName);
-	                  
-	                  const memberName = projectMember[0].memberName
-	                  console.log("프로젝트 구성인원 목록의 첫 이름은 : " + memberName)
-	                  const fileNo = issueDetail.file;
-	                  console.log(fileNo);
-	                  console.log("파일의 length는 : " +  issueDetail.file.length);
-					  console.log("프로젝트 구성인원의 length는 : " + projectMember.length);
+	               const guideArray = Object.entries(data);
+	               const issueDetail = JSON.parse(data.issueDetail)
+	               console.log(issueDetail);
+	               const projectMember = JSON.parse(data.projectMember)	                  
+	               console.log(projectMember);
+	               
+	               const registerName = issueDetail.register.name;
+	               console.log(registerName);
+	               
+	               const memberName = projectMember[0].memberName
+	               console.log(memberName)
+//	               const $fileNo = issueDetail.file;
+//	               console.log($fileNo);
 					  
 					  console.log(projectMember.length);
 					  
-					  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
-	                  $("#register").empty();
-					  /* register에 select문에 기본값으로 주기 */
-	                  const $registerName = "<option value = '" + issueDetail.register.no + "' selected >" + issueDetail.register.name + "</option>";
-	                  $("#register").append($registerName);
-	                  
-	                  //register에 for문으로 전체 출력
-	                  for(let i = 0; i < projectMember.length; i++){
-	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
-	                      $("#register").append($memberTag);
-	                  }
-	                  
-	                  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
-	                  $("#manager").empty();
-	                  /* manager에 select문에 기본값으로 주기 */
-	                  if(issueDetail.manager == null) {
-	                	  const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
-	                	  $("#manager").append($managerName);
-	                  } else {
-	                	  const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";
+				   /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	               $("#register").empty();
+				   /* register에 select문에 기본값으로 주기 */
+	               const $registerName = "<option value = '" + issueDetail.register.no + "' selected >" + issueDetail.register.name + "</option>";
+	               $("#register").append($registerName);
+	               
+	               //register에 for문으로 전체 출력
+	               for(let i = 0; i < projectMember.length; i++){
+	             	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                   $("#register").append($memberTag);
+	               }
+	               
+	               /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+	               $("#manager").empty();
+	               /* manager에 select문에 기본값으로 주기 */
+	               if(issueDetail.manager == null) {
+	             	  const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
+	             	  $("#manager").append($managerName);
+	               } else {
+	             	  const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";
 		                  $("#manager").append($managerName);
-	                  }
-	                  
-	                  //manager에 for문으로 전체 출력
-	                  for(let i = 0; i < projectMember.length; i++){
-	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
-	                      $("#manager").append($memberTag);
-	                  }
-	                  
-	                  $("#read-no").val(issueDetail.no);      
-	                  $("#read-name").val(issueDetail.name);
-	                  $("#read-createdDate").val(issueDetail.createdDate);
-	                  $("#read-deadline").val(issueDetail.deadline);
-	                  $("#read-progressStatus").val(issueDetail.progressStatus);
-	                  $("#read-importance").val(issueDetail.importance);
-	                  $("#read-content").val(issueDetail.content);
-	                  $("#read-answer").val(issueDetail.answer);
-	                  $("#read-completedDate").val(issueDetail.completedDate);
-	                  $("#read-projectNo").val(issueDetail.projectNo);
-	                  $("#read-taskNo").val(issueDetail.taskNo);
-	                  $("#myModal").modal("show");
-	                  
-	                  $("#downloadZone").empty();
+	               }
+	               
+	               //manager에 for문으로 전체 출력
+	               for(let i = 0; i < projectMember.length; i++){
+	             	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+	                   $("#manager").append($memberTag);
+	               }
+	               
+	               $("#read-no").val(issueDetail.no);      
+	               $("#read-name").val(issueDetail.name);
+	               $("#read-createdDate").val(issueDetail.createdDate);
+	               $("#read-deadline").val(issueDetail.deadline);
+	               $("#read-progressStatus").val(issueDetail.progressStatus);
+	               $("#read-importance").val(issueDetail.importance);
+	               $("#read-content").val(issueDetail.content);
+	               $("#read-answer").val(issueDetail.answer);
+	               $("#read-completedDate").val(issueDetail.completedDate);
+	               $("#read-projectNo").val(issueDetail.projectNo);
+	               $("#read-taskNo").val(issueDetail.taskNo);
+	               $("#myModal").modal("show");
+	               
+	               $("#downloadZone").empty();
 	                  if(issueDetail.file.length != 0) {
 	                	  
 	                	  const fileName = issueDetail.file[0].originalName;
 						  console.log("첫번째 파일의 이름은  : " + fileName);
 						  
- 	                	 for(let i = 0; i < issueDetail.file.length; i++) {
- 	                		 
+	                	 for(let i = 0; i < issueDetail.file.length; i++) {
 						  $("#read-fileNo").val(issueDetail.file[i].no);
 						  const $fileNo = issueDetail.file[i].no;
 						  console.log("파일 번호는 : " + issueDetail.file[i].no);
@@ -220,14 +212,13 @@ function backButton_click() {
 	              		  $("#downloadZone").append($buttonsTag);
 						}
 	                  }
-	              }, 
-	              error:function(data) {
-	                  console.log(data);
-	               }
-	          });
-	         }
-	   }
-	});
+	           }, 
+	           error:function(data) {
+	               console.log(data);
+	            }
+	       });
+	 });
+ });
 </script>
 </body>
 </html>
