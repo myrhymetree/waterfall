@@ -238,15 +238,14 @@
                         AND G.ISSUE_PROGRESS_STATUS = '완료'
                         AND G.TASK_NO = B.TASK_NO
                     ) AS COMPLETED_TASK_ISSUE_COUNT
-           FROM TBL_ISSUE A
-           LEFT JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
-           LEFT JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
-           LEFT JOIN TBL_PROJECT H ON (A.PROJECT_NO = H.PROJECT_NO)
-           LEFT JOIN TBL_MEMBER I ON (B.MEMBER_NO = I.MEMBER_NO)
-          WHERE A.ISSUE_STATUS = 'Y'
-	        AND H.PROJECT_STATUS = 'Y'
-	        AND B.TASK_STATUS = 'Y'
-	        AND A.PROJECT_NO = #{ projectNo }
+            FROM TBL_TASK A
+            LEFT JOIN TBL_ISSUE B ON (A.TASK_NO = B.TASK_NO)
+            LEFT JOIN TBL_TASK_CODE_MANAGE C ON (A.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+            LEFT JOIN TBL_PROJECT H ON (A.PROJECT_NO = H.PROJECT_NO)
+            LEFT JOIN TBL_MEMBER I ON (A.MEMBER_NO = I.MEMBER_NO)
+           WHERE H.PROJECT_STATUS = 'Y'
+             AND A.TASK_STATUS = 'Y'
+	         AND A.PROJECT_NO = #{ projectNo }
   	</select>
   	
    	<select id="selectTask" parameterType="_int" resultMap="issueResultMap" >
@@ -391,6 +390,13 @@
 	      , A.ISSUE_REGISTER = #{ registerNo }
 	      , A.ISSUE_MANAGER = #{ managerNo }
 	  WHERE A.ISSUE_NO = #{ no }
+	</update>
+	
+	<update id="deleteIssue" parameterType="_int">
+		UPDATE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#deleteIssue() */
+		       TBL_ISSUE A
+		   SET A.ISSUE_STATUS = 'N'
+		 WHERE A.ISSUE_NO = #{ no }
 	</update>
   
   </mapper>

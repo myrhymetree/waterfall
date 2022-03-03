@@ -90,8 +90,11 @@
 						</div>
         		  </div>
         <div class="modal-footer row">
-                <div class="col-5">
+                <div class="col-2">
                     <button type="submit" class="btn btn-outline-dark">수정</button>
+                </div>
+                <div class="col-3">
+                    <button id="delete" type="button" class="btn btn-outline-dark">삭제</button>
                 </div>
                 <div class="col-4">
                     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
@@ -100,6 +103,15 @@
     </div>
     </div>
 </div>
-</form> 	 
+</form>
+<script>
+/* 이슈 삭제 이벤트 */
+$(function(){
+      $("#delete").click(function(){
+         const no = $("#read-no").val();
+         location.href="${ pageContext.servletContext.contextPath }/issue/delete?no=" + no;
+      });
+});
+</script> 	 
 </body>
 </html>

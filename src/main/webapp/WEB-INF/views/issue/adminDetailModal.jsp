@@ -10,6 +10,7 @@
 <body>
 
 <!-- 조회 모달 -->
+<form action="${ pageContext.servletContext.contextPath }/issue/admin/update"  method="post" encType="multipart/form-data">
 <div class="modal" id="myModal">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -24,9 +25,8 @@
                    <div class="modal-body" id="modal-body">
                         <div class="mt-4 row">
                         	<input type="hidden" id="read-no" name="no">
-                        	<input type="hidden" id="#read-projectNo" name="projectNo">
-                        	<input type="hidden" id="#read-taskNo" name="taskNo">
-                        	<input type="hidden" id="#read-fileNo" name="fileNo">
+                        	<input type="hidden" id="read-projectNo" name="projectNo">
+                        	<input type="hidden" id="read-taskNo" name="taskNo">
                         	
                             <div class="col-2 center"><label>이슈명</label></div>
                             <div class="col"><input type="text" id="read-name" name="name"></div>
@@ -92,8 +92,11 @@
 
         <!-- Modal footer -->
         <div class="modal-footer row">
-                <div class="col-5">
-                    <button type="submit" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">수정</button>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-outline-dark">수정</button>
+                </div>
+                <div class="col-3">
+                    <button id="delete" type="button" class="btn btn-outline-dark">삭제</button>
                 </div>
                 <div class="col-4">
                     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
@@ -132,6 +135,15 @@
     </div>
     </div>
 </div>
-
+</form>
+<script>
+/* 이슈 삭제 이벤트 */
+$(function(){
+      $("#delete").click(function(){
+         const no = $("#read-no").val();
+         location.href="${ pageContext.servletContext.contextPath }/issue/admin/delete?no=" + no;
+      });
+});
+</script>
 </body>
 </html>

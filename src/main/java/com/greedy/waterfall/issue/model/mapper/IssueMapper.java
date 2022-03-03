@@ -37,4 +37,6 @@ public interface IssueMapper {
 
 	int updateIssue(IssueDTO issue);
 
+	int deleteIssue(int no);
+
 }

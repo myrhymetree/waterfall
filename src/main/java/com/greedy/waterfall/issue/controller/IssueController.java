@@ -39,6 +39,7 @@ import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.exception.GuideModifyException;
+import com.greedy.waterfall.common.exception.GuideRemoveException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
@@ -104,19 +105,39 @@ public class IssueController {
 	@GetMapping("/admin/list/{taskNo}")
 	public ModelAndView adminIssueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
-//		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
+		System.out.println("list에 들어오는 프로젝트 no : " + projectNo);
 		
 		System.out.println(taskNo);
 		
 		List<IssueDTO> issueList = issueService.selectIssueList(taskNo);
 		
-		mv.addObject("projectNo", issueList.get(0).getProjectNo());
+		mv.addObject("projectNo", projectNo);
 		mv.addObject("taskNo", taskNo);
 		mv.addObject("issueList", issueList);
 		mv.addObject("intent", "/issue/list");
 		mv.setViewName("/issue/adminIssueList");
 		
 		return mv;
+	}
+	
+	@GetMapping("/admin/delete")
+	public ModelAndView adminRemoveGuide(ModelAndView mv, HttpServletRequest request, 
+			RedirectAttributes rttr) throws GuideRemoveException {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		System.out.println("삭제하기 위해 no 받기 " + no );
+		
+		issueService.removeGuide(no);
+		
+		rttr.addFlashAttribute("message", "이슈 삭제에 성공하셨습니다.");
+		
+		mv.addObject("intent", "/issue/admin/delete");
+		mv.setViewName("redirect:/issue/admin/list/" + no);
+		
+		return mv;
+		
 	}
 	
 	@PostMapping("/admin/regist/{taskNo}")
@@ -229,6 +250,25 @@ public class IssueController {
 		mv.addObject("issueDetail", gson.toJson(issueDetail));
 		mv.addObject("projectMember", gson.toJson(projectMember));
 		mv.setViewName("jsonView");
+		return mv;
+	}
+	
+	@PostMapping("/admin/update")
+	public ModelAndView adminModifyIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
+			RedirectAttributes rttr, ModelAndView mv) throws GuideModifyException {
+
+		int taskNo = (int) request.getSession().getAttribute("taskNo");
+		System.out.println("update에 들어오는 업무번호 : " + taskNo);
+		
+		issueService.modifyIssue(issue);
+		
+		System.out.println("modifyIssue : " + issue);
+		
+		rttr.addFlashAttribute("message", "이슈 수정에 성공하셨습니다");
+		
+		mv.addObject("intent", "/issue/admin/update");
+		mv.setViewName("redirect:/issue/admin/list/" + taskNo);
+		
 		return mv;
 	}
 	
@@ -452,9 +492,9 @@ public class IssueController {
 	@PostMapping("/update")
 	public ModelAndView modifyIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
 			RedirectAttributes rttr, ModelAndView mv) throws GuideModifyException {
-
-		int taskNo = (int) request.getSession().getAttribute("taskNo");
-		System.out.println("delete에 들어오는 업무 no : " + taskNo);
+		
+		int taskNo = issue.getTaskNo();
+		System.out.println("update에 들어오는 업무 no : " + taskNo);
 		
 		issueService.modifyIssue(issue);
 		
@@ -466,6 +506,25 @@ public class IssueController {
 		mv.setViewName("redirect:/issue/list/" + taskNo);
 		
 		return mv;
+	}
+	
+	@GetMapping("/delete")
+	public ModelAndView removeGuide(ModelAndView mv, HttpServletRequest request, 
+			RedirectAttributes rttr) throws GuideRemoveException {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		System.out.println("삭제하기 위해 no 받기 " + no );
+		
+		issueService.removeGuide(no);
+		
+		rttr.addFlashAttribute("message", "가이드 게시판 삭제에 성공하셨습니다.");
+		
+		mv.addObject("intent", "/issue/delete");
+		mv.setViewName("redirect:/issue/list/" + no);
+		
+		return mv;
+		
 	}
 	
 }
