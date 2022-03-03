@@ -101,7 +101,7 @@
                     <button id="delete" type="button" class="btn btn-outline-dark">삭제</button>
                 </div>
                 <div class="col-4">
-                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
+                    <button type="button" id="cancel" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
                 </div>
         </div>
     </div>
@@ -115,6 +115,14 @@ $(function(){
          const no = $("#read-no").val();
          location.href="${ pageContext.servletContext.contextPath }/issue/delete?no=" + no;
       });
+});
+/* 모달 취소 버튼이 고장나는 바람에 어쩔 수 없이 만들었음 */
+$(function(){
+	$("#cancel").click(function(){
+		const taskNo = $("#read-taskNo").val();
+		console.log("no는 no" + taskNo)
+	    location.href="${ pageContext.servletContext.contextPath }/issue/admin/list/" + taskNo;
+	});
 });
 </script> 	 
 </body>

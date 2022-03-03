@@ -86,6 +86,10 @@
 			                <div class="col-10"><textarea id="read-answer" cols="80" rows="10" name="answer"></textarea></div>
 			            </div>
 						
+						<div id="uploadZone">
+			            	<input type="file"  name="multiFiles" multiple>
+			            </div>
+						
 						<div id="downloadZone">
 						</div>
         </div> 	 
@@ -93,13 +97,13 @@
         <!-- Modal footer -->
         <div class="modal-footer row">
                 <div class="col-2">
-                    <button type="submit" class="btn btn-outline-dark">수정</button>
+                    <button type="submit" class="btn btn-outline-dark" data-target="#mySubModal">수정</button>
                 </div>
                 <div class="col-3">
                     <button id="delete" type="button" class="btn btn-outline-dark">삭제</button>
                 </div>
                 <div class="col-4">
-                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
+                    <button type="button" id="cancel" class="btn btn-outline-dark" data-dismiss="#myModal">취소</button>
                 </div>
         </div>
     </div>
@@ -128,7 +132,7 @@
             <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">확인</button>
             </div>
             <div class="col-4">
-            <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="text-align: left;">취소</button>
+            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
             </div>
         </div>
 
@@ -143,6 +147,13 @@ $(function(){
          const no = $("#read-no").val();
          location.href="${ pageContext.servletContext.contextPath }/issue/admin/delete?no=" + no;
       });
+});
+$(function(){
+	$("#cancel").click(function(){
+		const taskNo = $("#read-taskNo").val();
+		console.log("no는 no" + taskNo)
+	    location.href="${ pageContext.servletContext.contextPath }/issue/admin/list/" + taskNo;
+	});
 });
 </script>
 </body>

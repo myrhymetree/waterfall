@@ -220,6 +220,7 @@ input::-webkit-search-results-decoration{
                         <div class="write">
                            <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
                                <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#writeModal"><i class="far fa-edit me-1"></i>등록</button>
+                                <!-- 검색 후 전체 게시글을 보려면 뒤로가기나 경로 기술 외에는 돌아갈 방법이 없어서 페이지 갱신 목적으로 버튼 만들어서 해결함-->
                                <button type="button" class="btn btn-secondary mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-undo"></i></button>
                             </c:if>
                         </div>
@@ -312,7 +313,6 @@ input::-webkit-search-results-decoration{
                                 <input type="search" id="searchvalue" name="searchValue"
                                    value="<c:out value="${ requestScope.selectCriteria.searchValue }" />">
                                 <button type="submit" id="submitButton"><i class="fas fa-search"></i></button>
-                                <!-- 검색 후 전체 게시글을 보려면 뒤로가기나 경로 기술 외에는 돌아갈 방법이 없어서 해결해야한다 -->
                                  
                             </div>
                             </form>
