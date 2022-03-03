@@ -1,1 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.waterfall.menu.model.mapper.MenuMapper">
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectDTO" id="projectResult">
+		<id property="no" column="PROJECT_NO"/>
+		<result property="name" column="PROJECT_NAME"/>	
+		<result property="startDate" column="PROJECT_START_DATE"/>
+		<result property="deadLine" column="PROJECT_DEADLINE"/>
+		<result property="progression" column="PROJECT_PROGRESSION"/>
+		<result property="status" column="PROJECT_STATUS"/>
+		<result property="completed" column="PROJECT_COMPLETED_DATE"/>
+		<result property="statusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="outputCount" column="OUTPUT_COUNT"/>
+		<result property="issueCount" column="ISSUE_COUNT"/>
+		
+		<association property="member" resultMap="memberResult"></association>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
+		<result property="memberName" column="MEMBER_NAME"/>
+	</resultMap>
+
+
+
+
+
+</mapper>

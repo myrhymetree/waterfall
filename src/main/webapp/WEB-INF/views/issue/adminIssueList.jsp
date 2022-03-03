@@ -26,23 +26,23 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <link href="css/styles.css" rel="stylesheet" />
 <style>
-	td { vertical-align: middle !important;
-	     text-align: center;
-	   }
-	th { text-align: !center; }
+   td { vertical-align: middle !important;
+        text-align: center;
+      }
+   th { text-align: !center; }
 </style>
 </head>
 <body>
 
-	<c:choose>
- 		<c:when test="${ sessionScope.loginMember.role eq 1 }"><jsp:include page="../common/header.jsp"/></c:when>
-		<c:otherwise><jsp:include page="../common/inprojectheader.jsp"/></c:otherwise>
-	</c:choose>
-	
-	<jsp:include page="/WEB-INF/views/issue/adminModal.jsp"/>
-	<jsp:include page="/WEB-INF/views/issue/adminDetailModal.jsp"/>
+   <c:choose>
+       <c:when test="${ sessionScope.loginMember.role eq 1 }"><jsp:include page="../common/header.jsp"/></c:when>
+      <c:otherwise><jsp:include page="../common/inprojectheader.jsp"/></c:otherwise>
+   </c:choose>
+   
+   <jsp:include page="/WEB-INF/views/issue/adminModal.jsp"/>
+   <jsp:include page="/WEB-INF/views/issue/adminDetailModal.jsp"/>
      <main>
-		<button type="button" class="btn btn-pink mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-backward"></i></button>
+      <button type="button" class="btn btn-pink mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-backward"></i></button>
          <div class="container-fluid px-4">
              <br>
              <br>
@@ -50,8 +50,8 @@
              <div class="card mb-4" style="vertical-align: middle;">
                  <div class="card-header">
                      <i class="fas fa-table me-1"></i>
-                     	업무 당 이슈 목록
-					 <button class="btn btn-outline-dark" data-toggle="modal" data-target="#registModal" id="registModal" style="float: right;">등록</button>
+                        업무 당 이슈 목록
+                <button class="btn btn-outline-dark" data-toggle="modal" data-target="#registModal" id="registModal" style="float: right;">등록</button>
                  </div>
                  <div class="card-body" id="card-body">
                      <table id="datatablesSimple">
@@ -80,7 +80,7 @@
                              </tr>
                          </thead>
                          <tbody id="tbody">
-                         	<c:forEach var="issue" items="${ requestScope.issueList }" varStatus="status">
+                            <c:forEach var="issue" items="${ requestScope.issueList }" varStatus="status">
                              <tr id="listArea" class="issueSelect">
                                  <td><c:out value="${ issue.no }"/></td>
                                  <td><c:out value="${ issue.name }"/></td>
@@ -93,7 +93,7 @@
                                  <td><button class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" style="width:45pt;height:25pt; vertical-align: middle;">배정</button></td>
                              </tr>
                              <input type="hidden" name="projectNo" value="${ issue.projectNo }">
-							</c:forEach>
+                     </c:forEach>
 
                          </tbody>
                          <tfoot></tfoot>
@@ -114,110 +114,110 @@ function backButton_click() {
 
  $("#registModal").click(function(){
 
-		var projectNo = ${ requestScope.projectNo };
-		
-		console.log(projectNo);
-		
-		$("#projectNo").val(projectNo);
+      var projectNo = ${ requestScope.projectNo };
+      
+      console.log(projectNo);
+      
+      $("#projectNo").val(projectNo);
 
-		console.log("프로젝트 번호는 : " + projectNo);	
+      console.log("프로젝트 번호는 : " + projectNo);   
 }); 
  
  
  $(document).ready(function() {
-		
-	 $('#datatablesSimple tbody').on('click', 'tr', function () {
-		var no = this.children[0].innerText;
+      
+    $('#datatablesSimple tbody').on('click', 'tr', function () {
+      var no = this.children[0].innerText;
 
-		 $.ajax({
-	         url :"adminIssueDetail",
-	         type : "get",
-	         data : { no : no },
-	         success : function(data, textStatus, xhr) {
-	            
-	               console.log(data);
-	               console.log(Object.entries(data));
-	               
-	               const guideArray = Object.entries(data);
-	               const issueDetail = JSON.parse(data.issueDetail)
-	               console.log(issueDetail);
-	               const projectMember = JSON.parse(data.projectMember)	                  
-	               console.log(projectMember);
-	               
-	               const registerName = issueDetail.register.name;
-	               console.log(registerName);
-	               
-	               const memberName = projectMember[0].memberName
-	               console.log(memberName)
-//	               const $fileNo = issueDetail.file;
-//	               console.log($fileNo);
-					  
-					  console.log(projectMember.length);
-					  
-				   /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
-	               $("#register").empty();
-				   /* register에 select문에 기본값으로 주기 */
-	               const $registerName = "<option value = '" + issueDetail.register.no + "' selected >" + issueDetail.register.name + "</option>";
-	               $("#register").append($registerName);
-	               
-	               //register에 for문으로 전체 출력
-	               for(let i = 0; i < projectMember.length; i++){
-	             	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
-	                   $("#register").append($memberTag);
-	               }
-	               
-	               /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
-	               $("#manager").empty();
-	               /* manager에 select문에 기본값으로 주기 */
-	               if(issueDetail.manager == null) {
-	             	  const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
-	             	  $("#manager").append($managerName);
-	               } else {
-	             	  const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";
-		                  $("#manager").append($managerName);
-	               }
-	               
-	               //manager에 for문으로 전체 출력
-	               for(let i = 0; i < projectMember.length; i++){
-	             	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
-	                   $("#manager").append($memberTag);
-	               }
-	               
-	               $("#read-no").val(issueDetail.no);      
-	               $("#read-name").val(issueDetail.name);
-	               $("#read-createdDate").val(issueDetail.createdDate);
-	               $("#read-deadline").val(issueDetail.deadline);
-	               $("#read-progressStatus").val(issueDetail.progressStatus);
-	               $("#read-importance").val(issueDetail.importance);
-	               $("#read-content").val(issueDetail.content);
-	               $("#read-answer").val(issueDetail.answer);
-	               $("#read-completedDate").val(issueDetail.completedDate);
-	               $("#read-projectNo").val(issueDetail.projectNo);
-	               $("#read-taskNo").val(issueDetail.taskNo);
-	               $("#myModal").modal("show");
-	               
-	               $("#downloadZone").empty();
-	                  if(issueDetail.file.length != 0) {
-	                	  
-	                	  const fileName = issueDetail.file[0].originalName;
-						  console.log("첫번째 파일의 이름은  : " + fileName);
-						  
-	                	 for(let i = 0; i < issueDetail.file.length; i++) {
-						  $("#read-fileNo").val(issueDetail.file[i].no);
-						  const $fileNo = issueDetail.file[i].no;
-						  console.log("파일 번호는 : " + issueDetail.file[i].no);
-						  console.log("파일 이름은 : " + issueDetail.file[i].originalName);
-						  
-	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
-	              		  $("#downloadZone").append($buttonsTag);
-						}
-	                  }
-	           }, 
-	           error:function(data) {
-	               console.log(data);
-	            }
-	       });
-	 });
+       $.ajax({
+            url :"adminIssueDetail",
+            type : "get",
+            data : { no : no },
+            success : function(data, textStatus, xhr) {
+               
+                  console.log(data);
+                  console.log(Object.entries(data));
+                  
+                  const guideArray = Object.entries(data);
+                  const issueDetail = JSON.parse(data.issueDetail)
+                  console.log(issueDetail);
+                  const projectMember = JSON.parse(data.projectMember)                     
+                  console.log(projectMember);
+                  
+                  const registerName = issueDetail.register.name;
+                  console.log(registerName);
+                  
+                  const memberName = projectMember[0].memberName
+                  console.log(memberName)
+//                  const $fileNo = issueDetail.file;
+//                  console.log($fileNo);
+                 
+                 console.log(projectMember.length);
+                 
+               /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+                  $("#register").empty();
+               /* register에 select문에 기본값으로 주기 */
+                  const $registerName = "<option value = '" + issueDetail.register.no + "' selected >" + issueDetail.register.name + "</option>";
+                  $("#register").append($registerName);
+                  
+                  //register에 for문으로 전체 출력
+                  for(let i = 0; i < projectMember.length; i++){
+                     const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+                      $("#register").append($memberTag);
+                  }
+                  
+                  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
+                  $("#manager").empty();
+                  /* manager에 select문에 기본값으로 주기 */
+                  if(issueDetail.manager == null) {
+                     const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
+                     $("#manager").append($managerName);
+                  } else {
+                     const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";
+                        $("#manager").append($managerName);
+                  }
+                  
+                  //manager에 for문으로 전체 출력
+                  for(let i = 0; i < projectMember.length; i++){
+                     const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
+                      $("#manager").append($memberTag);
+                  }
+                  
+                  $("#read-no").val(issueDetail.no);      
+                  $("#read-name").val(issueDetail.name);
+                  $("#read-createdDate").val(issueDetail.createdDate);
+                  $("#read-deadline").val(issueDetail.deadline);
+                  $("#read-progressStatus").val(issueDetail.progressStatus);
+                  $("#read-importance").val(issueDetail.importance);
+                  $("#read-content").val(issueDetail.content);
+                  $("#read-answer").val(issueDetail.answer);
+                  $("#read-completedDate").val(issueDetail.completedDate);
+                  $("#read-projectNo").val(issueDetail.projectNo);
+                  $("#read-taskNo").val(issueDetail.taskNo);
+                  $("#myModal").modal("show");
+                  
+                  $("#downloadZone").empty();
+                     if(issueDetail.file.length != 0) {
+                        
+                        const fileName = issueDetail.file[0].originalName;
+                    console.log("첫번째 파일의 이름은  : " + fileName);
+                    
+                       for(let i = 0; i < issueDetail.file.length; i++) {
+                    $("#read-fileNo").val(issueDetail.file[i].no);
+                    const $fileNo = issueDetail.file[i].no;
+                    console.log("파일 번호는 : " + issueDetail.file[i].no);
+                    console.log("파일 이름은 : " + issueDetail.file[i].originalName);
+                    
+                        $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+                         $("#downloadZone").append($buttonsTag);
+                  }
+                     }
+              }, 
+              error:function(data) {
+                  console.log(data);
+               }
+          });
+    });
  });
 </script>
 </body>
