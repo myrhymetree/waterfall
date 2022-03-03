@@ -1,9 +1,120 @@
 package com.greedy.waterfall.menu.model.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.common.paging.Paging;
+import com.greedy.waterfall.common.paging.PagingDTO;
+import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.menu.model.mapper.MenuMapper;
+import com.greedy.waterfall.project.model.dto.ProjectDTO;
+
+/**
+ * <pre>
+ * Class : MenuServiceImpl
+ * Comment : 클래스 설명 작성부분
+ * 
+ * History
+ * 2022. 3. 4.  (홍성원)
+ * </pre>
+ * @version 1
+ * @author 홍성원
+ */
 @Service
 public class MenuServiceImpl implements MenuService{
+	
+	private final MenuMapper mapper;
+	private final Paging paging;
+	
+	@Autowired
+	public MenuServiceImpl(MenuMapper mapper, Paging paging) {
+		this.mapper = mapper;
+		this.paging = paging;
+	}
+	
+	/**
+	 * findMainProjectList : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	public Map<String, Object> findMainProjectList(Map<String, String> searchMap) {
+		
+		Map<String, Object> findProjectResult = new HashMap<String, Object>();
+		/* 한페이지에 버튼의 갯수를 5개로 설정하고, 출력될 프로젝트의 수를 5개로 설정한다. */
+		PagingDTO pageSetting = new PagingDTO().builder().buttonAmount(5).limit(5).build();
+		/* 페이징처리를 위해 전체 프로젝트의 갯수를 조회한 뒤 searchMap에 저장한다. */
+		searchMap.put("totalCount", Integer.toString(mapper.findProjectCount()));
+		/* 페이지에대한 정보가 담긴 searchMap과  출력 설정정보가 담겨져있는 pageSetting을 전달해 검색조건이 담겨져있는 SelectCriteria변수를 반환받아, 프로젝트목록을 조회한다. */
+		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap, pageSetting);
+		List<ProjectDTO> projectList = mapper.findMainProjectList(selectCriteria);
+		
+		findProjectResult.put("projectList", projectList);
+		findProjectResult.put("selectCriteria", selectCriteria);
+		
+		
+		return findProjectResult;
+	}
+
+	/**
+	 * findAdminPageInfo : 관리자의 메인화면에 출력할 정보들을 조회한다.
+	 * @param 관리자가 선택한 프로젝트번호를 전달받는다.
+	 * @return 해당 프로젝트로 출력할 정보를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	@Override
+	public Map<String, Object> findAdminPageInfo(int projectNo) {
+
+		Map<String, Object> pageInfo = new HashMap<>();
+		
+		ProjectDTO projectInfo = mapper.findProjectInfo(projectNo);
+		
+		pageInfo.put("projectInfo", projectInfo);
+		
+		return pageInfo;
+	}
 
 }
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

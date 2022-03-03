@@ -1,56 +1,62 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+
+.paging button {
+	background: none;
+	border: none;
+}
+</style>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	<div class="pagingArea" align="center">
 	
-		<!-- 맨 앞으로 이동 버튼 -->
-		<c:if test="${ requestScope.selectCriteria.pageNo > 1}">
-	    	<button id="startPage"><<</button>
-		</c:if>
-		
-		<c:if test="${ requestScope.selectCriteria.pageNo <= 1 }">
-			<button disabled><<</button>
-		</c:if>
-		
-		<!-- 이전 페이지 버튼 -->
-		<c:if test="${ requestScope.selectCriteria.pageNo <= 1 }">
-			<button disabled><</button>
-		</c:if>
-		<c:if test="${ requestScope.selectCriteria.pageNo > 1 }">
-			<button id="prevPage"><</button>
-		</c:if>
-		
-		<!-- 숫자 버튼 -->
-		<c:forEach var="p" begin="${ requestScope.selectCriteria.startPage }" end="${ requestScope.selectCriteria.endPage }" step="1">
-			<c:if test="${ requestScope.selectCriteria.pageNo eq p }">
-				<button disabled><c:out value="${ p }"/></button>
+		<div class="paging mt-3">
+			<!-- 맨 앞으로 이동 버튼 -->
+		    <button id="startPage"><i class="fas fa-angle-double-left"></i></button>
+		    
+			
+			<!-- 이전 페이지 버튼 -->
+			<c:if test="${ requestScope.selectCriteria.pageNo <= 1 }">
+				<button disabled><i class="fas fa-angle-left"></i></button>
 			</c:if>
-			<c:if test="${ requestScope.selectCriteria.pageNo ne p }">
-				<button onclick="pageButtonAction(this.innerText);"><c:out value="${ p }"/></button>
+			<c:if test="${ requestScope.selectCriteria.pageNo > 1 }">
+				<button id="prevPage"><i class="fas fa-angle-left"></i></button>
 			</c:if>
-		</c:forEach>
+			
+			<!-- 숫자 버튼 -->
+      
 		
-		<!-- 다음 페이지 버튼 -->
-		<c:if test="${ requestScope.selectCriteria.pageNo >= requestScope.selectCriteria.maxPage }">
-			<button disabled>></button>
-		</c:if>
-		<c:if test="${ requestScope.selectCriteria.pageNo < requestScope.selectCriteria.maxPage }">
-			<button id="nextPage">></button>
-		</c:if>
-		
-		<!-- 마지막 페이지로 이동 버튼 -->
-		<button id="maxPage">>></button> 
+			<c:forEach var="p" begin="${ requestScope.selectCriteria.startPage }" end="${ requestScope.selectCriteria.endPage }" step="1">
+				<c:if test="${ requestScope.selectCriteria.pageNo eq p }">
+					<button disabled><c:out value="${ p }"/></button>
+				</c:if>
+				<c:if test="${ requestScope.selectCriteria.pageNo ne p }">
+					<button onclick="pageButtonAction(this.innerText);"><c:out value="${ p }"/></button>
+				</c:if>
+			</c:forEach>
+			<!-- 다음 페이지 버튼 -->
+			<c:if test="${ requestScope.selectCriteria.pageNo >= requestScope.selectCriteria.maxPage }">
+				<button disabled><i class="fas fa-angle-right"></i></button>
+			</c:if>
+			<c:if test="${ requestScope.selectCriteria.pageNo < requestScope.selectCriteria.maxPage }">
+				<button id="nextPage"><i class="fas fa-angle-right"></i></button>
+			</c:if>
+			
+			<!-- 마지막 페이지로 이동 버튼 -->
+			<button id="maxPage"><i class="fas fa-angle-double-right"></i></button>
+		</div>
 	</div>
 	
 	<script>
-	    const link = "${ pageContext.servletContext.contextPath }${ requestScope.intent }";
+		const link = "${ pageContext.servletContext.contextPath }${ requestScope.intent }";
 		let searchText = "";
 		
 		/* 검색 조건 유무에 따른 경로 처리 */
@@ -102,3 +108,6 @@
 	</script>
 </body>
 </html>
+
+
+

@@ -1,6 +1,7 @@
 package com.greedy.waterfall.project.model.dto;
 
 import com.greedy.waterfall.board.model.dto.MeetingMemberDTO;
+import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,5 +40,6 @@ public class ProjectDTO {
    
    private MeetingMemberDTO member;
    
+   private ProjectInfoDTO projectInfo;
 
 }

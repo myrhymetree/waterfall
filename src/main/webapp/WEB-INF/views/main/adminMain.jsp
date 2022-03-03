@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
@@ -56,6 +59,14 @@
 	</script>
 
 <style>
+	
+	.history-area{
+		height: 70%;
+		overflow: auto;
+	}
+	.history-area > h5{
+		margin-top: 10px;
+	}
 	th {
 		height: 3em;
 	}
@@ -79,6 +90,7 @@
 		border: 3px solid red;
 		border-radius: 2%;
 	}
+	
 </style>
 <meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -86,6 +98,7 @@
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+	
 	<div style="margin:1%">
 		<div class="row" style="border: 1px; height:20px">
 			<h3>관리자님 환영합니다</h3>
@@ -95,49 +108,34 @@
 		<div class="row ">
 			<div id="test" class="col-4 print-area">
 				<div class="inbox">
-					<table style="width: 100%;font-size:1.1em;">
-						<colgroup>
-							<col style="width: 15%" />
-							<col style="width: 65%" />
-							<col style="width: 20%" />
-							
-						</colgroup>
-						<thead>
-							<th></th>
-							<th>프로젝트명</th>
-							<th>PM이름</th>
-							
-						</thead>
-						<tbody>
-							<tr>
-								<td></td>
-								<td>1번 프로젝트</td>
-								<td>김서영</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td>2번 프로젝트</td>
-								<td>김영광</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td>3번 프로젝트</td>
-								<td>박성준</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td>4번 프로젝트</td>
-								<td>차화응</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td>5번 프로젝트</td>
-								<td>홍성원</td>
-							</tr>
-						</tbody>
-
-					</table>
-					<div class="mt-4" style="border: 2px solid black; text-align: center;">  1 2 3 4 5</div>
+					<div style="height: 80%;">
+						<table style="width: 100%;font-size:1.1em; border: 1px solid rebeccapurple">
+							<colgroup>
+								<col style="width: 15%" />
+								<col style="width: 65%" />
+								<col style="width: 20%" />
+								
+							</colgroup>
+							<thead>
+								<th></th>
+								<th>프로젝트명</th>
+								<th>PM이름</th>
+								
+							</thead>
+							<tbody id="project-list">
+								<c:forEach var="project" items="${ requestScope.projectList }" varStatus="status">
+									<tr>
+										<td><input type="hidden" value="${ project.no }"></td>
+										<td><c:out value="${ project.name }"/></td>
+										<td><c:out value="${ project.member.memberName }"/></td>
+									</tr>
+								</c:forEach>							
+							</tbody>
+						</table>
+					</div>
+					<div class="mt-4" style="border: 2px solid black; text-align: center;">
+						<jsp:include page="/WEB-INF/views/main/mainadminpaging.jsp"/>
+					</div>1
 				</div>
 			</div>
 			<div id="test" class="col-3 print-area">
@@ -152,15 +150,21 @@
 				</div>
 				
 			</div>
-			<div id="test" class="col-4 print-area">
+			<div id="test" class="col-5 print-area">
 				<div class="inbox">
-					<h2 class="mt-4">히스토리</h2>
-					<p>[김서영]님이 [요구사항분석]업무를 [생성]했습니다.</p>
-					<p>[차화응]님이 [홍성원]님을 [5번프로젝트]프로젝트에 [배정]했습니다.</p>
-					<p>[박성준]님이 [논리데이터모델링]업무에 [이슈]를 [등록]했습니다.</p>
-					<p>[김영광]님이 [5번프로젝트]프로젝를 [수정]했습니다.</p>
-					<p>[홍성원]님이 [김서영]님을 프로젝트에 [배정]]했습니다.</p>
-					
+					<h2 class="mt-3">히스토리</h2>
+					<div class="history-area">
+						<h5>[김서영]님이 [요구사항분석]업무를 [생성]했습니다.</h5>
+						<h5>[차화응]님이 [홍성원]님을 [5번프로젝트]프로젝트에 [배정]했습니다.</h5>
+						<h5>[박성준]님이 [논리데이터모델링]업무에 [이슈]를 [등록]했습니다.</h5>
+						<h5>[김영광]님이 [5번프로젝트]프로젝를 [수정]했습니다.</h5>
+						<h5>[홍성원]님이 [김서영]님을 프로젝트에 [배정]]했습니다.</h5>
+						<h5>[김서영]님이 [요구사항분석]업무를 [생성]했습니다.</h5>
+						<h5>[차화응]님이 [홍성원]님을 [5번프로젝트]프로젝트에 [배정]했습니다.</h5>
+						<h5>[박성준]님이 [논리데이터모델링]업무에 [이슈]를 [등록]했습니다.</h5>
+						<h5>[김영광]님이 [5번프로젝트]프로젝를 [수정]했습니다.</h5>
+						<h5>[홍성원]님이 [김서영]님을 프로젝트에 [배정]]했습니다.</h5>
+					</div>
 				</div>
 			</div>
 		
@@ -191,5 +195,76 @@
 		</div> 
 	</div>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>	
+	<script>
+		$(function() {
+			$("#project-list td").hover(function() {
+				$(this).parent().css({"background":"rgba(29, 22, 22, 0.106)", "cursor":"pointer"});
+			}).mouseleave(function() {
+				$(this).parent().css({"background":"white", "color":"black"});
+				
+			}).click(function() {
+				$projectNo = this.parentNode.children[0].children[0].value;
+				console.log($projectNo);
+				
+				$.ajax({
+					type: "get",
+					url: "${ pageContext.servletContext.contextPath }/menu/main/admin/project/" + $projectNo,
+					success: function(data) {
+						alert('컨트롤러 갔다왔어요~');
+					},
+					error: function(xhr, status, error) {
+						alert('admin mainpage/ find project list /network error');
+					}
+						
+				});
+			});
+		});
+	</script>
+	
+	
+	
+	
+	
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
