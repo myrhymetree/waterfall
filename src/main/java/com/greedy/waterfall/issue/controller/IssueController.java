@@ -462,6 +462,7 @@ public class IssueController {
 		
 		rttr.addFlashAttribute("message", "가이드 게시판 수정에 성공하셨습니다");
 		
+		mv.addObject("intent", "/issue/update");
 		mv.setViewName("redirect:/issue/list/" + taskNo);
 		
 		return mv;

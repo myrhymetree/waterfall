@@ -25,9 +25,8 @@
                    <div class="modal-body" id="modal-body">
                         <div class="mt-4 row">
                         	<input type="hidden" id="read-no" name="no">
-                        	<input type="hidden" id="#read-projectNo" name="projectNo">
-                        	<input type="hidden" id="#read-taskNo" name="taskNo">
-                        	<input type="hidden" id="#read-fileNo" name="fileNo">
+                        	<input type="hidden" id="read-projectNo" name="projectNo">
+                        	<input type="hidden" id="read-taskNo" name="taskNo">
                         	
                             <div class="col-2 center"><label>이슈명</label></div>
                             <div class="col"><input type="text" id="read-name" name="name"></div>
