@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
+import com.greedy.waterfall.common.exception.GuideModifyException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
@@ -446,6 +447,24 @@ public class IssueController {
 		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
 		
 		return mv; 
+	}
+	
+	@PostMapping("/update")
+	public ModelAndView modifyIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
+			RedirectAttributes rttr, ModelAndView mv) throws GuideModifyException {
+
+		int taskNo = (int) request.getSession().getAttribute("taskNo");
+		System.out.println("delete에 들어오는 업무 no : " + taskNo);
+		
+		issueService.modifyIssue(issue);
+		
+		System.out.println("modifyIssue : " + issue);
+		
+		rttr.addFlashAttribute("message", "가이드 게시판 수정에 성공하셨습니다");
+		
+		mv.setViewName("redirect:/issue/list/" + taskNo);
+		
+		return mv;
 	}
 	
 }

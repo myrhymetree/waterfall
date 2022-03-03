@@ -110,7 +110,7 @@ function backButton_click() {
 $(function() {
 	   const $tds = document.querySelectorAll("#listArea td");   /* 이벤트 클릭 했을 때의 this  */
 	   console.log($tds);
-	   for (let i = 0; i < $tds.length; i++) {
+	   for (let i = 0; i < $tds.length; i++) {					/* 페이지 안넘어가는 이유 일지도 모름 , 한번 알아봐야됨*/
 	      $tds[i].onclick = function() {
 	         const no = this.parentNode.children[0].innerText;
 	         const ex = this.parentNode; // this는 td의 부모인 tr
@@ -141,6 +141,8 @@ $(function() {
 	                  console.log("파일의 length는 : " +  issueDetail.file.length);
 					  console.log("프로젝트 구성인원의 length는 : " + projectMember.length);
 					  
+					  console.log(projectMember.length);
+					  
 					  /* 반복문 안이라서 클릭 될때마다 버튼이 생성되는걸 막아줌 */
 	                  $("#register").empty();
 					  /* register에 select문에 기본값으로 주기 */
@@ -169,7 +171,6 @@ $(function() {
 	                	  const $memberTag = "<option value = '" + projectMember[i].memberNo + "'>" + projectMember[i].memberName + "</option>";
 	                      $("#manager").append($memberTag);
 	                  }
-	                  
 	                  
 //	                  $("#read-memberNo").val(projectMember.memberNo)
 	                  
@@ -220,12 +221,12 @@ $(function() {
 //	                	  $("#attaachmentNameArea").append($buttonTag);
 //	                	  eval("const read-originalName" + i + " = 'read-originalName" + i + "';")
 //	                	  window['read-originalName'+ i] = "read-originalName " + i;
-						  
+						  $("#read-fileNo").val(issueDetail.file[i].no);
 						  const $fileNo = issueDetail.file[i].no;
 						  console.log("파일 번호는 : " + issueDetail.file[i].no);
 						  console.log("파일 이름은 : " + issueDetail.file[i].originalName);
 						  
-	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='read-originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
 	              		  $("#downloadZone").append($buttonsTag);
 	              		  
 //	              		  $("#read-originalName").val(issueDetail.file[i].originalName);

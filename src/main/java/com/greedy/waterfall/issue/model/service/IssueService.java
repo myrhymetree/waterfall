@@ -33,4 +33,6 @@ public interface IssueService {
 
 	IssueFileDTO removeGuideFile(int fileNumber);
 
+	void modifyIssue(IssueDTO issue);
+
 }

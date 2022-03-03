@@ -21,12 +21,13 @@
         </div>
 
         <!-- Modal body -->
+				   <form action="${ pageContext.servletContext.contextPath }/issue/update" method="POST">
                    <div class="modal-body" id="modal-body">
-
                         <div class="mt-4 row">
                         	<input type="hidden" id="read-no" name="no">
                         	<input type="hidden" id="#read-projectNo" name="projectNo">
                         	<input type="hidden" id="#read-taskNo" name="taskNo">
+                        	<input type="hidden" id="#read-fileNo" name="fileNo">
                         	
                             <div class="col-2 center"><label>이슈명</label></div>
                             <div class="col"><input type="text" id="read-name" name="name"></div>
@@ -41,7 +42,7 @@
                             </div>
                         </div>
 
-                       <div class="mt-4 row">
+                        <div class="mt-4 row">
                        		<div class="col-2 center"><label for="read-createdDate">등록일</label></div>
                             <div class="col"><input type="date" id="read-createdDate" name="createdDate"></div>
                        
@@ -49,17 +50,17 @@
                             <div class="col-4"><input type="date" id="read-deadline" name="deadline"></div>
                         </div>
 
-                        <div class="mt-4 row">
+                         <div class="mt-4 row">
                             <div class="col-2 center"><label>이슈 제기자</label></div>
                             <div class="col">
-                            	<select class="importance ms-auto" id="register" name="register">
+                            	<select class="importance ms-auto" id="register" name="registerNo">
 								</select>
 									
                             </div>
                             
                             <div class="col-2 center"><label>이슈 담당자</label></div>
                             <div class="col">
-                            	<select class="importance ms-auto" id="manager" name="manager">
+                            	<select class="importance ms-auto" id="manager" name="managerNo">
 								</select>
                             </div>
                         </div>
@@ -74,7 +75,7 @@
                             </select>
                             
                             </div>
-                        </div>
+                       </div>
 						
                         <div class="mt-4 row">
                             <div class="col-2 center" style="vertical-align: top;"><label>이슈내용</label></div>
@@ -88,17 +89,18 @@
 						
 						<div id="downloadZone">
 						</div>
-        </div> 	
+        </div> 	 
 
         <!-- Modal footer -->
         <div class="modal-footer row">
                 <div class="col-5">
-                    <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">확인</button>
+                    <button type="submit" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">수정</button>
                 </div>
                 <div class="col-4">
                     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
                 </div>
         </div>
+        </form>
     </div>
     </div>
 </div>

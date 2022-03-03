@@ -150,12 +150,14 @@ function backButton_click() {
 	                  console.log(projectMember);
 	                  
 	                  const registerName = issueDetail.register.name;
-	                  console.log(registerName);
+	                  console.log("이슈 등록인의 이름은 : " + registerName);
 	                  
 	                  const memberName = projectMember[0].memberName
-	                  console.log(memberName)
-//	                  const $fileNo = issueDetail.file;
-//	                  console.log($fileNo);
+	                  console.log("프로젝트 구성인원 목록의 첫 이름은 : " + memberName)
+	                  const fileNo = issueDetail.file;
+	                  console.log(fileNo);
+	                  console.log("파일의 length는 : " +  issueDetail.file.length);
+					  console.log("프로젝트 구성인원의 length는 : " + projectMember.length);
 					  
 					  console.log(projectMember.length);
 					  
@@ -188,9 +190,6 @@ function backButton_click() {
 	                      $("#manager").append($memberTag);
 	                  }
 	                  
-	                  
-//	                  $("#read-memberNo").val(projectMember.memberNo)
-	                  
 	                  $("#read-no").val(issueDetail.no);      
 	                  $("#read-name").val(issueDetail.name);
 	                  $("#read-createdDate").val(issueDetail.createdDate);
@@ -200,26 +199,27 @@ function backButton_click() {
 	                  $("#read-content").val(issueDetail.content);
 	                  $("#read-answer").val(issueDetail.answer);
 	                  $("#read-completedDate").val(issueDetail.completedDate);
-//	                  $("#read-registerName").val(issueDetail.register.name);
-//	                  $("#read-managerName").val(issueDetail.manager.name); 
 	                  $("#read-projectNo").val(issueDetail.projectNo);
 	                  $("#read-taskNo").val(issueDetail.taskNo);
-//	                  $("#read-writerNo").val(guideArray[8][1]);
-//	                  $("#read-originalName").val(guideArray[14][1]);
 	                  $("#myModal").modal("show");
 	                  
-//	                  if($fileNo != null) {
-//	                     
-//	                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
-//	                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
-//	               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
-//	                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
-//	                     
-//	                     $("#downloadarea").empty();
-//	                     $("#downloadarea").append($downloadTag);
-//	                     $("#downloadarea").append($deleteTag);
-//	                      $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
-//	                  }
+	                  $("#downloadZone").empty();
+	                  if(issueDetail.file.length != 0) {
+	                	  
+	                	  const fileName = issueDetail.file[0].originalName;
+						  console.log("첫번째 파일의 이름은  : " + fileName);
+						  
+ 	                	 for(let i = 0; i < issueDetail.file.length; i++) {
+ 	                		 
+						  $("#read-fileNo").val(issueDetail.file[i].no);
+						  const $fileNo = issueDetail.file[i].no;
+						  console.log("파일 번호는 : " + issueDetail.file[i].no);
+						  console.log("파일 이름은 : " + issueDetail.file[i].originalName);
+						  
+	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+	              		  $("#downloadZone").append($buttonsTag);
+						}
+	                  }
 	              }, 
 	              error:function(data) {
 	                  console.log(data);

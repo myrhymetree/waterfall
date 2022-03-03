@@ -35,4 +35,6 @@ public interface IssueMapper {
 
 	int deleteIssueFile(int fileNumber);
 
+	int updateIssue(IssueDTO issue);
+
 }
