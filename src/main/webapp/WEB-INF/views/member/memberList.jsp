@@ -210,7 +210,7 @@
 					                        
 					                        <!-- 검색폼  -->   
 					                </div>
-					                <div class="search-area">
+					                <div class="search-area" align="center">
 					                  <form id="loginForm" action="${ pageContext.servletContext.contextPath }/member/list" method="get">
 					                     <div class="search-set mt-2">
 					                      <input type="hidden" name="currentPage" value="1">

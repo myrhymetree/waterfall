@@ -150,6 +150,8 @@ public class MemberController {
 		
 		List<AdminMemberDTO> adminMemberList = memberService.findAdminMember(selectCriteria); 
 		
+		
+		
 		mv.addObject("adminMemberList", adminMemberList);
 		mv.addObject("selectCriteria", selectCriteria);
 		mv.addObject("intent", "/member/list");
