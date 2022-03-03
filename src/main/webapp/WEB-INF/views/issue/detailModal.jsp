@@ -85,6 +85,10 @@
 			                <div class="col-2 center" style="vertical-align: top;"><label>처리내용</label></div>
 			                <div class="col-10"><textarea id="read-answer" cols="80" rows="10" name="answer"></textarea></div>
 			            </div>
+			            
+			            <div id="uploadZone">
+			            	<input type="file"  name="multiFiles" multiple>
+			            </div>
 						
 						<div id="downloadZone">
 						</div>

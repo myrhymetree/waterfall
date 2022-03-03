@@ -129,6 +129,25 @@ public class IssueServiceImpl implements IssueService {
 		
 		int result = mapper.updateIssue(issue);
 		
+		List<IssueFileDTO> files = issue.getFile();
+		System.out.println("IssueServiceImpl의 updateIssue의 files 는  " + files);
+		if(mapper.updateIssue(issue) > 0) {
+//			result = true;
+		
+			if(files != null) {
+				int count = 0;
+				for(int i = 0; i < files.size(); i++) {
+					
+					files.get(i).setRefIssueNo(issue.getNo());
+					count += mapper.registIssueFile(files.get(i));
+				}
+				if(count != files.size()) {
+//					result = false;
+				} 
+				
+			}
+		}
+		
 //		if(!(result > 0)) {
 //			throw new GuideModifyException("가이드 게시글 수정에 실패하셨습니다.");
 //		}

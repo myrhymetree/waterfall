@@ -491,8 +491,68 @@ public class IssueController {
 	
 	@PostMapping("/update")
 	public ModelAndView modifyIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
-			RedirectAttributes rttr, ModelAndView mv) throws GuideModifyException {
+			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws GuideModifyException {
 		
+		/* 파일 업로드 */
+		System.out.println("MultiFiles : " + multiFiles);
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		System.out.println("root : " + root);
+		
+		String filePath = root + "/issueUploadFiles";
+		
+		File mkdir = new File(filePath);
+		
+		/* 폴더 생성 완료 */
+		if(!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+		/* 사진 개수 출력 완료 */
+		System.out.println("multiFiles.size() : " + multiFiles.size());
+		
+		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
+		if(multiFiles.get(0).getSize() != 0) {
+			for(int i = 0; i < multiFiles.size(); i++) {
+				String originFileName = multiFiles.get(i).getOriginalFilename();
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				System.out.println("originFileName" + originFileName);
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+				System.out.println("savedName : " + savedName);
+				
+				IssueFileDTO issueFileDTO = new IssueFileDTO();
+				issueFileDTO.setSavedPath(filePath);
+				issueFileDTO.setOriginalName(originFileName);
+				issueFileDTO.setRandomName(savedName);
+//				issue.setFile(issueFileDTO);
+				fileList.add(issueFileDTO);
+				issue.setFile(fileList);
+				
+				System.out.println("issue : " + issue);
+			}
+			
+			try {
+				for(int i = 0; i < multiFiles.size(); i++) {
+					
+					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
+					
+					System.out.println("이슈 등록 확인 " + issue);
+					
+				}
+				
+				rttr.addFlashAttribute("subMessage", "파일 업로드 성공");
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				
+				for(int i = 0; i < multiFiles.size(); i++) {
+					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
+				}
+				rttr.addFlashAttribute("subMessage", "파일 업로드 실패");
+			  }
+		}
+		
+		
+		/* 이슈 수정 */
 		int taskNo = issue.getTaskNo();
 		System.out.println("update에 들어오는 업무 no : " + taskNo);
 		
