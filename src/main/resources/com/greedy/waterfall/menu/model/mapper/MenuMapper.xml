@@ -25,15 +25,77 @@
 	
 	<resultMap type="com.greedy.waterfall.menu.model.dto.ProjectInfoDTO" id="projectInfoResult">
 		<result property="outputAmount" column="OUTPUT_AMOUNT"/>
-		<result property="causedIssueAmount" column="CAUSED_ISSUE"/>
+		
+		<result property="watingIssueAmount" column="WAIT_ISSUE"/>
+		<result property="progressingIssueAmount" column="PROGRESS_ISSUE"/>
 		<result property="solvedIssueAmount" column="SOLVED_ISSUE"/>
-		<result property="finishedTaskAmount" column="FINISH_TASK"/>
+		
+		<result property="beforeProceedingTaskAmount" column="BEFORE_TASK"/>
 		<result property="progressingTaskAmount" column="PROGRESS_TASK"/>
+		<result property="testingTaskAmount" column="TEST_TASK"/>
+		<result property="finishedTaskAmount" column="FINISH_TASK"/>
+		<result property="pendingTaskAmount" column="PENDING_TASK"/>
 	</resultMap>
 
 	<select id="findProjectInfo" resultMap="projectResult">
-
-	
+        SELECT 
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE
+             , A.PROJECT_DEADLINE
+             , A.PROJECT_PROGRESSION
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , C.MEMBER_NO
+             , C.MEMBER_NAME
+             , (SELECT COUNT(*) 
+                  FROM TBL_OUTPUT D
+                 WHERE D.PROJECT_NO = A.PROJECT_NO
+               ) AS OUTPUT_AMOUNT
+             , (SELECT COUNT(*) 
+                  FROM TBL_ISSUE E 
+                 WHERE E.PROJECT_NO = A.PROJECT_NO
+                   AND E.ISSUE_PROGRESS_STATUS = '대기중'
+               ) AS WAIT_ISSUE
+             , (SELECT COUNT(*) 
+                  FROM TBL_ISSUE F 
+                 WHERE F.PROJECT_NO = A.PROJECT_NO
+                   AND F.ISSUE_PROGRESS_STATUS = '처리중'
+               ) AS PROGRESS_ISSUE
+             , (SELECT COUNT(*) 
+                  FROM TBL_ISSUE G 
+                 WHERE G.PROJECT_NO = A.PROJECT_NO
+                   AND G.ISSUE_PROGRESS_STATUS = '완료'
+               ) AS SOLVED_ISSUE
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK H
+                 WHERE H.TASK_PROGRESS_STATUS ='진행전'
+                   AND H.PROJECT_NO = A.PROJECT_NO                  
+               ) AS BEFORE_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK I
+                 WHERE I.TASK_PROGRESS_STATUS ='진행중'
+                   AND I.PROJECT_NO = A.PROJECT_NO
+               ) AS PROGRESS_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK J
+                 WHERE J.TASK_PROGRESS_STATUS ='테스트중'
+                   AND J.PROJECT_NO = A.PROJECT_NO
+               ) AS TEST_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK K
+                 WHERE K.TASK_PROGRESS_STATUS ='진행완료'
+                   AND K.PROJECT_NO = A.PROJECT_NO
+               ) AS FINISH_TASK
+             , (SELECT COUNT(*)
+                          FROM TBL_TASK L
+                 WHERE TASK_PROGRESS_STATUS ='보류'
+                   AND L.PROJECT_NO = A.PROJECT_NO
+               ) AS PENDING_TASK
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON(A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON (B.MEMBER_NO = C.MEMBER_NO)
+         WHERE B.ROLE_NO = 8
+           AND B.PROJECT_NO = #{ projectNo }
 	</select>
 
 	<select id="findProjectCount" resultType="_int">

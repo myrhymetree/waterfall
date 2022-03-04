@@ -1,6 +1,7 @@
 package com.greedy.waterfall.menu.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,9 @@ public class MenuController {
 		response.setContentType("application/json; charset=UTF-8");
 
 		ObjectMapper mapper = new ObjectMapper();
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		mapper.setDateFormat(dateFormat);
 		
 		mv.addObject("project", mapper.writeValueAsString(project));
 		mv.setViewName("jsonView");

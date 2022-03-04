@@ -14,9 +14,15 @@ import lombok.ToString;
 @ToString
 @Builder
 public class ProjectInfoDTO {
-	private int outputAmount;
-	private int causedIssueAmount;
-	private int solvedIssueAmount;
-	private int finishedTaskAmount;
-	private int progressingTaskAmount;
+	private int outputAmount;				//산출물 갯수
+	
+	private int watingIssueAmount;			//대기중 이슈 갯수
+	private int progressingIssueAmount;		//처리중 이슈 갯수
+	private int solvedIssueAmount;			//완료 이슈 갯수
+	
+	private int beforeProceedingTaskAmount;	//진행전 업무 갯수 
+	private int progressingTaskAmount;		//진행중 업무 갯수
+	private int testingTaskAmount;			//테스트중 업무 갯수
+	private int finishedTaskAmount;			//진행완료 업무 갯수
+	private int pendingTaskAmount;			//보류 업무 갯수
 }
