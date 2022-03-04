@@ -36,7 +36,7 @@
 	</select>
 	
 	<!-- 부서 생성 -->
-	<select id="insertDept" parameterType="com.greedy.waterfall.company.model.dto.DeptDTO">
+	<insert id="insertDept" parameterType="com.greedy.waterfall.company.model.dto.DeptDTO">
 		INSERT
 		  INTO TBL_DEPT
 		(
@@ -48,7 +48,7 @@
 		  #{ code }
 		, #{ name } 
 		)
-	</select>
+	</insert>
 	
 	<!-- 팀 조회 -->
 	<select id="findTeam" resultMap="teamResultMap">
@@ -64,12 +64,11 @@
 	<!-- 팀 생성 -->
 	<insert id="insertTeam" parameterType="com.greedy.waterfall.company.model.dto.TeamDTO">
 		INSERT
-		  INTO TBL_TEAM A
-		  JOIN TBL_DEPT B ON (A.DEPT_CODE = B.DEPT_CODE)
+		  INTO TBL_TEAM
 		(
-		  A.TEAM_CODE
-	    , A.TEAM_NAME
-	    , A.DEPT_CODE
+		  TEAM_CODE
+	    , TEAM_NAME
+	    , DEPT_CODE
 		)
 		VALUES
 		(

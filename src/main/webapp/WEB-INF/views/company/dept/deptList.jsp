@@ -11,6 +11,12 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<!-- 부트스트랩 collapse 필수 cdn 시작 -->
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- //부트스트랩 collapse 필수 cdn 종료 -->
 <title>부서 관리</title>
 <script>
 
@@ -43,6 +49,8 @@
 	left: 100px;
 	top: 100px;
 	border-width: 1px;
+	/* 높이 길어지면 스크롤바 생기게 */
+	overflow: auto;
 }
 
 #outputbox2 {
@@ -61,6 +69,8 @@
 #box1header {
 	padding: 40px;
 	font-size: 1.4rem;
+	width: 100%;
+	height: 100%;
 }
 
 #headerunderline {
@@ -218,7 +228,7 @@ textarea {
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 		
 		<!-- 부서 추가 모달 -->
-		<%-- <div class="modal fade" id="writeModal" data-bs-backdrop="static"
+		<div class="modal fade" id="writeModal" data-bs-backdrop="static"
 			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
@@ -246,10 +256,10 @@ textarea {
 					</form>
 				</div>
 			</div>
-		</div> --%>
+		</div>
 		
 		<!-- 팀 추가 모달 -->
-		<div class="modal fade" id="writeModal" data-bs-backdrop="static"
+		<div class="modal fade" id="writeTeamModal" data-bs-backdrop="static"
 			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
@@ -261,9 +271,9 @@ textarea {
 						<div class="my-modal-body">
 							<div class="my-modal-input mb-3">
 								<label class="me-2" for="dept-select">상위부서</label>
-								<select id="dept-select" name="dept">
+								<select id="dept-select" name="deptCode">
 									<c:forEach var="dept" items="${ requestScope.deptList }">
-										<option><c:out value="${ dept.name }" /></option>
+										<option value="${ dept.code }"><c:out value="${ dept.name }" /></option>
 									</c:forEach>
 								</select>
 							</div>
@@ -294,23 +304,25 @@ textarea {
 				<div class="box" id="outputbox1">
 					<div id="box1header">
 						부서 관리 <br>
-						<hr style="margin: 0px;">
+						<hr style="margin: 0px">
 						<div id="box1_body">
-							<button  rel="float" class="button float" id="dept-add">
-								<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;부서
-								추가
-							</button>
-							<button  rel="float" class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#writeModal">
-								<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;팀
-								추가
-							</button>
-							<button  rel="float" class="button float" id="dept-add">
-								<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
-							</button>
-							<button  rel="float" class="button float" id="dept-delete">
-								<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
-							</button>
-							
+							<!-- 줄바꿈 방지 -->
+							<div style="white-space: nowrap">
+								<button  rel="float" class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#writeModal">
+									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;부서
+									추가
+								</button>
+								<button  rel="float" class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#writeTeamModal">
+									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;팀
+									추가
+								</button>
+								<button  rel="float" class="button float" id="dept-add">
+									<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
+								</button>
+								<button  rel="float" class="button float" id="dept-delete">
+									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
+								</button>
+							</div>
 							<!-- <br> <label type="button" class="folder_toggle"
 								data-toggle="collapse" data-target="#demo"><i
 								style='font-size: 24px' class='fas'>&#xf07b;</i>어쩌고</label>
@@ -345,10 +357,16 @@ textarea {
 									저쩌고잉<br> 저꾸쩌<br> 드를어<br>
 								</p>
 							</div> -->
-							
-							<c:forEach var="dept" items="${ requestScope.deptList }">
-								<ul id="listArea" style="list-style: none">
-									<li><i style='font-size: 24px' class='fas'>&#xf07b;</i><c:out value="${ dept.name }" /></li>
+							<!-- 부서 및 팀 조회 -->
+							<c:forEach var="dept" varStatus="status" items="${ requestScope.deptList }">
+								<ul id="deptName" class="folder_toggle" data-toggle="collapse" data-target="#demo${ status.index }" style="list-style: none">
+									<li><i style='font-size: 24px' class='fas'>&#xf07b;</i><c:out value="${ dept.name }" />
+										<c:forEach var="team" varStatus="st" items="${ requestScope.teamList }">
+											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: 10px; font-size: 1rem">
+												<li><c:out value="${ team.name }" /></li>
+											</ul>
+										</c:forEach>
+									</li>
 								</ul>
 							</c:forEach>
 						</div>
@@ -379,9 +397,9 @@ textarea {
 									<i style="font-size: 16px" class="fa">&#xf002;</i>&nbsp;검색
 								</button>
 							</div>
-							<hr style="color: #343A40;" margin="0px">
+							<hr style="color: #343A40" margin="0px">
 							<label id="deptPerson">부서 인원</label>
-							<hr style="margin: 0px;">
+							<hr style="margin: 0px">
 							<div align="center">
 								<label class="person-info">이름</label> <label class="person-info">부서</label>
 								<label class="person-info">직급</label> <label class="person-info">전화번호</label>

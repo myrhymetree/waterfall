@@ -18,6 +18,8 @@ public interface CompanyService {
 
 	void registDept(DeptDTO dept) throws DeptRegistException;
 
+	List<TeamDTO> findTeam(SelectCriteria selectCriteria);
+
 	void registTeam(TeamDTO team) throws TeamRegistException;
 
 	List<JobDTO> findJob(SelectCriteria selectCriteria);

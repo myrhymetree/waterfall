@@ -13,6 +13,8 @@ public interface CompanyMapper {
 
 	int insertDept(DeptDTO dept);
 
+	List<TeamDTO> findTeam(SelectCriteria selectCriteria);
+
 	int insertTeam(TeamDTO team);
 	
 	List<JobDTO> findJob(SelectCriteria selectCriteria);

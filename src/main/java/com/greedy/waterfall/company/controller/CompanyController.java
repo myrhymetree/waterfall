@@ -40,13 +40,15 @@ public class CompanyController {
 		this.companyService = companyService;
 	}
 	
-	/* 부서 조회 */
+	/* 부서 및 팀 조회 */
 	@GetMapping("/dept/list")
 	public ModelAndView deptSelectList(HttpServletRequest request, ModelAndView mv) {
 
 		SelectCriteria selectCriteria = null;
 		List<DeptDTO> deptList = companyService.findDept(selectCriteria);
+		List<TeamDTO> teamList = companyService.findTeam(selectCriteria);
 		mv.addObject("deptList", deptList);
+		mv.addObject("teamList", teamList);
 		mv.addObject("selectCriteria", selectCriteria);
 		mv.addObject("intent", "/company/dept/list");
 		mv.setViewName("/company/dept/deptList");
@@ -76,10 +78,10 @@ public class CompanyController {
 	@PostMapping("/team/regist")
 	public String registTeam(@ModelAttribute TeamDTO team, HttpServletRequest request, RedirectAttributes rttr) 
 			throws TeamRegistException {
-		
+		System.out.println(team);
 		String code = request.getParameter("code");
 		String name = request.getParameter("name");
-
+		
 		team.setCode(code);
 		team.setName(name);
 		

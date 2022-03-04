@@ -45,6 +45,15 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new DeptRegistException("부서 등록에 실패하셨습니다.");
 		}
 	}
+
+	/* 팀 조회 */
+	@Override
+	public List<TeamDTO> findTeam(SelectCriteria selectCriteria) {
+
+		List<TeamDTO> teamList = mapper.findTeam(selectCriteria);
+		
+		return teamList;
+	}
 	
 	/* 팀 생성 */
 	@Override
