@@ -77,13 +77,14 @@ public class MemberController {
 		return "/main/adminMain";
 	}
 	
+	/* 로그인시 메인화면으로 리다이렉트 한다. */
 	@PostMapping("/login2")
 	public String login(@ModelAttribute MemberDTO member, Model model) throws LoginFailedException {
 		
 		if(member.getId().equals("admin")) {
 			model.addAttribute("loginMember", memberService.findMember(member));
 			
-			return "redirect:/member/login3"; 
+			return "redirect:/menu/main"; 
 		
 		} else {			
 			model.addAttribute("loginMember", memberService.findMember(member));
