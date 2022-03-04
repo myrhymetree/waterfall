@@ -11,7 +11,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 
 public interface EduService {
 
-	int selectTotalCount(Map<String, String> searchMap); 
+	int selectTotalCount(Map<String, Object> searchMap); 
 
 	List<EduDTO> selectEduList(SelectCriteria selectCriteria);
 

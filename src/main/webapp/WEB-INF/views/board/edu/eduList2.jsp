@@ -151,8 +151,7 @@ table, th, td {
                         </div>
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
-                                <textarea name="content" id="my-textarea" cols="30" rows="10"></textarea>
-                                <input type="file"  name="singleFile">
+                                <textarea name="body" id="my-textarea" cols="30" rows="10"></textarea>
                             </div>
                             <div class="my-modal-footer">
                                 <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
@@ -257,15 +256,16 @@ table, th, td {
                                </c:forEach> 
                             </tbody>
                         </table>
-                       
-                        <div class="paging mt-3">                           
+                        <div class="paging mt-3">
+                            
                         <!-- 페이지 처리  -->
-                       		 <jsp:include page="../../common/paging.jsp" />                       
+                        <jsp:include page="../../common/paging.jsp" />
+                        
+                        <!-- 검색폼  -->   
                         </div>
-                       
-                        <!-- 검색폼  -->                      
                         <div class="search-area">
-                          <form id="loginForm" action="${ pageContext.servletContext.contextPath }/edu/list" method="get">
+                          <form id="loginForm" action="${ pageContext.servletContext.contextPath }/edu/list"
+                          		method="get">
                              <div class="search-set mt-2">
                               <input type="hidden" name="currentPage" value="1">
                                 <select name="searchCondition" id="searchCondition">
@@ -305,28 +305,12 @@ table, th, td {
 								
 								const eduArray = Object.entries(eduDetail);
 								
-								const $fileNo = guideArray[13][1];
-								
 								console.log(eduArray[3][1]);
 								$("#read-no").val(eduArray[0][1]);
 								$("#read-title").val(eduArray[2][1]);
 								$("#read-content").val(eduArray[3][1]);
-								$("#read-writerNo").val(eduArray[8][1]);
-								$("#read-originalName").val(eduArray[14][1]);
 								$("#readModal").modal("show");
 								ex.children[2].innerText=eduArray[9][1];
-								
-								if($fileNo != null) {
-									const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/edu/download/" + $fileNo
-													      + "' class='dropdown-item' id='downloadedu'>다운로드</a>";
-													        
-									const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/edu/deleteFile/" + $fileNo
-														+ "' class='dropdown-item' id='downloadedu'>삭제</a>";
-									
-									$("#downloadarea").empty();
-									$("#downloadarea").append($downloadTag);
-									$("#downloadarea").append($deleteTag);
-								}
 								
 								}
 							}, error:function(data){
