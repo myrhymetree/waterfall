@@ -14,6 +14,7 @@ import com.greedy.waterfall.common.paging.Paging;
 import com.greedy.waterfall.common.paging.PagingDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.MyProjectDTO;
@@ -268,6 +269,14 @@ public class ProjectServiceImpl implements ProjectService {
 		return mapper.deleteProject(projectNo);
 	}
 	
+	/**
+	 * findProjectMainInfo : 프로젝트 메인페이지에 출력될 정보들을 조회한다.
+	 * @param 프로젝트의 번호를 전달받는다.
+	 * @return projectAutority : 프로젝트의 번호와 해당 프로젝트의 pm번호를 저장한다.
+	 * @return projectBoard : 해당프로젝트 메인페이지에 출력할 각 게시판의 최신 게시글을  5개씩 저장한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@Override
 	public Map<String, Object> findProjectMainInfo(int projectNo) {
 		Map<String, Object> projectMainInfo = new HashMap<String, Object>();
@@ -285,8 +294,11 @@ public class ProjectServiceImpl implements ProjectService {
 				.eduBoard(mapper.findMainBoardList(SearchCondition.setBoardCategory(2)))
 				.build();
 
+		ProjectInfoDTO projectInfo = mapper.findProjectMainInfo(projectNo);
+		
 		projectMainInfo.put("projectAutority", projectAutority);
 		projectMainInfo.put("projectBoard", projectBoard);
+		projectMainInfo.put("projectInfo", projectInfo);
 		
 
 		return projectMainInfo;

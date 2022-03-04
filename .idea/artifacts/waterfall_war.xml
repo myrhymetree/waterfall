@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="waterfall:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>waterfall</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="waterfall-1.0.war">
+      <element id="artifact" artifact-name="waterfall:war exploded" />
+    </root>
+  </artifact>
+</component>
