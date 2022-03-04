@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<!-- 등록 모달 encType="multipart/form-data"-->
+<!-- 등록 모달 -->
 <div class="modal" id="registModal">
     <form id="registForm" onsubmit="test()"  encType="multipart/form-data">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">

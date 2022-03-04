@@ -33,8 +33,6 @@ public interface GuideMapper {
 
 	int incrementGuideCount(int no);
 
-	GuideDTO selectGuideDetail(int no);
-
 	int insertGuideFile(GuideFileDTO guideFileDTO);
 
 	GuideDTO selectGuideDetailPlusFile(int no);
@@ -42,5 +40,7 @@ public interface GuideMapper {
 	GuideFileDTO findFile(int no);
 
 	int deleteGuideFile(int fileNumber);
+
+	Object searchGuideFile(int guideNo);
 
 }

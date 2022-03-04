@@ -116,30 +116,21 @@ public class GuideServiceImpl implements GuideService {
 		
 		int result = mapper.updateGuide(guide);
 		
+		GuideFileDTO file = guide.getFile();
+		System.out.println("GuideServiceImpl의 updateGuideFile의 file은 " + file);
+		
+		if(mapper.updateGuide(guide) > 0) {
+			
+			if(file != null) {
+				file.setRefBoardNo(guide.getNo());
+				mapper.insertGuideFile(file);
+			}
+		}
+		
 		if(!(result > 0)) {
 			throw new GuideModifyException("가이드 게시글 수정에 실패하셨습니다.");
 		}
 		
-	}
-
-	/**
-	 * selectGuideDetail : 게시글 상세 조회 결과를 반환하는 서비스 메소드
-	 * @param no : 상세 조회할 게시글 번호
-	 * @return guideDetail : 상세 조회한 게시글의 정보
-	 * 
-	 * @author 박성준
-	 */
-	@Override
-	public GuideDTO selectGuideDetail(int no) {
-		 int result = mapper.incrementGuideCount(no);
-	      
-	      GuideDTO guideDetail = new GuideDTO();
-	      
-	      if(result > 0) {
-	    	  guideDetail = mapper.selectGuideDetail(no);
-	      }
-	      
-	      return guideDetail;
 	}
 
 	/**
@@ -182,6 +173,13 @@ public class GuideServiceImpl implements GuideService {
 //		}
 		
 		return guideFileDTO;
+	}
+
+	@Override
+	public Object searchGuideFile(int guideNo) {
+		Object result = mapper.searchGuideFile(guideNo);
+		
+		return result;
 	}
 
 }

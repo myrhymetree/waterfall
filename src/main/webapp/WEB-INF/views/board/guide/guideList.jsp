@@ -101,7 +101,7 @@ table, th, td {
 /* 모달 */
 .modal-content {
   width: 635px;
-  height: 700px;
+  height: 720px;
   padding: 30px;
 }
 #title-write {
@@ -260,7 +260,7 @@ input::-webkit-search-results-decoration{
                               <div class="modal-dialog">
                                   <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
                                   <div class="modal-content" style="top: 172px">
-                                      <form action="${ pageContext.servletContext.contextPath }/guide/update" method="POST">
+                                      <form action="${ pageContext.servletContext.contextPath }/guide/update" method="POST" encType="multipart/form-data">
                                           <div class="my-modal-header mb-4">
                                               <label class="me-2" for="title-write">제목</label>
                                               <input type="text" id="read-title" name="title">
@@ -271,6 +271,11 @@ input::-webkit-search-results-decoration{
                                               <div class="my-textarea-div mb-3">
                                                   <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
                                               </div>
+                                              
+                                              <div id="uploadZone">
+									              <input type="file"  name="singleFile">
+									          </div>
+									          <br>
                                               
                                                  <span><label>첨부파일</label></span>
                                                     <div class="btn-group">
@@ -385,7 +390,7 @@ $(function() {
                   $("#read-writerNo").val(guideArray[8][1]);
                   $("#read-originalName").val(guideArray[14][1]);
                   $("#readModal").modal("show");
-                  ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
+                  ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스, count
                   
                   if($fileNo != null) {
                      
