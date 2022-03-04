@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.output.model.dao.OutputMapper;
+import com.greedy.waterfall.output.model.dto.OutputAttachmentDTO;
 import com.greedy.waterfall.output.model.dto.OutputDTO;
 import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
@@ -81,8 +82,10 @@ public class OutputServiceImpl implements OutputService{
 	 * @author 김서영
 	 */
 	@Override
-	public OutputDTO findOutputDetail(int taskNo) {
+	public Object findOutputDetail(int taskNo) {
 		
+		
+		Map<String, Object> map = new HashMap<String, Object>();
 		OutputDTO outputDetail = new OutputDTO();
 		ChildTaskDTO childTask = new ChildTaskDTO();
 		TaskDTO parentTask = childTask.getParentTask();
@@ -101,18 +104,25 @@ public class OutputServiceImpl implements OutputService{
 		/*하위업무 내 상위업무DTO에 조회해온 상위업무 정보를 저장*/
 		childTask.setParentTask(parentTask);
 		
+		
 		/*화면에서 클릭한 하위업무 번호로 번호에 해당하는 산출물 정보 저장*/
 		outputDetail = mapper.selectOutputDetail(taskNo);
 		
-		System.out.println("outputDetail : " +outputDetail);
+		map.put("childTask", childTask);
+		map.put("parentTask", parentTask);
+		map.put("outputDetail", outputDetail);
 		
 		/*산출물 DTO내 하위업무DTO에 상위업무 정보를 담은 하위업무를 저장*/
-		outputDetail.setChildTask(childTask);
+//		outputDetail.setChildTask(childTask);
+		
+		System.out.println("outputDetail : " +outputDetail);
 		
 		
 		
 		
-		return outputDetail;
+		return map;
+		
+		
 	}
 
 	/**
@@ -161,6 +171,30 @@ public class OutputServiceImpl implements OutputService{
 		System.out.println(projectList);
 		
 		return projectList;
+	}
+
+	@Override
+	public void registOutput(OutputDTO output) {
+		
+		int result = mapper.insertOutput(output);
+		
+		System.out.println("output insert 확인 : " + output);
+		
+		OutputAttachmentDTO attachmentDTO = output.getOutputFile();
+		
+		attachmentDTO.setTaskNo(output.getTaskNo());
+		int outputResult = 0;
+		if(result > 0) {
+			outputResult = mapper.insertOutputAttachment(attachmentDTO);
+			
+		}
+		
+		if(outputResult > 0) {
+			mapper.insertOutputHistory(output);
+		}
+		
+		
+		
 	}
 
 

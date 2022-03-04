@@ -181,6 +181,14 @@ input{
 	background-color: #D16B6B;
 	color: white;
 }
+.box2Title{
+	background-color : transparent;
+	color : white;
+	width : 30px;
+}
+#box2Name{
+	width : 150px;
+}
 </style>
 </head>
 <body>
@@ -220,7 +228,9 @@ input{
 			
 				<div class="box" id="outputbox2">
 					<div id="box2_border_top">
-						<p id="box2_header">&nbsp;&nbsp;ver&nbsp;<c:out value="${requestScope.outputDetail.outputVer}"/><c:out value="${requestScope.outputDetail.childTask.taskCategory.categoryName}" /></p>
+						<label id="box2_header">&nbsp;&nbsp;ver&nbsp;</label>
+						<input class="box2Title" type="text" name="box2Ver">
+						<input class="box2Title" type="text" id="box2Name" name="box2Name">
 						</div>
 						<div class="box2_body" id="box2_sq1">
 							<button id="deleteBtn" rel="float" class="button float" data-bs-toggle="modal" data-bs-target="#deleteModal"><i style='font-size: 24px' class='far'>&#xf2ed;</i>삭제</button>
@@ -253,7 +263,7 @@ input{
 		</main>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 	
-	<!-- Modal HTML  "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
+	<!-- 삭제 확인 Modal "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
               <div class="modal fade modal-dialog-scrollable" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
@@ -282,7 +292,38 @@ input{
                     </div>
                 </div>
             </div>
-                <!-- Modal HTML  -->
+                <!--삭제 확인 Modal -->
+                
+	<!-- 산출물 오류 확인 Modal "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
+              <div class="modal fade modal-dialog-scrollable" id="exceptionModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+                    <div class="modal-content" style="top: 200px">
+                        <div style="background-color: #212529;">
+                            <br>
+                        </div>
+                        <div class="modal-header">
+                            <span class="modal-title" id="exampleModalLabel"><strong>산출물</strong></span>
+                        </div> 
+                    <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->
+                        <form>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
+                                    <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->
+                                  <label for="clieck-point" class="col-form-label" style="margin-left: 35%; margin-top:5%;">산출물이 존재하지 않습니다.</label>
+                                </div>
+                            </div>
+                            <!-- 모달의 바디 끝  -->
+                            <div class="modal-footer">
+                                <button type="button" id="confirm" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+                                <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+                <!--산출물 오류 확인 Modal -->                
 	
 	
 	
@@ -309,7 +350,7 @@ input{
 		for(let i = 0; i < $labels.length; i++){
 			 console.log($labels[i])
 			 $($labels[i]).click (function() {
-				 const parentTaskName = $($parentLabels[i]).html();
+				 const parentTaskName = $($parentLabels[i]).text();
 				 const no = $($no[i]).val();
 				 console.log(no);
 				 console.log(parentTaskName);
@@ -320,31 +361,57 @@ input{
 					 data : {"taskNo" : no},
 					 success : function(data, textStatus, xhr){
 						 console.log(data);
-						 console.log(data.childTask.taskCategory.categoryName);
-						 console.log(data.project.name)
-						 console.log(data.childTask.parentTaskName)
-						 console.log(data.memberName.name)
-						 console.log(data.registedDate)
-						 console.log(data.content)
-						 console.log(data.childTask.parentTask.taskCategory.categoryName)
+						 
+						const parentTask = JSON.parse(data.parentTask);
+						const childTask = JSON.parse(data.childTask);
+						const outputDetail = JSON.parse(data.outputDetail);
+						
+						console.log(parentTask);
+						console.log(childTask);
+						console.log(outputDetail);
+						 
+						
+						 if(outputDetail == null){
+							 
+							 $("input[name=box2Ver]").val("");
+							 
+							 $("input[name=box2Name]").val("");
+							 
+							 $("input[name=projectName]").val(parentTask.projectName);
+							 
+							 $("input[name=registedMember]").val("");
+							 
+							 $("input[name=registedDate]").val("");
+							 
+							 $("textarea[name=content]").val("산출물이 존재하지 않습니다.");
+						 }
+						 $("input[name=parentTaskName]").val(childTask.parentTaskName);
+						 
+						 if(outputDetail != null){
+							 $("input[name=box2Ver]").val(outputDetail.outputVer);
+							 
+							 $("input[name=box2Name]").val(childTask.taskCategory.categoryName);
+							 
+							 $("input[name=projectName]").val(outputDetail.project.name);
+							 
+							 $("input[name=registedMember]").val(outputDetail.memberName.name);	 
+							 
+							 $("input[name=registedDate]").val(outputDetail.registedDate);
+							 
+							 $("textarea[name=content]").val(outputDetail.content);
+							 
+							 $("input[name=outputNo]").val(outputDetail.outputNo);
+						 }
+						 
+						 $("input[name=parentTaskName]").val(childTask.parentTask.taskCategory.categoryName);
 						 
 						 
-						 $("input[name=projectName]").val(data.project.name);
-						 
-						 $("input[name=parentTaskName]").val(data.childTask.parentTaskName);
-						 
-						 $("input[name=registedMember]").val(data.memberName.name);
-						 
-						 $("input[name=registedDate]").val(data.registedDate);
-						 
-						 $("textarea[name=content]").val(data.content);
-						 
-						 $("input[name=parentTaskName]").val(data.childTask.parentTask.taskCategory.categoryName);
-						 
-						 $("input[name=outputNo]").val(data.outputNo);
 						 
 					 }, error:function(data){
-						 console.log(data);
+						 
+						 $('#exceptionModal').on('shown.bs.modal', function () {
+							    $("#myModal").attr('aria-hidden', false);
+							});
 					 }
 				 })
 			 }); 

@@ -47,6 +47,10 @@ public class TaskServiceImpl implements TaskService{
 		
 		/* 상위업무 List */
 		List<TaskDTO> parentTaskList = mapper.selectParentTaskList(taskDTO);
+		List<ChildTaskDTO> defaultChildTaskList =  new ArrayList<ChildTaskDTO>();
+		for(int i = 0; i < parentTaskList.size(); i++) {
+			parentTaskList.get(i).setChildList(defaultChildTaskList);
+		}
 		System.out.println("parentTaskList 확인 : " + parentTaskList);
 		
 		List<ChildTaskDTO> childTaskList = new ArrayList<ChildTaskDTO>();
@@ -125,16 +129,31 @@ public class TaskServiceImpl implements TaskService{
 	 */
 	@Override
 	public void registTask(TaskRegistDTO taskRegistDTO) {
+		System.out.println(taskRegistDTO.getParentTaskCode());
+			
+			if(taskRegistDTO.getParentTaskCode().equals("NULL")) {
+				
+				int result = mapper.registTask(taskRegistDTO);
+				if(result > 0) {
+					mapper.registHistory(taskRegistDTO);
+				}
+				
+			/* 상위업무 등록 시 */	
+			} else {
+				int parentTaskNo = mapper.selectParentTaskNo(taskRegistDTO);
+				taskRegistDTO.setParentTaskNo(parentTaskNo);
+				int result = mapper.registTask(taskRegistDTO);
+				if(result > 0) {
+					mapper.registHistory(taskRegistDTO);
+				}
+				
+			}
+			
+			
+			
 		
-		int parentTaskNo = mapper.selectParentTaskNo(taskRegistDTO);
 		
-		taskRegistDTO.setParentTaskNo(parentTaskNo);
 		
-		int result = mapper.registTask(taskRegistDTO);
-		
-		if(result > 0) {
-			mapper.registHistory(taskRegistDTO);
-		}
 		
 		
 	}
@@ -173,11 +192,15 @@ public class TaskServiceImpl implements TaskService{
 	public ChildTaskDTO findTaskDetail(int taskNo) {
 		
 		ChildTaskDTO childTask = new ChildTaskDTO();
-		TaskDTO parnetTask = childTask.getParentTask();
+		TaskDTO parentTask = childTask.getParentTask();
 		
 		childTask = mapper.selectChildTask(taskNo);
+		int parentNo = childTask.getParentTaskNo();
+		parentTask = mapper.selectParentTask(parentNo);
 		
-		return null;
+		childTask.setParentTask(parentTask);
+		
+		return childTask;
 	}
 	
 	

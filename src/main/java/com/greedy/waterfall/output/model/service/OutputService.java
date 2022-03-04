@@ -10,11 +10,13 @@ public interface OutputService {
 
 	List<TaskDTO> findOutputTask(TaskDTO taskDTO);
 
-	OutputDTO findOutputDetail(int no);
+	Object findOutputDetail(int no);
 
 	void removeOutput(int no);
 
 	List<OutputProjectDTO> findOutputList();
+
+	void registOutput(OutputDTO output);
 
 
 }

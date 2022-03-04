@@ -1,5 +1,7 @@
 package com.greedy.waterfall.output.model.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
@@ -15,8 +17,8 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @ToString
+@Builder
 public class OutputDTO {
 	
 	private int outputNo;
@@ -31,6 +33,7 @@ public class OutputDTO {
 	private ChildTaskDTO childTask;
 	private OutputProjectDTO project;
 	private OutputAttachmentDTO outputFile;
+	private int taskNo;
 	
 	
 

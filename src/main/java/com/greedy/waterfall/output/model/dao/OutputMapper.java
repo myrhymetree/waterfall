@@ -3,6 +3,7 @@ package com.greedy.waterfall.output.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.greedy.waterfall.output.model.dto.OutputAttachmentDTO;
 import com.greedy.waterfall.output.model.dto.OutputDTO;
 import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
@@ -31,6 +32,12 @@ public interface OutputMapper {
 	List<OutputProjectDTO> selectAllProjectList();
 
 	int selectAlloutputCount(int projectNo);
+
+	int insertOutput(OutputDTO output);
+
+	int insertOutputAttachment(OutputAttachmentDTO attachmentDTO);
+
+	void insertOutputHistory(OutputDTO output);
 	
 	
 }
