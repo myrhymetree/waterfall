@@ -118,7 +118,7 @@ height: 24px;
 										<option value="pmName" ${ requestScope.selectCriteria.searchCondition eq "pmName"? "selected": "" }>PM이름</option>
 									</c:if>
 								</select> 
-								<input type="search" id="subsearchValue" name="subsearchValue" value="${ requestScope.selectCriteria.searchValue }">
+								<input type="search" id="subsearchValue" name="subsearchValue" value="${ requestScope.subselectCriteria.searchValue }">
 								<button class="btn btn-bs" type="submit"><i class="fas fa-search"></i></button>
 							</form>	
 						</div>
