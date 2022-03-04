@@ -393,11 +393,77 @@
 	  WHERE A.ISSUE_NO = #{ no }
 	</update>
 	
-	<update id="deleteIssue" parameterType="_int">
+	<update id="deleteIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
 		UPDATE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#deleteIssue() */
 		       TBL_ISSUE A
 		   SET A.ISSUE_STATUS = 'N'
 		 WHERE A.ISSUE_NO = #{ no }
 	</update>
+	
+	<insert id="registIssueHistory">
+		INSERT
+		  INTO TBL_ISSUE_HISTORY A
+		  (
+		    A.ISSUE_HISTORY_NO
+		  , A.ISSUE_PROGRESS_STATUS 
+		  , A.ISSUE_NO 
+		  , A.ISSUE_REGISTER
+		  , A.ISSUE_MANAGER
+		  , A.ISSUE_UPDATED_CONTENT 
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , '추가'
+		  )
+	</insert>
+	
+	<insert id="updateIssueHistory">
+		INSERT
+		  INTO TBL_ISSUE_HISTORY A
+		  (
+		    A.ISSUE_HISTORY_NO
+		  , A.ISSUE_PROGRESS_STATUS 
+		  , A.ISSUE_NO 
+		  , A.ISSUE_REGISTER
+		  , A.ISSUE_MANAGER
+		  , A.ISSUE_UPDATED_CONTENT 
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , '수정'
+		  )
+	</insert>
+	
+	<insert id="deleteIssueHistory">
+		INSERT
+		  INTO TBL_ISSUE_HISTORY A
+		  (
+		    A.ISSUE_HISTORY_NO
+		  , A.ISSUE_PROGRESS_STATUS 
+		  , A.ISSUE_NO 
+		  , A.ISSUE_REGISTER
+		  , A.ISSUE_MANAGER
+		  , A.ISSUE_UPDATED_CONTENT 
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		 , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , '삭제'
+		  )
+	</insert>
   
   </mapper>

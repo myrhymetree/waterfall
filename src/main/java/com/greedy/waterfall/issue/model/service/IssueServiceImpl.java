@@ -66,6 +66,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		boolean result = false;
 		
+		
 		List<IssueFileDTO> files = issue.getFile();
 		System.out.println("IssueServiceImpl의 registIssue의 files 는  " + files);
 		if(mapper.registIssue(issue) > 0) {
@@ -81,8 +82,9 @@ public class IssueServiceImpl implements IssueService {
 				if(count != files.size()) {
 					result = false;
 				} 
-				
 			}
+			/* 이슈 등록 시 히스토리 반영하기 위해서 mapper로 보내줌 */
+			mapper.registIssueHistory(issue);
 		}
 		return result;
 	}
@@ -146,6 +148,7 @@ public class IssueServiceImpl implements IssueService {
 				} 
 				
 			}
+			mapper.updateIssueHistory(issue);
 		}
 		
 //		if(!(result > 0)) {
@@ -156,11 +159,14 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public void removeGuide(int no) {
 		
-		int result = mapper.deleteIssue(no);
+		IssueDTO issue = mapper.selectIssueDetail(no);
+		
+		int result = mapper.deleteIssue(issue);
 		
 //		if(!(result > 0)) {
 //			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
 //		}
+		mapper.deleteIssueHistory(issue);
 	}
 }
 

@@ -41,7 +41,7 @@ public class IssueDTO {
 	private IssueTaskDTO task;				//TBL_TASK 테이블과 JOIN하는 경우 1:1 조인이 될 것이기  때문에 DTO타입으로 생성
 	private int taskNo;						//업무 번호 (어떤 업무에서 발생한 이슈인지 확인)
 	private IssueTaskCodeManageDTO taskCode;		//업무이름을 저장하기 위한 DTO
-	private String taskCodeManageCode;
+	private String taskCodeManageCode;				//업무 이름
 	private List<IssueFileDTO> file;				//File 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 GuideFileDTO로 생성
 	private int fileNo;						//첨부파일 번호
 	private String originalName;			//첨부파일 이름
