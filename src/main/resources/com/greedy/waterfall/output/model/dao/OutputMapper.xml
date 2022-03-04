@@ -256,7 +256,7 @@
 		  INTO TBL_OUTPUT_FILE 
 		     (
 		       OUTPUT_FILE_NO
-		     , OUPUT_FILE_PATH
+		     , OUTPUT_FILE_PATH
 		     , OUTPUT_ORIGIN_NAME
 		     , OUTPUT_RANDOM_NAME
 		     , OUTPUT_STATUS
@@ -294,6 +294,19 @@
 		     , #{ memberNo }
 		     )
 	</insert>
+	
+	<select id="selectOutputFile" resultMap="fileResultMap">
+		SELECT
+		       OUTPUT_FILE_NO
+		     , OUTPUT_FILE_PATH
+		     , OUTPUT_ORIGIN_NAME
+		     , OUTPUT_RANDOM_NAME
+		     , OUTPUT_STATUS
+		     , OUTPUT_REGISTED_DATE
+		     , REF_OUTPUT_NO
+		  FROM TBL_OUTPUT_FILE
+		 WHERE REF_OUTPUT_NO = #{ outputNo }
+	</select>
 	
 	
 </mapper>

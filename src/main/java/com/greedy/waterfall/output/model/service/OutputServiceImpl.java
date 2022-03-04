@@ -88,6 +88,7 @@ public class OutputServiceImpl implements OutputService{
 		Map<String, Object> map = new HashMap<String, Object>();
 		OutputDTO outputDetail = new OutputDTO();
 		ChildTaskDTO childTask = new ChildTaskDTO();
+		OutputAttachmentDTO outputFile =  new OutputAttachmentDTO();
 		TaskDTO parentTask = childTask.getParentTask();
 		
 		/* 화면에서 클릭한 하위업무의 번호를 통해 해당하는 하위업무의 정보를 저장한다.*/
@@ -108,6 +109,14 @@ public class OutputServiceImpl implements OutputService{
 		/*화면에서 클릭한 하위업무 번호로 번호에 해당하는 산출물 정보 저장*/
 		outputDetail = mapper.selectOutputDetail(taskNo);
 		
+		
+		if(outputDetail != null) {
+			int outputNo = outputDetail.getOutputNo();
+			/* 산출물 파일 정보 */
+			outputFile = mapper.selectOutputFile(outputNo);
+			
+		}
+		map.put("outputFile", outputFile);
 		map.put("childTask", childTask);
 		map.put("parentTask", parentTask);
 		map.put("outputDetail", outputDetail);
@@ -115,14 +124,12 @@ public class OutputServiceImpl implements OutputService{
 		/*산출물 DTO내 하위업무DTO에 상위업무 정보를 담은 하위업무를 저장*/
 //		outputDetail.setChildTask(childTask);
 		
-		System.out.println("outputDetail : " +outputDetail);
-		
-		
-		
+		System.out.println("outputFile : " + outputFile);
+		System.out.println("childTask : " + childTask);
+		System.out.println("parentTask : " + parentTask);
+		System.out.println("outputDetail : " + outputDetail);
 		
 		return map;
-		
-		
 	}
 
 	/**
@@ -195,6 +202,12 @@ public class OutputServiceImpl implements OutputService{
 		
 		
 		
+	}
+
+	@Override
+	public OutputAttachmentDTO findOutputFile(int outputNo) {
+		
+		return mapper.selectOutputFile(outputNo);
 	}
 
 

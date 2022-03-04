@@ -189,6 +189,7 @@ input{
 #box2Name{
 	width : 150px;
 }
+
 </style>
 </head>
 <body>
@@ -248,7 +249,8 @@ input{
 								<input class="box1_body" type="text" name="registedDate" /><br>
 								
 								<label class="box2_sql_body" >첨부파일</label>
-								<input class="box1_body" type="text" name="output" /><br>
+								<label id="downloadArea" class="box1_body dropdown-menu" >
+								</label><br>
 								
 								<label class="box2_sql_body" id="content">내용</label><br>
 								<textarea cols="75" rows="5"  style="font-size: 14px;margin-left:20px" name="content" ></textarea><br>
@@ -365,10 +367,16 @@ input{
 						const parentTask = JSON.parse(data.parentTask);
 						const childTask = JSON.parse(data.childTask);
 						const outputDetail = JSON.parse(data.outputDetail);
+						const outputFile = JSON.parse(data.outputFile);
+						if(outputFile != null){
+						const no = outputFile.outputNo;
+						}
 						
 						console.log(parentTask);
 						console.log(childTask);
 						console.log(outputDetail);
+						console.log(outputFile);
+						console.log(no);
 						 
 						
 						 if(outputDetail == null){
@@ -382,6 +390,8 @@ input{
 							 $("input[name=registedMember]").val("");
 							 
 							 $("input[name=registedDate]").val("");
+							 
+							 $("#downloadArea").empty()
 							 
 							 $("textarea[name=content]").val("산출물이 존재하지 않습니다.");
 						 }
@@ -401,9 +411,21 @@ input{
 							 $("textarea[name=content]").val(outputDetail.content);
 							 
 							 $("input[name=outputNo]").val(outputDetail.outputNo);
+							 
+						     $("input[name=parentTaskName]").val(childTask.parentTask.taskCategory.categoryName);
+							 
+			                 const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/output/download/" + no 
+			                                           + "' class='dropdown-item' id='downloadOutput'>다운로드</a>";
+			               	 /* const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/output/deleteFile/" + no
+			                 + "' class='dropdown-item' id='deleteOutputFile'>삭제</a>";   */
+			                 
+			                 console.log($downloadTag);
+			                     
+		                     /* $("#downloadArea").empty(); */
+		                     $("#downloadArea").append($downloadTag);
+		                    /*  $("#downloadArea").append($deleteTag); */
 						 }
 						 
-						 $("input[name=parentTaskName]").val(childTask.parentTask.taskCategory.categoryName);
 						 
 						 
 						 

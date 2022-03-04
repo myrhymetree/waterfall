@@ -38,6 +38,8 @@ public interface OutputMapper {
 	int insertOutputAttachment(OutputAttachmentDTO attachmentDTO);
 
 	void insertOutputHistory(OutputDTO output);
+
+	OutputAttachmentDTO selectOutputFile(int outputNo);
 	
 	
 }

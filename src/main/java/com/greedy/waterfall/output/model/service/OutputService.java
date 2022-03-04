@@ -2,6 +2,7 @@ package com.greedy.waterfall.output.model.service;
 
 import java.util.List;
 
+import com.greedy.waterfall.output.model.dto.OutputAttachmentDTO;
 import com.greedy.waterfall.output.model.dto.OutputDTO;
 import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
@@ -17,6 +18,8 @@ public interface OutputService {
 	List<OutputProjectDTO> findOutputList();
 
 	void registOutput(OutputDTO output);
+
+	OutputAttachmentDTO findOutputFile(int no);
 
 
 }

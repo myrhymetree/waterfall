@@ -2,6 +2,8 @@ package com.greedy.waterfall.output.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -121,11 +124,10 @@ public class OutputController {
 		
 		Map<String, Object> map = (Map<String, Object>) outputService.findOutputDetail(taskNo);
 		
-		System.out.println("outputDetail : " +map);
-		
 		TaskDTO parentTask = (TaskDTO) map.get("parentTask");
 		ChildTaskDTO childTask = (ChildTaskDTO) map.get("childTask");
 		OutputDTO outputDetail = (OutputDTO) map.get("outputDetail");
+		OutputAttachmentDTO outputFile = (OutputAttachmentDTO) map.get("outputFile");
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
@@ -136,6 +138,7 @@ public class OutputController {
 		mv.addObject("parentTask", mapper.writeValueAsString(parentTask));
 		mv.addObject("childTask", mapper.writeValueAsString(childTask));
 		mv.addObject("outputDetail", mapper.writeValueAsString(outputDetail));
+		mv.addObject("outputFile", mapper.writeValueAsString(outputFile));
 		mv.setViewName("jsonView");
 		
 		
@@ -235,7 +238,24 @@ public class OutputController {
 		
 		return "redirect:/task/timeline";
 		
-		
 	}
+	
+	@GetMapping("/download/{outputNo}")
+	public ModelAndView downloadFile(ModelAndView mv, @PathVariable("outputNo") String refoutputNo) throws IOException {
+		int outputNo = Integer.parseInt(URLDecoder.decode(refoutputNo, "UTF-8"));
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		OutputAttachmentDTO file = outputService.findOutputFile(outputNo);
+		fileInfo.put("filePath", file.getFilePath());
+		fileInfo.put("originName", file.getOriginName());
+		fileInfo.put("randomName", file.getRandomName());
+		mv.addObject("downloadFile", fileInfo);
+		mv.setViewName("fileDownloadView");
+		
+		return mv;
+	}
+	
+	
 
 }
