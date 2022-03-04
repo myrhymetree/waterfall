@@ -52,7 +52,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
 
-
 <style>
 #box1header {
 	margin: 30px;
@@ -169,7 +168,7 @@ a {
 .layer {
 	display: none;
 	width: 850px;
-	height: 650px;
+	height: 670px;
 	background: #fff;
 	border: 1px solid black;
 	position: absolute;
@@ -292,7 +291,8 @@ ul {
 	background-color: #3E3C3C;
 	color : white;
 	padding:10px;
-	border-radius:10px;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
 }
 .button {
 			@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
@@ -364,6 +364,60 @@ ul {
 	border-radius:5px;
 	border-width : 1px;
 	
+}
+#outputModal.modal-overlay {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+	backdrop-filter: blur(0.5px);
+	-webkit-backdrop-filter: blur(0.5px);
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+}
+#outputModal .modal-window {
+	background: rgba( 69, 139, 197, 0.70 );
+	box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+	backdrop-filter: blur( 13.5px );
+	-webkit-backdrop-filter: blur( 13.5px );
+	border-radius: 10px;
+	border: 1px solid rgba( 255, 255, 255, 0.18 );
+	width: 400px;
+	height: 500px;
+	position: relative;
+	top: -100px;
+	padding: 10px;
+        }
+#outputModal .title {
+	padding-left: 10px;
+	display: inline;
+	text-shadow: 1px 1px 2px gray;
+	color: white;
+            
+}
+#outputModal .title h2 {
+	display: inline;
+}
+#outputModal .close-area {
+	display: inline;
+	float: right;
+	padding-right: 10px;
+	cursor: pointer;
+	text-shadow: 1px 1px 2px gray;
+	color: white;
+}
+        
+#outputModal .content-area {
+	margin-top: 20px;
+	padding: 0px 10px;
+	text-shadow: 1px 1px 2px gray;
+	color: white;
 }
 
 </style>
@@ -547,7 +601,7 @@ ul {
 					<p>
 						<label>이슈 등록</label>
 							<label id="addIssue">
-							<button>등록</button>
+							<button class="button float">등록</button>
 							<input type="hidden" name="parentTaskNo">
 							</label>
 							
@@ -556,10 +610,11 @@ ul {
 					<p>
 						<label>산출물 등록</label>
 							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
-								<input id="addOutput" type="file" name="outputFile">
+								<button id="addOutput1" class="button float">등록</button>
+								<input id="outputParentTaskNo" type="hidden" name="parentTaskNo">
 							</c:if>
 							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
-								<input id="addOutput" type="file" name="outputFile" readonly>
+								<input id="outputFileName1" type="file" name="outputFile" readonly>
 							</c:if>
 					</p>
 				</div>
@@ -604,18 +659,19 @@ ul {
 					<p>
 						<label>이슈 등록</label>
 							<label id="addIssue">
-							<button>등록</button>
+							<button class="button float">등록</button>
 							<input type="hidden" name="childTaskNo">
 							</label>
 					</p>
 					
 					<p>
-						<p>산출물 등록</p>
+						<label>산출물 등록</label>
 							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
-								<input id="addOutput" type="file" name="outputFile">
+								<button id="addOutput2" class="button float">등록</button>
+								<input id="outputChildTaskNo" type="hidden" name="childTaskNo">
 							</c:if>
 							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
-								<input id="addOutput" type="file" name="outputFile" readonly>
+								<input id=outputFileName2 type="file" name="outputFile" readonly>
 							</c:if>
 					</p>
 					</div>
@@ -626,7 +682,62 @@ ul {
 	</div>
 	<%--업무 조회 모달 끝 --%>
 	
+	<%-- 산출물 등록 모달 --%>
+	<form action="${ pageContext.servletContext.contextPath }/output/regist" method="post" encType="multipart/form-data">
+	<div id="outputModal" class="modal-overlay">
+		<div class="modal-window">
+			<div class="title">
+				<h4>산출물 등록</h4>
+			</div>
+			<div class="content-area">
+				<textarea name="content" rows="8" cols="45"></textarea>
+			</div>
+			<p>파일 업로드</p>
+			<input id="addOutput" type="file" name="outputFile" required>
+			<div class="close-area">
+				<button type="submit" id="submitOutput" class="button float">등록</button>
+				<input type="button" id="closeOutput" class="button float" value="돌아가기">
+				<input type="hidden" id="outputModalTaskNo" name="taskNo">
+			</div>
+		</div>
+	</div>
+	</form>
+	
+	
 	<script>
+	<%-- 상위업무 산출물 --%>
+	$("#addOutput1").click(function(){
+		if($("#outputModal").css("display")=="none"){
+			$("#outputModal").css("display", "flex");
+			$("#readModal").css("display", "none");
+			
+		}
+		
+		const taskNo = Number($("#outputParentTaskNo").val());
+		$("#outputModalTaskNo").val(Number(taskNo));
+		console.log(Number(taskNo));
+		console.log($("#outputModalTaskNo").val());
+	});
+	
+	<%-- 하위업무 산출물 --%>
+	$("#addOutput2").click(function(){
+		if($("#outputModal").css("display")=="none"){
+			$("#outputModal").css("display", "flex");
+			$("#readModal").css("display", "none");
+			
+		}
+		
+		const taskNo = $("#outputChildTaskNo").val();
+		$("#outputModalTaskNo").val(Number(taskNo));
+		console.log(Number(taskNo));
+		console.log($("#outputModalTaskNo").val());
+	});
+	
+	$("#closeOutput").click(function(){
+		$("#readModal").css("display", "block");
+		$("#outputModal").css("display", "none");
+	})
+	
 	<%-- hover event 추가 --%>
 		$(".folder_toggle").hover(function() {
 			$(this).css({
@@ -677,7 +788,85 @@ ul {
 		});
 	<%-- hover 이벤트 끝 --%>
 	
-		<%--Gantt Chart data--%>
+
+		// 모달 이벤트
+		$(".layerPopup").click(function() {
+			$("#addModal").css("display", "block");
+			$(".layer-bg").css("display", "block");
+			
+			
+		});
+		$(".layer #close").click(function() {
+			$("#addModal").css("display", "none");
+			$(".layer-bg").css("display", "none");
+		});
+		
+		$(".layer #close").click(function() {
+			$("#readModal").css("display", "none");
+			$(".layer-bg").css("display", "none");
+		});
+		
+		
+		/* 상세조회 이벤트 */
+		const $labels = document.querySelectorAll("#childTask label");
+		console.log($labels);
+		const $taskNo = document.querySelectorAll("#childTask input");
+		console.log($taskNo);
+		
+		for(let i = 0; i < $labels.length; i++){
+			const taskNo = $($taskNo[i]).val();
+			console.log(taskNo);
+			$($labels[i]).click(function() {
+				$.ajax({
+					url : "/waterfall/task/detail",
+					type : "get",
+					data : {"taskNo" : taskNo},
+					success : function(data, textStatus, xhr) {
+						const taskDetail = JSON.parse(data.taskDetail);
+						
+						//상위업무
+						$("input[name=parentTaskName]").val(taskDetail.parentTask.taskCategory.categoryName);
+						
+						$("input[name=parentTaskManager]").val(taskDetail.parentTask.managerName);
+						
+						$("input[name=parentStartDate]").val(taskDetail.parentTask.startDate);
+						
+						$("input[name=parentDeadline]").val(taskDetail.parentTask.deadline);
+						
+						$("input[name=parentImportance]").val(taskDetail.parentTask.importance);
+						
+						$("input[name=parentProgress]").val(taskDetail.parentTask.progression);
+						
+						$("input[name=parentTaskNo]").val(taskDetail.parentTask.taskNo);
+						
+						//하위 업무
+						$("input[name=childTaskName]").val(taskDetail.taskCategory.categoryName);
+						
+						$("input[name=childTaskManager]").val(taskDetail.managerName);
+						
+						$("input[name=childStartDate]").val(taskDetail.startDate);
+						
+						$("input[name=childDeadline]").val(taskDetail.deadline);
+						
+						$("input[name=childImportance]").val(taskDetail.importance);
+						
+						$("input[name=childProgress]").val(taskDetail.progression);
+						
+						$("input[name=childTaskNo]").val(taskDetail.taskNo);
+						
+						$("#readModal").css("display", "block");
+						$(".layer-bg").css("display", "block");
+						
+					}, error:function(data){
+						console.log(data);
+					}
+					
+				});
+			});
+		}
+		/* 상세조회 이벤트 끝 */
+		
+	<%--Gantt Chart data--%>
 
 		var parentTaskArray = new Array();
 		<c:forEach items="${parentTaskList}" var="task" varStatus ="status">
@@ -813,89 +1002,6 @@ ul {
 			language : 'en'
 		});
 		console.log(gantt_chart);
-
-		// 모달 이벤트
-		$(".layerPopup").click(function() {
-			$("#addModal").css("display", "block");
-			$(".layer-bg").css("display", "block");
-			
-			
-		});
-		$(".layer #close").click(function() {
-			$("#addModal").css("display", "none");
-			$(".layer-bg").css("display", "none");
-		});
-		
-		$(".layer #close").click(function() {
-			$("#readModal").css("display", "none");
-			$(".layer-bg").css("display", "none");
-		});
-		
-		
-		
-		
-		
-		/* 상세조회 이벤트 */
-		const $labels = document.querySelectorAll("#childTask label");
-		console.log($labels);
-		const $taskNo = document.querySelectorAll("#childTask input");
-		console.log($taskNo);
-		
-		for(let i = 0; i < $labels.length; i++){
-			const taskNo = $($taskNo[i]).val();
-			console.log(taskNo);
-			$($labels[i]).click(function() {
-				$.ajax({
-					url : "/waterfall/task/detail",
-					type : "get",
-					data : {"taskNo" : taskNo},
-					success : function(data, textStatus, xhr) {
-						const taskDetail = JSON.parse(data.taskDetail);
-						console.log(taskDetail);
-						console.log(taskDetail.parentTask.managerName);
-						console.log(taskDetail.managerName);
-						console.log(taskDetail.parentTask.startDate);
-						
-						//상위업무
-						$("input[name=parentTaskName]").val(taskDetail.parentTask.taskCategory.categoryName);
-						
-						$("input[name=parentTaskManager]").val(taskDetail.parentTask.managerName);
-						
-						$("input[name=parentStartDate]").val(taskDetail.parentTask.startDate);
-						
-						$("input[name=parentDeadline]").val(taskDetail.parentTask.deadline);
-						
-						$("input[name=parentImportance]").val(taskDetail.parentTask.importance);
-						
-						$("input[name=parentProgress]").val(taskDetail.parentTask.progression);
-						
-						$("input[name=parentTaskNo]").val(taskDetail.parentTask.taskNo);
-						
-						//하위 업무
-						$("input[name=childTaskName]").val(taskDetail.taskCategory.categoryName);
-						
-						$("input[name=childTaskManager]").val(taskDetail.managerName);
-						
-						$("input[name=childStartDate]").val(taskDetail.startDate);
-						
-						$("input[name=childDeadline]").val(taskDetail.deadline);
-						
-						$("input[name=childImportance]").val(taskDetail.importance);
-						
-						$("input[name=childProgress]").val(taskDetail.progression);
-						
-						$("input[name=childTaskNo]").val(taskDetail.taskNo);
-						
-						$("#readModal").css("display", "block");
-						$(".layer-bg").css("display", "block");
-						
-					}, error:function(data){
-						console.log(data);
-					}
-					
-				});
-			});
-		}
 	</script>
 	
 </body>

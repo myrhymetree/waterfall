@@ -244,6 +244,7 @@
 	<select id="selectChildTask" resultMap="childTaskResultMap">
 		SELECT
 		       A.TASK_REF_NO
+		     , A.TASK_NO
 		     , A.TASK_START_DATE
 		     , A.TASK_DEADLINE
 		     , A.TASK_PROGRESSION
@@ -266,6 +267,7 @@
 	<select id="selectParentTask" resultMap="taskResultMap">
 		SELECT
 		       A.TASK_START_DATE
+		     , A.TASK_NO
 		     , A.TASK_DEADLINE
 		     , A.TASK_PROGRESSION
 		     , A.TASK_PROGRESS_STATUS

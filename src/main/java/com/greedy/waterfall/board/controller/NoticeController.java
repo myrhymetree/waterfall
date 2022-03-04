@@ -163,7 +163,7 @@ public class NoticeController {
 	 */
 	@PostMapping("/regist")
 	public String registNotice(@ModelAttribute NoticeDTO notice, HttpServletRequest request, RedirectAttributes rttr
-			,@RequestParam MultipartFile noticeFile, HttpSession session) {
+			,@RequestParam("noticeFile") MultipartFile noticeFile, HttpSession session) {
 		
 		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();

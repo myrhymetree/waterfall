@@ -31,6 +31,7 @@ public class TaskDTO {
 	private String typeNo;				//1 : 일반 2: 마일스톤
 	private String taskStatus;			//업무 삭제여부
 	private int projectNo;				//업무에 해당하는 프로젝트번호
+	private String projectName;			//업무에 해당하는 프로젝트명
 	private int managerNo;				//업무 담당하는 사람 번호
 	private String managerName;
 	private String taskCode;			//업무코드
