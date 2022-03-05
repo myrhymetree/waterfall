@@ -58,8 +58,8 @@
                              <col style="width:5%"/>
                              <col style="width:15%"/>
                              <col style="width:15%"/>
-                             <col style="width:15%"/>
-                             <col style="width:10%"/>
+                             <col style="width:12.5%"/>
+                             <col style="width:12.5%"/>
                              <col style="width:10%"/>
                              <col style="width:10%"/>
                              <col style="width:10%"/>
@@ -71,11 +71,11 @@
                                  <th style="text-align: center;">이슈 명</th>
                                  <th style="text-align: center;">업무 명</th>
                                  <th style="text-align: center;">발생일</th>
+                                 <th style="text-align: center;">마감일</th>
                                  <th style="text-align: center;">상태</th>
                                  <th style="text-align: center;">중요도</th>
                                  <th style="text-align: center;">이슈제기자</th>
                                  <th style="text-align: center;">이슈담당자</th>
-                                 <th style="text-align: center;">해결완료</th>
                              </tr>
                          </thead>
                          <tbody id="tbody">
@@ -85,11 +85,11 @@
                                  <td><c:out value="${ issue.name }"/></td>
                                  <td><c:out value="${ issue.taskCode.taskCategoryName }"/></td>
                                  <td><c:out value="${ issue.createdDate }"/></td>
+                                 <td><c:out value="${ issue.deadline }"/></td>
                                  <td><c:out value="${ issue.progressStatus }"/></td>
                                  <td><c:out value="${ issue.importance }"/></td>
                                  <td><c:out value="${ issue.register.name }"/></td>
                                  <td><c:out value="${ issue.manager.name }"/></td>
-                                 <td><button class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" style="width:45pt;height:25pt; vertical-align: middle;">완료</button></td>
                              </tr>
 							</c:forEach>
                          </tbody>

@@ -278,6 +278,7 @@ input::-webkit-search-results-decoration{
 									          <br>
                                               
                                                  <span><label>첨부파일</label></span>
+                                                 	<!-- btn-group 포함 총 8줄이 한 세트인 버튼 그룹 부트스트랩 입니다   -->
                                                     <div class="btn-group">
                                                         <input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
                                                         <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
@@ -308,7 +309,7 @@ input::-webkit-search-results-decoration{
                         <div class="search-area">
                            <form id="loginForm" action="${ pageContext.servletContext.contextPath }/guide/list" method="get">
                             <div class="search-set mt-2">
-                            <input type="hidden" name="currentPage" value="1">
+                            	<input type="hidden" name="currentPage" value="1">
                                 <select name="searchCondition" id="searchCondition">
                                     <option value="title" 
                                        ${ requestScope.selectScope.selectCriteria.searchCondition eq "title"? "selected": "" }>제목</option>
@@ -318,7 +319,6 @@ input::-webkit-search-results-decoration{
                                 <input type="search" id="searchvalue" name="searchValue"
                                    value="<c:out value="${ requestScope.selectCriteria.searchValue }" />">
                                 <button type="submit" id="submitButton"><i class="fas fa-search"></i></button>
-                                 
                             </div>
                             </form>
                         </div>

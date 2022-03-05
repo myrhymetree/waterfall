@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -254,7 +255,7 @@ public class IssueController {
 	}
 	
 	@PostMapping("/admin/update")
-	public ModelAndView adminModifyIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
+	public ModelAndView adminModifyIssue(@ModelAttribute @Nullable IssueDTO issue, HttpServletRequest request,
 			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws GuideModifyException {
 		
 		/* 파일 업로드 */
@@ -547,7 +548,7 @@ public class IssueController {
 	}
 	
 	@PostMapping("/update")
-	public ModelAndView modifyIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
+	public ModelAndView modifyIssue(@ModelAttribute @Nullable IssueDTO issue, HttpServletRequest request,
 			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws GuideModifyException {
 		
 		/* 파일 업로드 */

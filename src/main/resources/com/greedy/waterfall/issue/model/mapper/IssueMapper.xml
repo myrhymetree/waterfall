@@ -382,14 +382,26 @@
 	    SET A.ISSUE_NO = #{ no }
 	      , A.ISSUE_NAME = #{ name }  
 	      , A.ISSUE_CREATED_DATE = #{ createdDate }
+	      <if test="completedDate != null">
+	      , A.ISSUE_COMPLETED_DATE = #{ completedDate }
+	      </if>
+	      <if test="completedDate == null">
+	      , A.ISSUE_COMPLETED_DATE = NULL
+	      </if>
 	      , A.ISSUE_PROGRESS_STATUS = #{ progressStatus }
 	      , A.ISSUE_IMPORTANCE = #{ importance }
 	      , A.ISSUE_CONTENT = #{ content }
 	      , A.ISSUE_ANSWER = #{ answer }
-	      , A.ISSUE_DEADLINE = #{ deadline } 
-	      , A.ISSUE_COMPLETED_DATE = #{ completedDate } 
+	      <if test="deadline != null">
+	      , A.ISSUE_DEADLINE = #{ deadline }
+	      </if>
 	      , A.ISSUE_REGISTER = #{ registerNo }
-	      , A.ISSUE_MANAGER = #{ managerNo }
+	      <if test="managerNo >= 1">
+	      , A.ISSUE_MANAGER = #{ managerNo } 
+	      </if>  
+	       <if test="1 > managerNo"> 
+	      , A.ISSUE_MANAGER = NULL
+	      </if>
 	  WHERE A.ISSUE_NO = #{ no }
 	</update>
 	
@@ -465,5 +477,89 @@
 		  , '삭제'
 		  )
 	</insert>
+	
+	<insert id="writeRegistedIssueHistory">
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_NAME
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  , A.CONTENT_TYPE
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || '이슈' || ']' || ' ' || #{ issueName } || '을/를' || ' ' || '[' || '추가' || ']' || '했습니다'
+		  , '이슈'
+		  , #{ projectNo }
+		  , #{ registerNo } 
+		  , '추가'
+		  )
+	</insert>
+	
+	<insert id="writeUpdatedIssueHistory">
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_NAME
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  , A.CONTENT_TYPE
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || '이슈' || ']' || ' ' || #{ issueName } || '을/를' || ' ' || '[' || '수정' || ']' || '했습니다'
+		  , '이슈'
+		  , #{ projectNo }
+		  , #{ registerNo } 
+		  , '수정'
+		  )
+	</insert>
+	
+	<insert id="writeDeletedIssueHistory">
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_NAME
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  , A.CONTENT_TYPE
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || '이슈' || ']' || ' ' || #{ issueName } || '을/를' || ' ' || '[' || '삭제' || ']' || '했습니다'
+		  , '이슈'
+		  , #{ projectNo }
+		  , #{ registerNo } 
+		  , '삭제'
+		  )
+	</insert>
+	
+	<select id="readIssueHistory">
+		SELECT
+		       B.MEMBER_ID
+		     , A.UPDATED_DATE
+		     , A.CATEGORY_NAME
+		     , B.MEMBER_NAME
+		     , A.CONTENT
+		  FROM TBL_ENTIRE_HISTORY A
+		  JOIN TBL_MEMBER B ON (A.REGISTER_NO = B.MEMBER_NO)
+		 ORDER BY 2 DESC;
+	</select>
   
   </mapper>

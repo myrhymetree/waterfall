@@ -2,6 +2,8 @@ package com.greedy.waterfall.issue.model.dto;
 
 import java.util.List;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.greedy.waterfall.board.model.dto.FileDTO;
 
@@ -26,11 +28,11 @@ public class IssueDTO {
 	private String progressStatus;			//진행상태
 	private String importance;				//중요도
 	private String content;					//이슈내용
-	private String answer;					//이슈답변
+	@Nullable private String answer;					//이슈답변
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
-	private java.sql.Date deadline;		//이슈마감일
+	@Nullable private java.sql.Date deadline;		//이슈마감일
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss")
-	private java.sql.Date completedDate;	//이슈종료일
+	@Nullable private java.sql.Date completedDate;	//이슈종료일
 	private String status;					//이슈 삭제여부
 	private IssueRegisterDTO register;			//TBL_MEMBER 테이블과 JOIN하는 경우 1:1 조인이 될 것이기  때문에 DTO타입으로 생성
 	private IssueManagerDTO manager;
