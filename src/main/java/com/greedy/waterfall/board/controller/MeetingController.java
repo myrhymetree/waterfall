@@ -133,6 +133,7 @@ public class MeetingController {
 		mv.addObject("meeting", mapper.writeValueAsString(meeting));
 		mv.setViewName("jsonView");
 		
+		
 		return mv;
 	}
 	
