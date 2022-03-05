@@ -170,8 +170,8 @@ function backButton_click() {
                   $("#manager").empty();
                   /* manager에 select문에 기본값으로 주기 */
                   if(issueDetail.manager == null) {
-                	 /* null로는 컨트롤러로 값을 전달할 수 없기 때문에 -1을 전달함, -1을 갖고 mapper에서 null로 업데이트함 */
-                     const $managerName = "<option value = '"  + "-1" +  "' selected >" + ' ' + "</option>";
+                	 /* null로는 컨트롤러로 값을 전달할 수 없기 때문에 0을 전달함, 0을 갖고 mapper에서 null로 업데이트함 */
+                     const $managerName = "<option value = '"  + "0" +  "' selected >" + ' ' + "</option>";
                      $("#manager").append($managerName);
                   } else {
                      const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";

@@ -211,6 +211,7 @@ public class IssueController {
 		}
 		
 		String message = "";
+		
 		if(issueService.registIssue(issue)) {
 			message = "게시글을 등록했습니다.";
 			System.out.println(message);

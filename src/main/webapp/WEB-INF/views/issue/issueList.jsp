@@ -173,7 +173,6 @@
 	                  $("#read-importance").val(issueDetail.importance);
 	                  $("#read-content").val(issueDetail.content);
 	                  $("#read-answer").val(issueDetail.answer);
-	                  $("#read-completedDate").val(issueDetail.completedDate);
 	                  $("#read-projectNo").val(issueDetail.projectNo);
 	                  $("#read-taskNo").val(issueDetail.taskNo);
 	                  $("#myModal").modal("show");
@@ -196,6 +195,35 @@
 
 						  }
 	                  }
+	                  
+	                  /* ------------ 완료 여부에 따라서 이슈 종료일을 결정하기 위한 로직  ------------------ */
+	                  $("#completedDateZone").empty();	// 행을 클릭할 때 마다 버튼이 생성되는걸 방지하기 위해서 초기화
+	                  if(issueDetail.completedDate == null) {	//종료일이 null 일 때
+	              		$("#read-progressStatus").change(function(){
+	              			$("#completedDateZone").empty();
+	              			if($("#read-progressStatus").val() == "완료") {
+	              				 $completedDate = "<div class='col-2 center' id='cZone'><label for='read-completedDate'>종료일</label></div><div class='col-4' id='cZone2'><input type='date' id='read-completedDate' name='completedDate' required></div>";
+	              			     $("#completedDateZone").append($completedDate);
+	              			     
+	              			} else {	//progressStatus의 value가 '완료'가 아닐 때
+	              				$("#completedDateZone *").remove();		//div영역에 있는 모든것을 날림
+	              			}
+	              		});
+	              	} else {
+	              		$completedDate = "<div class='col-2 center' id='cZone'><label for='read-completedDate'>종료일</label></div><div class='col-4' id='cZone2'><input type='date' id='read-completedDate' name='completedDate' required></div>";
+	           	     	$("#completedDateZone").append($completedDate);
+	              		$("#read-completedDate").val(issueDetail.completedDate);
+	              		
+	              		$("#read-progressStatus").change(function(){
+	              			if($("#read-progressStatus").val() == "대기중") {
+	              				console.log("이슈종료일은 : " + issueDetail.completedDate)
+	              				$("#completedDateZone *").remove();
+	              			} else if($("#read-progressStatus").val() == "처리중") {
+	              				$("#completedDateZone *").remove();
+	              			}
+	              		});
+	              	}
+	                /*-----------------------------------------------------------------------------------  */  
 	              }, 
 	              error:function(data) {
 	                  console.log(data);

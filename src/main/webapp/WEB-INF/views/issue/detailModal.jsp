@@ -45,7 +45,7 @@
                        		<div class="col-2 center"><label for="read-createdDate">등록일</label></div>
                             <div class="col"><input type="date" id="read-createdDate" name="createdDate"></div>
                        
-                            <div class="col-2 center"><label for="read-deadline">처리일</label></div>
+                            <div class="col-2 center"><label for="read-deadline">마감일</label></div>
                             <div class="col-4"><input type="date" id="read-deadline" name="deadline"></div>
                         </div>
 
@@ -72,9 +72,11 @@
                                 <option value="보통">보통</option>
                                 <option value="긴급">긴급</option>
                             </select>
-                            
                             </div>
                        </div>
+                       
+                       <div class="mt-4 row" id="completedDateZone">
+					   </div>
 						
                         <div class="mt-4 row">
                             <div class="col-2 center" style="vertical-align: top;"><label>이슈내용</label></div>
