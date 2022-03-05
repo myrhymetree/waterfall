@@ -222,6 +222,18 @@ textarea {
 .my-modal-footer button:first-child {
   margin-right: 5px;
 }
+/* 수정 모달 */
+.my-modal-footer-read {
+  text-align: right;
+}
+.my-modal-footer-read button {
+  color: #000;
+  background: none;
+  padding: 5px 25px;
+}
+.my-modal-footer-read button:first-child {
+  margin-right: 5px;
+}
 </style>
 </head>
 <body>
@@ -297,6 +309,35 @@ textarea {
 			</div>
 		</div>
 		
+		<!-- 부서 수정 모달 -->
+		<div class="modal fade" id="readModal" data-bs-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+				<div class="modal-content" style="top: 172px">
+					<form action="${ pageContext.servletContext.contextPath }/company/dept/update" method="POST">
+						<div class="my-modal-header mb-3">
+							<h3>부서 수정</h3>
+						</div>
+						<div class="my-modal-body">
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="name-read">부서명</label>
+								<input type="text" id="name-read" name="name">
+							</div>
+							<div class="my-modal-input mb-4">
+								<label class="me-2" for="code-read">부서코드</label>
+								<input type="text" id="code-read" name="code">
+							</div>
+						</div>
+						<div class="my-modal-footer-read">
+							<button type="submit" class="btn btn-secondary">수정</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
 		<main>
 			<div id="output_header">
 				<i style='font-size: 24px' class='fas'>&#xf4fe;</i>부서관리
@@ -306,6 +347,7 @@ textarea {
 						부서 관리 <br>
 						<hr style="margin: 0px">
 						<div id="box1_body">
+							
 							<!-- 줄바꿈 방지 -->
 							<div style="white-space: nowrap">
 								<button  rel="float" class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#writeModal">
@@ -360,15 +402,50 @@ textarea {
 							<!-- 부서 및 팀 조회 -->
 							<c:forEach var="dept" varStatus="status" items="${ requestScope.deptList }">
 								<ul id="deptName" class="folder_toggle" data-toggle="collapse" data-target="#demo${ status.index }" style="list-style: none">
-									<li><i style='font-size: 24px' class='fas'>&#xf07b;</i><c:out value="${ dept.name }" />
+									<li style="position: relative; line-height: 16px"><i style='font-size: 24px' class='fas'>&#xf07b;</i>
+										<c:out value="${ dept.name }" />
+										<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
+											<button class="button float modDept" id="dept-add" data-bs-toggle="modal" data-bs-target="#readModal">
+												<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
+											</button>
+											<button class="button float" id="dept-delete">
+												<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
+											</button>
+										</div>
 										<c:forEach var="team" varStatus="st" items="${ requestScope.teamList }">
-											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: 10px; font-size: 1rem">
-												<li><c:out value="${ team.name }" /></li>
+											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: 10px; font-size: 1.1rem">
+												<li style="position: relative; line-height: 30px"><c:out value="${ team.name }" />
+													<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
+													<button class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#readTeamModal">
+														<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
+													</button>
+													<button class="button float" id="dept-delete">
+														<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
+													</button>
+													</div>
+												</li>
 											</ul>
 										</c:forEach>
 									</li>
 								</ul>
 							</c:forEach>
+							<!-- 부서 -->
+							<%-- <c:forEach var="dept" varStatus="status" items="${ requestScope.deptList }">
+								<ul id="depts" class="folder_toggle" data-toggle="collapse" data-target="#demo${ status.index }" style="list-style: none">
+									<li id="deptNameId"><i style='font-size: 24px' class='fas'>&#xf07b;</i><c:out value="${ dept.name }" />
+										<!-- 팀 -->
+										<c:forEach var="team" varStatus="st" items="${ requestScope.deptList[ status.index ].teamDTOList }">
+											<nav id="demo${ status.index }" class="collapse">		
+												<ul id="teams${ st.index }" style="list-style: none; text-indent: 10px; font-size: 1rem">
+													<li id="teamNameId">
+														<label><c:out value="${ teamDTOList.name }" /></label>
+													</li>
+												</ul>
+											</nav>
+										</c:forEach>
+									</li>
+								</ul>
+							</c:forEach> --%>
 						</div>
 					</div>
 
@@ -410,5 +487,48 @@ textarea {
 			</div>
 		</main>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	
+	<script>
+	<!-- if(document.querySelectorAll("#teamNameId label")) {
+		const $deptLis = document.querySelectorAll("#deptNameId");
+		console.log($deptLis);
+		const $labels = document.querySelectorAll("#teamNameId label");
+		console.log($labels);
+		
+		<c:set var="TeamName" value="${ teamDTOList.name }"/>
+		
+		for(let i = 0; i < $labels.length; i++) {
+			console.log($labels[i]);
+		}
+		
+	} -->
+	
+	/* 부서 수정 */
+	if(document.querySelectorAll("#deptName li div button.modDept")) {
+		const $btns = document.querySelectorAll("#deptName li div button.modDept");
+		console.log($btns);
+		for(let i = 0; i < $btns.length; i++) {
+			$btns[i].onclick = function() {
+				const code = this.parentNode.parentNode.children[2].innerText;
+				console.log(code);
+				
+				$.ajax({
+					url: "${ pageContext.servletContext.contextPath }/company/deptDetail?code=" + code,
+					type: "get",
+					data: { code : code },
+					success: function(data, status, xhr) {
+						console.log(data);
+						jobDetail = JSON.parse(data.deptDetail);
+						
+						$("#name-read").val(deptDetail.name);
+						$("#code-read").val(deptDetail.code);
+						$("#readModal").modal("show");
+					}
+					
+				})
+			}
+		}
+	}
+	</script>
 </body>
 </html>

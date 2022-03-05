@@ -23,11 +23,15 @@ import com.greedy.waterfall.company.model.service.CompanyService;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.greedy.waterfall.common.exception.company.DeptModifyException;
 import com.greedy.waterfall.common.exception.company.DeptRegistException;
+import com.greedy.waterfall.common.exception.company.DeptRemoveException;
 import com.greedy.waterfall.common.exception.company.JobModifyException;
 import com.greedy.waterfall.common.exception.company.JobRegistException;
 import com.greedy.waterfall.common.exception.company.JobRemoveException;
+import com.greedy.waterfall.common.exception.company.TeamModifyException;
 import com.greedy.waterfall.common.exception.company.TeamRegistException;
+import com.greedy.waterfall.common.exception.company.TeamRemoveException;
 
 @Controller
 @RequestMapping("/company")
@@ -74,6 +78,56 @@ public class CompanyController {
 		return "redirect:/company/dept/list";
 	}
 	
+	/* 부서 상세 */
+	@GetMapping(value = "deptDetail")
+	@ResponseBody
+	public ModelAndView detailDept(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
+		
+		String code = request.getParameter("code");
+		
+		DeptDTO deptDetail = companyService.detailDept(code);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+		        .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+		        .serializeNulls()
+		        .disableHtmlEscaping()
+		        .create();
+		
+		mv.addObject("deptDetail", gson.toJson(deptDetail));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	/* 부서 수정 */
+	@PostMapping("/dept/update")
+	public String modifyDept(@ModelAttribute DeptDTO dept,
+			HttpServletRequest request, RedirectAttributes rttr) throws DeptModifyException {
+		
+		companyService.modifyDept(dept);
+		
+		rttr.addFlashAttribute("message", "부서 수정에 성공하셨습니다.");
+		
+		return "redirect:/company/dept/list";
+	}
+	
+	/* 부서 삭제 */
+	@GetMapping("/dept/delete")
+	public String removeDept(HttpServletRequest request, RedirectAttributes rttr) throws DeptRemoveException {
+		
+		String code = request.getParameter("code");
+		
+		companyService.removeDept(code);
+		
+		rttr.addFlashAttribute("message", "부서 삭제에 성공하셨습니다!");
+		
+		return "redirect:/company/dept/list";
+	}
+	
 	/* 팀 생성 */
 	@PostMapping("/team/regist")
 	public String registTeam(@ModelAttribute TeamDTO team, HttpServletRequest request, RedirectAttributes rttr) 
@@ -88,6 +142,56 @@ public class CompanyController {
 		companyService.registTeam(team);
 		
 		rttr.addFlashAttribute("message", "팀 등록에 성공하셨습니다!");
+		
+		return "redirect:/company/dept/list";
+	}
+	
+	/* 팀 상세 */
+	@GetMapping(value = "teamDetail")
+	@ResponseBody
+	public ModelAndView detailTeam(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
+		
+		String code = request.getParameter("code");
+		
+		TeamDTO teamDetail = companyService.detailTeam(code);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+				.setPrettyPrinting()
+		        .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+		        .serializeNulls()
+		        .disableHtmlEscaping()
+		        .create();
+		
+		mv.addObject("teamDetail", gson.toJson(teamDetail));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	/* 팀 수정 */
+	@PostMapping("/team/update")
+	public String modifyTeam(@ModelAttribute TeamDTO team,
+			HttpServletRequest request, RedirectAttributes rttr) throws TeamModifyException {
+		
+		companyService.modifyTeam(team);
+		
+		rttr.addFlashAttribute("message", "팀 수정에 성공하셨습니다.");
+		
+		return "redirect:/company/dept/list";
+	}
+	
+	/* 팀 삭제 */
+	@GetMapping("/team/delete")
+	public String removeTeam(HttpServletRequest request, RedirectAttributes rttr) throws TeamRemoveException {
+		
+		String code = request.getParameter("code");
+		
+		companyService.removeTeam(code);
+		
+		rttr.addFlashAttribute("message", "팀 삭제에 성공하셨습니다!");
 		
 		return "redirect:/company/dept/list";
 	}

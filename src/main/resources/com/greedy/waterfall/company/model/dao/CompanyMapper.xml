@@ -12,6 +12,8 @@
 	<resultMap type="com.greedy.waterfall.company.model.dto.DeptDTO" id="deptResultMap">
 		<id property="code" column="DEPT_CODE"/>
 		<result property="name" column="DEPT_NAME"/>
+		
+		<collection property="teamDTOList" resultMap="teamResultMap"></collection>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.TeamDTO" id="teamResultMap">
@@ -50,6 +52,30 @@
 		)
 	</insert>
 	
+	<!-- 부서 상세 -->
+	<select id="detailDept" resultMap="deptResultMap">
+		SELECT
+		       DEPT_CODE
+		     , DEPT_NAME
+		  FROM TBL_DEPT
+		 WHERE DEPT_CODE = #{ code }
+	</select>
+	
+	<!-- 부서 수정 -->
+	<update id="updateDept" parameterType="com.greedy.waterfall.company.model.dto.DeptDTO">
+		UPDATE
+		       TBL_DEPT
+		   SET DEPT_NAME = #{ name }
+		 WHERE DEPT_CODE = #{ code }
+	</update>
+	
+	<!-- 부서 삭제 -->
+	<delete id="deleteDept" parameterType="String">
+		DELETE
+		  FROM TBL_DEPT
+		 WHERE DEPT_CODE = #{ code }
+	</delete>
+	
 	<!-- 팀 조회 -->
 	<select id="findTeam" resultMap="teamResultMap">
 		SELECT
@@ -77,6 +103,22 @@
 		, #{ deptCode }
 		)
 	</insert>
+	
+	<!-- 팀 상세 -->
+	<select id="detailTeam" resultMap="teamResultMap">
+		SELECT
+		       TEAM_CODE
+		     , TEAM_NAME
+		  FROM TBL_TEAM
+		 WHERE TEAM_CODE = #{ code }
+	</select>
+	
+	<!-- 팀 삭제 -->
+	<delete id="deleteTeam" parameterType="String">
+		DELETE
+		  FROM TBL_TEAM
+		 WHERE TEAM_CODE = #{ code }
+	</delete>
 	
 	<!-- 직급 조회 -->
 	<select id="findJob" resultMap="jobResultMap">
