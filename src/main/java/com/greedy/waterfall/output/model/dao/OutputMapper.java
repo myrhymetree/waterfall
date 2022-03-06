@@ -25,7 +25,7 @@ public interface OutputMapper {
 
 	TaskDTO selectParentTask(int parentTaskNo);
 
-	void deleteOutput(int no);
+	int deleteOutput(OutputDTO output);
 
 	List<OutputDTO> selectAdminOutputList(int projectNo);
 
@@ -40,6 +40,22 @@ public interface OutputMapper {
 	void insertOutputHistory(OutputDTO output);
 
 	OutputAttachmentDTO selectOutputFile(int outputNo);
+
+	int deleteOutputFile(OutputDTO output);
+
+	void insertDeleteHistory(OutputDTO output);
+
+	int updateOutput(OutputDTO output);
+
+	Integer selectOutputVer(OutputDTO output);
+
+	Integer selectOutputCount(int outputNo);
+
+	int insertUpdateHistory(OutputDTO output);
+
+	int updateFile(OutputAttachmentDTO outputFile);
+
+	String selectOriginName(OutputDTO output);
 	
 	
 }

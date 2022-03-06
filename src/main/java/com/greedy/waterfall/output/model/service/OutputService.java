@@ -13,13 +13,17 @@ public interface OutputService {
 
 	Object findOutputDetail(int no);
 
-	void removeOutput(int no);
+	void removeOutput(OutputDTO output);
 
 	List<OutputProjectDTO> findOutputList();
 
-	void registOutput(OutputDTO output);
+	int registOutput(OutputDTO output);
 
-	OutputAttachmentDTO findOutputFile(int no);
+	OutputAttachmentDTO findOutputFile(int outputNo);
+
+	void modifyOutput(OutputDTO output);
+
+	int selectOutputCount(int outputNo);
 
 
 }

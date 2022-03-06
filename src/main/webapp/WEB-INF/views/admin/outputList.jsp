@@ -27,7 +27,7 @@
 </style>
 </head>
 <body>
-   <jsp:include page="../common/inprojectheader.jsp"/>
+   <jsp:include page="../common/header.jsp"/>
    
                 <main>
                     <div class="container-fluid px-4">
@@ -88,7 +88,7 @@ $(function() {
    $("#datatablesSimple td").click(function(){
        const projectNo = $(this).parent().children(":eq(0)").text();
        console.log(projectNo)
-      location.href = "${ pageContext.servletContext.contextPath }/output/list?projectNo=" + projectNo;
+       location.href = "${ pageContext.servletContext.contextPath }/output/admin/detail?projectNo=" + projectNo;
    });
 });
 </script>

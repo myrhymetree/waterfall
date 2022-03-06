@@ -207,7 +207,7 @@ input{
 </script>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 		<main>
 		<div id="header">
 			<i style='font-size: 24px' class='fas'>&#xf07c;</i>산출물

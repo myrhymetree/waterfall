@@ -34,6 +34,8 @@ public class OutputDTO {
 	private OutputProjectDTO project;
 	private OutputAttachmentDTO outputFile;
 	private int taskNo;
+	private String beforeOriginName;
+	private String afterOriginName;
 	
 	
 

@@ -178,7 +178,7 @@
 		UPDATE
 		       TBL_OUTPUT A
 		   SET A.OUTPUT_STATUS = 'N'
-		 WHERE OUTPUT_NO = #{ no }
+		 WHERE OUTPUT_NO = #{ outputNo }
 	</update>
 	
 	<select id="selectAllProjectList" resultMap="projectResultMap">
@@ -223,6 +223,30 @@
 		  FROM TBL_OUTPUT A
 		  LEFT JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
 		 WHERE A.PROJECT_NO = #{ projectNo }  
+		   AND A.OUTPUT_STATUS = 'Y'
+	</select>
+	
+	<select id="selectOutputVer" resultType="_int">
+		SELECT
+		       COUNT(*)
+		  FROM TBL_OUTPUT
+		 WHERE TASK_NO = #{ taskNo }
+		   AND OUTPUT_STATUS = 'Y'
+	</select>
+	
+	<select id="selectOutputCount" resultType="_int">
+		SELECT
+		       COUNT(*)
+		  FROM TBL_OUTPUT
+		 WHERE TASK_NO = #{ taskNo }
+		   AND OUTPUT_STATUS = 'Y'
+	</select>
+	
+	<select id="selectOriginName" resultType="String">
+		SELECT
+		       OUTPUT_ORIGIN_NAME
+		  FROM TBL_OUTPUT_FILE
+		 WHERE REF_OUTPUT_NO = #{ outputNo }
 	</select>
 	
 	<insert id="insertOutput">
@@ -294,6 +318,49 @@
 		     , #{ memberNo }
 		     )
 	</insert>
+	<insert id="insertUpdateHistory">
+		INSERT
+		  INTO TBL_OUTPUT_HISTORY
+			 (
+		  	   OUTPUT_HISTORY_NO
+		     , OUTPUT_HISTORY_DATE
+		     , OUTPUT_HISTORY_CONDITION
+		     , OUTPUT_NO
+		     , MEMBER_NO
+		     , OUTPUT_HISTORY_BEFORE_MODIFY
+		     , OUTPUT_HISTORY_AFTER_MODIFY
+			 )
+			 VALUES
+			 (
+			   OUTPUT_HISTORY_NO.NEXTVAL
+			 , SYSDATE
+			 , '수정'
+			 , #{ outputNo }
+			 , #{ memberNo }
+			 , #{ beforeOriginName }
+			 , #{ afterOriginName }
+			 )   
+	</insert>
+	
+	<insert id="insertDeleteHistory">
+		INSERT
+		  INTO TBL_OUTPUT_HISTORY
+		     (
+		       OUTPUT_HISTORY_NO
+		     , OUTPUT_HISTORY_DATE
+		     , OUTPUT_HISTORY_CONDITION
+		     , OUTPUT_NO
+		     , MEMBER_NO
+		     )
+		     VALUES
+		     (
+		       OUTPUT_HISTORY_NO.NEXTVAL
+		     , SYSDATE
+		     , '삭제'
+		     , #{ outputNo }
+		     , #{ memberNo }
+		     )
+	</insert>
 	
 	<select id="selectOutputFile" resultMap="fileResultMap">
 		SELECT
@@ -306,7 +373,39 @@
 		     , REF_OUTPUT_NO
 		  FROM TBL_OUTPUT_FILE
 		 WHERE REF_OUTPUT_NO = #{ outputNo }
+		   AND OUTPUT_STATUS = 'Y'
 	</select>
 	
+	<update id="deleteOutputFile">
+		UPDATE
+		       TBL_OUTPUT_FILE
+		   SET OUTPUT_STATUS = 'N'
+		 WHERE REF_OUTPUT_NO = #{ outputNo }
+	</update>
+	
+	
+	<update id="updateOutput">
+		UPDATE
+		        TBL_OUTPUT A
+		   SET  A.OUTPUT_COMMENT = #{ content }
+		     ,  A.OUTPUT_REGISTED_DATE = SYSDATE
+		     ,  A.MEMBER_NO = #{ memberNo }
+		     ,  A.OUTPUT_VER = (SELECT B.OUTPUT_VER
+		                        FROM TBL_OUTPUT B
+		                       WHERE B.OUTPUT_NO = #{ outputNo }
+		                       ) + 1
+	     WHERE A.OUTPUT_NO = #{ outputNo } 
+	</update>
+	
+	<update id="updateFile">
+		UPDATE
+		       TBL_OUTPUT_FILE
+		   SET OUTPUT_FILE_PATH = #{ filePath }
+		     , OUTPUT_ORIGIN_NAME = #{ originName }
+		     , OUTPUT_RANDOM_NAME = #{ randomName }
+		     , OUTPUT_REGISTED_DATE = SYSDATE
+		 WHERE REF_OUTPUT_NO = #{ outputNo }
+		     
+	</update>
 	
 </mapper>

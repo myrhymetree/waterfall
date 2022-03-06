@@ -421,6 +421,13 @@ ul {
 }
 
 </style>
+<script>
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />

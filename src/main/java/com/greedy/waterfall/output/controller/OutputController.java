@@ -60,18 +60,18 @@ public class OutputController {
 	@GetMapping("/list")
 	public ModelAndView outputFindList( HttpServletRequest request, ModelAndView mv, HttpSession session) {
 		
-		/*session에서 프로젝트 번호 얻음*/
-		/*
-		 * ProjectAuthorityDTO pa =
-		 * (ProjectAuthorityDTO)session.getAttribute("projectAutority"); int projectNo =
-		 * pa.getProjectNo();
-		 */
-		
 		TaskDTO taskDTO = new TaskDTO();
-		//taskDTO.setProjectNo(projectNo);
 		
-		/* 현재 진행중인 프로젝트의 번호를 세션에서 가져온다 */
-		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		int projectNo = 0;
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		/* 현재 진행중인 프로젝트의 번호를 세션에 있으면 세션에서 가져오고 없으면 parameter로 가져온다 */
+		if((session.getAttribute("projectAutority")) != null) {
+			projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		} else {
+			projectNo = Integer.parseInt(request.getParameter("projectNo"));
+		}
+		
 		
 		taskDTO.setProjectNo(projectNo);
 		List<TaskDTO> parentTaskList = new ArrayList<>();
@@ -80,6 +80,34 @@ public class OutputController {
 		
 		mv.addObject("parentTaskList", parentTaskList);
 		mv.setViewName("output/outputDetail");
+		
+		return mv; 
+		
+	}
+	
+	@GetMapping("/admin/detail")
+	public ModelAndView outputAdminFindList( HttpServletRequest request, ModelAndView mv, HttpSession session) {
+		
+		TaskDTO taskDTO = new TaskDTO();
+		
+		int projectNo = 0;
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		/* 현재 진행중인 프로젝트의 번호를 세션에 있으면 세션에서 가져오고 없으면 parameter로 가져온다 */
+		if((session.getAttribute("projectAutority")) != null) {
+			projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		} else {
+			projectNo = Integer.parseInt(request.getParameter("projectNo"));
+		}
+		
+		
+		taskDTO.setProjectNo(projectNo);
+		List<TaskDTO> parentTaskList = new ArrayList<>();
+		
+		parentTaskList = outputService.findOutputTask(taskDTO);
+		
+		mv.addObject("parentTaskList", parentTaskList);
+		mv.setViewName("admin/outputAdminDetail");
 		
 		return mv; 
 		
@@ -155,13 +183,19 @@ public class OutputController {
 	@GetMapping("/delete")
 	public String removeOutput(HttpServletRequest request, RedirectAttributes rttr) {
 		
-		int no = Integer.parseInt(request.getParameter("outputNo"));
+		int outputNo = Integer.parseInt(request.getParameter("outputNo"));
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
-		outputService.removeOutput(no);
+		OutputDTO output = new OutputDTO();
+		
+		output.setMemberNo(memberNo);
+		output.setOutputNo(outputNo);
+		
+		outputService.removeOutput(output);
 		
 		rttr.addFlashAttribute("message", "산출물 삭제에 성공하셨습니다.");
 		
-		return "redirect:/output/detail";
+		return "redirect:/output/list";
 	}
 	
 	/**
@@ -175,7 +209,7 @@ public class OutputController {
 	public String registOutput(HttpServletRequest request, RedirectAttributes rttr, HttpSession session
 	                           ,@RequestParam("outputFile") MultipartFile outputFile) {
 		
-		/* 현재 진행중인 프로젝트의 번호를 세션에서 가져온다 */
+		/* 등록할 정보들 */
 		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
@@ -188,8 +222,8 @@ public class OutputController {
 		OutputDTO output = new OutputDTO();
 		output.setMemberNo(memberNo);
 		output.setProjectNo(projectNo);
-		output.setTaskNo(taskNo);
 		output.setContent(content);
+		output.setTaskNo(taskNo);
 		System.out.println("mapping된 outputDTO 확인 : " + output );
 		
 		/* 파일 저장될 root 설정 */
@@ -225,14 +259,20 @@ public class OutputController {
 			try {
 				outputFile.transferTo(new File(fileUploadDirectory + "/" + savedName));
 				
-				outputService.registOutput(output);
+				int result = outputService.registOutput(output);
+				
+				if(result == 0) {
+					rttr.addFlashAttribute("message", "산출물이 이미 존재합니다.");
+				}else {
+					rttr.addFlashAttribute("message", "산출물이 등록되었습니다.");
+				}
 				
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 				new File(fileUploadDirectory + "\\" + savedName).delete();
 			}
 			
-			rttr.addFlashAttribute("messate", "산출물이 등록되었습니다.");
+			
 		} 
 		
 		
@@ -240,20 +280,121 @@ public class OutputController {
 		
 	}
 	
-	@GetMapping("/download/{outputNo}")
-	public ModelAndView downloadFile(ModelAndView mv, @PathVariable("outputNo") String refoutputNo) throws IOException {
-		int outputNo = Integer.parseInt(URLDecoder.decode(refoutputNo, "UTF-8"));
+	@GetMapping("/download/{refOutputNo}")
+	public ModelAndView downloadFile(ModelAndView mv, @PathVariable("refOutputNo") String refOutputNo) throws IOException {
+		int outputNo = Integer.parseInt(URLDecoder.decode(refOutputNo, "UTF-8"));
+		
+		System.out.println("outputNo 넘어오니???????????? : " + outputNo);
 		
 		Map<String, Object> fileInfo = new HashMap<String, Object>();
 		
 		OutputAttachmentDTO file = outputService.findOutputFile(outputNo);
 		fileInfo.put("filePath", file.getFilePath());
-		fileInfo.put("originName", file.getOriginName());
-		fileInfo.put("randomName", file.getRandomName());
+		fileInfo.put("fileOriginName", file.getOriginName());
+		fileInfo.put("fileRandomName", file.getRandomName());
 		mv.addObject("downloadFile", fileInfo);
 		mv.setViewName("fileDownloadView");
 		
 		return mv;
+	}
+	
+	@PostMapping("/update")
+	public String modifyOutput(HttpServletRequest request, RedirectAttributes rttr, HttpSession session,
+			                   @RequestParam("outputFile") MultipartFile outputFile) {
+		
+		/* 업데이트 할 정보들 */
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		int outputNo = Integer.parseInt(request.getParameter("outputNo"));
+		String content = request.getParameter("content");
+		System.out.println("content 확인 : " + content);
+		System.out.println("outputFile 확인 : " + outputFile);
+		
+		/* 수정할 산출물 정보 dto에 담음*/
+		OutputDTO output = new OutputDTO();
+		output.setMemberNo(memberNo);
+		output.setProjectNo(projectNo);
+		output.setOutputNo(outputNo);
+		output.setContent(content);
+		
+		/* 파일 저장될 root 설정 */
+		String root = request.getServletContext().getRealPath("resources");
+		System.out.println("file root : " +root);
+		String fileUploadDirectory = root + "/outputUpload/outputOriginal";
+		
+		/* filepath 경로인 폴더가 존재하는지 확인  */
+		File directory = new File(fileUploadDirectory);
+		if(!directory.exists()) {
+			directory.mkdirs();
+		}
+		
+		/*outputFile이 있을 경우*/
+		if(outputFile.getSize() > 0) {
+			/* request로 들어온 파일 확인 */
+			System.out.println("singleFile : " + outputFile);
+			
+			/* savedName 생성 */
+			String originFileName = outputFile.getOriginalFilename();
+			String ext = originFileName.substring(originFileName.lastIndexOf("."));
+			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+			
+			System.out.println("originFileName : " + originFileName);
+			System.out.println("savedName : " + savedName);
+			
+			/* attachmentDTO에 file 정보 저장해서 outputDTO에 set */
+			OutputAttachmentDTO attachmentDTO = new OutputAttachmentDTO();
+			attachmentDTO.setFilePath(fileUploadDirectory);
+			attachmentDTO.setOriginName(originFileName);
+			attachmentDTO.setRandomName(savedName);
+			output.setOutputFile(attachmentDTO);
+			
+			try {
+				outputFile.transferTo(new File(fileUploadDirectory + "/" + savedName));
+				
+				outputService.modifyOutput(output);
+				rttr.addFlashAttribute("message", "산출물이 수정되었습니다.");
+				
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				new File(fileUploadDirectory + "\\" + savedName).delete();
+			}
+		
+		/*file 이 없이 본문 내용만 수정할 경우*/
+		} else {
+			outputService.modifyOutput(output);
+			rttr.addFlashAttribute("message", "본문이 수정되었습니다.");
+		}
+		
+		
+		
+		
+		return "redirect:/output/list";
+	}
+	
+	@GetMapping("/count")
+	public ModelAndView countOutput(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException  {
+		
+		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+		
+		int result = outputService.selectOutputCount(taskNo);
+		
+		response.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper mapper = new ObjectMapper();
+		
+		/* output이 없는 경우 1 있는 경우 0 */
+		if(result == 1) {
+			mv.addObject("result",mapper.writeValueAsString(result));
+			mv.setViewName("jsonView");
+		}else {
+			result = 0;
+			mv.addObject("result", mapper.writeValueAsString(result));
+			mv.setViewName("jsonView");
+		}
+		
+		
+		return mv;
+		
 	}
 	
 	
