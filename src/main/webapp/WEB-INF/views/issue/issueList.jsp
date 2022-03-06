@@ -174,7 +174,7 @@
 	                  $("#read-content").val(issueDetail.content);
 	                  $("#read-answer").val(issueDetail.answer);
 	                  $("#read-projectNo").val(issueDetail.projectNo);
-	                  $("#read-taskNo").val(issueDetail.taskNo);
+	                  $("#read-taskNo").val(issueDetail.task.no);
 	                  $("#myModal").modal("show");
 	                  
 	                  $("#downloadZone").empty();
