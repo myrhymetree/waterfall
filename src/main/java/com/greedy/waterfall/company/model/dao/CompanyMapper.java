@@ -13,7 +13,21 @@ public interface CompanyMapper {
 
 	int insertDept(DeptDTO dept);
 
+	DeptDTO detailDept(String code);
+
+	int updateDept(DeptDTO dept);
+
+	int deleteDept(String code);
+
+	List<TeamDTO> findTeam(SelectCriteria selectCriteria);
+
 	int insertTeam(TeamDTO team);
+
+	TeamDTO detailTeam(String code);
+
+	int updateTeam(TeamDTO team);
+
+	int deleteTeam(String code);
 	
 	List<JobDTO> findJob(SelectCriteria selectCriteria);
 

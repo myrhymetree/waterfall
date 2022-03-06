@@ -300,9 +300,11 @@ td{
 						$("#name-read").val(jobDetail.name);
 						$("#code-read").val(jobDetail.code);
 						$("#readModal").modal("show");
+					}, error: function(xhr, status, error) {
+						console.log(xhr);
 					}
-					
-				})
+				});
+				
 			}
 		}
 	}
