@@ -86,7 +86,7 @@
 /* 관리 프로젝트 원형차트 css부분 */
 .manageprojectbox {
 	margin-top: 6%;
-	width: 100%;
+	width: 90%;
 	border: 1px solid black;
 	border-radius: 3px;
 }
@@ -119,16 +119,43 @@
 	margin-left: 5%;
 }
 
-
-
-
-
-
-
-
- .test-border {
-	border: solid 1px red;
+/* 참여중인 프로젝트 상세정보 css */
+.join-project{
+	border:#343A40 1px solid;
+	border-radius: 5px;
+	height: 265px;
+	margin-top: 2%;
 }
+.join-project-head {
+	height: 32px;
+	border-radius: 3%;
+	border: 1px #343A40 solid;
+	background-color: #343A40;
+	color: #bebebe;
+	font-size: 1.1em;
+	font-weight: 1000;
+}
+.join-project-head > label{
+	margin-top: 2px;
+	margin-left: 2%;
+}
+
+.join-project-body > label{
+	margin: 2%;	
+	margin-left: 2%;
+	font-size: 0.9em;
+	font-weight: 700;
+	width: 100%;
+}
+
+.join-project-body > label > input{
+	border: none; 
+	background: transparent;
+	width: auto;
+	margin-left: 5%;
+}
+
+
 .developer-main-table {
 	border: 1px solid black;
 	height: 90%;
@@ -178,18 +205,18 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
 	
-	<div class="test-border develop-main-header">
-		<div class="mt-5 test-border">
-			<label>개발자 메인화면</label>	
+	<div class=" develop-main-header">
+		<div class="mt-5 ">
+			<label>${ sessionScope.loginMember.name } 님 환영합니다</label>	
 		</div>
 	</div>
 	
-	<div class="test-border project-category-label">
+	<div class=" project-category-label">
 		<label>관리중인 프로젝트</label>
 	</div>
 	<!-- 관리중인 프로젝트 폼-->
-	<div class="mt-2 row test-border develop-main-body-top">
-		<div class="test-border col-4">
+	<div class="mt-2 row  develop-main-body-top">
+		<div class=" col-4">
 			<div class="developer-main-table">
 				<table style="width: 100%;font-size:1.1em;">
 					<colgroup>
@@ -207,7 +234,7 @@
 					<tbody id="project-list">
 						<c:forEach var="project" items="${ requestScope.projectList }" varStatus="status">
 							<tr>
-								<td><input type="hidden" value="${ project.no }"></td>
+								<td><input readonly type="hidden" value="${ project.no }"></td>
 								<td><c:out value="${ project.name }"/></td>
 								<td><c:out value="${ project.member.memberName }"/></td>
 							</tr>
@@ -220,26 +247,26 @@
 
 
 
-		<div class="test-border col-3 ">
+		<div class=" col-3 ">
 			<div class="manage-project-info">
 				<div class="manage-project-info-head">
 					<label>프로젝트 정보</label>
 				</div>
-				<div class="manage-project-info-body mt-2 test-border">
-					<label>시작일 : </label><input type="date" value="2022-01-01"><br>
-					<label>마감일 : </label><input type="date" value="2022-03-14"><br>
-					<label>&nbsp; 업무 &nbsp;: </label><input type="text" value="1개"><br>
-					<label>&nbsp; 이슈 &nbsp;: </label><input type="text" value="1개"><br>
-					<label>산출물 : </label><input type="text" value="1개"><br>
+				<div class="manage-project-info-body mt-2 ">
+					<label>시작일 : </label><input readonly type="date" value="2022-01-01"><br>
+					<label>마감일 : </label><input readonly type="date" value="2022-03-14"><br>
+					<label>&nbsp; 업무 &nbsp;: </label><input readonly type="text" value="1개"><br>
+					<label>&nbsp; 이슈 &nbsp;: </label><input readonly type="text" value="1개"><br>
+					<label>산출물 : </label><input readonly type="text" value="1개"><br>
 				</div>
 			</div>
 		</div>
 		
 		
 		
-		<div class="test-border col-5">
+		<div class=" col-5">
 		<div class="row" style="height: 100%;">
-			<div class="col-8 " id="manage-info-chart" style="border:1px red solid"></div>
+			<div class="col-8 " id="manage-info-chart"></div>
 			
 			<div class="col-4">
 				<div class="manageprojectbox">
@@ -247,9 +274,9 @@
 						<label class="" id="manage-project-info-category">이슈</label>							
 					</div>
 					<div class="manage-projectbox-body">
-						<label class="">대기중 : <input type="text" id="issue-category-wait"></label><br>
-						<label class="">처리중 : <input type="text" id="issue-category-proc"></label><br>
-						<label class="">해결완료 : <input type="text" id="issue-category-solv"></label><br>
+						<label class="">대기중 : <input readonly type="text" id="issue-category-wait"></label><br>
+						<label class="">처리중 : <input readonly type="text" id="issue-category-proc"></label><br>
+						<label class="">해결완료 : <input readonly type="text" id="issue-category-solv"></label><br>
 					</div>
 				</div>
 			</div>
@@ -257,15 +284,15 @@
 		</div>
 	</div>
 
-	<div class="test-border project-category-label">
+	<div class=" project-category-label">
 		<label>참여중인 프로젝트</label>
 	</div>
 
 	
 
 	<!-- 참여중인 프로젝트 폼-->
-	<div class="mt-2 row test-border develop-main-body-top">
-		<div class="test-border col-4">
+	<div class="mt-2 row  develop-main-body-top">
+		<div class=" col-4">
 			<div class="developer-main-table">
 				<table style="width: 100%;font-size:1.1em;">
 					<colgroup>
@@ -283,7 +310,7 @@
 					<tbody id="project-list">
 						<c:forEach var="project" items="${ requestScope.projectList }" varStatus="status">
 							<tr>
-								<td><input type="hidden" value="${ project.no }"></td>
+								<td><input readonly type="hidden" value="${ project.no }"></td>
 								<td><c:out value="${ project.name }"/></td>
 								<td><c:out value="${ project.member.memberName }"/></td>
 							</tr>
@@ -296,13 +323,23 @@
 			</div>
 		</div>
 	
-		<div class="test-border col-4">
-				대충 프로젝트 참여일 pm내용 등등
+		<div class=" col-3">
+			<div class="join-project">
+				<div class="join-project-head">
+					<label>프로젝트 이름</label>
+				</div>
+				<div class="join-project-body">
+					<label>프로젝트 PM : <input readonly type="text" value="박성준"></label><br>
+					<label>프로젝트 생성일 : <input readonly type="date" value="2022-01-01"></label><br>
+					<label>프로젝트 참여일 : <input readonly type="date" value="2022-01-01"></label><br>
+					<label>프로젝트 역할 : <input readonly type="text" value="DBA QA 테스터"></label><br>
+				</div>
+			</div>
 		</div>
 	
 	
 	
-		<div class="test-border col-4">
+		<div class=" col-5">
 			<div id="top_x_div" style="width: 100%; height: 100%;"></div>
 
 		</div>
