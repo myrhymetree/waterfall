@@ -34,4 +34,6 @@ public interface TaskMapper {
 
 	ChildTaskDTO selectChildTask(int taskNo);
 
+	TaskDTO selectParentTask(int parentNo);
+
 }
