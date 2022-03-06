@@ -68,7 +68,7 @@
 }
 
 #box1header {
-	padding: 40px;
+	padding: 30px;
 	font-size: 1.4rem;
 	width: 100%;
 	height: 100%;
@@ -351,6 +351,14 @@ textarea {
 						</div>
 						<div class="my-modal-body">
 							<div class="my-modal-input mb-3">
+								<label class="me-2" for="dept-select">상위부서</label>
+								<select id="dept-select" name="deptCode">
+									<c:forEach var="dept" items="${ requestScope.deptList }">
+										<option value="${ dept.code }"><c:out value="${ dept.name }" /></option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="my-modal-input mb-3">
 								<label class="me-2" for="team-name-read">팀명</label>
 								<input type="text" id="team-name-read" name="name">
 							</div>
@@ -431,25 +439,27 @@ textarea {
 							</div> -->
 							<!-- 부서 및 팀 조회 -->
 							<c:forEach var="dept" varStatus="status" items="${ requestScope.deptList }">
-								<ul id="deptName" class="folder_toggle" data-toggle="collapse" data-target="#demo${ status.index }" style="list-style: none">
-									<li style="position: relative; line-height: 16px">
+								<ul id="deptName" style="list-style: none; text-indent: -20px">
+									<li style="position: relative; line-height: 20px">
 										<input type="hidden" value="<c:out value='${ dept.code }' />">
-										<i style='font-size: 24px' class='fas'>&#xf07b;</i>
-										<c:out value="${ dept.name }" />
-										<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
+										<span class="folder_toggle" data-toggle="collapse" data-target="#demo${ status.index }">
+											<i class="fas" style="font-size: 24px">&#xf07b;</i>
+											<c:out value="${ dept.name }" />
+										</span>
+										<div style="display: inline-block; position: absolute; top: -12px; left: 279px">
 											<button class="button float modDept" id="dept-mod" data-bs-toggle="modal" data-bs-target="#readModal">
-												<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
+												<i class="far" style="font-size: 16px; color: white">&#xf044;</i>&nbsp;수정
 											</button>
 											<button class="button float delDept" id="dept-delete">
-												<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
+												<i class="fas" style="font-size: 16px; color: white">&#xf2ed;</i>&nbsp;삭제
 											</button>
 										</div>
 										<c:forEach var="team" varStatus="st" items="${ requestScope.teamList }">
-											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: 10px; font-size: 1.1rem">
-												<li style="position: relative; line-height: 30px">
+											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: -10px; font-size: 1.1rem">
+												<li style="position: relative; line-height: 20px; margin-top: 20px">
 													<input type="hidden" value="<c:out value='${ team.code }' />">
 													<c:out value="${ team.name }" />
-													<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
+													<div style="display: inline-block; position: absolute; top: -15px; left: 239px">
 														<button class="button float modTeam" id="team-mod" data-bs-toggle="modal" data-bs-target="#readTeamModal">
 															<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
 														</button>
@@ -574,8 +584,8 @@ textarea {
 	});
 	
 	/* 팀 수정 */
-	if(document.querySelectorAll("#demo${ status.index } li div button.modTeam")) {
-		const $btns = document.querySelectorAll("#demo${ status.index } li div button.modTeam");
+	if(document.querySelectorAll("ul.collapse li div button.modTeam")) {
+		const $btns = document.querySelectorAll("ul.collapse li div button.modTeam");
 		console.log($btns);
 		for(let i = 0; i < $btns.length; i++) {
 			$btns[i].onclick = function() {
@@ -603,11 +613,11 @@ textarea {
 	}
 	
 	/* 팀 삭제 */
-	/* $("#demo${ status.index } li div button.delTeam").click(function() {
+	$("ul.collapse li div button.delTeam").click(function() {
 		const code = this.parentNode.parentNode.children[0].value;
 		console.log(code);
 		location.href="${ pageContext.servletContext.contextPath }/company/team/delete?code=" + code;
-	}); */
+	});
 	</script>
 </body>
 </html>

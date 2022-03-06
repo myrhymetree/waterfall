@@ -85,7 +85,7 @@
 		     , A.DEPT_CODE
 		  FROM TBL_TEAM A
 		  JOIN TBL_DEPT B ON (A.DEPT_CODE = B.DEPT_CODE)
-		 ORDER BY 3 ASC
+		 ORDER BY 3 ASC, 1
 	</select>
 	
 	<!-- 팀 생성 -->
@@ -110,9 +110,20 @@
 		SELECT
 		       TEAM_CODE
 		     , TEAM_NAME
+		     , DEPT_CODE
 		  FROM TBL_TEAM
 		 WHERE TEAM_CODE = #{ code }
 	</select>
+	
+	<!-- 팀 수정 -->
+	<update id="updateTeam" parameterType="com.greedy.waterfall.company.model.dto.TeamDTO">
+		UPDATE
+		       TBL_TEAM
+		   SET TEAM_CODE = #{ code }
+		     , TEAM_NAME = #{ name }
+		     , DEPT_CODE = #{ deptCode }
+		 WHERE TEAM_CODE = #{ code }
+	</update>
 	
 	<!-- 팀 삭제 -->
 	<delete id="deleteTeam" parameterType="String">
