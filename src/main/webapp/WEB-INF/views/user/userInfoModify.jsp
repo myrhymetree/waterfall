@@ -7,6 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../common/inprojectheader.jsp"/>
+	<jsp:include page="../common/footer.jsp"/>
 
+	
+	
 </body>
 </html>
