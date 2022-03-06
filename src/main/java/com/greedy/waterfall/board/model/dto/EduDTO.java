@@ -27,6 +27,9 @@ public class EduDTO {
 	private java.sql.Date updatedDate;  //수정일
 	private int memberNo;				//회원번호
 	private int count;					//조회수
-	private MemberDTO writer;
-	
+	private MemberDTO writer;			//작성자 조인
+	private int rnum;					//게시판 번호
+	private EduFileDTO file;  			//file 테이블과 조인
+	private int fileNo; 				//첨부파일 번호
+	private String originalName;  		//첨부파일 이름
 }

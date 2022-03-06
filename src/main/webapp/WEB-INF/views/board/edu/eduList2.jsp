@@ -6,9 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
+
 #layoutSidenav_content .todo h2 {
   height: 50px;
   line-height: 1.5;
@@ -36,7 +35,7 @@
   text-align: center;
 }
 #layoutSidenav_content .todo .tbl-wrapper .paging button {
-
+  /* font-size: 1rem; */
   background: none;
   border: none;
 }
@@ -45,7 +44,7 @@
 }
 table, th, td {
   border: 1px solid #e5e5e5;
-
+  /* border-collapse: collapse; */
 }
 #layoutSidenav_content .todo .todo-tbl {
   width: 100%;
@@ -54,14 +53,17 @@ table, th, td {
   border-left: none;
   border-right: none;
 }
-#layoutSidenav_content .todo .todo-tbl tbody tr td {
+#layoutSidenav_content .todo .todo-tbl tbody tr td/* :first-child, 
+#layoutSidenav_content .todo .todo-tbl tbody tr td:last-child */ {
   border-left: none;
   border-right: none;
 }
 #layoutSidenav_content .todo .todo-tbl thead tr {
   background: #f0f0f0;
 }
-#layoutSidenav_content .todo .todo-tbl thead tr th {
+#layoutSidenav_content .todo .todo-tbl thead tr th/* :first-child, 
+#layoutSidenav_content .todo .todo-tbl thead tr th:last-child */ {
+  border-left: none;
   border-right: none;
   border-bottom-color: #999;
 }
@@ -81,7 +83,7 @@ table, th, td {
   background: none;
   border: none;
 }
-/* 게시글 조회 모달 */
+
 .my-modal-footer-read {
   text-align: center;
 }
@@ -90,24 +92,15 @@ table, th, td {
   background: none;
   padding: 5px 25px;
 }
-/* 서브모달 */
-.my-modal-message {
-  line-height: 45px;
-}
-/* 모달 */
+
 .modal-content {
   width: 635px;
-  height: 700px;
+  height: 600px;
   padding: 30px;
 }
 #title-write {
-  width: 440px;
+  width: 420px;
 }
-
-#read-title {
- width: 440px;
-}
-
 .my-modal-body {
   margin-left: 0px;
 }
@@ -120,11 +113,6 @@ table, th, td {
   width: 100%;
   height: 100%;
 }
-#read-content {
-   display: block;
-   width: 100%;
-   height: 100%;
-}
 .my-modal-footer button {
   color: #000;
   background: none;
@@ -134,7 +122,20 @@ table, th, td {
   margin-right: 306px;
 }
 
+
+.my-modal-message {
+  line-height: 45px;
+}
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 </head>
 <body>
 		<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp"/>
@@ -143,18 +144,17 @@ table, th, td {
             <div class="modal-dialog">
                 <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
                 <div class="modal-content" style="top: 172px">
-                    <form action="${ pageContext.servletContext.contextPath }/edu/regist" method="post" encType="multipart/form-data">
+                    <form action="${ pageContext.servletContext.contextPath }/edu/regist" method="post">
                         <div class="my-modal-header mb-4">
                             <label class="me-2" for="title-write">제목</label>
                             <input type="text" id="title-write" name="title">
                         </div>
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
-                                <textarea name="content" id="my-textarea" cols="30" rows="10"></textarea>
-                                <input type="file"  name="singleFile" style="margin-top: 20px;">
+                                <textarea name="body" id="my-textarea" cols="30" rows="10"></textarea>
                             </div>
-                            <div class="my-modal-footer" align="right">
-                                <button type="submit" class="btn btn-secondary" style="margin-right: 0px;" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
+                            <div class="my-modal-footer">
+                                <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                             </div>
                         </div>    
@@ -194,7 +194,16 @@ table, th, td {
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
                                 <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
-                            </div>                         
+                            </div>
+                            <span><label>첨부파일</label></span>
+                            <div calss="btn-group">
+                            	<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
+                            	<button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                            		<span class="caret"></span>
+                            	</button>
+                            	<div class="dropdown-menu" id="downloadarea">
+                            	</div>
+                            </div>
                         </div>
                         <div class="my-modal-footer-read">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
@@ -203,15 +212,7 @@ table, th, td {
                             </c:if>
                             <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">	
                             	<button type="submit" class="btn btn-secondary">수정하기</button>
-                            </c:if>      
-						    <div calss="btn-group" style="margin-top: 5%;margin-left: 38%;">
-                            	<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
-                            	<button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-                            		<span class="caret"></span>
-                            	</button>
-                            	<div class="dropdown-menu" id="downloadarea">
-                            	</div>
-                            </div>       
+                            </c:if>	
                         </div>
                     </form>
                 </div>
@@ -249,21 +250,22 @@ table, th, td {
 	                                    <td><c:out value="${ edu.no }"/></td>
 	                                    <td><c:out value="${ edu.title }"/></td>
 	                                    <td><c:out value="${ edu.count }"/></td>
-	                                    <td><c:out value="${ edu.updatedDate }"/></td>
+	                                    <td><c:out value="${ edu.registedDate }"/></td>
 	                                    <td><c:out value="${ edu.writer.name }"/></td>
 	                                </tr>
                                </c:forEach> 
                             </tbody>
                         </table>
-                       
-                        <div class="paging mt-3">                           
+                        <div class="paging mt-3">
+                            
                         <!-- 페이지 처리  -->
-                       		 <jsp:include page="../../common/paging.jsp" />                       
+                        <jsp:include page="../../common/paging.jsp" />
+                        
+                        <!-- 검색폼  -->   
                         </div>
-                       
-                        <!-- 검색폼  -->                      
                         <div class="search-area">
-                          <form id="loginForm" action="${ pageContext.servletContext.contextPath }/edu/list" method="get">
+                          <form id="loginForm" action="${ pageContext.servletContext.contextPath }/edu/list"
+                          		method="get">
                              <div class="search-set mt-2">
                               <input type="hidden" name="currentPage" value="1">
                                 <select name="searchCondition" id="searchCondition">
@@ -297,32 +299,20 @@ table, th, td {
 						success : function(data, textStatus, xhr) {
 							const eduDetail = JSON.parse(data.eduDetail);
 							
+							for(let index in eduDetail) {
 								console.log(eduDetail);
 								console.log(Object.entries(eduDetail));
 								
 								const eduArray = Object.entries(eduDetail);
 								
-								const $fileNo = eduArray[13][1];
-								
-								console.log(eduArray);
+								console.log(eduArray[3][1]);
 								$("#read-no").val(eduArray[0][1]);
 								$("#read-title").val(eduArray[2][1]);
 								$("#read-content").val(eduArray[3][1]);
-								$("#read-writerNo").val(eduArray[8][1]);
-								$("#read-originalName").val(eduArray[14][1]);
 								$("#readModal").modal("show");
 								ex.children[2].innerText=eduArray[9][1];
 								
-								if($fileNo != null) {
-									const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/edu/download/" + $fileNo
-													      + "' class='dropdown-item' id='downloadedu'>다운로드</a>";
-													        									
-									$("#downloadarea").empty();
-									$("#downloadarea").append($downloadTag);
-								
 								}
-								
-								
 							}, error:function(data){
 								console.log(data);
 							}

@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.greedy.waterfall.board.model.dto.EduDTO;
+import com.greedy.waterfall.board.model.dto.EduFileDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
 public interface EduMapper {
 
-	int selectTotalCount(Map<String, String> searchMap);
+	int selectTotalCount(Map<Object, Object> searchMap);
 	
 	List<EduDTO> selectEduList(SelectCriteria selectCriteria);
 
@@ -21,6 +22,14 @@ public interface EduMapper {
 	int deleteEduBoard(int no);
 
 	int updateEduBoard(EduDTO edu);
+
+	EduDTO selectEduDetailFile(int no);
+
+	EduFileDTO findFile(int no);
+
+	int deleteEduFile(int fileNumber);
+
+	void insertEduFile(EduFileDTO eduFileDTO);
 
 
 	
