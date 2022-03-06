@@ -158,6 +158,8 @@ public class IssueServiceImpl implements IssueService {
 			}
 			mapper.updateIssueHistory(issue);
 			
+			mapper.writeUpdatedIssueHistory(issue);
+			
 		}
 		
 //		if(!(result > 0)) {
@@ -166,16 +168,26 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public void removeGuide(int no) {
+	public int removeGuide(int no) {
+		
+		System.out.println("int no의 정보는 :" + no);
 		
 		IssueDTO issue = mapper.selectIssueDetail(no);
 		
+		int taskNo = issue.getTaskNo();
+		
+		System.out.println("removeGuide의 DTO 정보는 : " + issue);
+
 		int result = mapper.deleteIssue(issue);
 		
 //		if(!(result > 0)) {
 //			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
 //		}
 		mapper.deleteIssueHistory(issue);
+		
+		mapper.writeDeletedIssueHistory(issue);
+		
+		return taskNo;
 	}
 }
 

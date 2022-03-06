@@ -47,4 +47,8 @@ public interface IssueMapper {
 
 	void writeRegistedIssueHistory(IssueDTO issue);
 
+	void writeUpdatedIssueHistory(IssueDTO issue);
+
+	void writeDeletedIssueHistory(IssueDTO issue);
+
 }
