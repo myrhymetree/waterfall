@@ -2,6 +2,8 @@ package com.greedy.waterfall.board.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +11,13 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,7 +66,7 @@ public class EduController {
 		String searchCondition = request.getParameter("searchCondition");
 		String searchValue = request.getParameter("searchValue");
 		
-		Map<String, Object> searchMap = new HashMap<>();
+		Map<Object, Object> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
 		searchMap.put("projectNo", projectNo);
@@ -176,6 +180,7 @@ public class EduController {
     
     int no = Integer.parseInt(request.getParameter("no"));
 		EduDTO eduDetail = eduService.findEduDetail(no);
+		EduDTO eduFileDetail = eduService.findEduFileDetail(no);
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
@@ -187,7 +192,13 @@ public class EduController {
 		      .disableHtmlEscaping()
 		      .create();
 		
-		mv.addObject("eduDetail", gson.toJson(eduDetail));
+		if(eduFileDetail == null) {
+			mv.addObject("eduDetail", gson.toJson(eduDetail));
+			mv.setViewName("jsonView");
+			return mv; 
+		}
+		
+		mv.addObject("eduFileDetail", gson.toJson(eduFileDetail));
 		mv.setViewName("jsonView");
 		
 		return mv; 
@@ -222,6 +233,45 @@ public class EduController {
 		
 		return "redirect:/edu/list";
 		
+	}
+	
+	@GetMapping("/download/{fileNo}")
+	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
+		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		EduFileDTO file = eduService.findFile(no);
+		fileInfo.put("filePath", file.getSavedPath());
+		fileInfo.put("fileOriginName", file.getOriginalName());
+		fileInfo.put("fileRandomName", file.getRandomName());
+		
+		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
+	}
+	
+	@GetMapping("/deleteFile/{fileNo}")
+	public ModelAndView deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session,
+			RedirectAttributes rttr, ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
+		int fileNumber = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		
+		EduFileDTO eduFileDTO = eduService.removeEduFile(fileNumber);
+		
+		String root = session.getServletContext().getRealPath("resources");
+		
+		String filePath = root + "/eduUploadFiles";
+		
+		File file = new File(filePath + "\\" + eduFileDTO.getRandomName());
+		
+		if(file.exists()) {
+			file.delete();
+		}
+		
+		mv.addObject("intent", "/edu/deleteFile");
+		mv.setViewName("redirect:/edu/list");
+		
+		rttr.addFlashAttribute("message", "게시판 첨부파일 삭제에 성공하셨습니다.");
+		
+		return mv;
 	}
 	
 }

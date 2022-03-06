@@ -6,8 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-
+/* 게시판 */
 #layoutSidenav_content .todo h2 {
   height: 50px;
   line-height: 1.5;
@@ -83,7 +85,7 @@ table, th, td {
   background: none;
   border: none;
 }
-
+/* 게시글 조회 모달 */
 .my-modal-footer-read {
   text-align: center;
 }
@@ -92,15 +94,24 @@ table, th, td {
   background: none;
   padding: 5px 25px;
 }
-
+/* 서브모달 */
+.my-modal-message {
+  line-height: 45px;
+}
+/* 모달 */
 .modal-content {
   width: 635px;
-  height: 600px;
+  height: 700px;
   padding: 30px;
 }
 #title-write {
-  width: 420px;
+  width: 440px;
 }
+
+#read-title {
+ width: 440px;
+}
+
 .my-modal-body {
   margin-left: 0px;
 }
@@ -113,6 +124,11 @@ table, th, td {
   width: 100%;
   height: 100%;
 }
+#read-content {
+   display: block;
+   width: 100%;
+   height: 100%;
+}
 .my-modal-footer button {
   color: #000;
   background: none;
@@ -122,20 +138,24 @@ table, th, td {
   margin-right: 306px;
 }
 
+/* 검색 인풋 버튼 */ 
+/* input::-ms-clear,
+input::-ms-reveal{
+   display:none;width:0;height:0;
+} */
 
-.my-modal-message {
-  line-height: 45px;
-}
+/* input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration{
+   display:none;
+} */
+
+/* input::-webkit-search-cancel-button {
+   display:none;
+} */
+
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-
-	/* 비지니스 로직 성공 alert 메시지 처리 */
-	const message = '${ requestScope.message }';
-	if(message != null && message !== '') {
-		alert(message);
-	}
-</script>
 </head>
 <body>
 		<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp"/>
@@ -144,7 +164,7 @@ table, th, td {
             <div class="modal-dialog">
                 <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
                 <div class="modal-content" style="top: 172px">
-                    <form action="${ pageContext.servletContext.contextPath }/edu/regist" method="post">
+                    <form action="${ pageContext.servletContext.contextPath }/edu/regist" method="post" encType="multipart/form-data">
                         <div class="my-modal-header mb-4">
                             <label class="me-2" for="title-write">제목</label>
                             <input type="text" id="title-write" name="title">
@@ -307,7 +327,7 @@ table, th, td {
 								
 								const $fileNo = guideArray[13][1];
 								
-								console.log(eduArray[3][1]);
+								console.log(eduArray);
 								$("#read-no").val(eduArray[0][1]);
 								$("#read-title").val(eduArray[2][1]);
 								$("#read-content").val(eduArray[3][1]);
