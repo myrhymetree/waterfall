@@ -59,7 +59,7 @@
    border-radius: 20px;
    border-color: #C4C4C4;
    float: left;
-   margin-left: 11%;
+   margin-left: 8%;
    overflow: auto;
 }
 
@@ -198,7 +198,7 @@ td {
             <label class="project-issue">이슈 현황</label>
             
             <%-- 프로젝트 가이드 시작 --%>
-            <label style="margin-left: 11%">&emsp;&emsp;&emsp;프로젝트 가이드</label>
+            <label style="margin-left: 2%">&emsp;&emsp;&emsp;프로젝트 가이드</label>
             <%-- + 버튼 --%>
             <button class="float" id="addButton1" onclick="location.href='${ pageContext.servletContext.contextPath }/edu /list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
@@ -213,12 +213,12 @@ td {
                </div>
                
                <%-- 이슈 해당 박스 --%>
-               <div id="issuebox" class="main-box">
+               <div id="issuebox" class="main-box" style="margin-left:3%;">
                   
                </div>
             	   
                <div class="main-box3">
-	               <table style="margin-left:8%;margin-top:8%" id="main-board-modal">
+	               <table style="margin-left:3%;margin-top:8%" id="main-board-modal">
 		               <c:forEach var="guide" items="${ projectBoard.guideBoard }">
 							<tr data-bs-toggle="modal" data-bs-target="#project-main-board-modal">
 								<td>${ guide.title }</td>

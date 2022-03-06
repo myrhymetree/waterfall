@@ -301,7 +301,7 @@
 								['Status', 'Amount'],
 							  	['대기중', $projectInfo.watingIssueAmount],
 							  	['처리중', $projectInfo.progressingIssueAmount],
-							  	['완료', $projectInfo.solvedIssueAmount],
+							  	['완료', $projectInfo.solvedIssueAmount]
 							]);
 							
 							var options = {
