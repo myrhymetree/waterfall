@@ -18,6 +18,7 @@
         <result property="registerNo" column="ISSUE_REGISTER"/>
         <result property="managerNo" column="ISSUE_MANAGER"/>
         <result property="projectNo" column="PROJECT_NO"/>
+        <result property="taskNo" column="TASK_NO"/>
         <result property="taskCodeManageName" column="taskCodeManageName"/>
         
         <association property="file" resultMap="fileResultMap"></association>
@@ -125,7 +126,8 @@
      LEFT JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
      LEFT JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
     WHERE A.TASK_NO = #{ taskNo }
-      AND A.ISSUE_STATUS = 'Y' 
+      AND A.ISSUE_STATUS = 'Y'
+    ORDER BY 1 DESC
    </select>
    
    <select id="selectAllIssue" resultMap="issueResultMap">
@@ -154,7 +156,8 @@
      JOIN TBL_TASK F ON (A.TASK_NO = F.TASK_NO)
      JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
      JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
-    WHERE A.ISSUE_STATUS = 'Y' 
+    WHERE A.ISSUE_STATUS = 'Y'
+    ORDER BY 1 DESC 
    </select>
   	
   	<select id="selectAllProjectList" parameterType="hashmap" resultMap="projectIssueCountResultMap">
@@ -204,6 +207,7 @@
            <if test="managerNo != 1">
            	AND G.MEMBER_NO = #{ managerNo } 
            </if>
+          ORDER BY 1 DESC
   	</select>
   	
   	<select id="selectIssuesOfTask" parameterType="_int" resultMap="taskIssueCountResultMap" >
@@ -246,6 +250,7 @@
            WHERE H.PROJECT_STATUS = 'Y'
              AND A.TASK_STATUS = 'Y'
 	         AND A.PROJECT_NO = #{ projectNo }
+	       ORDER BY 1 DESC
   	</select>
   	
    	<select id="selectTask" parameterType="_int" resultMap="issueResultMap" >
@@ -479,18 +484,18 @@
 	</insert>
 	
  	<insert id="writeRegistedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
-	<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
-		SELECT 
-		DISTINCT 
-                 C.TASK_CATEGORY_NAME AS taskCodeManageName
-               , D.MEMBER_NAME AS registerName
-            FROM TBL_ISSUE A
-            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
-            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
-            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
-           WHERE B.TASK_NO = #{ taskNo }
-             AND A.ISSUE_REGISTER = #{ registerNo }
-	</selectKey>
+		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS registerName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
 		  (
@@ -505,58 +510,78 @@
 		  (
 		    HISTORY_NO.NEXTVAL
 		  , SYSDATE
-		  , '[' || #{ registerName } || ']' || '님이' || #{ taskCodeManageName } || '업무에서' || '[' || '이슈' || '] ' || #{ name } || '를' || '[' || '수정' || ']' || '했습니다'
+		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
 		  , 3
 		  , #{ projectNo }
 		  , #{ registerNo } 
 		  )
 	</insert>
 	
-	<insert id="writeUpdatedIssueHistory">
+	<insert id="writeUpdatedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS registerName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
 		  (
 		    A.HISTORY_NO
 		  , A.UPDATED_DATE
 		  , A.CONTENT
-		  , A.CATEGORY_NAME
+		  , A.CATEGORY_TYPE_NO
 		  , A.PROJECT_NO
 		  , A.REGISTER_NO
-		  , A.CONTENT_TYPE
 		  )
 		  VALUES
 		  (
 		    HISTORY_NO.NEXTVAL
 		  , SYSDATE
-		  , '[' || #{ registerName } || ']' || '님이' || #{ taskCategoryName } || '업무에서' || '[' || '이슈' || '] ' || #{ issueName } || '를' || '[' || '수정' || ']' || '했습니다'
-		  , '이슈'
+		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , 3
 		  , #{ projectNo }
 		  , #{ registerNo } 
-		  , '수정'
 		  )
 	</insert>
 	
-	<insert id="writeDeletedIssueHistory">
+	<insert id="writeDeletedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS registerName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
 		  (
 		    A.HISTORY_NO
 		  , A.UPDATED_DATE
 		  , A.CONTENT
-		  , A.CATEGORY_NAME
+		  , A.CATEGORY_TYPE_NO
 		  , A.PROJECT_NO
 		  , A.REGISTER_NO
-		  , A.CONTENT_TYPE
 		  )
 		  VALUES
 		  (
 		    HISTORY_NO.NEXTVAL
 		  , SYSDATE
-		  , '[' || '이슈' || ']' || ' ' || #{ issueName } || '을/를' || ' ' || '[' || '삭제' || ']' || '했습니다'
-		  , '이슈'
+		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		  , 3
 		  , #{ projectNo }
 		  , #{ registerNo } 
-		  , '삭제'
 		  )
 	</insert>
 	

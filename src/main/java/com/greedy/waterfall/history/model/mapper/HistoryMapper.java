@@ -1,14 +1,15 @@
-package com.greedy.waterfall.history.model.service;
+package com.greedy.waterfall.history.model.mapper;
 
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
 
 import com.greedy.waterfall.history.model.dto.HistoryDTO;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 
-public interface HistoryService {
+@Repository
+public interface HistoryMapper {
 
 	List<HistoryDTO> selectIssueHistoryList(int projectNo);
-
-	List<HistoryDTO> selectEntireHistoryList();
 
 }

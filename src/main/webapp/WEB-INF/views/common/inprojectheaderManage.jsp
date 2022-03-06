@@ -61,10 +61,12 @@
 	<div class="collapse" id="collapseLayouts5" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 		<div class="menu-font2">
 			<nav class="sb-sidenav-menu-nested nav">
-				<a class="nav-link" href="layout-static.html">산출물</a> 
-				<a class="nav-link" href="layout-sidenav-light.html">이슈</a> 
-				<a class="nav-link" href="layout-sidenav-light.html">게시판</a>
-				<button onclick="location.href='${  pageContext.servletContext.contextPath }/test'">Test DB 연결</button>
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/project">프로젝트</a> 
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/task">업무</a> 
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/issue">이슈</a> 
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/output">산출물</a> 
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/member">인원배정</a>
+				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/board">게시판</a>
 			</nav>
 		</div>
 	</div>

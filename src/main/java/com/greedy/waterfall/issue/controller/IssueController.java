@@ -130,12 +130,13 @@ public class IssueController {
 		
 		System.out.println("삭제하기 위해 no 받기 " + no );
 		
-		issueService.removeGuide(no);
+		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
+		int taskNo = issueService.removeGuide(no);
 		
 		rttr.addFlashAttribute("message", "이슈 삭제에 성공하셨습니다.");
 		
 		mv.addObject("intent", "/issue/admin/delete");
-		mv.setViewName("redirect:/issue/admin/list/" + no);
+		mv.setViewName("redirect:/issue/admin/list/" + taskNo);
 		
 		return mv;
 		
@@ -635,12 +636,13 @@ public class IssueController {
 		
 		System.out.println("삭제하기 위해 no 받기 " + no );
 		
-		issueService.removeGuide(no);
+		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
+		int taskNo = issueService.removeGuide(no);
 		
 		rttr.addFlashAttribute("message", "가이드 게시판 삭제에 성공하셨습니다.");
 		
 		mv.addObject("intent", "/issue/delete");
-		mv.setViewName("redirect:/issue/list/" + no);
+		mv.setViewName("redirect:/issue/list/" + taskNo);
 		
 		return mv;
 		

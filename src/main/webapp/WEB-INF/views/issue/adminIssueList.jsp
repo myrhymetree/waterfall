@@ -193,7 +193,7 @@ function backButton_click() {
                   $("#read-content").val(issueDetail.content);
                   $("#read-answer").val(issueDetail.answer);
                   $("#read-projectNo").val(issueDetail.projectNo);
-                  $("#read-taskNo").val(issueDetail.taskNo);
+                  $("#read-taskNo").val(issueDetail.task.no);
                   $("#myModal").modal("show");
                   
                   $("#downloadZone").empty();
@@ -226,12 +226,13 @@ function backButton_click() {
               				$("#completedDateZone *").remove();		//div영역에 있는 모든것을 날림
               			}
               		});
-              	} else {
+              	} else {	//종료일이 null이 아닐때는 무조건 완료일 버튼을 만들어서 값을 표시해줌
               		$completedDate = "<div class='col-2 center' id='cZone'><label for='read-completedDate'>종료일</label></div><div class='col-4' id='cZone2'><input type='date' id='read-completedDate' name='completedDate' required></div>";
            	     	$("#completedDateZone").append($completedDate);
               		$("#read-completedDate").val(issueDetail.completedDate);
               		
-              		$("#read-progressStatus").change(function(){
+              		/* '완료'가 아니면 만든 영역을 지우고 '수정'을 눌렀을 경우 버튼이 없는 상태로 전송을 하기 때문에 어떠한 값도 전달 받지 못했기 때문에 null이 된다. */
+              		$("#read-progressStatus").change(function(){	
               			if($("#read-progressStatus").val() == "대기중") {
               				console.log("이슈종료일은 : " + issueDetail.completedDate)
               				$("#completedDateZone *").remove();
