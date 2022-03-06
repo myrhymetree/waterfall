@@ -198,7 +198,7 @@ public class EduController {
 			return mv; 
 		}
 		
-		mv.addObject("eduFileDetail", gson.toJson(eduFileDetail));
+		mv.addObject("eduDetail", gson.toJson(eduFileDetail));
 		mv.setViewName("jsonView");
 		
 		return mv; 

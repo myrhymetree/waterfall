@@ -9,7 +9,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-/* 게시판 */
 #layoutSidenav_content .todo h2 {
   height: 50px;
   line-height: 1.5;
@@ -37,7 +36,7 @@
   text-align: center;
 }
 #layoutSidenav_content .todo .tbl-wrapper .paging button {
-  /* font-size: 1rem; */
+
   background: none;
   border: none;
 }
@@ -46,7 +45,7 @@
 }
 table, th, td {
   border: 1px solid #e5e5e5;
-  /* border-collapse: collapse; */
+
 }
 #layoutSidenav_content .todo .todo-tbl {
   width: 100%;
@@ -55,17 +54,14 @@ table, th, td {
   border-left: none;
   border-right: none;
 }
-#layoutSidenav_content .todo .todo-tbl tbody tr td/* :first-child, 
-#layoutSidenav_content .todo .todo-tbl tbody tr td:last-child */ {
+#layoutSidenav_content .todo .todo-tbl tbody tr td {
   border-left: none;
   border-right: none;
 }
 #layoutSidenav_content .todo .todo-tbl thead tr {
   background: #f0f0f0;
 }
-#layoutSidenav_content .todo .todo-tbl thead tr th/* :first-child, 
-#layoutSidenav_content .todo .todo-tbl thead tr th:last-child */ {
-  border-left: none;
+#layoutSidenav_content .todo .todo-tbl thead tr th {
   border-right: none;
   border-bottom-color: #999;
 }
@@ -138,23 +134,6 @@ table, th, td {
   margin-right: 306px;
 }
 
-/* 검색 인풋 버튼 */ 
-/* input::-ms-clear,
-input::-ms-reveal{
-   display:none;width:0;height:0;
-} */
-
-/* input::-webkit-search-decoration,
-input::-webkit-search-cancel-button,
-input::-webkit-search-results-button,
-input::-webkit-search-results-decoration{
-   display:none;
-} */
-
-/* input::-webkit-search-cancel-button {
-   display:none;
-} */
-
 </style>
 </head>
 <body>
@@ -172,10 +151,10 @@ input::-webkit-search-results-decoration{
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
                                 <textarea name="content" id="my-textarea" cols="30" rows="10"></textarea>
-                                <input type="file"  name="singleFile">
+                                <input type="file"  name="singleFile" style="margin-top: 20px;">
                             </div>
-                            <div class="my-modal-footer">
-                                <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
+                            <div class="my-modal-footer" align="right">
+                                <button type="submit" class="btn btn-secondary" style="margin-right: 0px;" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                             </div>
                         </div>    
@@ -215,16 +194,7 @@ input::-webkit-search-results-decoration{
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
                                 <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
-                            </div>
-                            <span><label>첨부파일</label></span>
-                            <div calss="btn-group">
-                            	<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
-                            	<button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-                            		<span class="caret"></span>
-                            	</button>
-                            	<div class="dropdown-menu" id="downloadarea">
-                            	</div>
-                            </div>
+                            </div>                         
                         </div>
                         <div class="my-modal-footer-read">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
@@ -233,7 +203,15 @@ input::-webkit-search-results-decoration{
                             </c:if>
                             <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">	
                             	<button type="submit" class="btn btn-secondary">수정하기</button>
-                            </c:if>	
+                            </c:if>      
+						    <div calss="btn-group" style="margin-top: 5%;margin-left: 38%;">
+                            	<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
+                            	<button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                            		<span class="caret"></span>
+                            	</button>
+                            	<div class="dropdown-menu" id="downloadarea">
+                            	</div>
+                            </div>       
                         </div>
                     </form>
                 </div>
@@ -271,7 +249,7 @@ input::-webkit-search-results-decoration{
 	                                    <td><c:out value="${ edu.no }"/></td>
 	                                    <td><c:out value="${ edu.title }"/></td>
 	                                    <td><c:out value="${ edu.count }"/></td>
-	                                    <td><c:out value="${ edu.registedDate }"/></td>
+	                                    <td><c:out value="${ edu.updatedDate }"/></td>
 	                                    <td><c:out value="${ edu.writer.name }"/></td>
 	                                </tr>
                                </c:forEach> 
@@ -319,13 +297,12 @@ input::-webkit-search-results-decoration{
 						success : function(data, textStatus, xhr) {
 							const eduDetail = JSON.parse(data.eduDetail);
 							
-							for(let index in eduDetail) {
 								console.log(eduDetail);
 								console.log(Object.entries(eduDetail));
 								
 								const eduArray = Object.entries(eduDetail);
 								
-								const $fileNo = guideArray[13][1];
+								const $fileNo = eduArray[13][1];
 								
 								console.log(eduArray);
 								$("#read-no").val(eduArray[0][1]);
@@ -339,16 +316,13 @@ input::-webkit-search-results-decoration{
 								if($fileNo != null) {
 									const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/edu/download/" + $fileNo
 													      + "' class='dropdown-item' id='downloadedu'>다운로드</a>";
-													        
-									const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/edu/deleteFile/" + $fileNo
-														+ "' class='dropdown-item' id='downloadedu'>삭제</a>";
-									
+													        									
 									$("#downloadarea").empty();
 									$("#downloadarea").append($downloadTag);
-									$("#downloadarea").append($deleteTag);
-								}
 								
 								}
+								
+								
 							}, error:function(data){
 								console.log(data);
 							}
