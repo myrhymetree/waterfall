@@ -142,7 +142,7 @@ td {
                             </c:forEach>
                             </tbody>
                         </table>
-						<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>	
+						<jsp:include page="/WEB-INF/views/common/paging.jsp"/>	
                         <div class="search-area">
                             <div class="search-set mt-2">
 	                            <form action="${ pageContext.servletContext.contextPath }/meeting/list" >

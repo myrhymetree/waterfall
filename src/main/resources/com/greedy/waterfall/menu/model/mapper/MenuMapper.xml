@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.waterfall.menu.model.mapper.MenuMapper">
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectDTO" id="projectResult">
+		<id property="no" column="PROJECT_NO"/>
+		<result property="name" column="PROJECT_NAME"/>	
+		<result property="startDate" column="PROJECT_START_DATE"/>
+		<result property="deadLine" column="PROJECT_DEADLINE"/>
+		<result property="progression" column="PROJECT_PROGRESSION"/>
+		<result property="status" column="PROJECT_STATUS"/>
+		<result property="completed" column="PROJECT_COMPLETED_DATE"/>
+		<result property="statusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="outputCount" column="OUTPUT_COUNT"/>
+		<result property="issueCount" column="ISSUE_COUNT"/>
+		
+		<association property="member" resultMap="memberResult"></association>
+		<association property="projectInfo" resultMap="projectInfoResult"></association>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
+		<result property="memberName" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.menu.model.dto.ProjectInfoDTO" id="projectInfoResult">
+		<result property="outputAmount" column="OUTPUT_AMOUNT"/>
+		
+		<result property="watingIssueAmount" column="WAIT_ISSUE"/>
+		<result property="progressingIssueAmount" column="PROGRESS_ISSUE"/>
+		<result property="solvedIssueAmount" column="SOLVED_ISSUE"/>
+		
+		<result property="beforeProceedingTaskAmount" column="BEFORE_TASK"/>
+		<result property="progressingTaskAmount" column="PROGRESS_TASK"/>
+		<result property="testingTaskAmount" column="TEST_TASK"/>
+		<result property="finishedTaskAmount" column="FINISH_TASK"/>
+		<result property="pendingTaskAmount" column="PENDING_TASK"/>
+	</resultMap>
+
+	<select id="findProjectInfo" resultMap="projectResult">
+        SELECT 
+               A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.PROJECT_START_DATE
+             , A.PROJECT_DEADLINE
+             , A.PROJECT_PROGRESSION
+             , A.PROJECT_PROGRESS_STATUS_CODE
+             , C.MEMBER_NO
+             , C.MEMBER_NAME
+             , (SELECT COUNT(*) 
+                  FROM TBL_OUTPUT D
+                 WHERE D.PROJECT_NO = A.PROJECT_NO
+               ) AS OUTPUT_AMOUNT
+             , (SELECT COUNT(*) 
+                  FROM TBL_ISSUE E 
+                 WHERE E.PROJECT_NO = A.PROJECT_NO
+                   AND E.ISSUE_PROGRESS_STATUS = '대기중'
+               ) AS WAIT_ISSUE
+             , (SELECT COUNT(*) 
+                  FROM TBL_ISSUE F 
+                 WHERE F.PROJECT_NO = A.PROJECT_NO
+                   AND F.ISSUE_PROGRESS_STATUS = '처리중'
+               ) AS PROGRESS_ISSUE
+             , (SELECT COUNT(*) 
+                  FROM TBL_ISSUE G 
+                 WHERE G.PROJECT_NO = A.PROJECT_NO
+                   AND G.ISSUE_PROGRESS_STATUS = '완료'
+               ) AS SOLVED_ISSUE
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK H
+                 WHERE H.TASK_PROGRESS_STATUS ='진행전'
+                   AND H.PROJECT_NO = A.PROJECT_NO                  
+               ) AS BEFORE_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK I
+                 WHERE I.TASK_PROGRESS_STATUS ='진행중'
+                   AND I.PROJECT_NO = A.PROJECT_NO
+               ) AS PROGRESS_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK J
+                 WHERE J.TASK_PROGRESS_STATUS ='테스트중'
+                   AND J.PROJECT_NO = A.PROJECT_NO
+               ) AS TEST_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK K
+                 WHERE K.TASK_PROGRESS_STATUS ='진행완료'
+                   AND K.PROJECT_NO = A.PROJECT_NO
+               ) AS FINISH_TASK
+             , (SELECT COUNT(*)
+                          FROM TBL_TASK L
+                 WHERE TASK_PROGRESS_STATUS ='보류'
+                   AND L.PROJECT_NO = A.PROJECT_NO
+               ) AS PENDING_TASK
+          FROM TBL_PROJECT A
+          JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON(A.PROJECT_NO = B.PROJECT_NO)
+          JOIN TBL_MEMBER C ON (B.MEMBER_NO = C.MEMBER_NO)
+         WHERE B.ROLE_NO = 8
+           AND B.PROJECT_NO = #{ projectNo }
+	</select>
+
+	<select id="findProjectCount" resultType="_int">
+        SELECT  
+               COUNT(*)
+          FROM TBL_PROJECT A
+         WHERE A.PROJECT_STATUS = 'Y'
+	</select>
+	<select id="findMainProjectList" resultMap="projectResult">
+        SELECT 
+               RNUM
+             , A.PROJECT_NO
+             , A.PROJECT_NAME
+             , A.MEMBER_NAME
+          FROM (SELECT ROWNUM RNUM
+                     , B.PROJECT_NO
+                     , B.PROJECT_NAME
+                     , B.MEMBER_NAME
+                  FROM (SELECT D.PROJECT_NO
+                             , D.PROJECT_NAME
+                             , E.MEMBER_NO
+                             , E.MEMBER_NAME
+                         FROM TBL_ROLE_ASSIGNMENT_HISTORY C
+                         JOIN TBL_PROJECT D ON (C.PROJECT_NO = D.PROJECT_NO)
+                         JOIN TBL_MEMBER E ON (C.MEMBER_NO = E.MEMBER_NO)
+                        WHERE C.ROLE_NO = 8
+                          AND D.PROJECT_STATUS = 'Y'
+                        ORDER BY C.PROJECT_NO DESC
+                       ) B
+				<![CDATA[
+                 WHERE ROWNUM <= #{ endRow }
+				]]>
+               ) A
+         WHERE RNUM >= #{ startRow }
+	</select>
+
+
+
+</mapper>

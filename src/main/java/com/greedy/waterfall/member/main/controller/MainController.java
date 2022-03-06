@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/*")
 public class MainController {
 
+	/* 루트주소의 요청시, 세션에 로그인정보가 있다면 메인화면으로 보내고, 아니라면 로그인화면으로 보낸다. */
 	@GetMapping(value= {"/"})
 	public String main(HttpSession session) {	
 		if(session.getAttribute("loginMember") != null){
-			return "redirect:/member/login2";
+			return "redirect:/menu/main";
 		}
 		return "member/memberLogin";
 	}
