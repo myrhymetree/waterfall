@@ -65,7 +65,8 @@
 	<update id="updateDept" parameterType="com.greedy.waterfall.company.model.dto.DeptDTO">
 		UPDATE
 		       TBL_DEPT
-		   SET DEPT_NAME = #{ name }
+		   SET DEPT_CODE = #{ code }
+		     , DEPT_NAME = #{ name }
 		 WHERE DEPT_CODE = #{ code }
 	</update>
 	

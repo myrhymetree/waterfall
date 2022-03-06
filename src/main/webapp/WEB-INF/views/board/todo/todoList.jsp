@@ -323,16 +323,15 @@ table, th, td {
 					<form id="loginForm"
 						action="${ pageContext.servletContext.contextPath }/todo/list"
 						method="GET" style="display: inline-block">
-						<input type="hidden" name="currentPage" value="1"> <!-- 검색 드롭 창 --><select
-						id="searchCondition" name="searchCondition">
-						<option value="title"
-							${ requestScope.selectCriteria.searchCondition eq "title"? "selected": "" }>제목</option>
-						<option value="content"
-							${ requestScope.selectCriteria.searchCondition eq "content"? "selected": "" }>내용</option>
-						<option value="writer"
-							${ requestScope.selectCriteria.searchCondition eq "writer"? "selected": "" }>등록자</option>
-						</select> <!-- 검색 입력 창 --><input type="search" id="searchValue" name="searchValue"
-						value="<c:out value="${ requestScope.selectCriteria.searchValue }"/>">
+						<input type="hidden" name="currentPage" value="1">
+						<!-- 검색 드롭다운 목록 -->
+						<select id="searchCondition" name="searchCondition">
+							<option value="title" ${ requestScope.selectCriteria.searchCondition eq "title"? "selected": "" }>제목</option>
+							<option value="content" ${ requestScope.selectCriteria.searchCondition eq "content"? "selected": "" }>내용</option>
+							<%-- <option value="writer" ${ requestScope.selectCriteria.searchCondition eq "writer"? "selected": "" }>등록자</option> --%>
+						</select>
+						<!-- 검색 입력 필드 -->
+						<input type="search" id="searchValue" name="searchValue" value="<c:out value="${ requestScope.selectCriteria.searchValue }"/>">
 						<!-- 찾기 버튼 -->
 						<button type="submit">
 							<i class="fas fa-search"></i>

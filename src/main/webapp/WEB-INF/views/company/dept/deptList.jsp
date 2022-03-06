@@ -135,12 +135,12 @@ textarea {
 	
 }
 
-#dept-add {
+#dept-add, #dept-mod, #team-add, #team-mod, #btn-modify {
 	background-color: #343A40;
 	color: white;
 }
 
-#dept-delete {
+#dept-delete, #team-delete, #btn-delete {
 	background-color: #D16B6B;
 	color: white;
 }
@@ -338,6 +338,35 @@ textarea {
 			</div>
 		</div>
 		
+		<!-- 팀 수정 모달 -->
+		<div class="modal fade" id="readTeamModal" data-bs-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+				<div class="modal-content" style="top: 172px">
+					<form action="${ pageContext.servletContext.contextPath }/company/team/update" method="POST">
+						<div class="my-modal-header mb-3">
+							<h3>팀 수정</h3>
+						</div>
+						<div class="my-modal-body">
+							<div class="my-modal-input mb-3">
+								<label class="me-2" for="team-name-read">팀명</label>
+								<input type="text" id="team-name-read" name="name">
+							</div>
+							<div class="my-modal-input mb-4">
+								<label class="me-2" for="team-code-read">팀코드</label>
+								<input type="text" id="team-code-read" name="code">
+							</div>
+						</div>
+						<div class="my-modal-footer-read">
+							<button type="submit" class="btn btn-secondary">수정</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
 		<main>
 			<div id="output_header">
 				<i style='font-size: 24px' class='fas'>&#xf4fe;</i>부서관리
@@ -354,14 +383,14 @@ textarea {
 									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;부서
 									추가
 								</button>
-								<button  rel="float" class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#writeTeamModal">
+								<button  rel="float" class="button float" id="team-add" data-bs-toggle="modal" data-bs-target="#writeTeamModal">
 									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;팀
 									추가
 								</button>
-								<button  rel="float" class="button float" id="dept-add">
+								<button  rel="float" class="button float" id="btn-modify">
 									<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
 								</button>
-								<button  rel="float" class="button float" id="dept-delete">
+								<button  rel="float" class="button float" id="btn-delete">
 									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
 								</button>
 							</div>
@@ -402,13 +431,14 @@ textarea {
 							<!-- 부서 및 팀 조회 -->
 							<c:forEach var="dept" varStatus="status" items="${ requestScope.deptList }">
 								<ul id="deptName" class="folder_toggle" data-toggle="collapse" data-target="#demo${ status.index }" style="list-style: none">
-									<li style="position: relative; line-height: 16px"><i style='font-size: 24px' class='fas'>&#xf07b;</i>
+									<li style="position: relative; line-height: 16px">
+										<i style='font-size: 24px' class='fas'>&#xf07b;</i>
 										<c:out value="${ dept.name }" />
 										<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
-											<button class="button float modDept" id="dept-add" data-bs-toggle="modal" data-bs-target="#readModal">
+											<button class="button float modDept" id="dept-mod" data-bs-toggle="modal" data-bs-target="#readModal">
 												<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
 											</button>
-											<button class="button float" id="dept-delete">
+											<button class="button float delDept" id="dept-delete">
 												<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
 											</button>
 										</div>
@@ -416,12 +446,12 @@ textarea {
 											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: 10px; font-size: 1.1rem">
 												<li style="position: relative; line-height: 30px"><c:out value="${ team.name }" />
 													<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
-													<button class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#readTeamModal">
-														<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
-													</button>
-													<button class="button float" id="dept-delete">
-														<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
-													</button>
+														<button class="button float modTeam" id="team-mod" data-bs-toggle="modal" data-bs-target="#readTeamModal">
+															<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
+														</button>
+														<button class="button float delTeam" id="team-delete">
+															<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
+														</button>
 													</div>
 												</li>
 											</ul>
@@ -509,7 +539,7 @@ textarea {
 		console.log($btns);
 		for(let i = 0; i < $btns.length; i++) {
 			$btns[i].onclick = function() {
-				const code = this.parentNode.parentNode.children[2].innerText;
+				const code = ;
 				console.log(code);
 				
 				$.ajax({
@@ -529,6 +559,47 @@ textarea {
 			}
 		}
 	}
+	
+	/* 부서 삭제 */
+	$("#deptName li div button.delDept").click(function() {
+		const code = ;
+		console.log(code);
+		location.href="${ pageContext.servletContext.contextPath }/company/dept/delete?code=" + code;
+	});
+	
+	/* 팀 수정 */
+	if(document.querySelectorAll("#demo${ status.index } li div button.modTeam")) {
+		const $btns = document.querySelectorAll("#demo${ status.index } li div button.modTeam");
+		console.log($btns);
+		for(let i = 0; i < $btns.length; i++) {
+			$btns[i].onclick = function() {
+				const code = ;
+				console.log(code);
+				
+				$.ajax({
+					url: "${ pageContext.servletContext.contextPath }/company/teamDetail?code=" + code,
+					type: "get",
+					data: { code : code },
+					success: function(data, status, xhr) {
+						console.log(data);
+						jobDetail = JSON.parse(data.teamDetail);
+						
+						$("#team-name-read").val(teamDetail.name);
+						$("#team-code-read").val(teamDetail.code);
+						$("#readTeamModal").modal("show");
+					}
+					
+				})
+			}
+		}
+	}
+	
+	/* 팀 삭제 */
+	$("#demo${ status.index } li div button.delTeam").click(function() {
+		const code = ;
+		console.log(code);
+		location.href="${ pageContext.servletContext.contextPath }/company/team/delete?code=" + code;
+	});
 	</script>
 </body>
 </html>
