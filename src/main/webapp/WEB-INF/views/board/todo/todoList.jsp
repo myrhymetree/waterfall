@@ -406,6 +406,7 @@ table, th, td {
 						   	 console.log(xhr);
 					      }
 		            });
+		            
 		         }
 		      }
 		} 

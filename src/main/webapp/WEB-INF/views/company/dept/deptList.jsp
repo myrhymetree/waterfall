@@ -17,6 +17,7 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <!-- //부트스트랩 collapse 필수 cdn 종료 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <title>부서 관리</title>
 <script>
 
@@ -432,6 +433,7 @@ textarea {
 							<c:forEach var="dept" varStatus="status" items="${ requestScope.deptList }">
 								<ul id="deptName" class="folder_toggle" data-toggle="collapse" data-target="#demo${ status.index }" style="list-style: none">
 									<li style="position: relative; line-height: 16px">
+										<input type="hidden" value="<c:out value='${ dept.code }' />">
 										<i style='font-size: 24px' class='fas'>&#xf07b;</i>
 										<c:out value="${ dept.name }" />
 										<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
@@ -444,7 +446,9 @@ textarea {
 										</div>
 										<c:forEach var="team" varStatus="st" items="${ requestScope.teamList }">
 											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: 10px; font-size: 1.1rem">
-												<li style="position: relative; line-height: 30px"><c:out value="${ team.name }" />
+												<li style="position: relative; line-height: 30px">
+													<input type="hidden" value="<c:out value='${ team.code }' />">
+													<c:out value="${ team.name }" />
 													<div style="display: inline-block; position: absolute; top: -10px; right: 4px">
 														<button class="button float modTeam" id="team-mod" data-bs-toggle="modal" data-bs-target="#readTeamModal">
 															<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
@@ -519,7 +523,7 @@ textarea {
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 	
 	<script>
-	<!-- if(document.querySelectorAll("#teamNameId label")) {
+	/* if(document.querySelectorAll("#teamNameId label")) {
 		const $deptLis = document.querySelectorAll("#deptNameId");
 		console.log($deptLis);
 		const $labels = document.querySelectorAll("#teamNameId label");
@@ -531,7 +535,7 @@ textarea {
 			console.log($labels[i]);
 		}
 		
-	} -->
+	} */
 	
 	/* 부서 수정 */
 	if(document.querySelectorAll("#deptName li div button.modDept")) {
@@ -539,7 +543,7 @@ textarea {
 		console.log($btns);
 		for(let i = 0; i < $btns.length; i++) {
 			$btns[i].onclick = function() {
-				const code = ;
+				const code = this.parentNode.parentNode.children[0].value;
 				console.log(code);
 				
 				$.ajax({
@@ -548,21 +552,23 @@ textarea {
 					data: { code : code },
 					success: function(data, status, xhr) {
 						console.log(data);
-						jobDetail = JSON.parse(data.deptDetail);
+						deptDetail = JSON.parse(data.deptDetail);
 						
 						$("#name-read").val(deptDetail.name);
 						$("#code-read").val(deptDetail.code);
 						$("#readModal").modal("show");
+					}, error: function(xhr, status, error) {
+						console.log(xhr);
 					}
-					
-				})
+				});
+				
 			}
 		}
 	}
 	
 	/* 부서 삭제 */
 	$("#deptName li div button.delDept").click(function() {
-		const code = ;
+		const code = this.parentNode.parentNode.children[0].value;
 		console.log(code);
 		location.href="${ pageContext.servletContext.contextPath }/company/dept/delete?code=" + code;
 	});
@@ -573,7 +579,7 @@ textarea {
 		console.log($btns);
 		for(let i = 0; i < $btns.length; i++) {
 			$btns[i].onclick = function() {
-				const code = ;
+				const code = this.parentNode.parentNode.children[0].value;
 				console.log(code);
 				
 				$.ajax({
@@ -582,24 +588,26 @@ textarea {
 					data: { code : code },
 					success: function(data, status, xhr) {
 						console.log(data);
-						jobDetail = JSON.parse(data.teamDetail);
+						teamDetail = JSON.parse(data.teamDetail);
 						
 						$("#team-name-read").val(teamDetail.name);
 						$("#team-code-read").val(teamDetail.code);
 						$("#readTeamModal").modal("show");
+					}, error: function(xhr, status, error) {
+						console.log(xhr);
 					}
-					
-				})
+				});
+				
 			}
 		}
 	}
 	
 	/* 팀 삭제 */
-	$("#demo${ status.index } li div button.delTeam").click(function() {
-		const code = ;
+	/* $("#demo${ status.index } li div button.delTeam").click(function() {
+		const code = this.parentNode.parentNode.children[0].value;
 		console.log(code);
 		location.href="${ pageContext.servletContext.contextPath }/company/team/delete?code=" + code;
-	});
+	}); */
 	</script>
 </body>
 </html>
