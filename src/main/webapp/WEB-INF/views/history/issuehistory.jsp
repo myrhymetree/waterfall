@@ -54,12 +54,14 @@
 	                   <colgroup>
 	                        <col style="width:15%"/>
 	                        <col style="width:5%"/>
-	                        <col style="width:80%"/>
+	                        <col style="width:5%"/>
+	                        <col style="width:75%"/>
 	                    </colgroup>
 	                    <thead>
 	                        <tr>
 	                            <th>날짜</th>
 	                            <th>종류</th>
+	                            <th>프로젝트</th>
 	                            <th>내용</th>
 	                        </tr>
 	                    </thead>
@@ -68,6 +70,7 @@
 		                        <tr>
 		                            <td><c:out value="${ issue.updatedDate }"/></td>
 		                            <td><c:out value="${ issue.categoryTypeNo }"/></td>
+		                            <td><c:out value="${ issue.projectNo }"/></td>
 		                            <td><c:out value="${ issue.content }"/></td>
 		                        </tr>
 							</c:forEach>

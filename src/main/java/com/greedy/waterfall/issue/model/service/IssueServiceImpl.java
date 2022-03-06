@@ -90,7 +90,7 @@ public class IssueServiceImpl implements IssueService {
 			
 			IssueHistoryDTO history = new IssueHistoryDTO();
 			history.setIssue(issue);
-					
+			
 			mapper.writeRegistedIssueHistory(issue);
 		}
 		return result;
@@ -134,7 +134,7 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public void modifyIssue(IssueDTO issue) {
+	public void modifyIssue(IssueDTO issue, int loginMember) {
 		
 		int result = mapper.updateIssue(issue);
 		
@@ -156,6 +156,8 @@ public class IssueServiceImpl implements IssueService {
 				} 
 				
 			}
+			issue.setLoginMemberNo(loginMember);
+			
 			mapper.updateIssueHistory(issue);
 			
 			mapper.writeUpdatedIssueHistory(issue);
@@ -168,21 +170,62 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public int removeGuide(int no) {
+	public int removeIssue(int issueNo, int loginMemberNo) {
 		
-		System.out.println("int no의 정보는 :" + no);
+		System.out.println("int no의 정보는 :" + issueNo);
 		
-		IssueDTO issue = mapper.selectIssueDetail(no);
+		IssueDTO issue = mapper.selectIssueDetail(issueNo);
 		
 		int taskNo = issue.getTaskNo();
 		
-		System.out.println("removeGuide의 DTO 정보는 : " + issue);
+		System.out.println("removeIssue의 DTO 정보는 : " + issue);
 
 		int result = mapper.deleteIssue(issue);
 		
 //		if(!(result > 0)) {
 //			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
 //		}
+		
+		issue.setLoginMemberNo(loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+
+		
 		mapper.deleteIssueHistory(issue);
 		
 		mapper.writeDeletedIssueHistory(issue);

@@ -75,6 +75,8 @@ public class GuideServiceImpl implements GuideService {
 		
 		int result = mapper.insertGuide(guide);
 		
+		mapper.writeRegistedGuideHistory(guide);
+		
 		GuideFileDTO guideFileDTO = guide.getFile();
 		
 		if(guideFileDTO != null) {

@@ -8,10 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.greedy.waterfall.history.model.dto.HistoryDTO;
@@ -29,26 +25,17 @@ public class HistoryController {
 		this.historyService = historyService;
 	}
 	
-//	public static Object getBean(String beanName) {
-//        WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
-//        return context.getBean(beanName);
-//   }
-
-	/* 클래스에서 HttpServletRequest 객체를 직접 얻음 */
-//	public static HttpServletRequest getRequest() {
-//        ServletRequestAttributes attr = (ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
-//        return attr.getRequest();
-//    }
-	
-//	int projectNo = (((ProjectAuthorityDTO) getRequest().getSession().getAttribute("projectAutority")).getProjectNo());
-
 	@GetMapping("/list")
-	public ModelAndView hitoryList(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView projectHitoryList(HttpServletRequest request, ModelAndView mv) {
 		
-		List<HistoryDTO> historyList = historyService.selectEntireHistoryList();
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		
-		mv.addObject("historyList", historyList);
+		List<HistoryDTO> projectHistoryList = historyService.selectProjectHistoryList(projectNo);
+		System.out.println("업무 히스토리 목록은 : " + projectHistoryList);
+		
+		mv.addObject("projectHistoryList", projectHistoryList);
 		mv.addObject("intent", "/history/list");
+		mv.setViewName("/history/projectHistory");
 		return mv;
 	}
 	
@@ -57,12 +44,12 @@ public class HistoryController {
 		
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		
-		List<HistoryDTO> issueHistoryList = historyService.selectIssueHistoryList(projectNo);
-		System.out.println("이슈 히스토리 목록은 : " + issueHistoryList);
+		List<HistoryDTO> taskHistoryList = historyService.selectTaskHistoryList(projectNo);
+		System.out.println("업무 히스토리 목록은 : " + taskHistoryList);
 		
-		mv.addObject("issueHistoryList", issueHistoryList);
-		mv.addObject("intent", "/history/issue");
-		mv.setViewName("/history/historyList");
+		mv.addObject("taskHistoryList", taskHistoryList);
+		mv.addObject("intent", "/history/task");
+		mv.setViewName("/history/taskHistory");
 		return mv;
 	}
 	
@@ -72,23 +59,61 @@ public class HistoryController {
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		
 		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
-		System.out.println("projectNo :" + projectNo);
 		
 		List<HistoryDTO> issueHistoryList = historyService.selectIssueHistoryList(projectNo);
 		System.out.println("이슈 히스토리 목록은 : " + issueHistoryList);
 		
 		mv.addObject("issueHistoryList", issueHistoryList);
 		mv.addObject("intent", "/history/issue");
-		mv.setViewName("/history/historyList");
+		mv.setViewName("/history/issuehistory");
+		return mv;
+	}
+	
+	@GetMapping("/output")
+	public ModelAndView outputHistoryList(HttpServletRequest request, ModelAndView mv) {
+		
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		
+		System.out.println("projectNo :" + projectNo);
+		
+		List<HistoryDTO> outputHistoryList = historyService.selectOutputHistoryList(projectNo);
+		System.out.println("산출물 히스토리 목록은 : " + outputHistoryList);
+		
+		mv.addObject("outputHistoryList", outputHistoryList);
+		mv.addObject("intent", "/history/output");
+		mv.setViewName("/history/outputHistory");
+		return mv;
+	}
+	
+	@GetMapping("/member")
+	public ModelAndView memberHistoryList(HttpServletRequest request, ModelAndView mv) {
+		
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		
+		System.out.println("projectNo :" + projectNo);
+		
+		List<HistoryDTO> memberHistoryList = historyService.selectMemberHistoryList(projectNo);
+		System.out.println("회원 히스토리 목록은 : " + memberHistoryList);
+		
+		mv.addObject("memberHistoryList", memberHistoryList);
+		mv.addObject("intent", "/history/member");
+		mv.setViewName("/history/memberHistory");
+		return mv;
+	}
+	
+	@GetMapping("/board")
+	public ModelAndView boardHistoryList(HttpServletRequest request, ModelAndView mv) {
+		
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		
+		System.out.println("projectNo :" + projectNo);
+		
+		List<HistoryDTO> boardHistoryList = historyService.selectBoardHistoryList(projectNo);
+		System.out.println("게시판 히스토리 목록은 : " + boardHistoryList);
+		
+		mv.addObject("boardHistoryList", boardHistoryList);
+		mv.addObject("intent", "/history/board");
+		mv.setViewName("/history/boardHistory");
 		return mv;
 	}
 }

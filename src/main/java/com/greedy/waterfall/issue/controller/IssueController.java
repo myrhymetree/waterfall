@@ -126,12 +126,15 @@ public class IssueController {
 	public ModelAndView adminRemoveGuide(ModelAndView mv, HttpServletRequest request, 
 			RedirectAttributes rttr) throws GuideRemoveException {
 		
-		int no = Integer.parseInt(request.getParameter("no"));
+		int issueNo = Integer.parseInt(request.getParameter("no"));
 		
-		System.out.println("삭제하기 위해 no 받기 " + no );
+		System.out.println("삭제하기 위해 no 받기 " + issueNo );
+		
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
 		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
-		int taskNo = issueService.removeGuide(no);
+		int taskNo = issueService.removeIssue(issueNo, loginMemberNo);
 		
 		rttr.addFlashAttribute("message", "이슈 삭제에 성공하셨습니다.");
 		
@@ -320,7 +323,10 @@ public class IssueController {
 		int taskNo = (int) request.getSession().getAttribute("taskNo");
 		System.out.println("update에 들어오는 업무번호 : " + taskNo);
 		
-		issueService.modifyIssue(issue);
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMember =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		issueService.modifyIssue(issue, loginMember);
 		
 		System.out.println("modifyIssue : " + issue);
 		
@@ -616,7 +622,10 @@ public class IssueController {
 		int taskNo = issue.getTaskNo();
 		System.out.println("update에 들어오는 업무 no : " + taskNo);
 		
-		issueService.modifyIssue(issue);
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMember =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		issueService.modifyIssue(issue, loginMember);
 		
 		System.out.println("modifyIssue : " + issue);
 		
@@ -632,12 +641,15 @@ public class IssueController {
 	public ModelAndView removeGuide(ModelAndView mv, HttpServletRequest request, 
 			RedirectAttributes rttr) throws GuideRemoveException {
 		
-		int no = Integer.parseInt(request.getParameter("no"));
+		int issueNo = Integer.parseInt(request.getParameter("no"));
 		
-		System.out.println("삭제하기 위해 no 받기 " + no );
+		System.out.println("삭제하기 위해 no 받기 " + issueNo );
+		
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
 		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
-		int taskNo = issueService.removeGuide(no);
+		int taskNo = issueService.removeIssue(issueNo, loginMemberNo);
 		
 		rttr.addFlashAttribute("message", "가이드 게시판 삭제에 성공하셨습니다.");
 		

@@ -152,7 +152,7 @@
 	                  $("#manager").empty();
 	                  /* manager에 select문에 기본값으로 주기 */
 	                  if(issueDetail.manager == null) {
-	                	  const $managerName = "<option value = '"  + "' selected >" + ' ' + "</option>";
+	                	  const $managerName = "<option value = '" + "0" + "' selected >" + '' + "</option>";
 	                	  $("#manager").append($managerName);
 	                  } else {
 	                	  const $managerName = "<option value = '" + issueDetail.manager.no + "' selected >" + issueDetail.manager.name + "</option>";

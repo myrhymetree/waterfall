@@ -518,17 +518,15 @@
 	</insert>
 	
 	<insert id="writeUpdatedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
-		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+		<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
 			SELECT 
 			DISTINCT 
 	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
-	               , D.MEMBER_NAME AS registerName
+	               , (SELECT MEMBER_NAME FROM TBL_MEMBER WHERE MEMBER_NO = #{ loginMemberNo }) AS loginMemberName
 	            FROM TBL_ISSUE A
 	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
 	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
-	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
 	           WHERE B.TASK_NO = #{ taskNo }
-	             AND A.ISSUE_REGISTER = #{ registerNo }
 		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
@@ -544,25 +542,23 @@
 		  (
 		    HISTORY_NO.NEXTVAL
 		  , SYSDATE
-		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
 		  , 3
 		  , #{ projectNo }
-		  , #{ registerNo } 
+		  , #{ loginMemberNo } 
 		  )
 	</insert>
 	
 	<insert id="writeDeletedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
-		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+		<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
 			SELECT 
 			DISTINCT 
 	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
-	               , D.MEMBER_NAME AS registerName
+	               , (SELECT MEMBER_NAME FROM TBL_MEMBER WHERE MEMBER_NO = #{ loginMemberNo }) AS loginMemberName
 	            FROM TBL_ISSUE A
 	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
 	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
-	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
 	           WHERE B.TASK_NO = #{ taskNo }
-	             AND A.ISSUE_REGISTER = #{ registerNo }
 		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
@@ -578,10 +574,10 @@
 		  (
 		    HISTORY_NO.NEXTVAL
 		  , SYSDATE
-		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
 		  , 3
 		  , #{ projectNo }
-		  , #{ registerNo } 
+		  , #{ loginMemberNo } 
 		  )
 	</insert>
 	

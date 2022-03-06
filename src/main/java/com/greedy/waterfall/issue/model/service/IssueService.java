@@ -33,8 +33,8 @@ public interface IssueService {
 
 	IssueFileDTO removeGuideFile(int fileNumber);
 
-	void modifyIssue(IssueDTO issue);
+	void modifyIssue(IssueDTO issue, int loginMember);
 
-	int removeGuide(int no);
+	int removeIssue(int issueNo, int loginMemberNo);
 
 }

@@ -12,4 +12,14 @@ public interface HistoryMapper {
 
 	List<HistoryDTO> selectIssueHistoryList(int projectNo);
 
+	List<HistoryDTO> selectTaskHistoryList(int projectNo);
+
+	List<HistoryDTO> selectOutputHistoryList(int projectNo);
+
+	List<HistoryDTO> selectMemberHistoryList(int projectNo);
+
+	List<HistoryDTO> selectBoardHistoryList(int projectNo);
+
+	List<HistoryDTO> selectProjectHistoryList(int projectNo);
+
 }
