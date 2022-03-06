@@ -4,6 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- google chart cdn-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- jQuery library -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
@@ -19,7 +23,6 @@
 <!-- chart -->
 <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js"></script>
 <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-pie.min.js"></script>
-
 <style>
 #output_header {
    font-size: 1.6rem;
@@ -47,6 +50,7 @@
    border-color: #C4C4C4;
    float: left;
    margin-right: 100px;
+   overflow: auto;
 }
 .main-box3 {
    border: solid;
@@ -55,7 +59,8 @@
    border-radius: 20px;
    border-color: #C4C4C4;
    float: left;
-   margin-left: 11%;
+   margin-left: 8%;
+   overflow: auto;
 }
 
 .donut-chart {
@@ -164,9 +169,10 @@ textarea {
    border-radius: 5px;
    border: solid 2px #B4ADAD;
 }
+td {
+   font-size: 0.8em;
+}
 </style>
-
-
 
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -187,12 +193,12 @@ textarea {
             <hr style="width:1470px;">
             
             <%-- 프로젝트이름  --%>
-            <label class="project-name">프로젝트 1</label>
+            <label class="project-name">프로젝트 진행 현황</label>
             
-            <label class="project-issue">이슈</label>
+            <label class="project-issue">이슈 현황</label>
             
             <%-- 프로젝트 가이드 시작 --%>
-            <label style="margin-left: 11%">&emsp;&emsp;&emsp;프로젝트 가이드</label>
+            <label style="margin-left: 2%">&emsp;&emsp;&emsp;프로젝트 가이드</label>
             <%-- + 버튼 --%>
             <button class="float" id="addButton1" onclick="location.href='${ pageContext.servletContext.contextPath }/edu /list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
@@ -202,17 +208,17 @@ textarea {
             <div id="chartContent">
             
                <%-- 프로젝트 1 해당 박스 --%>
-               <div class="main-box">
-                  <div class="donut-chart" id="container"></div>
+               <div id="projectbox" class="main-box">
+                  
                </div>
                
                <%-- 이슈 해당 박스 --%>
-               <div class="main-box">
-                  <div class="donut-chart" id="container2"></div>
+               <div id="issuebox" class="main-box" style="margin-left:3%;">
+                  
                </div>
             	   
                <div class="main-box3">
-	               <table style="margin-left:8%;margin-top:8%" id="main-board-modal">
+	               <table style="margin-left:3%;margin-top:8%" id="main-board-modal">
 		               <c:forEach var="guide" items="${ projectBoard.guideBoard }">
 							<tr data-bs-toggle="modal" data-bs-target="#project-main-board-modal">
 								<td>${ guide.title }</td>
@@ -308,177 +314,111 @@ textarea {
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 	
 	
-	<script>
+<script>
 	
-		$("td").click(function() {
-			boardNo = this.parentNode.children[1].children[0].value;
-			console.log(boardNo);
+	$("td").click(function() {
+		boardNo = this.parentNode.children[1].children[0].value;
+		console.log(boardNo);
 			
-			$url = "${ pageContext.servletContext.contextPath }/project/board/" + boardNo;
-			console.log($url);
+		$url = "${ pageContext.servletContext.contextPath }/project/board/" + boardNo;
+		console.log($url);
 			
-			$.ajax({
-				type: "get",
-				url: $url,
-				success: function(data) {
-					const $boardInfo = JSON.parse(data.board);
-					$("#upload-file-area").empty();
-					$("#board-category-name").empty();
+		$.ajax({
+			type: "get",
+			url: $url,
+			success: function(data) {
+				const $boardInfo = JSON.parse(data.board);
+				$("#upload-file-area").empty();
+				$("#board-category-name").empty();
 
-					$("#read-title").val($boardInfo.title);
-					$("#read-membername").val($boardInfo.member.name);
-					$("#read-boardcount").val($boardInfo.boardCount);
-					$("#read-content").val($boardInfo.content);
-					console.log($boardInfo.member.name);
-					if($boardInfo.file != null) {
-						for(let i = 0;i < $boardInfo.file.length; i++) {
-							const $fileName = $boardInfo.file[i].fileOriginName;
-							const $fileNo = $boardInfo.file[i].fileNo;
-							const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
-							$("#upload-file-area").append($fileTag);
-							$("#upload-file-area").append("<br>");
-						}
+				$("#read-title").val($boardInfo.title);
+				$("#read-membername").val($boardInfo.member.name);
+				$("#read-boardcount").val($boardInfo.boardCount);
+				$("#read-content").val($boardInfo.content);
+				console.log($boardInfo.member.name);
+				if($boardInfo.file != null) {
+					for(let i = 0;i < $boardInfo.file.length; i++) {
+						const $fileName = $boardInfo.file[i].fileOriginName;
+						const $fileNo = $boardInfo.file[i].fileNo;
+						const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
+						$("#upload-file-area").append($fileTag);
+						$("#upload-file-area").append("<br>");
 					}
-					$("#board-category-name").append($boardInfo.boardCategoryName);
-				},
-				error: function() {
-					alert('project main board error');
 				}
-			});
+				$("#board-category-name").append($boardInfo.boardCategoryName);
+			},
+			error: function() {
+				alert('project main board error');
+			}
 		});
-
-
-
-
-
+	});
 
 	
+	$(function() {
+		
 	
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawprojectChart);
+		google.charts.setOnLoadCallback(drawissueChart);
+		const $projectInfo = JSON.parse('${ requestScope.projectInfo }');
+      	console.log($projectInfo);
+      	console.log($projectInfo.beforeProceedingTaskAmount);
+      	console.log($projectInfo.progressingTaskAmount);
+      	console.log($projectInfo.watingIssueAmount);
+
+		
+		function drawprojectChart() {
 	
-      anychart.onDocumentReady(function() {
-               // add data(도넛 차트 각각의 업무 개수 - 개수 다 더해서 퍼센트로 나타내줍니다)
-               var data = anychart.data.set([ [ '진행중 업무', 20 ],
-                     [ '완료 업무', 30 ], [ '진행 전 업무', 30 ], [ '중단 업무', 20 ]
-
-               ]);
-
-               // create a pie chart with the data (위에서 저장한 data를 가져와서 chart 생성)
-               var chart = anychart.pie(data);
-
-               // set the chart radius making a donut chart()
-               chart.innerRadius('40%')
-
-               // create a color palette(차트 각 파트별 색상 지정, data의 종류 개수와 일치해야합니다! data가 4개니까 색상도 4개 지정, 같은색으로 지정 가능))
-               var palette = anychart.palettes.distinctColors();
-
-               // set the colors according to the brands
-               palette.items([ {
-                  color : '#E1BEE7'
-               }, {
-                  color : '#CE93D8'
-               }, {
-                  color : '#B39DDB'
-               }, {
-                  color : '#D2B4DE'
-               },
-
-               ]);
-
-               // apply the donut chart color palette(위에서 저장한 컬러를 차트에 적용합니다)
-               chart.palette(palette);
-
-               // set the position of labels(화면을 보면 도넛 밖으로 20.0%라고 되어있을텐데 그거에 대한 설정입니다)
-               chart.labels().position("outside");
-
-               // disable the legend
-               chart.legend(false);
-
-               // format the donut chart tooltip( 퍼센트로 계산해 준다는 거 같습니다)}
-               chart.tooltip().format('value: {%PercentValue}%');
-
-               // create a standalone label
-               var label = anychart.standalones.label();
-
-               // configure the label settings
-               label
-                     .useHtml(true)
-                     .text(
-                           '<span style = "color: #313136; font-size:15px;">project</span>')
-                     .position('center').anchor('center').hAlign(
-                           'center').vAlign('middle');
-
-               // set the label as the center content
-               chart.center().content(label);
-
-               // set container id for the chart(어느 박스에 차트를 넣어줄건지 적어줍니다.199번째 줄)
-               chart.container('container');
-
-               // initiate chart drawing
-               chart.draw();
-
-            });
-      <%-- chart 생성 반복 --%>
-      anychart.onDocumentReady(function() {
-
-               // add data
-               var data2 = anychart.data.set([ [ '발생이슈', 5 ],
-                     [ '완료된이슈', 10 ], [ '진행중 이슈', 20 ] ]);
-
-               // create a pie chart with the data
-               var chart = anychart.pie(data2);
-
-               // set the chart radius making a donut chart
-               chart.innerRadius('40%')
-
-               // create a color palette
-               var palette = anychart.palettes.distinctColors();
-
-               // set the colors according to the brands
-               palette.items([ {
-                  color : '#DD9595'
-               }, {
-                  color : '#E5E298'
-               }, {
-                  color : '#92B1AA'
-               }
-
-               ]);
-
-               // apply the donut chart color palette
-               chart.palette(palette);
-
-               // set the position of labels
-               chart.labels().position("outside");
-
-               // disable the legend
-               chart.legend(false);
-
-               // format the donut chart tooltip
-               chart.tooltip().format('value: {%PercentValue}%');
-
-               // create a standalone label
-               var label = anychart.standalones.label();
-
-               // configure the label settings
-               label
-                     .useHtml(true)
-                     .text(
-                           '<span style = "color: #313136; font-size:15px;">Issue</span>')
-                     .position('center').anchor('center').hAlign(
-                           'center').vAlign('middle');
-
-               // set the label as the center content
-               chart.center().content(label);
-
-               // set container id for the chart(204번째 줄 박스에 넣음)
-               chart.container('container2');
-
-               // initiate chart drawing
-               chart.draw();
-
-            });
-
-      //Modal
+			var data = google.visualization.arrayToDataTable([
+				['Status', 'Amount'],
+				['진행전', $projectInfo.beforeProceedingTaskAmount],
+				['진행중', $projectInfo.progressingTaskAmount],
+				['테스트중', $projectInfo.testingTaskAmount],
+				['진행완료', $projectInfo.finishedTaskAmount],
+				['보류', $projectInfo.pendingTaskAmount]
+			]);
+	
+			var options = {
+				title: '업무상태',
+	        	 	slices: {
+	            0: { color: 'yellowgreen' },
+	            1: { color: 'orangered' },
+	            2: { color: 'gold' },
+	            3: { color: 'black' },
+	            4: { color: 'hotpink' }
+	         		},
+			  	sliceVisibilityThreshold:0
+			};
+								
+			var chart = new google.visualization.PieChart(document.getElementById('projectbox'));
+							
+			chart.draw(data, options);
+	   	}
+	
+		function drawissueChart() {
+			var data = google.visualization.arrayToDataTable([
+				['Status', 'Amount'],
+			  	['대기중', $projectInfo.watingIssueAmount],
+			  	['처리중', $projectInfo.progressingIssueAmount],
+			  	['완료', $projectInfo.solvedIssueAmount],
+			]);
+								
+			var options = {
+			  	title: '이슈상태',
+			  	slices: {
+		    	0: { color: 'yellowgreen' },
+			    1: { color: 'orangered' },
+			    2: { color: 'cyan' }
+			  	},
+			  	sliceVisibilityThreshold:0
+			};
+	
+			var chart1 = new google.visualization.PieChart(document.getElementById('issuebox'));
+			chart1.draw(data, options);
+		}
+      
+	});
+	//Modal
       var myModal = document.getElementById('myModal')
       var myInput = document.getElementById('myInput')
 

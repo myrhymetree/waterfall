@@ -14,5 +14,5 @@ import lombok.ToString;
 @ToString
 @Builder
 public class MenuDTO {
-
+	private int a;
 }

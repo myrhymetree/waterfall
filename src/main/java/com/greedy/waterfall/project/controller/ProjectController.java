@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.board.model.dto.BoardDTO;
-import com.greedy.waterfall.board.model.dto.MeetingDTO;
-import com.greedy.waterfall.board.model.service.EduService;
-import com.greedy.waterfall.board.model.service.GuideService;
-import com.greedy.waterfall.board.model.service.MeetingService;
-import com.greedy.waterfall.board.model.service.NoticeService;
-import com.greedy.waterfall.board.model.service.TodoService;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.MyProjectDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
@@ -322,13 +316,26 @@ public class ProjectController {
 		return mv;
 	}
 	
+	/**
+	 * sendProjectDetail : 프로젝트 번호와 해당 프로젝트의 PM번호를 세션에 저장하고, 프로젝트의 메인페이지에 필요한 정보를 조회한다.
+	 * @param 프로젝트 번호와, 정보와 요청주소를 저장할 ModelAndView변수를 전달받는다.
+	 * @return 프로젝트 메인페이지에 필요한 정보와, 요청주소를 담은 ModelAndView 변수를 반환한다.
+	 * 
+	 * @author 홍성원
+	 * @throws IOException 
+	 */
 	@GetMapping("main/{projectNo}")
-	public ModelAndView sendProjectDetail(@PathVariable("projectNo") int projectNo, ModelAndView mv) {
+	public ModelAndView sendProjectDetail(@PathVariable("projectNo") int projectNo, ModelAndView mv) throws IOException {
 		Map<String, Object> projectMainInfo = projectService.findProjectMainInfo(projectNo);
 		
 		ProjectMainBoardDTO projectBoard = (ProjectMainBoardDTO) projectMainInfo.get("projectBoard");
 		ProjectAuthorityDTO projectAutority = (ProjectAuthorityDTO) projectMainInfo.get("projectAutority");
+		ProjectInfoDTO projectInfo = (ProjectInfoDTO) projectMainInfo.get("projectInfo");
 		
+		ObjectMapper mapper = new ObjectMapper();
+		mv.addObject("projectInfo", mapper.writeValueAsString(projectInfo));
+		
+//		mv.addObject("projectInfo", projectInfo);
 		mv.addObject("projectBoard", projectBoard);
 		mv.addObject("projectAutority", projectAutority);
 		mv.setViewName("/project/projectMain");

@@ -9,6 +9,7 @@ import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
@@ -128,6 +129,8 @@ public interface ProjectMapper {
 	int findAllJoinProjectCount(Map<String, String> searchMap);
 
 	int findAllRemovedProjectCount(Map<String, String> searchMap);
+
+	ProjectInfoDTO findProjectMainInfo(int projectNo);
 
 
 }

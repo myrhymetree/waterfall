@@ -244,6 +244,8 @@
 		</div> 
 	</div>
 
+	
+
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>	
 	<script>
 		$(function() {
@@ -299,7 +301,7 @@
 								['Status', 'Amount'],
 							  	['대기중', $projectInfo.watingIssueAmount],
 							  	['처리중', $projectInfo.progressingIssueAmount],
-							  	['완료', $projectInfo.solvedIssueAmount],
+							  	['완료', $projectInfo.solvedIssueAmount]
 							]);
 							
 							var options = {
