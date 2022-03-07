@@ -11,7 +11,7 @@ public interface History {
 
 	List<ProjectHistoryDTO> modifyHistory(Object info);
 	
-	List<ProjectHistoryDTO> deleteHistory(MemberDTO member, Object info);
+	List<ProjectHistoryDTO> removeHistory(Object info);
 	
-	
+	public List<ProjectHistoryDTO> recoveryHistory(Object info);
 }

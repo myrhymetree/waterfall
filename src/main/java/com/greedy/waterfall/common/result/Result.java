@@ -1,5 +1,7 @@
 package com.greedy.waterfall.common.result;
 
+import org.springframework.stereotype.Component;
+
 public class Result {
 	
 	boolean result;

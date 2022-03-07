@@ -258,12 +258,25 @@ public class ProjectServiceImpl implements ProjectService {
 		return false;
 	}
 
+	/* 작성중  */
 	@Override
 	public boolean removeProject(int projectNo) {
+		/* [누가]님이 [프로젝트]를 삭제했습니다. */
+		RegistProjectDTO projectInfo = mapper.findOneProjectInfo(projectNo);
 
 		return mapper.removeProject(projectNo);
 	}
+	
+	
+	public RegistProjectDTO removeProject1(int projectNo) {
+		/* [누가]님이 [프로젝트]를 삭제했습니다. */
+		RegistProjectDTO projectInfo = mapper.findOneProjectInfo(projectNo);
+		history.removeHistory(projectInfo);
+		return projectInfo;
+	}
 
+	
+	
 	@Override
 	public boolean restoreProject(int projectNo) {
 		

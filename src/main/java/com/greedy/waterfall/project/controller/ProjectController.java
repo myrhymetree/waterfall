@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.WebSession;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -307,7 +309,11 @@ public class ProjectController {
 	}
 									
 	@GetMapping("/remove/{projectNo}")
-	public ModelAndView removeProject(ModelAndView mv, @PathVariable int projectNo) {
+	public ModelAndView removeProject(ModelAndView mv, @PathVariable int projectNo, WebSession session) {
+		
+		Map<String, Integer> 
+		int memberNo = ((MemberDTO) session.getAttribute("loginMember")).getNo();
+		
 		
 		String message = "삭제에 실패했습니다.";
 		
