@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,26 +84,7 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/regist")
-	public ModelAndView registProject(ModelAndView mv, @RequestParam Map<String, String> parameter) {
-		
-		String projectName = parameter.get("projectName");
-		String startDate = parameter.get("startDate");
-		String deadLine = parameter.get("deadLine");
-		String pm = parameter.get("pm");
-		String dept = parameter.get("dept");
-		String team = parameter.get("team");
-		String pmNumber = parameter.get("pmNumber");
-		String projectStatusCode = parameter.get("projectStatusCode");
-		
-		RegistProjectDTO newProject = new RegistProjectDTO().builder()
-										.projectName(projectName)
-										.startDate(java.sql.Date.valueOf(startDate))
-										.deadLine(java.sql.Date.valueOf(deadLine))
-										.pmNumber(Integer.parseInt(pmNumber))
-										.projectStatusCode(projectStatusCode)
-										.dept(dept)
-										.team(team)
-										.build();
+	public ModelAndView registProject(ModelAndView mv, @ModelAttribute RegistProjectDTO newProject) {
 		
 		if(projectService.registProject(newProject)) {
 			System.out.println("프로젝트 생성 성공!");
@@ -279,31 +261,12 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/modify")
-	public ModelAndView modifyProject(ModelAndView mv, @RequestParam Map<String, String> parameter) {
+	public ModelAndView modifyProject(ModelAndView mv, @ModelAttribute RegistProjectDTO project) {
 		
-		String projectName = parameter.get("projectName");
-		String projectNo = parameter.get("projectNo");
-		String startDate = parameter.get("startDate");
-		String deadLine = parameter.get("deadLine");
-		String pm = parameter.get("pm");
-		String dept = parameter.get("dept");
-		String team = parameter.get("team");
-		String pmNumber = parameter.get("pmNumber");
-		String projectStatusCode = parameter.get("projectStatus");
-		String progression = parameter.get("progression");
-		String adminNo = parameter.get("adminNo");
-		RegistProjectDTO project = new RegistProjectDTO().builder()
-										.projectName(projectName)
-										.projectNo(Integer.parseInt(projectNo))
-										.startDate(java.sql.Date.valueOf(startDate))
-										.deadLine(java.sql.Date.valueOf(deadLine))
-										.pmNumber(Integer.parseInt(pmNumber))
-										.projectStatusCode(projectStatusCode)
-										.dept(dept)
-										.team(team)
-										.progression(Integer.parseInt(progression))
-										.adminNo(Integer.parseInt(adminNo))
-										.build();
+		
+		System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);
+		
+		
 		
 		if(projectService.modifyProject(project)) {
 			System.out.println("프로젝트 수정 성공!");

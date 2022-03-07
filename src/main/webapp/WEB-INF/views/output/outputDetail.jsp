@@ -52,7 +52,9 @@
 	width: 90%;
 	height: 800px;
 } */
-
+.test{
+	display: none;
+}
 .box {
 	width: 600px;
 	height: 580px;
@@ -250,17 +252,17 @@ input{
 						<div class="box2_body" id="box2_sq1">
 							<button id="deleteBtn" rel="float" class="button float" data-bs-toggle="modal" data-bs-target="#deleteModal"><i style='font-size: 24px' class='far'>&#xf2ed;</i>삭제</button>
 							<div id="detail">
-								<label class="box2_sql_body" ">프로젝트이름</label>
-								<input id="box1_body" type="text" name="projectName"  /><br>
+								<label class="box2_sql_body">프로젝트이름</label>
+								<input class="test"  id="box1_body" type="text" name="projectName"  /><br>
 								
 								<label class="box2_sql_body" >상위업무</label>
-								<input class="box1_body" type="text" name="parentTaskName" /><br>
+								<input class="box1_body test" type="text" name="parentTaskName" /><br>
 								
 								<label class="box2_sql_body" >등록인</label>
-								<input class="box1_body" type="text" name="registedMember" /><br>
+								<input class="box1_body test" type="text" name="registedMember" /><br>
 								
 								<label class="box2_sql_body">등록일</label>
-								<input class="box1_body" type="text" name="registedDate" /><br>
+								<input class="box1_body test" type="text" name="registedDate" /><br>
 								
 								<label class="box2_sql_body" >첨부파일</label>
 								<div class="btn-group" >
@@ -273,7 +275,7 @@ input{
 								</div><br>
 								
 								<label class="box2_sql_body" id="content">내용</label><br>
-								<textarea cols="75" rows="5"  style="font-size: 14px;margin-left:20px" name="content" ></textarea><br>
+								<textarea class="test" cols="75" rows="5"  style="font-size: 14px;margin-left:20px" name="content" ></textarea><br>
 								
 								<button class="box2_sql_body button float" id="modifyBtn" style="margin-left : 500px;" >수정하기</button>
 								<input id="outputNo" type="hidden" name="outputNo"/>
@@ -475,6 +477,7 @@ input{
 							 $("textarea[name=content]").val("산출물이 존재하지 않습니다.");
 							 
 							 $("input[name=taskNo]").val(no);
+							 $(".test").fadeIn();
 						 }
 						     $("input[name=parentTaskName]").val(childTask.parentTaskName);
 						 
@@ -510,8 +513,10 @@ input{
 		                     $("#downloadarea").empty();
 		                     $("#downloadarea").append($downloadTag);
 		                     /* $("#downloadarea").append($deleteTag); */
+							 $(".test").fadeIn();
+							 
 						 }
-						 
+						 $(".test").fadeIn();
 						 
 						 
 						 

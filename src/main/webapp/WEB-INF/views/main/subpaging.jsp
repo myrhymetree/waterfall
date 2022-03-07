@@ -72,7 +72,7 @@
 		if(document.getElementById("startPage")) {
 			const $startPage = document.getElementById("startPage");
 			$startPage.onclick = function() {
-				location.href = link + "?currentPage=1" + searchText;
+				location.href = link + "?currsubentPage=1" + searchText;
 			}
 		}
 		
@@ -80,7 +80,7 @@
 		if(document.getElementById("prevPage")) {
 			const $prevPage = document.getElementById("prevPage");
 			$prevPage.onclick = function() {
-				location.href = link + "?currentPage=${ requestScope.subselectCriteria.pageNo - 1 }" + searchText;
+				location.href = link + "?subcurrentPage=${ requestScope.subselectCriteria.pageNo - 1 }" + searchText;
 			}
 		}
 		
@@ -88,7 +88,7 @@
 		if(document.getElementById("nextPage")) {
 			const $nextPage = document.getElementById("nextPage");
 			$nextPage.onclick = function() {
-				location.href = link + "?currentPage=${ requestScope.subselectCriteria.pageNo + 1 }" + searchText;
+				location.href = link + "?subcurrentPage=${ requestScope.subselectCriteria.pageNo + 1 }" + searchText;
 			}
 		}
 		
@@ -96,13 +96,13 @@
 		if(document.getElementById("maxPage")) {
 			const $maxPage = document.getElementById("maxPage");
 			$maxPage.onclick = function() {
-				location.href = link + "?currentPage=${ requestScope.subselectCriteria.maxPage }" + searchText;
+				location.href = link + "?subcurrentPage=${ requestScope.subselectCriteria.maxPage }" + searchText;
 			}
 		}
 		
 		/* 페이지 번호 버튼 click 이벤트 처리 */
 		function pageButtonAction(text) {
-			location.href = link + "?currentPage=" + text + searchText;
+			location.href = link + "?subcurrentPage=" + text + searchText;
 		}
 	</script>
 </body>

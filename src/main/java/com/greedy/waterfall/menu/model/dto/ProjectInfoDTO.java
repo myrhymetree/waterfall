@@ -1,5 +1,9 @@
 package com.greedy.waterfall.menu.model.dto;
 
+import java.util.List;
+
+import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,4 +29,6 @@ public class ProjectInfoDTO {
 	private int testingTaskAmount;			//테스트중 업무 갯수
 	private int finishedTaskAmount;			//진행완료 업무 갯수
 	private int pendingTaskAmount;			//보류 업무 갯수
+	
+	private List<ProjectRoleDTO> role;
 }

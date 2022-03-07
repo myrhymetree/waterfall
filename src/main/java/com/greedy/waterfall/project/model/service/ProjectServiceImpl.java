@@ -7,12 +7,17 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.dto.BoardDTO;
+import com.greedy.waterfall.common.History.History;
 import com.greedy.waterfall.common.paging.Paging;
 import com.greedy.waterfall.common.paging.PagingDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.common.result.Result;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
@@ -20,6 +25,7 @@ import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.MyProjectDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 import com.greedy.waterfall.project.model.dto.ProjectMainBoardDTO;
 import com.greedy.waterfall.project.model.dto.ProjectStatusDTO;
 import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
@@ -43,8 +49,13 @@ import com.greedy.waterfall.project.model.mapper.ProjectMapper;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+	@Autowired
+	@Qualifier("projectHistory")
+	private History history;
+
 	private final ProjectMapper mapper;
 	private final Paging paging;
+	
 
 	@Autowired
 	public ProjectServiceImpl(ProjectMapper mapper, Paging paging) {
@@ -99,38 +110,6 @@ public class ProjectServiceImpl implements ProjectService {
 													.subselectCriteria(subselectCriteria)
 													.build();
 		
-		
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		System.out.println("subselectCriteria : "  + subselectCriteria);
-		
 		return projectList;
 	}
 
@@ -161,18 +140,37 @@ public class ProjectServiceImpl implements ProjectService {
 		return mapper.findTeamMember(teamCode);
 	}
 
+	/**
+	 * registProject : 입력받은 프로젝트정보로 새로운 프로젝트를 생성한다.
+	 * @param 프로젝트 생성 정보를 전달받는다.
+	 * @return 프로젝트 생성 성공여부를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@Override
 	public boolean registProject(RegistProjectDTO newProject) {
 
-		int registProjectdResult = mapper.registProject(newProject);
-		int pmRegistResult = mapper.registPm(newProject);
-		int memberRegistResult = mapper.registMemberProject(newProject);
-		int registProjectHistory = mapper.registProjectHistory(newProject.getProjectNo());
-		if(registProjectdResult > 0 && pmRegistResult > 0 && memberRegistResult > 0) {
-
-			return true;
-		}
 		
+		
+		boolean registProjectResult = new Result(mapper.registProject(newProject))
+								.and(mapper.registPm(newProject))
+								.and(mapper.registMemberProject(newProject))
+								.and(mapper.registProjectHistory(newProject.getProjectNo()))
+								.isOk();
+		if(registProjectResult) {
+			
+			List<ProjectHistoryDTO> projectRegistHistory = 
+					history.registHistory(mapper.findAdminInfo(newProject.getAdminNo()), newProject);
+			
+			Result registHistoryResult = new Result();
+			for(int i = 0; i < projectRegistHistory.size(); i++) {
+				
+				registHistoryResult.and(mapper.registEntireHistoryProjectRegist(projectRegistHistory.get(i)));
+			}
+				
+				return registHistoryResult.isOk();
+			}
+			
 		return false;
 	}
 
@@ -213,42 +211,35 @@ public class ProjectServiceImpl implements ProjectService {
 	public boolean modifyProject(RegistProjectDTO newProject) {
 		
 		RegistProjectDTO oldProject = mapper.findOneProjectInfo(newProject.getProjectNo());
-		int resultPmChange = 1;
-		int resultModifyProject = mapper.modifyProject(newProject);
-		if(oldProject.getPmNumber() != newProject.getPmNumber()) {
+//		int resultModifyProject = mapper.modifyProject(newProject);
+//		
+//		/* 기존의 PM과 수정정보에서 입력된 PM정보를 비교 후, PM이 바뀌었는지 확인한다. */
+//		if(oldProject.getPmNumber() != newProject.getPmNumber()) {
+//			
+//			/* 기존 pm의 역할을 지우고,프로젝트에서 내보낸다. */
+//			int pmOutResult = mapper.kickOldPm(oldProject);
+//			
+//			/* 새로운 pm의 기존 프로젝트 내 역할을 지우고, pm으로 등록한다. */
+//			int pmRoleRemoveResult = mapper.projectRoleRemove(newProject);
+//			pmRoleRemoveResult += mapper.projectRoleRemove(oldProject);
+//			int newPmRoleRegistResult = mapper.assignPmRole(newProject);
+//			
+//			/* 새로운 pm이 프로젝트에 배정이 안돼있을 시 프로젝트에 배정한다. */
+//			if(mapper.findMemberInProject(newProject) == null) {
+//				
+//				int pmChangeResult = mapper.joinPmInProject(newProject);
+//			}
+//		}
+		
+		System.out.println("newProject : "  + newProject);
+		System.out.println("oldProject : " + oldProject);
+		
+		
+		/* 수정한 내용을 히스토리 테이블에 저장한다. */
+//		List<ProjectHistoryDTO> modifyProjectHistory
+		
 			
-			/* 새로운pm번호가 기존 pm번호랑 다를시 회원 배정내역, 회원 역할배정내역에 추가해준다. */
-			/* 새로운 pm이 프로젝트에 배정이 안돼있을 시 프로젝트에 배정한다. */
-			if(mapper.findMemberInProject(newProject) != null) {
-				int pmChangeResult = mapper.joinPmInProject(newProject);
-				
-				if(pmChangeResult <= 0) {
-					resultPmChange = 0;
-				}
-			} else {
-				/* 이미 배정되어있는 멤버라면 역할을 pm으로 등록한다 */
-				int pmChangeResult = mapper.assignPmRole(newProject);
-				
-				if(pmChangeResult <= 0) {
-					resultPmChange = 0;
-				}
-			}
-			
-			/* 기존의 pm은 프로젝트에서 내보낸다. */
-			int pmChangeResult = mapper.kickOldPm(newProject);
-			
-			if(pmChangeResult <= 0) {
-				resultPmChange = 0;
-			}
-		}
-		
-		if(resultPmChange > 0 && resultModifyProject > 0) {
-			return true;
-		}
-		
-		
-		
-		return false;
+		return true;
 	}
 
 	@Override

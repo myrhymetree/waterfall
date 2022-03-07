@@ -165,7 +165,7 @@ height: 24px;
 						</tbody>
 					</table>
 				</div>
-					<jsp:include page="/WEB-INF/views/common/sungwonpaging.jsp"/>
+					<jsp:include page="/WEB-INF/views/project/subpaging.jsp"/>
 					<br>
 			</div>
 		</c:if>

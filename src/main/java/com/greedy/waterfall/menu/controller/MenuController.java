@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.menu.model.dto.MainInfoDTO;
 import com.greedy.waterfall.menu.model.service.MenuService;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
@@ -48,20 +50,26 @@ public class MenuController {
 	
 	@GetMapping("/main")
 	public ModelAndView sendToMainpage(ModelAndView mv, HttpServletRequest request) {
-		Map<String, String> searchMap = new HashMap<String, String>();
 		String currentPage = request.getParameter("currentPage");
-
-		Map<String, Object> findProjectResult = menuService.findMainProjectList(searchMap);
+		String subcurrentPage = request.getParameter("subcurrentPage");
+		MemberDTO loginMember = (MemberDTO) request.getSession().getAttribute("loginMember");
+		MainInfoDTO mainInfo = new MainInfoDTO().builder()
+								.currentPage(currentPage)
+								.subcurrentPage(subcurrentPage)
+								.loginMember(loginMember).build();
+		
+		Map<String, Object> findProjectResult = menuService.findMainProjectList(mainInfo);
 		
 		List<ProjectDTO> projectList = (List<ProjectDTO>) findProjectResult.get("projectList");
+		List<ProjectDTO> joinProjectList = (List<ProjectDTO>) findProjectResult.get("joinProjectList");
 		SelectCriteria selectCriteria = (SelectCriteria) findProjectResult.get("selectCriteria");
-		if(selectCriteria != null) {
-			System.out.println(selectCriteria);System.out.println(selectCriteria);System.out.println(selectCriteria);
-		}
+		SelectCriteria subselectCriteria = (SelectCriteria) findProjectResult.get("subselectCriteria");
 		
 		
 		mv.addObject("projectList", projectList);
+		mv.addObject("joinProjectList", joinProjectList);
 		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("subselectCriteria", subselectCriteria);
 		mv.addObject("intent", "/menu/main");
 		mv.setViewName("/main/mainPage");
 		
@@ -95,6 +103,31 @@ public class MenuController {
 		return mv;
 	}
 	
+	@GetMapping("main/join/project/{projectNo}")
+	public ModelAndView findJoinProjectInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response
+															, @PathVariable("projectNo") int projectNo) throws IOException {
+		
+		Map<String, Integer> searchMap = new HashMap<String, Integer>();
+		Integer memberNo = ((MemberDTO) request.getSession().getAttribute("loginMember")).getNo();
+		
+		searchMap.put("memberNo", memberNo);
+		searchMap.put("projectNo", projectNo);
+		
+		ProjectDTO joinProjectInfo = menuService.findJoinProjectInfo(searchMap);
+		
+		
+		response.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper mapper = new ObjectMapper();
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		mapper.setDateFormat(dateFormat);
+		
+		mv.addObject("joinProjectInfo", mapper.writeValueAsString(joinProjectInfo));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
 	
 	
 	

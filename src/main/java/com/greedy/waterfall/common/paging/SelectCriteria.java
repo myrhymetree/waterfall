@@ -1,5 +1,7 @@
 package com.greedy.waterfall.common.paging;
 
+import com.greedy.waterfall.member.model.dto.MemberDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +14,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@Builder
 public class SelectCriteria implements java.io.Serializable {
 	
 	private int pageNo;					//요청한 페이지 번호
@@ -27,5 +28,6 @@ public class SelectCriteria implements java.io.Serializable {
 	private String searchCondition;		//검색 조건
 	private String searchValue;			//검색어
 	private int projectNo;
+	private MemberDTO member;
 	
 }
