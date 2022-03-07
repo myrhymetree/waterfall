@@ -97,35 +97,23 @@ public class ProjectHistory implements History{
 			System.out.println("projectHistory at modify : "+ projectHistoryList.get(i));
 		}
 		
-		return null;
+		return projectHistoryList;
 	}
 
 	@Override
 	public List<ProjectHistoryDTO> removeHistory(Object info) {
-		RegistProjectDTO projectInfo = (RegistProjectDTO) info;
-		
 		List<ProjectHistoryDTO> historyList = new ArrayList<>();
+
+		RegistProjectDTO projectInfo = (RegistProjectDTO) ((Map<String, Object>) info).get("projectInfo");
+		MemberDTO memberInfo = (MemberDTO) ((Map<String, Object>) info).get("memberInfo");
 		
-		ProjectHistoryDTO history = new ProjectHistoryDTO().builder()
-										.projectNo(projectInfo.getProjectNo())
-										.managerNo(projectInfo.getno)
-										.contentType(1)
-										.content("[" + )
+		ProjectHistoryDTO history = new ProjectHistoryDTO().builder().projectNo(projectInfo.getProjectNo())
+										.managerNo(memberInfo.getNo()).contentType(1)
+										.content("[" + memberInfo.getName() + "]님이 [" + projectInfo.getProjectName() + "] 프로젝트를 삭제했습니다.")
 										.build();
-		
-		RegistProjectDTO(projectNo=56, projectName=워터폴ㅇl, startDate=2022-01-01, 
-				deadLine=2022-04-03, pmNumber=46, pmName=홍성원, 
-				projectStatusCode=PROGRESSING, projectStatusName=진행 중, 
-				progression=0, dept=null, team=null, adminNo=0, adminName=null)
-		
-		projectRegistHistory.add(new ProjectHistoryDTO().builder()
-				.projectNo(newProject.getProjectNo())
-				.managerNo(newProject.getAdminNo())
-				.contentType(1)
-				.content("[" + findAdminInfo.getName() + "]님이 [" + newProject.getProjectName() + "]프로젝트를 [생성]했습니다.")
-				.build());
-		
-		return null;
+			
+		historyList.add(history);		
+		return historyList;
 	}
 
 	@Override

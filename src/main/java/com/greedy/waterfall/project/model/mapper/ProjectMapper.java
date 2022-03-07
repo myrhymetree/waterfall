@@ -103,17 +103,17 @@ public interface ProjectMapper {
 	 * 
 	 * @author 홍성원
 	 */
-	int modifyProject(RegistProjectDTO newProject);
+	Integer modifyProject(RegistProjectDTO newProject);
 
 	Integer findMemberInProject(RegistProjectDTO newProject);
 
-	int joinPmInProject(RegistProjectDTO newProject);
+	Integer joinPmInProject(RegistProjectDTO newProject);
 
 	int assignPmRole(RegistProjectDTO newProject);
 
 	int kickOldPm(RegistProjectDTO newProject);
 	
-	boolean removeProject(int projectNo);
+	Integer removeProject(int projectNo);
 
 	boolean restoreProject(int projectNo);
 

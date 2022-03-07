@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,13 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.server.WebSession;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
@@ -309,15 +306,17 @@ public class ProjectController {
 	}
 									
 	@GetMapping("/remove/{projectNo}")
-	public ModelAndView removeProject(ModelAndView mv, @PathVariable int projectNo, WebSession session) {
+	public ModelAndView removeProject(ModelAndView mv, @PathVariable int projectNo, HttpSession session) {
 		
-		Map<String, Integer> 
+		Map<String, Integer> removeInfo = new HashMap<>();
 		int memberNo = ((MemberDTO) session.getAttribute("loginMember")).getNo();
 		
+		removeInfo.put("projectNo", projectNo);
+		removeInfo.put("memberNo", memberNo);
 		
 		String message = "삭제에 실패했습니다.";
 		
-		if(projectService.removeProject(projectNo)) {
+		if(projectService.removeProject(removeInfo)) {
 			message = "삭제에 성공했습니다.";
 			
 		}

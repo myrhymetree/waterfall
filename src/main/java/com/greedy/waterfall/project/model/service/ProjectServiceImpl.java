@@ -156,7 +156,7 @@ public class ProjectServiceImpl implements ProjectService {
 								.and(mapper.registPm(newProject))
 								.and(mapper.registMemberProject(newProject))
 								.and(mapper.registProjectHistory(newProject.getProjectNo()))
-								.isOk();
+								.result();
 		if(registProjectResult) {
 				Map<String, Object> info = new HashMap<>();
 				info.put("findAdminInfo", mapper.findAdminInfo(newProject.getAdminNo()));
@@ -177,7 +177,7 @@ public class ProjectServiceImpl implements ProjectService {
 			registHistoryResult.and(mapper.registEntireHistoryProjectRegist(projectHistoryList.get(i)));
 		}
 			
-			return registHistoryResult.isOk();
+			return registHistoryResult.result();
 	}
 
 	/**
@@ -220,51 +220,53 @@ public class ProjectServiceImpl implements ProjectService {
 		RegistProjectDTO oldProject = mapper.findOneProjectInfo(newProject.getProjectNo());
 		info.put("newProject", newProject);
 		info.put("oldProject", oldProject);
-		
-		boolean result = true;
-		
-		
-		
-//		int resultModifyProject = mapper.modifyProject(newProject);
-//		
-//		/* 기존의 PM과 수정정보에서 입력된 PM정보를 비교 후, PM이 바뀌었는지 확인한다. */
-//		if(oldProject.getPmNumber() != newProject.getPmNumber()) {
-//			
-//			/* 기존 pm의 역할을 지우고,프로젝트에서 내보낸다. */
-//			int pmOutResult = mapper.kickOldPm(oldProject);
-//			
-//			/* 새로운 pm의 기존 프로젝트 내 역할을 지우고, pm으로 등록한다. */
-//			int pmRoleRemoveResult = mapper.projectRoleRemove(newProject);
-//			pmRoleRemoveResult += mapper.projectRoleRemove(oldProject);
-//			int newPmRoleRegistResult = mapper.assignPmRole(newProject);
-//			
-//			/* 새로운 pm이 프로젝트에 배정이 안돼있을 시 프로젝트에 배정한다. */
-//			if(mapper.findMemberInProject(newProject) == null) {
-//				
-//				int pmChangeResult = mapper.joinPmInProject(newProject);
-//			}
-//		}
-		if(result) {
+		Integer r = mapper.modifyProject(newProject);
+		System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);System.out.println("r : " + r);
+		Result modifyResult = new Result(r);
+		System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());
+
+		/* 기존의 PM과 수정정보에서 입력된 PM정보를 비교 후, PM이 바뀌었는지 확인한다. */
+		if(oldProject.getPmNumber() != newProject.getPmNumber()) {
+			
+			/* 기존 pm의 역할을 지우고,프로젝트에서 내보낸다. */
+			modifyResult.perform(mapper.kickOldPm(oldProject))
+						.and(mapper.projectRoleRemove(newProject))
+						.and(mapper.projectRoleRemove(oldProject))
+						.and(mapper.assignPmRole(newProject));
+			
+			/* 새로운 pm이 프로젝트에 배정이 안돼있을 시 프로젝트에 배정한다. */
+			if(mapper.findMemberInProject(newProject) == null) {
+				
+				modifyResult.perform(mapper.joinPmInProject(newProject));
+			}
+		}
+		System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());System.out.println("modifyResult.result() : " + modifyResult.result());
+		if(modifyResult.result()) {
 			List<ProjectHistoryDTO> modifyProjectHistory = history.modifyHistory(info);
 			
-//			return registHistoryResult(modifyProjectHistory);
+			return registHistoryResult(modifyProjectHistory);
 		}
 		
-		
-		/* 수정한 내용을 히스토리 테이블에 저장한다. */
-//		List<ProjectHistoryDTO> modifyProjectHistory
-		
-			
 		return false;
 	}
 
-	/* 작성중  */
 	@Override
-	public boolean removeProject(int projectNo) {
-		/* [누가]님이 [프로젝트]를 삭제했습니다. */
+	public boolean removeProject(Map<String, Integer> removeInfo) {
+		
+		int projectNo = removeInfo.get("projectNo");
+		int memberNo = removeInfo.get("memberNo");
+		MemberDTO memberInfo = mapper.findAdminInfo(memberNo);
 		RegistProjectDTO projectInfo = mapper.findOneProjectInfo(projectNo);
+		Map<String, Object> historyRegistInfo = new HashMap<String, Object>();
+		historyRegistInfo.put("memberInfo", memberInfo);
+		historyRegistInfo.put("projectInfo", projectInfo);
+		List<ProjectHistoryDTO> historyInfo = history.removeHistory(historyRegistInfo);
+		
+		boolean result = new Result().perform(mapper.removeProject(projectNo))
+							.and(mapper.registEntireHistoryProjectRegist(historyInfo.get(0))).result();
+//		
 
-		return mapper.removeProject(projectNo);
+		return result;
 	}
 	
 	

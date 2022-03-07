@@ -7,30 +7,28 @@ public class Result {
 	boolean result;
 	
 	public Result() {
-		this.result = false;
+		this.result = true;
 	}
 	
-	public Result(Integer testValue) {
-		if(testValue != null) {
-			if(testValue > 0) {
-				this.result = true;
-			} else {
-				this.result = false;
-			}
-		} else {
-			this.result = false;
+	public Result(Integer checkValue) {
+		this.result = true;
+		
+		if(nullCheck(checkValue)) {
+			integerCheck(checkValue);
 		}
 	}
 	
-	public Result and(Integer testValue) {
-		if(testValue != null) {
-			if(testValue > 0) {
-				this.result = true;
-			} else {
-				this.result = false;
-			}
-		} else {
-			this.result = false;
+	public Result and(Integer checkValue) {
+		if(nullCheck(checkValue)) {
+			integerCheck(checkValue);
+		}
+		
+		return this;
+	}
+	
+	public Result perform(Integer checkValue) {
+		if(nullCheck(checkValue)) {
+			integerCheck(checkValue);
 		}
 		
 		return this;
@@ -41,4 +39,59 @@ public class Result {
 		return this.result;
 	}
 
+	public boolean result() {
+		
+		return this.result;
+	}
+	
+	private boolean nullCheck(Integer checkValue) {
+		if(checkValue != null) {
+
+			return true;
+		}
+		this.result = false;
+		
+		return false;
+	}
+
+	private void integerCheck(Integer checkValue) {
+		if(checkValue > 0) {
+			this.result = this.result && true;
+		} else {
+			this.result = false;
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

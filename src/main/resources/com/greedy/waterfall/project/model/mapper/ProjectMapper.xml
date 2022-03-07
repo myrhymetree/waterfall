@@ -100,8 +100,9 @@
 		<result property="pendingTaskAmount" column="PENDING_TASK"/>
 	</resultMap>
 	<select id="findAdminInfo" resultMap="memberResultMap">
-        SELECT
-               A.MEMBER_NAME
+        SELECT 
+               A.MEMBER_NO
+             , A.MEMBER_NAME
           FROM TBL_MEMBER A
          WHERE A.MEMBER_NO = #{ adminNo }
 	</select>		
