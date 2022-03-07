@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
 	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
@@ -419,6 +421,12 @@ ul {
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
+#parentTaskModifyBtn, #childTaskModifyBtn{
+	background-color: #9B91BF;
+	color: white;
+}
+
+
 
 </style>
 <script>
@@ -486,7 +494,6 @@ ul {
 	<!-- 업무 생성 레이어 -->
 	<form action="${ pageContext.servletContext.contextPath }/task/regist" method="post">
 	<div>
-		
 		<div class="layer add" id="addModal">
 		<div class="header">업무 생성</div>
 			<div style="margin-left:30px;">
@@ -566,6 +573,90 @@ ul {
 	</div>
 	</form>
 	<!-- 업무 생성 끝 -->
+	
+	<!-- 업무 수정 모달 -->
+	<form action="${ pageContext.servletContext.contextPath }/task/update" method="post">
+	<div>
+		<div class="layer add" id="modifyModal">
+		<div class="header">업무 수정</div>
+			<div style="margin-left:30px;">
+				<p class="text-end mt-3">
+				</p>
+				<p>
+					<label>업무선택</label>
+					<select id="selectTask" class="task-register-code" name="taskCode" required>
+					<option value="" disabled >선택</option>
+					<c:forEach var="taskList" items="${requestScope.taskCategoryList }" varStatus="status" >
+						<option id="modifyCategoryName" value="${taskList.categoryCode }" ><c:out value="${ taskList.categoryName }"/></option>
+					</c:forEach>	
+					</select> <span class="trash"><i class="far fa-trash-alt ms-2"></i></span>
+				</p>
+				<p>
+					<label>종속관계</label>
+					<select class="relation ms-2 me-5" name="parentTaskCode" required>
+					<option value="" disabled >선택</option>
+					<c:forEach var="taskCode" items="${requestScope.allTaskCode.parentCategory }" varStatus="status">
+						<option value="${taskCode.parentCategoryCode }" ><c:out value="${taskCode.parentCategoryName }"/></option>
+					</c:forEach>
+						<option id="selectedNull" value= "NULL">미지정</option>
+					</select>
+					<label>담당자</label><i class="far fa-user ms-2"></i>
+					<select class="in-charge ms-0" name="taskMember" required>
+						<option value="" disabled>선택</option>
+						<c:forEach var="projectMember" items="${requestScope.projectMemberList }" varStatus="status">
+						<option id="modifyMember" value="${projectMember.memberNo }" ><c:out value="${projectMember.memberName }"/></option>
+						</c:forEach>
+					</select>
+				</p>
+				<p>
+					<label for="start-date">시작일</label><i
+						class="far fa-calendar-alt ms-2"></i>
+						<input id="modifyStartDate" type="date" id="start-date" name="startDate" required>
+				</p>
+				<p>
+					<label for="end-date">종료일</label><i class="far fa-calendar-alt ms-2"></i>
+					<input id="modifyDeadline" type="date" id="end-date" name="deadline" required>
+				</p>
+				<p>
+					<label>중요도</label>
+					<select id="modifyImportance" class="importance ms-2" name="importance" required>
+						<option value="" disabled>선택</option>
+						<option value="낮음">낮음</option>
+						<option value="보통">보통</option>
+						<option value="긴급">긴급</option>
+					</select>
+				</p>
+				<p>
+					<label>진행상태</label>
+					<select id="modifyStatus" class="status ms-2" name="progressStatus" required>
+						<option value="" selected disabled>선택</option>
+						<option value="진행전">진행전</option>
+						<option value="진행중">진행중</option>
+						<option value="테스트중">테스트중</option>
+						<option value="진행완료">진행완료</option>
+						<option value="보류">보류</option>
+					</select>
+				</p>
+				<p>
+					<label>진행률</label>
+					<input id="modifyRatio" class="rate ms-2" type="number" name="progressRatio" value="0" min="0" max="100" >%
+				</p>
+				
+				<p>
+					<label>마일스톤</label>
+					<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
+					<input type="hidden" name="typeNo" value="1">
+				</p>
+				</div>
+					<div id="footerBtn">
+						<button class="addTask button float" type="submit" style="padding:4px; " rel="float">업무 수정</button>
+						<input type="button" id="closeModify" class="button float" style="padding:4px; margin-right:30px;" rel="float" value="업무 나가기">
+					</div>
+			
+		</div>
+	</div>
+	</form>
+	<!-- 업무 수정 모달 끝 -->
 		
 	 <%-- 업무 조회 모달 --%>
 	<div>
@@ -576,9 +667,13 @@ ul {
 				</p>
 				<div class="detail" id="parentTaskDetail">
 				<label class="task">상위업무</label>
+				<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+				<button class="button float" id="parentTaskModifyBtn">수정</button>
+				</c:if>
 					<p>
 						<label>업무명</label>
 						<input id="parentTaskName" type="text" name="parentTaskName"/>
+						<input type="hidden" name="parentTaskCode" id="parentTaskCode" />
 					</p>
 					<p>
 						<label>담당자</label>
@@ -594,11 +689,15 @@ ul {
 					</p>
 					<p>
 						<label>중요도</label>
-						<input type="text" id="parnetImportance" name="parentImportance">
+						<input type="text" id="parentImportance" name="parentImportance">
 					</p>
 					<p>
 						<label>진행률</label>
 						<input id="parentProgress" class="rate ms-2" type="number" name="parentProgress" value="0" min="0" max="100" >%
+					</p>
+					<p>
+						<label>진행상태</label>
+						<input id="parentStatus" type="text" name="parentStatus" >
 					</p>
 					<p>
 						<label>마일스톤</label>
@@ -627,6 +726,9 @@ ul {
 				</div>
 				<div class="detail"id="childTaskDetail">
 				<label class="task">하위업무</label>
+				<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+				<button class="button float" id="childTaskModifyBtn">수정</button>
+				</c:if>
 					<p>
 						<label>업무명</label>
 						<input id="childTaskName" type="text" name="childTaskName"/>
@@ -655,6 +757,11 @@ ul {
 					<p>
 						<label>진행률</label>
 						<input class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" >%
+					</p>
+					
+					<p>
+						<label>진행상태</label>
+						<input id="childStatus" type="text" name="childStatus" >
 					</p>
 					
 					<p>
@@ -689,6 +796,8 @@ ul {
 	</div>
 	<%--업무 조회 모달 끝 --%>
 	
+	
+	
 	<%-- 산출물 등록 모달 --%>
 	<form action="${ pageContext.servletContext.contextPath }/output/regist" method="post" encType="multipart/form-data">
 	<div id="outputModal" class="modal-overlay">
@@ -712,6 +821,51 @@ ul {
 	
 	
 	<script>
+	<%--Modal drag 이벤트 --%>
+	/* $(function(){
+		$('#addModal').draggable({ handle: ".header" });
+
+	}); */
+	
+	<%-- 상위 업무 수정 이벤트 시작 --%>
+	$("#parentTaskModifyBtn").click(function(){
+		const modifyTaskCode = $("#parentTaskCode").val();
+		const modifyMemberName = $("#parentTaskManager").val();
+		const modifyStartDate = $("#parent-start-date").val();
+		const modifyDeadline = $("#parent-end-date").val();
+		const modifyImportance = $("#parentImportance").val();
+		const modifyRatio = $("#parentProgress").val();
+		const modifyStatus = $("#parentStatus").val();
+		console.log(modifyTaskCode);
+		console.log(modifyMemberName);
+		console.log(modifyStartDate);
+		console.log(modifyDeadline);
+		console.log(modifyImportance);
+		console.log(modifyRatio);
+		$("#modifyCategoryName").val(modifyTaskCode).prop("selected", true);		//value가 선택한 taskCode와 동일한 것을 선택
+		$("#selectedNull").val('미지정').prop("selected", true);
+		$("#modifyMember").val(modifyMemberName).prop("selected", true);
+		$("#modifyStartDate").val(modifyStartDate).prop("selected", true);
+		$("#modifyDeadline").val(modifyDeadline).prop("selected", true);
+		$("#modifyImportance").val(modifyImportance).prop("selected", true);
+		$("#modifyStatus").val(modifyStatus).prop("selected", true);
+		$("#modifyRatio").val(modifyRatio);
+		if($("#modifyModal").css("display")=="none"){
+			$("#modifyModal").css("display", "block");
+			$("#readModal").css("display", "none");
+		}	
+		
+		
+		
+	});
+	
+	$("#closeModify").click(function(){
+		$("#closeModify").css("display", "none");
+		$("#readModal").css("display", "block");
+		
+	});
+
+
 	<%-- 상위업무 산출물 --%>
 	$("#addOutput1").click(function(){
 		if($("#outputModal").css("display")=="none"){
@@ -743,7 +897,7 @@ ul {
 	$("#closeOutput").click(function(){
 		$("#readModal").css("display", "block");
 		$("#outputModal").css("display", "none");
-	})
+	});
 	
 	<%-- hover event 추가 --%>
 		$(".folder_toggle").hover(function() {
@@ -813,6 +967,11 @@ ul {
 			$(".layer-bg").css("display", "none");
 		});
 		
+		$(".layer #close").click(function() {
+			$("#modifyModal").css("display", "none");
+			$(".layer-bg").css("display", "none");
+		});
+		
 		
 		/* 상세조회 이벤트 */
 		const $labels = document.querySelectorAll("#childTask label");
@@ -846,6 +1005,10 @@ ul {
 						
 						$("input[name=parentTaskNo]").val(taskDetail.parentTask.taskNo);
 						
+						$("input[name=parentTaskCode]").val(taskDetail.parentTask.taskCategory.categoryCode);
+						
+						$("input[name=parentStatus]").val(taskDetail.parentTask.progressStatus);
+						
 						//하위 업무
 						$("input[name=childTaskName]").val(taskDetail.taskCategory.categoryName);
 						
@@ -860,6 +1023,8 @@ ul {
 						$("input[name=childProgress]").val(taskDetail.progression);
 						
 						$("input[name=childTaskNo]").val(taskDetail.taskNo);
+						
+						$("input[name=childStatus]").val(taskDetail.progressStatus);
 						
 						$("#readModal").css("display", "block");
 						$(".layer-bg").css("display", "block");
@@ -988,10 +1153,6 @@ ul {
                 })
 		}
 		
-		
-		
-		
-		
 		var gantt_chart = new Gantt(".gantt-target", taskArray, {
 			on_click : function(task) {
 				console.log(task);
@@ -1008,7 +1169,10 @@ ul {
 			view_mode : 'Day',
 			language : 'en'
 		});
+		
 		console.log(gantt_chart);
+		
+		
 	</script>
 	
 </body>

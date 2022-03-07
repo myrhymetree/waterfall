@@ -27,13 +27,14 @@ public class OutputDTO {
 	private java.sql.Date registedDate;
 	private String status;
 	private int memberNo;
+	private String memberName;
 	private int projectNo;
-	private MemberDTO memberName;
 	private TaskDTO task;
 	private ChildTaskDTO childTask;
 	private OutputProjectDTO project;
 	private OutputAttachmentDTO outputFile;
 	private int taskNo;
+	private String taskName;
 	private String beforeOriginName;
 	private String afterOriginName;
 	

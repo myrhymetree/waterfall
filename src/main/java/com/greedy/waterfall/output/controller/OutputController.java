@@ -100,6 +100,7 @@ public class OutputController {
 			projectNo = Integer.parseInt(request.getParameter("projectNo"));
 		}
 		
+		System.out.println("adminDetail projectNo : " + projectNo);
 		
 		taskDTO.setProjectNo(projectNo);
 		List<TaskDTO> parentTaskList = new ArrayList<>();
@@ -304,8 +305,16 @@ public class OutputController {
 		
 		/* 업데이트 할 정보들 */
 		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
-		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		int projectNo = 0;
+		if((session.getAttribute("projectAutority")) != null) {
+			projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		} else {
+			projectNo = Integer.parseInt(request.getParameter("projectNo"));
+		}
+		
 		int outputNo = Integer.parseInt(request.getParameter("outputNo"));
+		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+		String childTaskName = request.getParameter("childTaskName");
 		String content = request.getParameter("content");
 		System.out.println("content 확인 : " + content);
 		System.out.println("outputFile 확인 : " + outputFile);
@@ -316,6 +325,8 @@ public class OutputController {
 		output.setProjectNo(projectNo);
 		output.setOutputNo(outputNo);
 		output.setContent(content);
+		output.setTaskNo(taskNo);
+		output.setTaskName(childTaskName);
 		
 		/* 파일 저장될 root 설정 */
 		String root = request.getServletContext().getRealPath("resources");
@@ -367,7 +378,9 @@ public class OutputController {
 		
 		
 		
-		
+		if(memberNo == 1) {
+			return "redirect:/output/admin/detail?projectNo=" + projectNo;
+		}
 		return "redirect:/output/list";
 	}
 	

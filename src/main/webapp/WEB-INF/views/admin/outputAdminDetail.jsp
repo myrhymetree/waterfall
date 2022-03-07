@@ -338,6 +338,9 @@ input{
                                   <label class="col-form-label">첨부파일</label>
                                   <input type="file" class="form-control" name="outputFile" required>
                                   <input id="outputNo" type="hidden" name="outputNo">
+                                  <input name="projectNo" type="hidden">
+                                  <input name="taskNo" type="hidden">
+                                  <input name="childTaskName" type="hidden">
                                 </div>
                             </div>
                             <!-- 모달의 바디 끝  -->
@@ -500,6 +503,11 @@ input{
 						     $("input[name=originalName]").val(outputFile.originName);
 						     
 						     $("input[name=taskNo]").val(no);
+						     
+						     $("input[name=projectNo]").val(parentTask.projectNo);
+						     
+						     $("input[name=childTaskName]").val(childTask.taskCategory.categoryName);
+						     
 							 
 			                 
 						     var $downloadTag = "<a href='${pageContext.servletContext.contextPath}/output/download/" + refOutputNo 
