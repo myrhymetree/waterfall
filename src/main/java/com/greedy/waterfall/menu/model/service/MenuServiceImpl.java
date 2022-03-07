@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.greedy.waterfall.common.paging.Paging;
 import com.greedy.waterfall.common.paging.PagingDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.menu.model.dto.MainInfoDTO;
 import com.greedy.waterfall.menu.model.mapper.MenuMapper;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
 
@@ -43,17 +45,32 @@ public class MenuServiceImpl implements MenuService{
 	 * 
 	 * @author 홍성원
 	 */
-	public Map<String, Object> findMainProjectList(Map<String, String> searchMap) {
+	public Map<String, Object> findMainProjectList(MainInfoDTO mainInfo) {
 		
+		Map<String, String> searchMap = new HashMap<String, String>();
+		MemberDTO loginMember = mainInfo.getLoginMember();
+		SelectCriteria subselectCriteria = null;
+		searchMap.put("currentPage", mainInfo.getCurrentPage());
+		searchMap.put("subcurrentPage", mainInfo.getSubcurrentPage());
 		Map<String, Object> findProjectResult = new HashMap<String, Object>();
 		/* 한페이지에 버튼의 갯수를 5개로 설정하고, 출력될 프로젝트의 수를 5개로 설정한다. */
 		PagingDTO pageSetting = new PagingDTO().builder().buttonAmount(5).limit(5).build();
 		/* 페이징처리를 위해 전체 프로젝트의 갯수를 조회한 뒤 searchMap에 저장한다. */
-		searchMap.put("totalCount", Integer.toString(mapper.findProjectCount()));
-		/* 페이지에대한 정보가 담긴 searchMap과  출력 설정정보가 담겨져있는 pageSetting을 전달해 검색조건이 담겨져있는 SelectCriteria변수를 반환받아, 프로젝트목록을 조회한다. */
-		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap, pageSetting);
+		searchMap.put("totalCount", Integer.toString(mapper.findProjectCount(loginMember)));
+		/* 페이지에대한 정보가 담긴 searchMap과  출력 설정정보가 담겨져있는 pageSetting, 로그인회원의 정보가 담긴 정보를 전달해, 
+		 * 검색조건이 담겨져있는 SelectCriteria변수를 반환받아, 프로젝트목록을 조회한다. */
+		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap, pageSetting, loginMember);
 		List<ProjectDTO> projectList = mapper.findMainProjectList(selectCriteria);
 		
+		/* 관리자가 아닌경우 참여중인 프로젝트 목록을 반환한다. */
+		if(!"1".equals(loginMember.getRole())){
+			searchMap.put("subtotalCount", Integer.toString(mapper.findJoinProjectCount(loginMember)));
+			subselectCriteria = paging.setSubPagingCondition(searchMap, pageSetting, loginMember);
+			List<ProjectDTO> joinProjectList = mapper.findJoinProjectList(selectCriteria);
+			findProjectResult.put("joinProjectList", joinProjectList);
+			findProjectResult.put("subselectCriteria", subselectCriteria);
+			
+		}
 		findProjectResult.put("projectList", projectList);
 		findProjectResult.put("selectCriteria", selectCriteria);
 		
@@ -78,6 +95,19 @@ public class MenuServiceImpl implements MenuService{
 		pageInfo.put("projectInfo", projectInfo);
 		
 		return pageInfo;
+	}
+
+	/**
+	 * findJoinProjectInfo : 개발자의 메인화면에 참여중인 프로젝트의 상세정보를 조회한다.
+	 * @param searchMap: 개발자의 회원번호와 조회하려는 프로젝트의 번호를 담고있는 Map을 전달받는다.
+	 * @return 전달받은 정보로 참여중인 프로젝트의 상세정보를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	@Override
+	public ProjectDTO findJoinProjectInfo(Map<String, Integer> searchMap) {
+
+		return mapper.findJoinProjectDetail(searchMap);
 	}
 
 }

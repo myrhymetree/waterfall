@@ -74,7 +74,7 @@
 				</div>
 				<div class="mt-3">
 					<label style="margin-left: 2%; width: 20%">진행상태</label>
-					<select id="projectStatus" name="projectStatus" >
+					<select id="projectStatus" name="projectStatusCode" >
 					    <option value="" selected disabled>프로젝트 상태</option>
 					    <c:forEach var="projectStatus" items="${ statusList }">
 					    	<c:if test="${ projectInfo.projectStatusCode eq projectStatus.statusCode}">
