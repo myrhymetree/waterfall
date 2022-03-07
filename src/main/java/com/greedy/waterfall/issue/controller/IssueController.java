@@ -61,17 +61,17 @@ public class IssueController {
 	private final IssueService issueService;
 	
 	@Autowired
-	private IssueController(IssueService IssueService) {
+	public IssueController(IssueService IssueService) {
 		this.issueService = IssueService;
 	}
 	
 	@GetMapping("/project")
 	public ModelAndView projectList(HttpServletRequest request, ModelAndView mv) {
 		
-		int No = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int memberNo = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
 		Map<String, Integer> managerNo = new HashMap<>();
-		managerNo.put("managerNo", No);
+		managerNo.put("managerNo", memberNo);
 
 		List<ProjectIssueCountDTO> allProject = issueService.selectAllProjectList(managerNo);
 		System.out.println("allProject" + allProject);
@@ -106,7 +106,7 @@ public class IssueController {
 	@GetMapping("/admin/list/{taskNo}")
 	public ModelAndView adminIssueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
-		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
+		Integer projectNo = (int) request.getSession().getAttribute("adminProjectNo");
 		System.out.println("list에 들어오는 프로젝트 no : " + projectNo);
 		
 		System.out.println(taskNo);

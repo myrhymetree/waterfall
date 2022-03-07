@@ -19,10 +19,6 @@ public interface IssueService {
 
 	List<IssueDTO> selectAllIssue();
 
-	IssueDTO selectTasks(int no);
-
-	List<IssueDTO> selectTask(int taskNo);
-
 	boolean registIssue(IssueDTO issue);
 
 	IssueDTO selectIssueDetail(int no);

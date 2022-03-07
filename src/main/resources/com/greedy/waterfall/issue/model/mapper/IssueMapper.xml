@@ -253,17 +253,6 @@
 	       ORDER BY 1 DESC
   	</select>
   	
-   	<select id="selectTask" parameterType="_int" resultMap="issueResultMap" >
-  		SELECT
-  		       A.TASK_NO
-  		       C.TASK_CATEGORY_NAME
-  		  FROM TBL_ISSUE A
-  		  JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
-  		  JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
-  		 WHERE TBL_TASK = 'Y'
-  		   AND A.TASK_NO = #{ no }   
-  	</select>
-  	
   	<insert id="registIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO" >
   		INSERT
 		  INTO TBL_ISSUE A
@@ -580,17 +569,5 @@
 		  , #{ loginMemberNo } 
 		  )
 	</insert>
-	
-	<select id="readIssueHistory">
-		SELECT
-		       B.MEMBER_ID
-		     , A.UPDATED_DATE
-		     , A.CATEGORY_NAME
-		     , B.MEMBER_NAME
-		     , A.CONTENT
-		  FROM TBL_ENTIRE_HISTORY A
-		  JOIN TBL_MEMBER B ON (A.REGISTER_NO = B.MEMBER_NO)
-		 ORDER BY 2 DESC;
-	</select>
   
   </mapper>

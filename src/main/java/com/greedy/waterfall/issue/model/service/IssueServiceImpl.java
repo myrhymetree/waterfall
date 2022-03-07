@@ -35,34 +35,25 @@ public class IssueServiceImpl implements IssueService {
 		List<ProjectIssueCountDTO> allProject = mapper.selectAllProjectList(managerNo);
 		return allProject;
 	}
+	
 	@Override
 	public List<IssueDTO> selectIssuesOfTask(int projectNo) {
 		List<IssueDTO> taskIssueList = mapper.selectIssuesOfTask(projectNo);
 		return taskIssueList;
 	}
+	
 	@Override
 	public List<IssueDTO> selectIssueList(int taskNo) {
 		List<IssueDTO> issueList = mapper.selectIssueList(taskNo);
 		return issueList;
 	}
+	
 	@Override
 	public List<IssueDTO> selectAllIssue() {
 		List<IssueDTO> allIssueList = mapper.selectAllIssue();
 		return allIssueList;
 	}
-	@Override
-	public IssueDTO selectTasks(int no) {
-		IssueDTO issue = mapper.selectTasks(no);
-		
-		return issue;
-	}
-	@Override
-	public List<IssueDTO> selectTask(int taskNo) {
-		List<IssueDTO> taskList = mapper.selectTask(taskNo);
-		
-		return taskList;
-	}
-	
+
 	@Override
 	public boolean registIssue(IssueDTO issue) {
 		
@@ -188,43 +179,6 @@ public class IssueServiceImpl implements IssueService {
 		
 		issue.setLoginMemberNo(loginMemberNo);
 		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-		System.out.println("로그인멤버 : " + loginMemberNo);
-
 		
 		mapper.deleteIssueHistory(issue);
 		

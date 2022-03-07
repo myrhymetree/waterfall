@@ -19,10 +19,6 @@ public interface IssueMapper {
 
 	List<IssueDTO> selectAllIssue();
 
-	IssueDTO selectTasks(int no);
-
-	List<IssueDTO> selectTask(int taskNo);
-
 	int registIssue(IssueDTO issue);
 
 	int registIssueFile(IssueFileDTO issueFileDTO);
