@@ -157,6 +157,26 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public String pwCheck(String id) {
+		
+		
+		return mapper.selectOne(id);
+	}
+
+
+	@Override
+	public void pwUpdate(String id, String hashedPw) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("pwd", hashedPw);
+		
+		mapper.pwUpdate(map);
+	}
+
+
+
 	
 
 }

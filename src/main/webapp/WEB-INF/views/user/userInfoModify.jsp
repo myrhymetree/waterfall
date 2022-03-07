@@ -52,7 +52,7 @@
                      <span class="modal-title" id="exampleModalLabel"><strong>비밀번호 변경</strong></span>
                  </div> 
              <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->
-                 <form action="${ pageContext.servletContext.contextPath }/user/info" method="post" id="UpdateForm" name="UpdateForm">
+                 <form action="${ pageContext.servletContext.contextPath }/user/pwUpdate" method="post" id="pwUpdateForm" name="pwUpdateForm">
                      <input type="hidden" id="id" name="id" value="${ sessionScope.loginMember.id }">
                      <div class="modal-body">
                          <div class="mb-3">
@@ -86,7 +86,7 @@
                      </div>
                      <!-- 모달의 바디 끝  -->
                      <div class="modal-footer">
-                         <button type="button" name="pwdUpdate" id="pwdUpdate" class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">확인</button>
+                         <button type="button" name="pwdUpdate" id="pwdUpdate" class="btn btn-secondary" data-bs-toggle="modal">확인</button>
                          <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                      </div>
                  </form>
@@ -96,9 +96,9 @@
             <!-- Modal HTML  -->
 	        
         <!-- Modal HTML 2 -->
-        <div class="modal fade" id="exampleModalToggle2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <!-- <div class="modal fade" id="exampleModalToggle2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
-                <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+                 style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요
                 <div class="modal-content" style="top: 200px; height: 252px; width: 402px; margin-left: 0px; left: 100px;">
                     <div style="background-color: #212529;">
                         <br>
@@ -106,17 +106,17 @@
                     <div class="modal-header">
                         <span class="modal-title" id="exampleModalLabel"><strong></strong></span>
                     </div> 
-                <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->           
+                모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남            
                         <div class="modal-body">  
                             <h5 align="center" style="margin-top: 30px;"><strong>등록되었습니다.</strong></h5>                          
                         </div>
-                        <!-- 모달의 바디 끝  -->
+                        모달의 바디 끝 
                         <div class="modal-footer">                           
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin-right: 44%;">확인</button>
                         </div>                    
                 </div>
             </div>
-        </div>
+        </div> -->
 	
 	<jsp:include page="../common/inprojectheader.jsp"/>
 	<jsp:include page="../common/footer.jsp"/>
@@ -206,50 +206,51 @@
             </div>
             
             <script>
-            	$(document).ready(function(){
+//             	$(document).ready(function(){
             		
             		$("#pwdUpdate").on("click", function(){
-            			if($("#pwd").val=="") {
-            				alert("현재 비밀번호를 입력해주세요");
-            				$("#pwd").focus();
-            				return false
-            			}
+            			console.log("들어와라");
+//             			if($("#pwd").val=="") {
+//             				alert("현재 비밀번호를 입력해주세요");
+//             				$("#pwd").focus();
+//             				return false
+//             			}
             			
-            			if($("#pwd1").val=="") {
-            				alert("변경비밀번호를 입력해주세요");
-            				$("pwd1").focus();
-            				return false
-            			}
+//             			if($("#pwd1").val=="") {
+//             				alert("변경비밀번호를 입력해주세요");
+//             				$("pwd1").focus();
+//             				return false
+//             			}
             			
-            			if($("#pwd2").val()=="") {
-            				alert("변경 비밀번호 확인을 입력해주세요");
-            				$("pwd2").focus();
-            				return false
-            			}
-            			if($("#pwd").val() != $("#pwd2").val()){
-            				alert("변경 비밀번호가 일치하지 않습니다.");
-            				$("#pwd2").focus();
+//             			if($("#pwd2").val()=="") {
+//             				alert("변경 비밀번호 확인을 입력해주세요");
+//             				$("pwd2").focus();
+//             				return false
+//             			}
+//             			if($("#pwd").val() != $("#pwd2").val()){
+//             				alert("변경 비밀번호가 일치하지 않습니다.");
+//             				$("#pwd2").focus();
             				
-            				$.ajax({
-            					url: "/user/pwCheck",
-            					type : "POST",
-            					dataType : "json",
-            					data : $("#UpdateForm").serializeArray(),
-            					success: function(data){
+//             				$.ajax({
+//             					url: "pwCheck",
+//             					type : "POST",
+//             					dataType : "json",
+//             					data : $("#pwUpdateForm").serializeArray(),
+//             					success: function(data){
             						
-            						if(data == 0){
-            							alert("패스워드가 틀렸습니다.");
-            							return;
-            						}else{
-            							if(confirm("변경하시겠습니까?")){
-            								$("#UpdateForm").submit();
-            							}
-            						}
-            					}
-            				});
+//             						if(data == 0){
+//             							alert("패스워드가 틀렸습니다.");
+//             							return;
+//             						}else{
+//             							if(confirm("변경하시겠습니까?")){
+//             								$("#pwUpdateForm").submit();
+//             							}
+//             						}
+//             					}
+//             				})
             			}
             		});
-            	});
+//             	});
             </script>
 	
 </body>
