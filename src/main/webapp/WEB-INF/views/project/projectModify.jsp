@@ -42,7 +42,7 @@
 					<input type="hidden" id="adminNo" name="adminNo" value="${ sessionScope.loginMember.no }">
 					<input type="hidden" id="projectNo" name="projectNo" value="${ projectInfo.projectNo }">
 					
-					<input name="pm" id="pm-name-area" type="text" class="readonly" value="${ projectInfo.pmName }" required autocomplete="off"> 
+					<input name="pmName" id="pm-name-area" type="text" class="readonly" value="${ projectInfo.` }" required autocomplete="off"> 
 				</div>
 				<div class="mt-4">
 					<span  style="margin-left: 2%">
