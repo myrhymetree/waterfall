@@ -424,4 +424,12 @@
 		                       WHERE A.MEMBER_ID = #{ id }
 	                    	)            
 	</delete>
+	
+	<update id="">
+		UPDATE
+		       TBL_MEMBER A
+		   SET A.MEMBER_PWD = #{ pwd }
+		 WHERE A.MEMBER_ID = ${ id }  
+	</update>
+	
 </mapper>
