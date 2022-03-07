@@ -419,6 +419,10 @@ ul {
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
+#registModal {
+	align-items: center;
+	justify-content: center;
+}
 
 </style>
 <script>
@@ -431,6 +435,7 @@ ul {
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
+	<jsp:include page="/WEB-INF/views/task/IssueModal.jsp"/>
 	<div class="taskList">
 		<div id="box1header">
 			<i style='font-size:24px' class='far'>&#xf328;</i>&nbsp;&nbsp;업무 관리 <br>
@@ -608,7 +613,7 @@ ul {
 					<p>
 						<label>이슈 등록</label>
 							<label id="addIssue">
-							<button class="button float">등록</button>
+							<button id="addIssue1" class="button float">등록</button>
 							<input type="hidden" name="parentTaskNo">
 							</label>
 							
@@ -666,7 +671,7 @@ ul {
 					<p>
 						<label>이슈 등록</label>
 							<label id="addIssue">
-							<button class="button float">등록</button>
+							<button id="addIssue2" class="button float">등록</button>
 							<input type="hidden" name="childTaskNo">
 							</label>
 					</p>
@@ -1009,6 +1014,55 @@ ul {
 			language : 'en'
 		});
 		console.log(gantt_chart);
+		
+		/* 이슈 등록 기능 모달 이벤트 */
+		
+		$("#closeIssue").click(function(){
+			$("#readModal").css("display", "block");
+			$("#registModal").css("display", "none");
+		});
+		
+		$("#addIssue1").click(function(){
+			if($("#registModal").css("display")=="none"){
+				$("#registModal").css("display", "flex");
+				$("#readModal").css("display", "none");
+			
+			}
+			
+			var projectNo = ${ sessionScope.projectAutority.projectNo };
+		   	$("#read-projectNo").val(projectNo);
+
+		    console.log("프로젝트 번호는 : " + projectNo);
+		      
+//		    var $taskNo = Number($("input[name=parentTaskNo]").val());
+			
+			const taskNo = Number($("input[name=parentTaskNo]").val());
+			$("#read-taskNo").val(taskNo);
+			console.log(Number(taskNo));
+			console.log($("#read-taskNo").val());
+		});
+		
+		$("#addIssue2").click(function(){
+			if($("#registModal").css("display")=="none"){
+				$("#registModal").css("display", "flex");
+				$("#readModal").css("display", "none");
+			}
+			
+//			var $taskNo = Number($("input[name=childTaskNo]").val());
+			
+			var projectNo = ${ sessionScope.projectAutority.projectNo };
+		    $("#read-projectNo").val(projectNo);
+
+		    console.log("프로젝트 번호는 : " + projectNo);
+		      
+		    var $taskNo = Number($("input[name=childTaskNo]").val());
+			
+			const taskNo = Number($("input[name=childTaskNo]").val());
+			$("#read-taskNo").val(taskNo);
+			console.log(Number(taskNo));
+			console.log($("#read-taskNo").val());
+		});
+		
 	</script>
 	
 </body>

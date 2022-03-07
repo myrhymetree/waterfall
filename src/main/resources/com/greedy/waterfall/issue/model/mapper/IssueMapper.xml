@@ -484,11 +484,11 @@
 	</insert>
 	
  	<insert id="writeRegistedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
-		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+		<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
 			SELECT 
 			DISTINCT 
 	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
-	               , D.MEMBER_NAME AS registerName
+	               , D.MEMBER_NAME AS loginMemberName
 	            FROM TBL_ISSUE A
 	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
 	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
@@ -510,7 +510,7 @@
 		  (
 		    HISTORY_NO.NEXTVAL
 		  , SYSDATE
-		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
 		  , 3
 		  , #{ projectNo }
 		  , #{ registerNo } 

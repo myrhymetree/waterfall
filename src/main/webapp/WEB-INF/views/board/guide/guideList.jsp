@@ -176,7 +176,7 @@ input::-webkit-search-results-decoration{
                     <form action="${ pageContext.servletContext.contextPath }/guide/regist" method="POST" encType="multipart/form-data"> 
                         <div class="my-modal-header mb-4">
                             <label class="me-2" for="title-write">제목</label>
-                            <input type="text" id="title-write" name="title"placeholder="제목을 입력하세요" required>
+                            <input type="text" id="title-write" name="title" placeholder="제목을 입력하세요" required>
                         </div>
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
@@ -185,7 +185,7 @@ input::-webkit-search-results-decoration{
                             </div>
                             <br>
                             <div class="my-modal-footer-read">
-                                <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
+                                <button type="submit" class="btn btn-secondary">등록</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                             </div>
                         </div>    
@@ -195,8 +195,8 @@ input::-webkit-search-results-decoration{
         </div>
         <!-- Modal HTML  -->
 
-        <!-- subModal -->
-        <div class="modal fade" id="subModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- subModal
+       <div class="modal fade" id="subModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content" style="left: 150px; top: 300px; width: 300px; height: 150px; margin: 0; padding: 0;">
                     <div class="modal-body align-middle my-modal-message">
@@ -208,7 +208,7 @@ input::-webkit-search-results-decoration{
                 </div>
             </div>
         </div>
-        <!-- //subModal -->
+ -->
 
         
 
@@ -263,14 +263,14 @@ input::-webkit-search-results-decoration{
                                       <form action="${ pageContext.servletContext.contextPath }/guide/update" method="POST" encType="multipart/form-data">
                                           <div class="my-modal-header mb-4">
                                               <label class="me-2" for="title-write">제목</label>
-                                              <input type="text" id="read-title" name="title">
+                                              <input type="text" id="read-title" name="title" required>
                                               <input type="hidden" id="read-no" name="no">
                                               <input type="hidden" id="read-writerNo" name="writerMemberNo">
                                               <input type="hidden" id="read-projectNo" name="projectNo">
                                           </div>
                                           <div class="my-modal-body">
                                               <div class="my-textarea-div mb-3">
-                                                  <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
+                                                  <textarea name="content" id="read-content" cols="30" rows="10" required></textarea>
                                               </div>
                                               
                                               <div id="uploadZone">
@@ -329,7 +329,11 @@ input::-webkit-search-results-decoration{
           
 <script>
 
-$('#title-write').removeAttr('required');
+function manualValidate(ev) {
+    ev.target.checkValidity();
+    return false;
+}
+$("#form").bind("submit", manualValidate);
 
  $(function(){
    $("#submitButton").click(function(){

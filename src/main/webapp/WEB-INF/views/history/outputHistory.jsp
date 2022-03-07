@@ -66,7 +66,7 @@
 	                        </tr>
 	                    </thead>
 	                    <tbody>
-	                    	<c:forEach var="output" items="${ requestScope.outputhistory }" varStatus="status">
+	                    	<c:forEach var="output" items="${ requestScope.outputHistoryList }" varStatus="status">
 		                        <tr>
 		                            <td><c:out value="${ output.updatedDate }"/></td>
 		                            <td><c:out value="${ output.categoryTypeNo }"/></td>

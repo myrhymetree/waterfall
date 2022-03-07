@@ -102,13 +102,14 @@
 <script>
 	function backButton_click() {
 		   console.log("이전 페이지 이동");
-		   location.href= document.referrer;
+//		   location.href= document.referrer;
+		   location.href = "${ pageContext.servletContext.contextPath }/issue/task";
 	}
 	
 	$(document).ready(function() {
 		$('#datatablesSimple tbody').on('click', 'tr', function () {
 		      var no = this.children[0].innerText;
-	         
+		      
  	          $.ajax({
 	            url :"issueDetail",
 	            type : "get",
