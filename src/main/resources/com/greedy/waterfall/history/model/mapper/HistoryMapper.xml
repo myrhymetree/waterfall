@@ -24,7 +24,7 @@
      ORDER BY 1 DESC
   </select>
   
-  <select id="selectAllProjectHistoryList" resultMap="historyResultMap">
+  <select id="selectAdminProjectHistoryList" resultMap="historyResultMap">
 	SELECT
 	       A.HISTORY_NO
 	     , A.UPDATED_DATE

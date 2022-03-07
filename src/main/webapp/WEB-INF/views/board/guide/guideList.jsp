@@ -266,6 +266,7 @@ input::-webkit-search-results-decoration{
                                               <input type="text" id="read-title" name="title">
                                               <input type="hidden" id="read-no" name="no">
                                               <input type="hidden" id="read-writerNo" name="writerMemberNo">
+                                              <input type="hidden" id="read-projectNo" name="projectNo">
                                           </div>
                                           <div class="my-modal-body">
                                               <div class="my-textarea-div mb-3">
@@ -389,6 +390,7 @@ $(function() {
                   $("#read-content").val(guideArray[3][1]);
                   $("#read-writerNo").val(guideArray[8][1]);
                   $("#read-originalName").val(guideArray[14][1]);
+                  $("#read-projectNo").val(guideArray[5][1]);
                   $("#readModal").modal("show");
                   ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스, count
                   

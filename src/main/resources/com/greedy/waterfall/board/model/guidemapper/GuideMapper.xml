@@ -265,5 +265,65 @@
 		  , #{ writerMemberNo } 
 		  )
 	</insert>
+	
+	<insert id="writeUpdatedGuideHistory" parameterType="com.greedy.waterfall.board.model.dto.GuideDTO">
+		<selectKey keyProperty="loginMemberName" resultType="com.greedy.waterfall.board.model.dto.GuideDTO" order="BEFORE">
+			SELECT
+            DISTINCT 
+                     B.MEMBER_NAME AS loginMemberName
+                FROM TBL_BOARD A
+                JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+               WHERE A.MEMBER_NO = #{ loginMemberNo }
+		</selectKey>
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || '[가이드 게시판]에 ' || #{ title } || ' [게시글]을 [수정]했습니다'
+		  , 6
+		  , #{ projectNo }
+		  , #{ loginMemberNo } 
+		  )
+	</insert>
+	
+	<insert id="writeDeletedGuideHistory" parameterType="com.greedy.waterfall.board.model.dto.GuideDTO">
+		<selectKey keyProperty="loginMemberName" resultType="com.greedy.waterfall.board.model.dto.GuideDTO" order="BEFORE">
+			SELECT
+            DISTINCT 
+                     B.MEMBER_NAME AS loginMemberName
+                FROM TBL_BOARD A
+                JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+               WHERE A.MEMBER_NO = #{ loginMemberNo }
+		</selectKey>
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || '[가이드 게시판]에 ' || #{ title } || ' [게시글]을 [삭제]했습니다'
+		  , 6
+		  , #{ projectNo }
+		  , #{ loginMemberNo } 
+		  )
+	</insert>
   	
 </mapper>

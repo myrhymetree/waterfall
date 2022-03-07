@@ -74,4 +74,12 @@ private final HistoryMapper mapper;
 		return projectHistoryList;
 	}
 
+	@Override
+	public List<HistoryDTO> selectAdminProjectHistoryList() {
+		
+		List<HistoryDTO> adminProjectHistoryList = mapper.selectAdminProjectHistoryList();
+		
+		return adminProjectHistoryList;
+	}
+
 }

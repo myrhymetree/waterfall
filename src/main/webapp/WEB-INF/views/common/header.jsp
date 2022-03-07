@@ -66,6 +66,7 @@
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/company/dept/list">부서관리</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/output/admin/list">산출물</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/project">이슈</a>
+		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/project">히스토리</a>
 		                                    </nav>
 		                                </div>
 		                            </div>

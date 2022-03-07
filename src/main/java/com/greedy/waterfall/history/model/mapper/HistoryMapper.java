@@ -22,4 +22,6 @@ public interface HistoryMapper {
 
 	List<HistoryDTO> selectProjectHistoryList(int projectNo);
 
+	List<HistoryDTO> selectAdminProjectHistoryList();
+
 }

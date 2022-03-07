@@ -43,4 +43,6 @@ public class GuideDTO {
 	private GuideFileDTO file;				//File 테이블과 join하는 경우 1:1 조인이 될 것이기 때문에 GuideFileDTO로 생성
 	private int fileNo;						//첨부파일 번호
 	private String originalName;			//첨부파일 이름
+	private int loginMemberNo;				//로그인한 사람번호
+	private String loginMemberName;			//로그인한 사람이름
 }

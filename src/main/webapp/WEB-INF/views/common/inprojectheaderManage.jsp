@@ -40,13 +40,7 @@
 	</a>
 	<div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 		<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-			<a class="nav-link collapsed, menu-font2" href="${ pageContext.servletContext.contextPath }/issue/list" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-				이슈관리
-			</a>						
-			<nav class="sb-sidenav-menu-nested nav">
-				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/task">이슈 조회</a> 									
-<%-- 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/list?no=" +  + "${ projectAutority.projectNo }">이슈 조회</a> 									 --%>
-			</nav>				
+			<a class="nav-link collapsed, menu-font2" href="${ pageContext.servletContext.contextPath }/issue/task">이슈관리</a>									
 		</nav>
 	</div>
 	<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts5" aria-expanded="false" aria-controls="collapseLayouts5">

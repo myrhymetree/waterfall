@@ -25,13 +25,25 @@ public class HistoryController {
 		this.historyService = historyService;
 	}
 	
+	@GetMapping("/project")
+	public ModelAndView adminProjectHitoryList(HttpServletRequest request, ModelAndView mv) {
+		
+		List<HistoryDTO> adminProjectHistoryList = historyService.selectAdminProjectHistoryList();
+		System.out.println("프로젝트 관리 히스토리 목록은 : " + adminProjectHistoryList);
+		
+		mv.addObject("adminProjectHistoryList", adminProjectHistoryList);
+		mv.addObject("intent", "/history/project");
+		mv.setViewName("/history/adminProjectHistory");
+		return mv;
+	}
+	
 	@GetMapping("/list")
 	public ModelAndView projectHitoryList(HttpServletRequest request, ModelAndView mv) {
 		
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		
 		List<HistoryDTO> projectHistoryList = historyService.selectProjectHistoryList(projectNo);
-		System.out.println("업무 히스토리 목록은 : " + projectHistoryList);
+		System.out.println("해당 프로젝트의 히스토리 목록은 : " + projectHistoryList);
 		
 		mv.addObject("projectHistoryList", projectHistoryList);
 		mv.addObject("intent", "/history/list");

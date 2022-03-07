@@ -45,4 +45,8 @@ public interface GuideMapper {
 
 	void writeRegistedGuideHistory(GuideDTO guide);
 
+	void writeUpdatedGuideHistory(GuideDTO guide);
+
+	void writeDeletedGuideHistory(GuideDTO guide);
+
 }

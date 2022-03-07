@@ -20,4 +20,6 @@ public interface HistoryService {
 
 	List<HistoryDTO> selectProjectHistoryList(int projectNo);
 
+	List<HistoryDTO> selectAdminProjectHistoryList();
+
 }
