@@ -40,9 +40,10 @@
 					<label style="margin-left: 2%; width: 20%">프로젝트 매니저</label>
 					<input type="hidden" id="pmNumber" name="pmNumber" value="${ projectInfo.pmNumber }">
 					<input type="hidden" id="adminNo" name="adminNo" value="${ sessionScope.loginMember.no }">
+					<input type="hidden" id="adminName" name="adminName" value="${ sessionScope.loginMember.name }">
 					<input type="hidden" id="projectNo" name="projectNo" value="${ projectInfo.projectNo }">
 					
-					<input name="pmName" id="pm-name-area" type="text" class="readonly" value="${ projectInfo.` }" required autocomplete="off"> 
+					<input name="pmName" id="pm-name-area" type="text" class="readonly" value="${ projectInfo.pmName }" required autocomplete="off"> 
 				</div>
 				<div class="mt-4">
 					<span  style="margin-left: 2%">
@@ -74,6 +75,7 @@
 				</div>
 				<div class="mt-3">
 					<label style="margin-left: 2%; width: 20%">진행상태</label>
+					<input type="hidden" id="projectStatusName" name="projectStatusName">
 					<select id="projectStatus" name="projectStatusCode" >
 					    <option value="" selected disabled>프로젝트 상태</option>
 					    <c:forEach var="projectStatus" items="${ statusList }">
@@ -94,6 +96,11 @@
 	</div>	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 	<script>
+	
+	$("#projectStatus").on("change", function() {
+		
+		$("#projectStatusName").val($("#projectStatus option:selected").text());
+	});
 	
 	$("#save-pm").on("click", function() {
 		console.log($("#member option:selected").val());

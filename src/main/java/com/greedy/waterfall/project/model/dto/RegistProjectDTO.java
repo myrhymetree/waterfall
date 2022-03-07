@@ -33,9 +33,11 @@ public class RegistProjectDTO {
 	private int pmNumber;
 	private String pmName;
 	private String projectStatusCode;
+	private String projectStatusName;
 	private int progression;
 	private String dept;
 	private String team;
 	private int adminNo;
+	private String adminName;
 	
 }

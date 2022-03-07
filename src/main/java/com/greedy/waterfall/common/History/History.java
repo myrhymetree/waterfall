@@ -7,10 +7,11 @@ import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 
 public interface History {
 	
-	List<ProjectHistoryDTO> registHistory(MemberDTO member, Object info);
+	List<ProjectHistoryDTO> registHistory(Object info);
 
-	List<ProjectHistoryDTO> modifyHistory(MemberDTO member, Object info);
+	List<ProjectHistoryDTO> modifyHistory(Object info);
 	
 	List<ProjectHistoryDTO> deleteHistory(MemberDTO member, Object info);
+	
 	
 }

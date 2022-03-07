@@ -158,20 +158,26 @@ public class ProjectServiceImpl implements ProjectService {
 								.and(mapper.registProjectHistory(newProject.getProjectNo()))
 								.isOk();
 		if(registProjectResult) {
-			
-			List<ProjectHistoryDTO> projectRegistHistory = 
-					history.registHistory(mapper.findAdminInfo(newProject.getAdminNo()), newProject);
-			
-			Result registHistoryResult = new Result();
-			for(int i = 0; i < projectRegistHistory.size(); i++) {
+				Map<String, Object> info = new HashMap<>();
+				info.put("findAdminInfo", mapper.findAdminInfo(newProject.getAdminNo()));
+				info.put("newProject", newProject);
 				
-				registHistoryResult.and(mapper.registEntireHistoryProjectRegist(projectRegistHistory.get(i)));
-			}
+				List<ProjectHistoryDTO> projectRegistHistory = history.registHistory(info);
 				
-				return registHistoryResult.isOk();
+				return registHistoryResult(projectRegistHistory);
 			}
 			
 		return false;
+	}
+	
+	private boolean registHistoryResult(List<ProjectHistoryDTO> projectHistoryList) {
+		Result registHistoryResult = new Result();
+		for(int i = 0; i < projectHistoryList.size(); i++) {
+			
+			registHistoryResult.and(mapper.registEntireHistoryProjectRegist(projectHistoryList.get(i)));
+		}
+			
+			return registHistoryResult.isOk();
 	}
 
 	/**
@@ -210,7 +216,15 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public boolean modifyProject(RegistProjectDTO newProject) {
 		
+		Map<String, Object> info  = new HashMap<>();
 		RegistProjectDTO oldProject = mapper.findOneProjectInfo(newProject.getProjectNo());
+		info.put("newProject", newProject);
+		info.put("oldProject", oldProject);
+		
+		boolean result = true;
+		
+		
+		
 //		int resultModifyProject = mapper.modifyProject(newProject);
 //		
 //		/* 기존의 PM과 수정정보에서 입력된 PM정보를 비교 후, PM이 바뀌었는지 확인한다. */
@@ -230,16 +244,18 @@ public class ProjectServiceImpl implements ProjectService {
 //				int pmChangeResult = mapper.joinPmInProject(newProject);
 //			}
 //		}
-		
-		System.out.println("newProject : "  + newProject);
-		System.out.println("oldProject : " + oldProject);
+		if(result) {
+			List<ProjectHistoryDTO> modifyProjectHistory = history.modifyHistory(info);
+			
+//			return registHistoryResult(modifyProjectHistory);
+		}
 		
 		
 		/* 수정한 내용을 히스토리 테이블에 저장한다. */
 //		List<ProjectHistoryDTO> modifyProjectHistory
 		
 			
-		return true;
+		return false;
 	}
 
 	@Override
