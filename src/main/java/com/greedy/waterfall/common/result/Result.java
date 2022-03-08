@@ -25,6 +25,12 @@ public class Result {
 		
 		return this;
 	}
+
+	public Result and(boolean checkValue) {
+
+		this.result = this.result && checkValue;
+		return this;
+	}
 	
 	public Result perform(Integer checkValue) {
 		if(nullCheck(checkValue)) {

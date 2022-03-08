@@ -5,14 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.greedy.waterfall.common.History.History;
 import com.greedy.waterfall.common.paging.Paging;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.common.result.Result;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
+import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 import com.greedy.waterfall.project.model.dto.ProjectManageMemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
 import com.greedy.waterfall.project.model.mapper.ProjectManageMapper;
@@ -20,6 +30,10 @@ import com.greedy.waterfall.project.model.mapper.ProjectManageMapper;
 @Service
 public class ProjectManageServiceImpl implements ProjectManageService{
 
+	@Autowired
+	@Qualifier("memberHistory")
+	private History history;
+	
 	private final ProjectManageMapper mapper;
 	private final Paging paging;
 
@@ -61,13 +75,37 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 		/* 프로젝트 인원배정내역에 등록한다. */
 		/* 프로젝트 역할배정내역에 등록한다. */ 
 		/* 인원배정과 역할배정내역 등록에 성공하면 성공값을 반환한다. */
-		if(isSuccess(mapper.registMemberToProject(registInfo)) && registRoleToProject(registInfo)) {
-			return true;
+		Result registProjectMember = new Result()
+									.perform(mapper.registMemberToProject(registInfo))
+									.and(registRoleToProject(registInfo));
+
+		if(registProjectMember.result()) {
+			ProjectManageMemberDTO historyInfo = mapper.findMemberInfo(registInfo);
+			
+			List<ProjectHistoryDTO> memberResigtHistory = history.registHistory(historyInfo);
+			if(registHistoryResult(memberResigtHistory)) {
+				
+				return true;
+			}
+		
 		}
 		
 		/* 인원배정과 역할배정내역 등록에 실패하면 실패값을 반환한다. */
 		return false;
 	}
+	
+	private boolean registHistoryResult(List<ProjectHistoryDTO> projectHistoryList) {
+		Result registHistoryResult = new Result();
+		for(int i = 0; i < projectHistoryList.size(); i++) {
+			
+			registHistoryResult.and(mapper.registEntireHistoryProjectRegist(projectHistoryList.get(i)));
+		}
+			
+			return registHistoryResult.result();
+	}
+	
+	
+	
 	
 	private boolean isSuccess(int result) {
 		boolean isSuccess = false;
@@ -87,15 +125,13 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 	 * @author 홍성원
 	 */
 	private boolean registRoleToProject(ProjectManageMemberDTO registInfo) {
-		boolean isSuccess = false;
-		
 		/* 역할 부여받은 갯수만큼 반복문을 돌려서 , 그만큼 insert 해야 성공 */
-		int resultCount = 0;
+		Result registProjectRole = new Result();
 		for(int i = 0; i < registInfo.getRole().size(); i++) {
-			resultCount += mapper.registRoleToProject(parsingRegistInfo(registInfo, i));
+			registProjectRole.perform(mapper.registRoleToProject(parsingRegistInfo(registInfo, i)));
 		}
 		
-		return resultRegistRole(registInfo.getRole().size(), resultCount);
+		return registProjectRole.result();
 	}
 
 	private Map<String, Integer> parsingRegistInfo(ProjectManageMemberDTO registInfo, int i) {
@@ -108,22 +144,6 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 		
 		
 		return registRoleInfo;
-	}
-
-	/**
-	 * resultRegistRole : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
-	 * 
-	 * @author 홍성원
-	 */
-	private boolean resultRegistRole(int result, int count) {
-		if(result == count) {
-			
-			return true;
-		}
-		
-		return false;
 	}
 
 	@Override
@@ -141,9 +161,21 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 
 	@Override
 	public boolean modifyProjectMember(ProjectManageMemberDTO modifyInfo) {
+		ProjectManageMemberDTO oldInfo = mapper.findMemberInfo(modifyInfo);
 		
 		if(removeOldRole(modifyInfo) && registRoleToProject(modifyInfo)) {
-			return true;
+			ProjectManageMemberDTO newInfo = mapper.findMemberInfo(modifyInfo);
+			
+			Map<String, Object> historyInfo = new HashMap<>();
+			historyInfo.put("newInfo", newInfo);
+			historyInfo.put("oldInfo", oldInfo);
+			
+			List<ProjectHistoryDTO> modifyHistoryList = history.modifyHistory(historyInfo);
+			
+			if(registHistoryResult(modifyHistoryList)) {
+				
+				return true;
+			}
 		}
 		
 		return false;
@@ -156,17 +188,24 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 
 	@Override
 	public boolean removeMemberInProject(Map<String, Integer> removeInfo) {
-
+		ProjectManageMemberDTO projectInfo = new ProjectManageMemberDTO().builder()
+														.memberNo(removeInfo.get("memberNo"))
+														.projectNo(removeInfo.get("projectNo"))
+														.build();
+				
+		projectInfo = mapper.findMemberInfo(projectInfo);
 		/* 멤버의 역할내역 모두 삭제 && 멤버의 하차일 업데이트 */
 		if(isSuccess(mapper.removeMemberRole(removeInfo)) && isSuccess(mapper.removeMemberJoinHistory(removeInfo))) {
 			
-			return true;
+			List<ProjectHistoryDTO> removeHistoryList = history.removeHistory(projectInfo);
+			if(registHistoryResult(removeHistoryList)) {
+				
+				return true;
+			}
 		}
-		
 		
 		return false;
 	}
-
 }
 
 
