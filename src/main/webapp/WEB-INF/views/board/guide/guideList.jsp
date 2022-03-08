@@ -386,17 +386,17 @@ $(function() {
                   const guideArray = Object.entries(data);
                   
                   console.log(guideArray[3][1]);
-                  const $fileNo = guideArray[13][1];
+                  const $fileNo = guideArray[14][1];
                   console.log($fileNo);
                   
                   $("#read-no").val(guideArray[0][1]);      
                   $("#read-title").val(guideArray[2][1]);
                   $("#read-content").val(guideArray[3][1]);
                   $("#read-writerNo").val(guideArray[8][1]);
-                  $("#read-originalName").val(guideArray[14][1]);
+                  $("#read-originalName").val(guideArray[15][1]);
                   $("#read-projectNo").val(guideArray[5][1]);
                   $("#readModal").modal("show");
-                  ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스, count
+                  ex.children[2].innerText=guideArray[10][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스, count
                   
                   if($fileNo != null) {
                      
