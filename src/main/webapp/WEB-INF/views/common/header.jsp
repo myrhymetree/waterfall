@@ -12,7 +12,26 @@
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 <link href="${ pageContext.servletContext.contextPath }/resources/css/styles.css" rel="stylesheet" />
-<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>		
+<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>
+<style>
+.notification {
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification .badge {
+  position: absolute;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+</style>	
 <title>Insert title here</title>
 
 <!-- 추가됐던거 -->
@@ -31,6 +50,19 @@
 	               
 	        </form>
 	        <!-- Navbar-->
+	        
+	        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+	            <li class="nav-item dropdown">
+	                <a class="nav-link dropdown-toggle notification" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-bell"></i><span class="badge">3</span></a>
+	                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownNotification" style="width: 300px; height: 200px; overflow: auto">                       
+	                    <li><a class="dropdown-item" href="#!">계정정보 관리fffffffffffffffffffffffffffffffffffffffffffffffffffffff</a></li>
+	                    <li><a class="dropdown-item" href="#!">프로필 관리</a></li>
+	                    <li><hr class="dropdown-divider" /></li>
+	                    <li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/member/logout">로그아웃</a></li>
+	                </ul>
+	            </li>
+	        </ul>
+	        
 	        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 	            <li class="nav-item dropdown">
 	                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
