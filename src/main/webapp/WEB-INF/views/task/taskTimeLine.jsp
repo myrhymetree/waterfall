@@ -170,7 +170,7 @@ a {
 .layer {
 	display: none;
 	width: 850px;
-	height: 670px;
+	height: 750px;
 	background: #fff;
 	border: 1px solid black;
 	position: absolute;
@@ -186,7 +186,7 @@ a {
 .add{
 	display: none;
 	width: 770px;
-	height: 530px; !important
+	height: 530px !important;
 	background: #fff;
 	border: 1px solid black;
 	position: absolute;
@@ -345,10 +345,11 @@ ul {
 	padding-left: 500px;
 }
 #readModal{
+
 }
 
 #parentTaskDetail{
-	width : 30%;
+	width : 40%;
 	float : left;
 	
 }
@@ -424,6 +425,13 @@ ul {
 #parentTaskModifyBtn, #childTaskModifyBtn{
 	background-color: #9B91BF;
 	color: white;
+	margin : 0px;
+}
+#parentTaskDeleteBtn, #childTaskDeleteBtn{
+	background-color : #D16B6B;
+	color: white;
+	margin : 3px;
+
 }
 
 
@@ -457,7 +465,7 @@ ul {
 
 				<c:forEach var="parentTask" items="${ requestScope.parentTaskList }"
 					varStatus="status">
-					<label id="parentTaskName" type="button" class="folder_toggle"
+					<label  type="button" class="folder_toggle"
 						data-toggle="collapse" data-target="#demo${ status.index }"><i
 						style='font-size: 16px;' class='fas'>&#xf07b;</i>&nbsp;<c:out
 							value="${ parentTask.taskCategory.categoryName }" /></label>
@@ -566,7 +574,7 @@ ul {
 				</div>
 					<div id="footerBtn">
 						<button class="addTask button float" type="submit" style="padding:4px; " rel="float">업무 생성</button>
-						<button id="close" class="button float" style="padding:4px; margin-right:30px;" rel="float">업무 나가기</button>
+						<input type="button" id="close" class="button float" style="padding:4px; margin-right:30px;" rel="float" value="업무 나가기">
 					</div>
 			
 		</div>
@@ -584,7 +592,7 @@ ul {
 				</p>
 				<p>
 					<label>업무선택</label>
-					<select id="selectTask" class="task-register-code" name="taskCode" required>
+					<select id="modifyCategoryName" class="task-register-code" name="taskCode" required>
 					<option value="" disabled >선택</option>
 					<c:forEach var="taskList" items="${requestScope.taskCategoryList }" varStatus="status" >
 						<option id="modifyCategoryName" value="${taskList.categoryCode }" ><c:out value="${ taskList.categoryName }"/></option>
@@ -593,7 +601,7 @@ ul {
 				</p>
 				<p>
 					<label>종속관계</label>
-					<select class="relation ms-2 me-5" name="parentTaskCode" required>
+					<select id="modifyParentTaskCode" class="relation ms-2 me-5" name="parentTaskCode" required>
 					<option value="" disabled >선택</option>
 					<c:forEach var="taskCode" items="${requestScope.allTaskCode.parentCategory }" varStatus="status">
 						<option value="${taskCode.parentCategoryCode }" ><c:out value="${taskCode.parentCategoryName }"/></option>
@@ -601,7 +609,7 @@ ul {
 						<option id="selectedNull" value= "NULL">미지정</option>
 					</select>
 					<label>담당자</label><i class="far fa-user ms-2"></i>
-					<select class="in-charge ms-0" name="taskMember" required>
+					<select id="modifyMember" class="in-charge ms-0" name="taskMember" required>
 						<option value="" disabled>선택</option>
 						<c:forEach var="projectMember" items="${requestScope.projectMemberList }" varStatus="status">
 						<option id="modifyMember" value="${projectMember.memberNo }" ><c:out value="${projectMember.memberName }"/></option>
@@ -650,6 +658,7 @@ ul {
 				</div>
 					<div id="footerBtn">
 						<button class="addTask button float" type="submit" style="padding:4px; " rel="float">업무 수정</button>
+						<input type="hidden" id="modifyTaskNo" name="taskNo">
 						<input type="button" id="closeModify" class="button float" style="padding:4px; margin-right:30px;" rel="float" value="업무 나가기">
 					</div>
 			
@@ -669,6 +678,7 @@ ul {
 				<label class="task">상위업무</label>
 				<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
 				<button class="button float" id="parentTaskModifyBtn">수정</button>
+				<button class="button float" id="parentTaskDeleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</button>
 				</c:if>
 					<p>
 						<label>업무명</label>
@@ -678,6 +688,7 @@ ul {
 					<p>
 						<label>담당자</label>
 						<input id="parentTaskManager" type="text" name="parentTaskManager"/>
+						<input id="parentTaskManagerNo" type="hidden" name="parentTaskManagerNo">
 					</p>	
 					<p>
 						<label>시작일</label>
@@ -728,15 +739,18 @@ ul {
 				<label class="task">하위업무</label>
 				<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
 				<button class="button float" id="childTaskModifyBtn">수정</button>
+				<button class="button float" id="childTaskDeleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</button>
 				</c:if>
 					<p>
 						<label>업무명</label>
 						<input id="childTaskName" type="text" name="childTaskName"/>
+						<input id="childTaskCode" type="hidden" name="childTaskCode"/>
 					</p>
 					
 					<p>
 						<label>담당자</label>
 						<input id="childTaskManager" type="text" name="childTaskManager"/>
+						<input id="childTaskManagerNo" type="hidden" name="childTaskManagerNo">
 					</p>
 					
 					<p>
@@ -756,7 +770,7 @@ ul {
 					
 					<p>
 						<label>진행률</label>
-						<input class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" >%
+						<input id="childProgress" class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" >%
 					</p>
 					
 					<p>
@@ -796,6 +810,36 @@ ul {
 	</div>
 	<%--업무 조회 모달 끝 --%>
 	
+	<!-- 삭제 확인 Modal "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
+              <div class="modal fade modal-dialog-scrollable" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+                    <div class="modal-content" style="top: 200px">
+                        <div style="background-color: #212529;">
+                            <br>
+                        </div>
+                        <div class="modal-header">
+                            <span class="modal-title" id="exampleModalLabel"><strong>업무 삭제</strong></span>
+                        </div> 
+                    <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
+                                    <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->
+                                  <label for="clieck-point" class="col-form-label" style="margin-left: 35%; margin-top:5%;">삭제하시겠습니까?</label>
+                                  <input type="hidden" id="deleteParentTaskNo">
+                                  <input type="hidden" id="deleteChildTaskNo">
+                                </div>
+                            </div>
+                            <!-- 모달의 바디 끝  -->
+                            <div class="modal-footer">
+                                <button type="button" id="delete" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+                                <button id="cancelDelete" style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+	
 	
 	
 	<%-- 산출물 등록 모달 --%>
@@ -827,40 +871,120 @@ ul {
 
 	}); */
 	
+	$("#parentTaskDeleteBtn").click(function(){
+		
+		if($("#readModal").css("display")=="none"){
+			$("#readModal").css("display", "blcok");
+		} else{
+			$("#readModal").css("display", "none");
+		}
+		$("#delete").click(function(){
+			const deleteParentTaskNo = $("#outputParentTaskNo").val();
+			console.log(deleteParentTaskNo);
+			
+			/*상위 업무 삭제를 클릭했을 때*/
+			location.href="${ pageContext.servletContext.contextPath }/task/delete?taskNo=" + deleteParentTaskNo ;
+		});
+	});
+	$("#childTaskDeleteBtn").click(function(){
+		
+		if($("#readModal").css("display")=="none"){
+			$("#readModal").css("display", "blcok");
+		} else{
+			$("#readModal").css("display", "none");
+		}
+		$("#delete").click(function(){
+			const deleteChildTaskNo = $("#outputChildTaskNo").val();
+			console.log(deleteChildTaskNo);
+			
+			/*하위 업무 삭제를 클릭했을 때*/
+			location.href="${ pageContext.servletContext.contextPath }/task/delete?taskNo=" + deleteChildTaskNo ;
+		});
+		
+	});
+	$("#cancelDelete").click(function(){
+		if($("#readModal").css("display")=="none"){
+			$("#readModal").css("display", "blcok");
+		} 
+	});
+	
 	<%-- 상위 업무 수정 이벤트 시작 --%>
+	/* 업무조회 모달에서 수정버튼을 클릭했을 경우 */
 	$("#parentTaskModifyBtn").click(function(){
-		const modifyTaskCode = $("#parentTaskCode").val();
+		/* 수정모달에 보여질 정보들을 넣어준다. */
+		const modifyTaskCode= $("#parentTaskCode").val();
 		const modifyMemberName = $("#parentTaskManager").val();
+		const modifyMemberNo = $("#parentTaskManagerNo").val();
 		const modifyStartDate = $("#parent-start-date").val();
 		const modifyDeadline = $("#parent-end-date").val();
 		const modifyImportance = $("#parentImportance").val();
 		const modifyRatio = $("#parentProgress").val();
 		const modifyStatus = $("#parentStatus").val();
+		const modifyTaskNo = $("#outputParentTaskNo").val();
 		console.log(modifyTaskCode);
 		console.log(modifyMemberName);
 		console.log(modifyStartDate);
 		console.log(modifyDeadline);
 		console.log(modifyImportance);
 		console.log(modifyRatio);
+		console.log(modifyTaskNo);
 		$("#modifyCategoryName").val(modifyTaskCode).prop("selected", true);		//value가 선택한 taskCode와 동일한 것을 선택
 		$("#selectedNull").val('미지정').prop("selected", true);
-		$("#modifyMember").val(modifyMemberName).prop("selected", true);
+		$("#modifyMember").val(modifyMemberNo).prop("selected", true);
 		$("#modifyStartDate").val(modifyStartDate).prop("selected", true);
 		$("#modifyDeadline").val(modifyDeadline).prop("selected", true);
 		$("#modifyImportance").val(modifyImportance).prop("selected", true);
 		$("#modifyStatus").val(modifyStatus).prop("selected", true);
 		$("#modifyRatio").val(modifyRatio);
+		$("#modifyTaskNo").val(modifyTaskNo);
+		
+		
 		if($("#modifyModal").css("display")=="none"){
 			$("#modifyModal").css("display", "block");
 			$("#readModal").css("display", "none");
 		}	
+	});
+	
+	/* 하위업무 수정을 클릭하였을 때 */
+	$("#childTaskModifyBtn").click(function(){
+		/* 수정모달에 보여질 정보들을 넣어준다. */
+		const modifyTaskCode= $("#childTaskCode").val();
+		const modifyMemberName = $("#childTaskManager").val();
+		const modifyMemberNo = $("#childTaskManagerNo").val();
+		const modifyStartDate = $("#child-start-date").val();
+		const modifyDeadline = $("#child-end-date").val();
+		const modifyImportance = $("#childImportance").val();
+		const modifyRatio = $("#childProgress").val();
+		const modifyStatus = $("#childStatus").val();
+		const modifyParentTaskCode = $("#parentTaskCode").val();
+		const modifyTaskNo = $("#outputChildTaskNo").val();
 		
+		console.log(modifyTaskCode);
+		console.log(modifyMemberName);
+		console.log(modifyStartDate);
+		console.log(modifyDeadline);
+		console.log(modifyImportance);
+		console.log(modifyRatio);
+		console.log(modifyParentTaskCode);
+		console.log(modifyTaskNo);
+		$("#modifyCategoryName").val(modifyTaskCode).prop("selected", true);		//value가 선택한 taskCode와 동일한 것을 선택
+		$("#modifyParentTaskCode").val(modifyParentTaskCode).prop("selected", true);
+		$("#modifyMember").val(modifyMemberNo).prop("selected", true);
+		$("#modifyStartDate").val(modifyStartDate).prop("selected", true);
+		$("#modifyDeadline").val(modifyDeadline).prop("selected", true);
+		$("#modifyImportance").val(modifyImportance).prop("selected", true);
+		$("#modifyStatus").val(modifyStatus).prop("selected", true);
+		$("#modifyRatio").val(modifyRatio);
+		$("#modifyTaskNo").val(modifyTaskNo);
 		
-		
+		if($("#modifyModal").css("display")=="none"){
+			$("#modifyModal").css("display", "block");
+			$("#readModal").css("display", "none");
+		}	
 	});
 	
 	$("#closeModify").click(function(){
-		$("#closeModify").css("display", "none");
+		$("#modifyModal").css("display", "none");
 		$("#readModal").css("display", "block");
 		
 	});
@@ -989,11 +1113,15 @@ ul {
 					data : {"taskNo" : taskNo},
 					success : function(data, textStatus, xhr) {
 						const taskDetail = JSON.parse(data.taskDetail);
+						console.log(taskDetail.taskNo);
+						console.log(taskDetail.parentTask.taskNo);
 						
 						//상위업무
 						$("input[name=parentTaskName]").val(taskDetail.parentTask.taskCategory.categoryName);
 						
 						$("input[name=parentTaskManager]").val(taskDetail.parentTask.managerName);
+						
+						$("input[name=parentTaskManagerNo]").val(taskDetail.parentTask.managerNo);
 						
 						$("input[name=parentStartDate]").val(taskDetail.parentTask.startDate);
 						
@@ -1012,7 +1140,11 @@ ul {
 						//하위 업무
 						$("input[name=childTaskName]").val(taskDetail.taskCategory.categoryName);
 						
+						$("input[name=childTaskCode]").val(taskDetail.taskCategory.categoryCode);
+						
 						$("input[name=childTaskManager]").val(taskDetail.managerName);
+						
+						$("input[name=childTaskManagerNo]").val(taskDetail.managerNo);
 						
 						$("input[name=childStartDate]").val(taskDetail.startDate);
 						
@@ -1025,6 +1157,8 @@ ul {
 						$("input[name=childTaskNo]").val(taskDetail.taskNo);
 						
 						$("input[name=childStatus]").val(taskDetail.progressStatus);
+						
+						
 						
 						$("#readModal").css("display", "block");
 						$(".layer-bg").css("display", "block");

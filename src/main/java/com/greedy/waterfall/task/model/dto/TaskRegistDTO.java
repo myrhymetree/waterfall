@@ -17,8 +17,11 @@ import lombok.ToString;
 public class TaskRegistDTO {
 	
 	private String taskCode;
+	private String taskName;		//history등록시 taskCategoryName
 	private String parentTaskCode;
-	private String taskMember;
+	
+	private String taskMember;		//업무 담당자
+	
 	private Date startDate;
 	private Date deadline;
 	private String importance;
@@ -26,7 +29,12 @@ public class TaskRegistDTO {
 	private int progressRatio;
 	private int typeNo;
 	private int projectNo;
+	
 	private int parentTaskNo;
+	private int taskNo;
+	
+	private int memberNo;			// session member 번호
+	private String memberName;			// session member 이름
 	
 	
 }

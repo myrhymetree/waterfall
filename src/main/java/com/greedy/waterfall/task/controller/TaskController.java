@@ -1,5 +1,6 @@
 package com.greedy.waterfall.task.controller;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,18 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.task.model.dto.AllTaskCodeDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskHistoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskRegistDTO;
 import com.greedy.waterfall.task.model.service.TaskService;
 
@@ -91,6 +95,7 @@ public class TaskController {
 		
 		/* 상위업무,하위업무 categoryCode */
 		List<TaskCategoryDTO> taskCategoryList = taskService.findAllCategoryCode();
+		System.out.println("taskCategoryList :" + taskCategoryList);
 		AllTaskCodeDTO allTaskCode = taskService.findAllTaskCode();
 		
 		
@@ -123,7 +128,7 @@ public class TaskController {
 	 * @author 김서영
 	 */
 	@PostMapping("/regist")
-	public String taskRegist(@ModelAttribute TaskRegistDTO taskRegistDTO, HttpSession session) {
+	public String taskRegist(@ModelAttribute TaskRegistDTO taskRegistDTO, HttpSession session, RedirectAttributes rttr) {
 		
 		/* session 내 projectNo 저장 */
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
@@ -136,7 +141,7 @@ public class TaskController {
 		/* projectNo가 담긴 taskRegistDTO 매개변수로 service method 호출 */
 		taskService.registTask(taskRegistDTO);
 		
-		
+		rttr.addFlashAttribute("message", "업무 등록에 성공하셨습니다.");
 		
 		return "redirect:/task/timeline";
 		
@@ -162,6 +167,61 @@ public class TaskController {
 		mv.setViewName("jsonView");
 		return mv;
 	}
+	
+	@PostMapping("/update")
+	public String taskUpdate(@ModelAttribute TaskRegistDTO taskUpdateDTO, HttpServletRequest request,
+			                 HttpSession session, RedirectAttributes rttr) {
+		
+		/* session 내 projectNo 저장 */
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		taskUpdateDTO.setProjectNo(projectNo);
+		taskUpdateDTO.setMemberNo(memberNo);
+		
+		TaskHistoryDTO history = new TaskHistoryDTO();
+		history.setMemberNo(memberNo);
+		history.setTaskCode(taskUpdateDTO.getTaskCode());
+		history.setProjectNo(projectNo);
+		
+		
+		System.out.println("update taskUpdateDTO확인 : " + taskUpdateDTO);
+		
+		/* projectNo가 담긴 taskUpdateDTO 매개변수로 service method 호출 */
+		taskService.updateTask(taskUpdateDTO, history);
+		
+		rttr.addFlashAttribute("message", "업무 수정에 성공하셨습니다.");
+		
+		return "redirect:/task/timeline";
+	}
+	
+	@GetMapping("/delete")
+	public String removeTask(HttpServletRequest request, HttpSession session, RedirectAttributes rttr) {
+		
+		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		
+		System.out.println("projectNo : " +projectNo);
+		
+		TaskDTO task = new TaskDTO();
+		task.setTaskNo(taskNo);
+		task.setMemberNo(memberNo);
+		task.setProjectNo(projectNo);
+		
+		TaskHistoryDTO history = new TaskHistoryDTO();
+		history.setTaskNo(taskNo);
+		history.setMemberNo(memberNo);
+		history.setProjectNo(projectNo);
+		
+		taskService.removeTask(task, history);
+		
+		rttr.addFlashAttribute("message", "업무 삭제에 성공하셨습니다.");
+		
+		return "redirect:/task/timeline";
+	}
+	
+	
 	
 	
 }
