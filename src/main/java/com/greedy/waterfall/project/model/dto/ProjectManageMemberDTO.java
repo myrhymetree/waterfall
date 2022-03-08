@@ -18,6 +18,7 @@ import lombok.ToString;
 public class ProjectManageMemberDTO {
 
 	private int projectNo;
+	private String projectName;
 	private int memberNo;
 	private String memberName;
 	private int completeTask;
@@ -25,6 +26,7 @@ public class ProjectManageMemberDTO {
 	private int registOutput;
 	private int registIssue;
 	private int managerNo;
+	private String managerName;
 	private java.sql.Date joinDate;
 	private java.sql.Date quitDate;
 	

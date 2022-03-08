@@ -6,8 +6,11 @@
 	
 	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectManageMemberDTO" id="projectMemberResult">
 		<result property="projectNo" column="PROJECT_NO"/>
+		<result property="projectName" column="PROJECT_NAME"/>
 		<result property="memberNo" column="MEMBER_NO"/>
 		<result property="memberName" column="MEMBER_NAME"/>
+		<result property="managerNo" column="MANAGER_NO"/>
+		<result property="managerName" column="MANAGER_NAME"/>
 		<result property="completeTask" column="COMPLETE_TASK"/>
 		<result property="progressingTask" column="PROGRESSING_TASK"/>
 		<result property="registOutput" column="REGIST_OUTPUT"/>
@@ -52,6 +55,24 @@
            AND B.PROJECT_NO = #{ projectNo }
 		</where>
          GROUP BY B.MEMBER_NO
+	</select>
+	
+	<select id="findMemberInfo" resultMap="projectMemberResult">
+        SELECT
+               B.MEMBER_NO
+             , B.MEMBER_NAME
+             , C.PROJECT_NO
+             , C.PROJECT_NAME
+             , D.ROLE_NAME
+             , E.MEMBER_NAME AS MANAGER_NAME
+             , E.MEMBER_NO AS MANAGER_NO
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+          JOIN TBL_PROJECT C ON (A.PROJECT_NO = C.PROJECT_NO)
+          JOIN TBL_ROLE_CATEGORY D ON (A.ROLE_NO = D.ROLE_NO)
+          JOIN TBL_MEMBER E ON (A.MANAGER_NO = E.MEMBER_NO)
+         WHERE A.PROJECT_NO = #{ projectNo }
+           AND A.MEMBER_NO = #{ memberNo }
 	</select>
 	
 	<select id="findProjectMember" resultMap="projectMemberResult" parameterType="com.greedy.waterfall.common.paging.SelectCriteria">
@@ -235,6 +256,27 @@
          WHERE A.MEMBER_NO = #{ memberNo }
            AND A.PROJECT_NO = #{ projectNo }
 	</update>
+	<insert id="registEntireHistoryProjectRegist">
+        INSERT
+          INTO TBL_ENTIRE_HISTORY A
+        (
+          A.HISTORY_NO
+        , A.UPDATED_DATE
+        , A.CONTENT
+        , A.CATEGORY_TYPE_NO
+        , A.PROJECT_NO
+        , A.REGISTER_NO
+        ) 
+        VALUES
+        (
+          HISTORY_NO.NEXTVAL
+        , SYSDATE
+        , #{ content }
+        , 1
+        , #{ projectNo }
+        , #{ managerNo }
+        )
+	</insert>
 </mapper>
 
 
