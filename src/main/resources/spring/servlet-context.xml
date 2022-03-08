@@ -52,5 +52,23 @@
          <beans:bean id="loginInterceptor" class="com.greedy.waterfall.member.controller.MemberInterceptor"/>
       </interceptor>
    </interceptors> -->
+   
+   
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
     
 </beans:beans>
