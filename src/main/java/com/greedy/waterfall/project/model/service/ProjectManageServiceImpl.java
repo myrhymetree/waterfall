@@ -5,10 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.greedy.waterfall.common.History.History;
 import com.greedy.waterfall.common.paging.Paging;
@@ -16,6 +21,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.common.result.Result;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 import com.greedy.waterfall.project.model.dto.ProjectManageMemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
@@ -76,7 +82,7 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 		if(registProjectMember.result()) {
 			ProjectManageMemberDTO historyInfo = mapper.findMemberInfo(registInfo);
 			
-		List<ProjectHistoryDTO> memberResigtHistory = history.registHistory(historyInfo);
+			List<ProjectHistoryDTO> memberResigtHistory = history.registHistory(historyInfo);
 			if(registHistoryResult(memberResigtHistory)) {
 				
 				return true;
@@ -155,9 +161,21 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 
 	@Override
 	public boolean modifyProjectMember(ProjectManageMemberDTO modifyInfo) {
+		ProjectManageMemberDTO oldInfo = mapper.findMemberInfo(modifyInfo);
 		
 		if(removeOldRole(modifyInfo) && registRoleToProject(modifyInfo)) {
-			return true;
+			ProjectManageMemberDTO newInfo = mapper.findMemberInfo(modifyInfo);
+			
+			Map<String, Object> historyInfo = new HashMap<>();
+			historyInfo.put("newInfo", newInfo);
+			historyInfo.put("oldInfo", oldInfo);
+			
+			List<ProjectHistoryDTO> modifyHistoryList = history.modifyHistory(historyInfo);
+			
+			if(registHistoryResult(modifyHistoryList)) {
+				
+				return true;
+			}
 		}
 		
 		return false;
@@ -170,17 +188,24 @@ public class ProjectManageServiceImpl implements ProjectManageService{
 
 	@Override
 	public boolean removeMemberInProject(Map<String, Integer> removeInfo) {
-
+		ProjectManageMemberDTO projectInfo = new ProjectManageMemberDTO().builder()
+														.memberNo(removeInfo.get("memberNo"))
+														.projectNo(removeInfo.get("projectNo"))
+														.build();
+				
+		projectInfo = mapper.findMemberInfo(projectInfo);
 		/* 멤버의 역할내역 모두 삭제 && 멤버의 하차일 업데이트 */
 		if(isSuccess(mapper.removeMemberRole(removeInfo)) && isSuccess(mapper.removeMemberJoinHistory(removeInfo))) {
 			
-			return true;
+			List<ProjectHistoryDTO> removeHistoryList = history.removeHistory(projectInfo);
+			if(registHistoryResult(removeHistoryList)) {
+				
+				return true;
+			}
 		}
-		
 		
 		return false;
 	}
-
 }
 
 
