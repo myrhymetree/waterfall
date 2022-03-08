@@ -7,18 +7,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.board.model.dto.BoardDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
@@ -83,26 +83,7 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/regist")
-	public ModelAndView registProject(ModelAndView mv, @RequestParam Map<String, String> parameter) {
-		
-		String projectName = parameter.get("projectName");
-		String startDate = parameter.get("startDate");
-		String deadLine = parameter.get("deadLine");
-		String pm = parameter.get("pm");
-		String dept = parameter.get("dept");
-		String team = parameter.get("team");
-		String pmNumber = parameter.get("pmNumber");
-		String projectStatusCode = parameter.get("projectStatusCode");
-		
-		RegistProjectDTO newProject = new RegistProjectDTO().builder()
-										.projectName(projectName)
-										.startDate(java.sql.Date.valueOf(startDate))
-										.deadLine(java.sql.Date.valueOf(deadLine))
-										.pmNumber(Integer.parseInt(pmNumber))
-										.projectStatusCode(projectStatusCode)
-										.dept(dept)
-										.team(team)
-										.build();
+	public ModelAndView registProject(ModelAndView mv, @ModelAttribute RegistProjectDTO newProject) {
 		
 		if(projectService.registProject(newProject)) {
 			System.out.println("프로젝트 생성 성공!");
@@ -279,31 +260,12 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/modify")
-	public ModelAndView modifyProject(ModelAndView mv, @RequestParam Map<String, String> parameter) {
+	public ModelAndView modifyProject(ModelAndView mv, @ModelAttribute RegistProjectDTO project) {
 		
-		String projectName = parameter.get("projectName");
-		String projectNo = parameter.get("projectNo");
-		String startDate = parameter.get("startDate");
-		String deadLine = parameter.get("deadLine");
-		String pm = parameter.get("pm");
-		String dept = parameter.get("dept");
-		String team = parameter.get("team");
-		String pmNumber = parameter.get("pmNumber");
-		String projectStatusCode = parameter.get("projectStatus");
-		String progression = parameter.get("progression");
-		String adminNo = parameter.get("adminNo");
-		RegistProjectDTO project = new RegistProjectDTO().builder()
-										.projectName(projectName)
-										.projectNo(Integer.parseInt(projectNo))
-										.startDate(java.sql.Date.valueOf(startDate))
-										.deadLine(java.sql.Date.valueOf(deadLine))
-										.pmNumber(Integer.parseInt(pmNumber))
-										.projectStatusCode(projectStatusCode)
-										.dept(dept)
-										.team(team)
-										.progression(Integer.parseInt(progression))
-										.adminNo(Integer.parseInt(adminNo))
-										.build();
+		
+		System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);System.out.println("project : " + project);
+		
+		
 		
 		if(projectService.modifyProject(project)) {
 			System.out.println("프로젝트 수정 성공!");
@@ -344,11 +306,17 @@ public class ProjectController {
 	}
 									
 	@GetMapping("/remove/{projectNo}")
-	public ModelAndView removeProject(ModelAndView mv, @PathVariable int projectNo) {
+	public ModelAndView removeProject(ModelAndView mv, @PathVariable int projectNo, HttpSession session) {
+		
+		Map<String, Integer> removeInfo = new HashMap<>();
+		int memberNo = ((MemberDTO) session.getAttribute("loginMember")).getNo();
+		
+		removeInfo.put("projectNo", projectNo);
+		removeInfo.put("memberNo", memberNo);
 		
 		String message = "삭제에 실패했습니다.";
 		
-		if(projectService.removeProject(projectNo)) {
+		if(projectService.removeProject(removeInfo)) {
 			message = "삭제에 성공했습니다.";
 			
 		}

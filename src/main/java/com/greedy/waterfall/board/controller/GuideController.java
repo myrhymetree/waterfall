@@ -255,8 +255,64 @@ public class GuideController {
 	 */
 	@PostMapping("/update")
 	public String modifyGuide(@ModelAttribute GuideDTO guide, HttpServletRequest request,
-			RedirectAttributes rttr) throws GuideModifyException {
+			RedirectAttributes rttr, @RequestParam MultipartFile singleFile) throws GuideModifyException {
+		
+		System.out.println("update에 들어오는 가이드 게시글 : " + guide);
+		
+		int guideNo = guide.getNo();
+		
+		/* 파일업로드는 기존에 파일이 저장 되어 있지 않아야 추가가 가능하다 */
+		if(guideService.searchGuideFile(guideNo) == null) {
+			
+			System.out.println("singleFile : " + singleFile);
+			
+			String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 		파일서버를 따로둠
+			
+			System.out.println("root : " + root);		
+			
+			String filePath = root + "/guideUploadFiles";
+			
+			File mkdir = new File(filePath);
+			
+			/* 폴더 생성 */
+			if(!mkdir.exists()) {
+				mkdir.mkdirs();
+			}
+			
+			if(singleFile.getSize() > 0) {
 				
+				/* 파일 명 변경처리 */
+				String originFileName = singleFile.getOriginalFilename();
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));		//확장자
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+				
+				System.out.println("originFileName : " + originFileName);
+				System.out.println("savedName : " + savedName);
+				
+				/* file 정보 저장해서 DTO에 insert */
+				GuideFileDTO guideFileDTO = new GuideFileDTO();
+				guideFileDTO.setSavedPath(filePath);
+				guideFileDTO.setOriginalName(originFileName);
+				guideFileDTO.setRandomName(savedName);
+				guide.setFile(guideFileDTO);
+				
+				/* 파일 저장 */
+				try {
+					singleFile.transferTo(new File(filePath + "\\" + savedName));
+					
+					System.out.println("등록 용 가이드 확인 " + guide);
+					
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+					
+					rttr.addFlashAttribute("message", "파일을 먼저 삭제하세요");
+					
+					/* 실패 시 파일 삭제*/
+					new File(filePath + "\\" + savedName).delete();
+				}
+			}
+		}
+		
 		guideService.modifyGuide(guide);
 		
 		System.out.println("modifyGuide : " + guide);
@@ -280,9 +336,7 @@ public class GuideController {
     
 	    int no = Integer.parseInt(request.getParameter("no"));
 	    System.out.println("detail에 들어오는 no " + no);
-	    GuideDTO guideDetail = guideService.selectGuideDetail(no);
 	    GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
-	    System.out.println("상세조회 guideDetail : " + guideDetail);
 	    System.out.println("상세조회 guideDetail : " + guideFileDetail);
 	    System.out.println((((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getPmNo()));
 	    System.out.println((((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()));
@@ -294,10 +348,6 @@ public class GuideController {
 	          .disableHtmlEscaping()
 	          .create();
 	   
-	    if(guideFileDetail == null) {
-	    	return gson.toJson(guideDetail);
-	    }
-    
     	return gson.toJson(guideFileDetail); 
    }
 	

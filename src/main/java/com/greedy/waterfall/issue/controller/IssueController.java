@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,6 +40,7 @@ import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.exception.GuideModifyException;
+import com.greedy.waterfall.common.exception.GuideRemoveException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
@@ -104,19 +106,40 @@ public class IssueController {
 	@GetMapping("/admin/list/{taskNo}")
 	public ModelAndView adminIssueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
-//		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
+		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
+		System.out.println("list에 들어오는 프로젝트 no : " + projectNo);
 		
 		System.out.println(taskNo);
 		
 		List<IssueDTO> issueList = issueService.selectIssueList(taskNo);
 		
-		mv.addObject("projectNo", issueList.get(0).getProjectNo());
+		mv.addObject("projectNo", projectNo);
 		mv.addObject("taskNo", taskNo);
 		mv.addObject("issueList", issueList);
 		mv.addObject("intent", "/issue/list");
 		mv.setViewName("/issue/adminIssueList");
 		
 		return mv;
+	}
+	
+	@GetMapping("/admin/delete")
+	public ModelAndView adminRemoveGuide(ModelAndView mv, HttpServletRequest request, 
+			RedirectAttributes rttr) throws GuideRemoveException {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		System.out.println("삭제하기 위해 no 받기 " + no );
+		
+		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
+		int taskNo = issueService.removeGuide(no);
+		
+		rttr.addFlashAttribute("message", "이슈 삭제에 성공하셨습니다.");
+		
+		mv.addObject("intent", "/issue/admin/delete");
+		mv.setViewName("redirect:/issue/admin/list/" + taskNo);
+		
+		return mv;
+		
 	}
 	
 	@PostMapping("/admin/regist/{taskNo}")
@@ -189,6 +212,7 @@ public class IssueController {
 		}
 		
 		String message = "";
+		
 		if(issueService.registIssue(issue)) {
 			message = "게시글을 등록했습니다.";
 			System.out.println(message);
@@ -229,6 +253,82 @@ public class IssueController {
 		mv.addObject("issueDetail", gson.toJson(issueDetail));
 		mv.addObject("projectMember", gson.toJson(projectMember));
 		mv.setViewName("jsonView");
+		return mv;
+	}
+	
+	@PostMapping("/admin/update")
+	public ModelAndView adminModifyIssue(@ModelAttribute @Nullable IssueDTO issue, HttpServletRequest request,
+			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws GuideModifyException {
+		
+		/* 파일 업로드 */
+		System.out.println("MultiFiles : " + multiFiles);
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		System.out.println("root : " + root);
+		
+		String filePath = root + "/issueUploadFiles";
+		
+		File mkdir = new File(filePath);
+		
+		/* 폴더 생성 완료 */
+		if(!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+		/* 사진 개수 출력 완료 */
+		System.out.println("multiFiles.size() : " + multiFiles.size());
+		
+		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
+		if(multiFiles.get(0).getSize() != 0) {
+			for(int i = 0; i < multiFiles.size(); i++) {
+				String originFileName = multiFiles.get(i).getOriginalFilename();
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				System.out.println("originFileName" + originFileName);
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+				System.out.println("savedName : " + savedName);
+				
+				IssueFileDTO issueFileDTO = new IssueFileDTO();
+				issueFileDTO.setSavedPath(filePath);
+				issueFileDTO.setOriginalName(originFileName);
+				issueFileDTO.setRandomName(savedName);
+				fileList.add(issueFileDTO);
+				issue.setFile(fileList);
+				
+				System.out.println("issue : " + issue);
+			}
+			
+			try {
+				for(int i = 0; i < multiFiles.size(); i++) {
+					
+					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
+					
+					System.out.println("이슈 등록 확인 " + issue);
+					
+				}
+				
+				rttr.addFlashAttribute("subMessage", "파일 업로드 성공");
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				
+				for(int i = 0; i < multiFiles.size(); i++) {
+					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
+				}
+				rttr.addFlashAttribute("subMessage", "파일 업로드 실패");
+			  }
+		}
+		
+		int taskNo = (int) request.getSession().getAttribute("taskNo");
+		System.out.println("update에 들어오는 업무번호 : " + taskNo);
+		
+		issueService.modifyIssue(issue);
+		
+		System.out.println("modifyIssue : " + issue);
+		
+		rttr.addFlashAttribute("message", "이슈 수정에 성공하셨습니다");
+		
+		mv.addObject("intent", "/issue/admin/update");
+		mv.setViewName("redirect:/issue/admin/list/" + taskNo);
+		
 		return mv;
 	}
 	
@@ -450,11 +550,71 @@ public class IssueController {
 	}
 	
 	@PostMapping("/update")
-	public ModelAndView modifyIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request,
-			RedirectAttributes rttr, ModelAndView mv) throws GuideModifyException {
-
-		int taskNo = (int) request.getSession().getAttribute("taskNo");
-		System.out.println("delete에 들어오는 업무 no : " + taskNo);
+	public ModelAndView modifyIssue(@ModelAttribute @Nullable IssueDTO issue, HttpServletRequest request,
+			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws GuideModifyException {
+		
+		/* 파일 업로드 */
+		System.out.println("MultiFiles : " + multiFiles);
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		System.out.println("root : " + root);
+		
+		String filePath = root + "/issueUploadFiles";
+		
+		File mkdir = new File(filePath);
+		
+		/* 폴더 생성 완료 */
+		if(!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+		/* 사진 개수 출력 완료 */
+		System.out.println("multiFiles.size() : " + multiFiles.size());
+		
+		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
+		if(multiFiles.get(0).getSize() != 0) {
+			for(int i = 0; i < multiFiles.size(); i++) {
+				String originFileName = multiFiles.get(i).getOriginalFilename();
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				System.out.println("originFileName" + originFileName);
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+				System.out.println("savedName : " + savedName);
+				
+				IssueFileDTO issueFileDTO = new IssueFileDTO();
+				issueFileDTO.setSavedPath(filePath);
+				issueFileDTO.setOriginalName(originFileName);
+				issueFileDTO.setRandomName(savedName);
+//				issue.setFile(issueFileDTO);
+				fileList.add(issueFileDTO);
+				issue.setFile(fileList);
+				
+				System.out.println("issue : " + issue);
+			}
+			
+			try {
+				for(int i = 0; i < multiFiles.size(); i++) {
+					
+					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
+					
+					System.out.println("이슈 등록 확인 " + issue);
+					
+				}
+				
+				rttr.addFlashAttribute("subMessage", "파일 업로드 성공");
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				
+				for(int i = 0; i < multiFiles.size(); i++) {
+					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
+				}
+				rttr.addFlashAttribute("subMessage", "파일 업로드 실패");
+			  }
+		}
+		
+		
+		/* 이슈 수정 */
+		int taskNo = issue.getTaskNo();
+		System.out.println("update에 들어오는 업무 no : " + taskNo);
 		
 		issueService.modifyIssue(issue);
 		
@@ -466,6 +626,26 @@ public class IssueController {
 		mv.setViewName("redirect:/issue/list/" + taskNo);
 		
 		return mv;
+	}
+	
+	@GetMapping("/delete")
+	public ModelAndView removeGuide(ModelAndView mv, HttpServletRequest request, 
+			RedirectAttributes rttr) throws GuideRemoveException {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		System.out.println("삭제하기 위해 no 받기 " + no );
+		
+		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
+		int taskNo = issueService.removeGuide(no);
+		
+		rttr.addFlashAttribute("message", "가이드 게시판 삭제에 성공하셨습니다.");
+		
+		mv.addObject("intent", "/issue/delete");
+		mv.setViewName("redirect:/issue/list/" + taskNo);
+		
+		return mv;
+		
 	}
 	
 }

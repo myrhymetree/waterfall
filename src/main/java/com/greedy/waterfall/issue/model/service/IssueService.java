@@ -35,4 +35,6 @@ public interface IssueService {
 
 	void modifyIssue(IssueDTO issue);
 
+	int removeGuide(int no);
+
 }

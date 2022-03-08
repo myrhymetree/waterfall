@@ -123,7 +123,7 @@
 							</div>
 		            	</div>
 	            	</div>
-	            	<input type="hidden" name="memberNo" id="memberNo">
+	            	<input type="text" name="memberNo" id="regist-memberNo">
 	            	<input type="hidden" name="managerNo" value="${ sessionScope.loginMember.no }" id="managerNo">
 	            	<input type="hidden" name="projectNo" value="${ sessionScope.projectAutority.projectNo }" id="projectNo">
 	            	
@@ -142,7 +142,7 @@
 		console.log($("#member option:selected").text());
 		if("사원 선택" != $("#member option:selected").text()) {
 			const $managerNo = ${ sessionScope.loginMember.no};
-			$("#memberNo").val($("#member option:selected").val());
+			$("#regist-memberNo").val($("#member option:selected").val());
 			$("#managerNo").val($managerNo);
 			console.log($("#memberNo").val());
 			console.log($("#managerNo").val());
@@ -194,7 +194,7 @@
 				for(let i = 0; i < memberList.length; i++) {
 					const $memberTag = "<option value = '" + memberList[i].memberNo + "'>" + memberList[i].memberName + "</option>"
 					console.log($memberTag);
-						
+					
 					$("#member").append($memberTag);
 				}
 				console.log($("dept"));

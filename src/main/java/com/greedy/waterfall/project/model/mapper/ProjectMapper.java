@@ -13,6 +13,7 @@ import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 import com.greedy.waterfall.project.model.dto.ProjectStatusDTO;
 import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
 import com.greedy.waterfall.project.model.dto.TeamDTO;
@@ -102,17 +103,17 @@ public interface ProjectMapper {
 	 * 
 	 * @author 홍성원
 	 */
-	int modifyProject(RegistProjectDTO newProject);
+	Integer modifyProject(RegistProjectDTO newProject);
 
 	Integer findMemberInProject(RegistProjectDTO newProject);
 
-	int joinPmInProject(RegistProjectDTO newProject);
+	Integer joinPmInProject(RegistProjectDTO newProject);
 
 	int assignPmRole(RegistProjectDTO newProject);
 
 	int kickOldPm(RegistProjectDTO newProject);
 	
-	boolean removeProject(int projectNo);
+	Integer removeProject(int projectNo);
 
 	boolean restoreProject(int projectNo);
 
@@ -131,6 +132,12 @@ public interface ProjectMapper {
 	int findAllRemovedProjectCount(Map<String, String> searchMap);
 
 	ProjectInfoDTO findProjectMainInfo(int projectNo);
+
+	int projectRoleRemove(RegistProjectDTO oldProject);
+
+	MemberDTO findAdminInfo(int adminNo);
+
+	int registEntireHistoryProjectRegist(ProjectHistoryDTO projectHistoryDTO);
 
 
 }

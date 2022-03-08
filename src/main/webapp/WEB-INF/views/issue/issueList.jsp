@@ -58,8 +58,8 @@
                              <col style="width:5%"/>
                              <col style="width:15%"/>
                              <col style="width:15%"/>
-                             <col style="width:15%"/>
-                             <col style="width:10%"/>
+                             <col style="width:12.5%"/>
+                             <col style="width:12.5%"/>
                              <col style="width:10%"/>
                              <col style="width:10%"/>
                              <col style="width:10%"/>
@@ -71,11 +71,11 @@
                                  <th style="text-align: center;">이슈 명</th>
                                  <th style="text-align: center;">업무 명</th>
                                  <th style="text-align: center;">발생일</th>
+                                 <th style="text-align: center;">마감일</th>
                                  <th style="text-align: center;">상태</th>
                                  <th style="text-align: center;">중요도</th>
                                  <th style="text-align: center;">이슈제기자</th>
                                  <th style="text-align: center;">이슈담당자</th>
-                                 <th style="text-align: center;">이슈배정</th>
                              </tr>
                          </thead>
                          <tbody id="tbody">
@@ -85,31 +85,29 @@
                                  <td><c:out value="${ issue.name }"/></td>
                                  <td><c:out value="${ issue.taskCode.taskCategoryName }"/></td>
                                  <td><c:out value="${ issue.createdDate }"/></td>
+                                 <td><c:out value="${ issue.deadline }"/></td>
                                  <td><c:out value="${ issue.progressStatus }"/></td>
                                  <td><c:out value="${ issue.importance }"/></td>
                                  <td><c:out value="${ issue.register.name }"/></td>
                                  <td><c:out value="${ issue.manager.name }"/></td>
-                                 <td><button class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" style="width:45pt;height:25pt; vertical-align: middle;">배정</button></td>
                              </tr>
 							</c:forEach>
-
                          </tbody>
                          <tfoot></tfoot>
                      </table>
-
                  </div>
              </div>
          </div>
      </main>
 <script>
-function backButton_click() {
-	   console.log("이전 페이지 이동");
-	   location.href= document.referrer;
+	function backButton_click() {
+		   console.log("이전 페이지 이동");
+		   location.href= document.referrer;
 	}
 	
-$(document).ready(function() {
-	$('#datatablesSimple tbody').on('click', 'tr', function () {
-		var no = this.children[0].innerText;
+	$(document).ready(function() {
+		$('#datatablesSimple tbody').on('click', 'tr', function () {
+		      var no = this.children[0].innerText;
 	         
  	          $.ajax({
 	            url :"issueDetail",
@@ -167,8 +165,6 @@ $(document).ready(function() {
 	                      $("#manager").append($memberTag);
 	                  }
 	                  
-//	                  $("#read-memberNo").val(projectMember.memberNo)
-	                  
 	                  $("#read-no").val(issueDetail.no);      
 	                  $("#read-name").val(issueDetail.name);
 	                  $("#read-createdDate").val(issueDetail.createdDate);
@@ -177,9 +173,8 @@ $(document).ready(function() {
 	                  $("#read-importance").val(issueDetail.importance);
 	                  $("#read-content").val(issueDetail.content);
 	                  $("#read-answer").val(issueDetail.answer);
-	                  $("#read-completedDate").val(issueDetail.completedDate);
 	                  $("#read-projectNo").val(issueDetail.projectNo);
-	                  $("#read-taskNo").val(issueDetail.taskNo);
+	                  $("#read-taskNo").val(issueDetail.task.no);
 	                  $("#myModal").modal("show");
 	                  
 	                  $("#downloadZone").empty();
@@ -188,34 +183,8 @@ $(document).ready(function() {
 	                	  const fileName = issueDetail.file[0].originalName;
 						  console.log("첫번째 파일의 이름은  : " + fileName);
 						  
- 	                	 for(let i = 0; i < issueDetail.file.length; i++) {
-//						  eval("const $div1Tag" + " = '$div1Tag" + i + "';")
-//						  $div1Tag = "<div class = 'mt-4 row' id = 'div1Tag'></div>";
-//	                	  $("#modal-body").append($div1Tag);
-	                	      
-//	                	  eval("const $div2Tag" + " = '$div2Tag" + i + "';")
-//	                	  $div2Tag = "<div id='div2Tag' class='col-2 center' style='vertical-align: top;'><label>첨부파일</label></div>";
-//	                	  $("#div1Tag").append($div2Tag);
-	                	  
-//	                	  eval("const $div3Tag" + " = '$div3Tag" + i + "';")
-//	                	  $div3Tag = "<div id='div3Tag' class='col-3'></div>";
-//	                	  $("#div1Tag").append($div3Tag);
-	                	  
-//	                	  eval("const $div4Tag" + " = '$div4Tag" + i + "';")
-//	                	  $div4Tag = "<div class='btn-group' id='attaachmentNameArea'></div>"
-//	                	  $("#div3Tag").append($div4Tag);
-	                	  
-//	                	  eval("const $inputTag" + " = '$inputTag" + i + "';")
-//	                	  $inputTag = "<input type='button' class='btn btn-outline-dark' id = '" + issueDetail.file[i].originalName + "' name='" + issueDetail.file[i].originalName + "'>";	 
-//	                	  $("#attaachmentNameArea").append($inputTag);
-	                	  
-	                	  
-//	                	  eval("const $buttonsTag" + " = '$buttonsTag" + i + "';")
-//	                	  $buttonTag =
-//	                	  "<button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button>";
-//	                	  $("#attaachmentNameArea").append($buttonTag);
-//	                	  eval("const read-originalName" + i + " = 'read-originalName" + i + "';")
-//	                	  window['read-originalName'+ i] = "read-originalName " + i;
+ 	                	  for(let i = 0; i < issueDetail.file.length; i++) {
+
 						  $("#read-fileNo").val(issueDetail.file[i].no);
 						  const $fileNo = issueDetail.file[i].no;
 						  console.log("파일 번호는 : " + issueDetail.file[i].no);
@@ -223,30 +192,45 @@ $(document).ready(function() {
 						  
 	                	  $buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + issueDetail.file[i].originalName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/issue/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
 	              		  $("#downloadZone").append($buttonsTag);
-	              		  
-//	              		  $("#read-originalName").val(issueDetail.file[i].originalName);
-	                	 
-//	                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
-//	                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
-//	               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
-//	                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
-//	                    
- 						
-// 						 $("#eval(d1 " + i")").empty();
-//						 $("modal-body").append(eval("const $d1" + i));
-//	                     $("#downloadarea").empty();
-//	                     $("#downloadarea").append($downloadTag);
-//	                     $("#downloadarea").append($deleteTag);
-//	                     $("#downloadguide").href("${pageContext.servletContext.contextPath}/guide/download/" + $fileNo);
-						}
+
+						  }
 	                  }
+	                  
+	                  /* ------------ 완료 여부에 따라서 이슈 종료일을 결정하기 위한 로직  ------------------ */
+	                  $("#completedDateZone").empty();	// 행을 클릭할 때 마다 버튼이 생성되는걸 방지하기 위해서 초기화
+	                  if(issueDetail.completedDate == null) {	//종료일이 null 일 때
+	              		$("#read-progressStatus").change(function(){
+	              			$("#completedDateZone").empty();
+	              			if($("#read-progressStatus").val() == "완료") {
+	              				 $completedDate = "<div class='col-2 center' id='cZone'><label for='read-completedDate'>종료일</label></div><div class='col-4' id='cZone2'><input type='date' id='read-completedDate' name='completedDate' required></div>";
+	              			     $("#completedDateZone").append($completedDate);
+	              			     
+	              			} else {	//progressStatus의 value가 '완료'가 아닐 때
+	              				$("#completedDateZone *").remove();		//div영역에 있는 모든것을 날림
+	              			}
+	              		});
+	              	} else {
+	              		$completedDate = "<div class='col-2 center' id='cZone'><label for='read-completedDate'>종료일</label></div><div class='col-4' id='cZone2'><input type='date' id='read-completedDate' name='completedDate' required></div>";
+	           	     	$("#completedDateZone").append($completedDate);
+	              		$("#read-completedDate").val(issueDetail.completedDate);
+	              		
+	              		$("#read-progressStatus").change(function(){
+	              			if($("#read-progressStatus").val() == "대기중") {
+	              				console.log("이슈종료일은 : " + issueDetail.completedDate)
+	              				$("#completedDateZone *").remove();
+	              			} else if($("#read-progressStatus").val() == "처리중") {
+	              				$("#completedDateZone *").remove();
+	              			}
+	              		});
+	              	}
+	                /*-----------------------------------------------------------------------------------  */  
 	              }, 
 	              error:function(data) {
 	                  console.log(data);
-	               }
-	          });
-	   });
-	});
+	              }
+	              });
+	   		});
+		});
 </script>
 <jsp:include page="../common/footer.jsp"/>
 

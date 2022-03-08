@@ -19,6 +19,7 @@
         <result property="managerNo" column="ISSUE_MANAGER"/>
         <result property="projectNo" column="PROJECT_NO"/>
         <result property="taskNo" column="TASK_NO"/>
+        <result property="taskCodeManageName" column="taskCodeManageName"/>
         
         <association property="file" resultMap="fileResultMap"></association>
         <association property="register" resultMap="registerResultMap"/>
@@ -125,7 +126,8 @@
      LEFT JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
      LEFT JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
     WHERE A.TASK_NO = #{ taskNo }
-      AND A.ISSUE_STATUS = 'Y' 
+      AND A.ISSUE_STATUS = 'Y'
+    ORDER BY 1 DESC
    </select>
    
    <select id="selectAllIssue" resultMap="issueResultMap">
@@ -154,7 +156,8 @@
      JOIN TBL_TASK F ON (A.TASK_NO = F.TASK_NO)
      JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
      JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
-    WHERE A.ISSUE_STATUS = 'Y' 
+    WHERE A.ISSUE_STATUS = 'Y'
+    ORDER BY 1 DESC 
    </select>
   	
   	<select id="selectAllProjectList" parameterType="hashmap" resultMap="projectIssueCountResultMap">
@@ -204,6 +207,7 @@
            <if test="managerNo != 1">
            	AND G.MEMBER_NO = #{ managerNo } 
            </if>
+          ORDER BY 1 DESC
   	</select>
   	
   	<select id="selectIssuesOfTask" parameterType="_int" resultMap="taskIssueCountResultMap" >
@@ -238,15 +242,15 @@
                         AND G.ISSUE_PROGRESS_STATUS = '완료'
                         AND G.TASK_NO = B.TASK_NO
                     ) AS COMPLETED_TASK_ISSUE_COUNT
-           FROM TBL_ISSUE A
-           LEFT JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
-           LEFT JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
-           LEFT JOIN TBL_PROJECT H ON (A.PROJECT_NO = H.PROJECT_NO)
-           LEFT JOIN TBL_MEMBER I ON (B.MEMBER_NO = I.MEMBER_NO)
-          WHERE A.ISSUE_STATUS = 'Y'
-	        AND H.PROJECT_STATUS = 'Y'
-	        AND B.TASK_STATUS = 'Y'
-	        AND A.PROJECT_NO = #{ projectNo }
+            FROM TBL_TASK A
+            LEFT JOIN TBL_ISSUE B ON (A.TASK_NO = B.TASK_NO)
+            LEFT JOIN TBL_TASK_CODE_MANAGE C ON (A.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+            LEFT JOIN TBL_PROJECT H ON (A.PROJECT_NO = H.PROJECT_NO)
+            LEFT JOIN TBL_MEMBER I ON (A.MEMBER_NO = I.MEMBER_NO)
+           WHERE H.PROJECT_STATUS = 'Y'
+             AND A.TASK_STATUS = 'Y'
+	         AND A.PROJECT_NO = #{ projectNo }
+	       ORDER BY 1 DESC
   	</select>
   	
    	<select id="selectTask" parameterType="_int" resultMap="issueResultMap" >
@@ -380,17 +384,217 @@
 	<update id="updateIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
 	 UPDATE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#updateIssue() */
 	        TBL_ISSUE A
-	    SET A.ISSUE_NAME = #{ name }  
+	    SET A.ISSUE_NO = #{ no }
+	      , A.ISSUE_NAME = #{ name }  
 	      , A.ISSUE_CREATED_DATE = #{ createdDate }
+	      <if test="completedDate != null">
+	      , A.ISSUE_COMPLETED_DATE = #{ completedDate }
+	      </if>
+	      <if test="completedDate == null">
+	      , A.ISSUE_COMPLETED_DATE = NULL
+	      </if>
 	      , A.ISSUE_PROGRESS_STATUS = #{ progressStatus }
 	      , A.ISSUE_IMPORTANCE = #{ importance }
 	      , A.ISSUE_CONTENT = #{ content }
 	      , A.ISSUE_ANSWER = #{ answer }
-	      , A.ISSUE_DEADLINE = #{ deadline } 
-	      , A.ISSUE_COMPLETED_DATE = #{ completedDate } 
+	      <if test="deadline != null">
+	      , A.ISSUE_DEADLINE = #{ deadline }
+	      </if>
 	      , A.ISSUE_REGISTER = #{ registerNo }
-	      , A.ISSUE_MANAGER = #{ managerNo }
+	      <if test="managerNo >= 1">
+	      , A.ISSUE_MANAGER = #{ managerNo } 
+	      </if>  
+	       <if test="1 > managerNo"> 
+	      , A.ISSUE_MANAGER = NULL
+	      </if>
 	  WHERE A.ISSUE_NO = #{ no }
 	</update>
+	
+	<update id="deleteIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+		UPDATE /* com.greedy.waterfall.issue.model.issuemapper.IssueMapper#deleteIssue() */
+		       TBL_ISSUE A
+		   SET A.ISSUE_STATUS = 'N'
+		 WHERE A.ISSUE_NO = #{ no }
+	</update>
+	
+	<insert id="registIssueHistory">
+		INSERT
+		  INTO TBL_ISSUE_HISTORY A
+		  (
+		    A.ISSUE_HISTORY_NO
+		  , A.ISSUE_PROGRESS_STATUS 
+		  , A.ISSUE_NO 
+		  , A.ISSUE_REGISTER
+		  , A.ISSUE_MANAGER
+		  , A.ISSUE_UPDATED_CONTENT 
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , '추가'
+		  )
+	</insert>
+	
+	<insert id="updateIssueHistory">
+		INSERT
+		  INTO TBL_ISSUE_HISTORY A
+		  (
+		    A.ISSUE_HISTORY_NO
+		  , A.ISSUE_PROGRESS_STATUS 
+		  , A.ISSUE_NO 
+		  , A.ISSUE_REGISTER
+		  , A.ISSUE_MANAGER
+		  , A.ISSUE_UPDATED_CONTENT 
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , '수정'
+		  )
+	</insert>
+	
+	<insert id="deleteIssueHistory">
+		INSERT
+		  INTO TBL_ISSUE_HISTORY A
+		  (
+		    A.ISSUE_HISTORY_NO
+		  , A.ISSUE_PROGRESS_STATUS 
+		  , A.ISSUE_NO 
+		  , A.ISSUE_REGISTER
+		  , A.ISSUE_MANAGER
+		  , A.ISSUE_UPDATED_CONTENT 
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		 , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , '삭제'
+		  )
+	</insert>
+	
+ 	<insert id="writeRegistedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS registerName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
+		  , 3
+		  , #{ projectNo }
+		  , #{ registerNo } 
+		  )
+	</insert>
+	
+	<insert id="writeUpdatedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS registerName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , 3
+		  , #{ projectNo }
+		  , #{ registerNo } 
+		  )
+	</insert>
+	
+	<insert id="writeDeletedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+		<selectKey keyProperty="taskCodeManageName,registerName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS registerName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ registerName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		  , 3
+		  , #{ projectNo }
+		  , #{ registerNo } 
+		  )
+	</insert>
+	
+	<select id="readIssueHistory">
+		SELECT
+		       B.MEMBER_ID
+		     , A.UPDATED_DATE
+		     , A.CATEGORY_NAME
+		     , B.MEMBER_NAME
+		     , A.CONTENT
+		  FROM TBL_ENTIRE_HISTORY A
+		  JOIN TBL_MEMBER B ON (A.REGISTER_NO = B.MEMBER_NO)
+		 ORDER BY 2 DESC;
+	</select>
   
   </mapper>

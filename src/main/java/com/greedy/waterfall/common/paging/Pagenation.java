@@ -1,25 +1,27 @@
 package com.greedy.waterfall.common.paging;
 
+import com.greedy.waterfall.member.model.dto.MemberDTO;
+
 public class Pagenation {
 	
 	/* 검색어가 없는 경우 페이징 처리만을 위한 용도 */
 	public static SelectCriteria getSelectCriteria(int pageNo, int totalCount, int limit, int buttonAmount) {
 		
-		return getSelectCriteria(pageNo, totalCount, limit, buttonAmount, null, null , 0);
+		return getSelectCriteria(pageNo, totalCount, limit, buttonAmount, null, null , 0, null);
 	}
 	/* 검색어가 없는 경우 페이징 처리만을 위한 용도 */
 	public static SelectCriteria getSelectCriteria(int pageNo, int totalCount, int limit, int buttonAmount, int projectNo) {
 		
-		return getSelectCriteria(pageNo, totalCount, limit, buttonAmount, null, null, projectNo);
+		return getSelectCriteria(pageNo, totalCount, limit, buttonAmount, null, null, projectNo, null);
 	}
 	/* 검색어가 없는 경우 페이징 처리만을 위한 용도 */
 	public static SelectCriteria getSelectCriteria(int pageNo, int totalCount, int limit, int buttonAmount, String searchCondition, String searchValue) {
 		
-		return getSelectCriteria(pageNo, totalCount, limit, buttonAmount, null, null, 0);
+		return getSelectCriteria(pageNo, totalCount, limit, buttonAmount, null, null, 0, null);
 	}
 	
 	/* 검색어가 존재하는 경우 검색 조건으로 select 후 페이징 처리를 하기 위한 용도 */
-	public static SelectCriteria getSelectCriteria(int pageNo, int totalCount, int limit, int buttonAmount, String searchCondition, String searchValue, int projectNo) {
+	public static SelectCriteria getSelectCriteria(int pageNo, int totalCount, int limit, int buttonAmount, String searchCondition, String searchValue, int projectNo, MemberDTO member) {
 		
 		/* pageNo와 totalCount가 넘어온 상태이기 때문에
 		 * 페이징처리에 필요한 나머지 변수만 선언을 한다.
@@ -66,7 +68,7 @@ public class Pagenation {
 		System.out.println("startRow : " + startRow);
 		System.out.println("endRow : " + endRow);
 		
-		SelectCriteria selectCriteria = new SelectCriteria(pageNo, totalCount, limit, buttonAmount ,maxPage, startPage, endPage, startRow, endRow, searchCondition, searchValue, projectNo);
+		SelectCriteria selectCriteria = new SelectCriteria(pageNo, totalCount, limit, buttonAmount ,maxPage, startPage, endPage, startRow, endRow, searchCondition, searchValue, projectNo, null);
 		
 		return selectCriteria;
 	}

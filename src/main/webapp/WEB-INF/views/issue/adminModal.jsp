@@ -50,13 +50,6 @@
                        </div>
 
                        <div class="mt-4 row">
-                           <div class="col-2 center"><label>이슈 제기자</label></div>
-                           <div class="col"><input type="text" readonly></div>
-                           <div class="col-2 center"><label>이슈 담당자</label></div>
-                           <div class="col"><input type="text" readonly></div>
-                       </div>
-
-                       <div class="mt-4 row">
                            <div class="col-2 center"><label>중요도</label></div>
                            <div class="col-4">
                            <select class="importance ms-auto" name="importance">

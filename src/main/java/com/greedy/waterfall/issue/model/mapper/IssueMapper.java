@@ -37,4 +37,18 @@ public interface IssueMapper {
 
 	int updateIssue(IssueDTO issue);
 
+	int deleteIssue(IssueDTO issue);
+
+	void registIssueHistory(IssueDTO issue);
+
+	void updateIssueHistory(IssueDTO issue);
+
+	void deleteIssueHistory(IssueDTO issue);
+
+	void writeRegistedIssueHistory(IssueDTO issue);
+
+	void writeUpdatedIssueHistory(IssueDTO issue);
+
+	void writeDeletedIssueHistory(IssueDTO issue);
+
 }

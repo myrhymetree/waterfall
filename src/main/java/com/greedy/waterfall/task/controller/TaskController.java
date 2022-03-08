@@ -147,6 +147,7 @@ public class TaskController {
 		
 		response.setContentType("aplication/json; charset=UTF-8");
 		
+		/* jsp에서 받은 클릭한 하위업무 번호*/
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		
 		System.out.println("taskTimeline Detail taskNo : " + taskNo);
@@ -155,13 +156,10 @@ public class TaskController {
 		
 		System.out.println("taskDetail : " + taskDetail);
 		
-		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		mv.addObject("taskDetail", mapper.writeValueAsString(taskDetail));
-		
-		
-		
+		mv.setViewName("jsonView");
 		return mv;
 	}
 	

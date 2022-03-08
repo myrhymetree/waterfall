@@ -34,12 +34,12 @@ public interface GuideService {
 
 	void modifyGuide(GuideDTO guide) throws GuideModifyException;
 
-	GuideDTO selectGuideDetail(int no);
-
 	GuideDTO selectGuideFileDetail(int no);
 
 	GuideFileDTO findFile(int no);
 
 	GuideFileDTO removeGuideFile(int fileNumber);
+
+	Object searchGuideFile(int guideNo);
 
 }

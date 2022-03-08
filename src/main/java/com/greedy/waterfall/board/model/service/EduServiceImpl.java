@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.board.model.dto.EduDTO;
+import com.greedy.waterfall.board.model.dto.EduFileDTO;
 import com.greedy.waterfall.board.model.mapper.EduMapper;
 import com.greedy.waterfall.common.exception.board.BoardModifyException;
 import com.greedy.waterfall.common.exception.board.BoardRegistException;
@@ -27,7 +28,7 @@ public class EduServiceImpl implements EduService {
 	 /* 게시글 전체 갯수조회 */
 	  
 	  @Override 
-	  public int selectTotalCount(Map<String, String> searchMap) { 
+	  public int selectTotalCount(Map<Object, Object> searchMap) { 
 		  int result = mapper.selectTotalCount(searchMap);
 	 
 	  return result; 
@@ -45,6 +46,13 @@ public class EduServiceImpl implements EduService {
 	@Override
 	public void registEdu(EduDTO eduBoard) throws BoardRegistException {
 		int result = mapper.insertEduBoard(eduBoard);
+		
+		EduFileDTO eduFileDTO = eduBoard.getFile();
+		
+		if(eduFileDTO != null) {
+			eduFileDTO.setRefBoardNo(eduBoard.getNo());
+			mapper.insertEduFile(eduFileDTO);
+		}
 		
 		if(!(result >0 )) {
 			throw new BoardRegistException("게시글 등록이 실패");
@@ -87,6 +95,38 @@ public class EduServiceImpl implements EduService {
 			throw new BoardModifyException("공지사항 수정에 실패하셨습니다.");
 		}
 		
+	}
+
+	
+	@Override
+	public EduDTO findEduFileDetail(int no) {
+
+		int result = mapper.incrementEduCount(no);
+		
+		EduDTO eduFileDetail = new EduDTO();
+		
+		if(result > 0) {
+			
+			eduFileDetail = mapper.selectEduDetailFile(no);
+		}
+		
+		return eduFileDetail;
+	}
+
+	@Override
+	public EduFileDTO findFile(int no) {
+
+		return mapper.findFile(no);
+	}
+
+	@Override
+	public EduFileDTO removeEduFile(int fileNumber) {
+		
+		EduFileDTO eduFileDTO = mapper.findFile(fileNumber);
+		
+		int result = mapper.deleteEduFile(fileNumber);
+		
+		return eduFileDTO;
 	}
 
 	

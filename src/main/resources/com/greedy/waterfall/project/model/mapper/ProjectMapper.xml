@@ -23,6 +23,7 @@
 		<result property="pmNumber" column="MEMBER_NO"/>
 		<result property="pmName" column="MEMBER_NAME"/>
 		<result property="projectStatusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
+		<result property="projectStatusName" column="PROJECT_PROGRESS_STATUS_NAME"/>
 		<result property="progression" column="PROJECT_PROGRESSION"/>
 		<result property="dept" column="DEPT_CODE"/>
 		<result property="team" column="TEAM_CODE"/>
@@ -98,7 +99,13 @@
 		<result property="finishedTaskAmount" column="FINISH_TASK"/>
 		<result property="pendingTaskAmount" column="PENDING_TASK"/>
 	</resultMap>
-		
+	<select id="findAdminInfo" resultMap="memberResultMap">
+        SELECT 
+               A.MEMBER_NO
+             , A.MEMBER_NAME
+          FROM TBL_MEMBER A
+         WHERE A.MEMBER_NO = #{ adminNo }
+	</select>		
 	
 	<select id="findManageProjectCount" resultType="_int">
         SELECT
@@ -434,7 +441,7 @@
 	<insert id="registProject">
 		<selectKey keyProperty="projectNo" resultType="_int" order="AFTER">
         SELECT
-               PROJECT_NO.CURRVAL AS projectNumber
+               PROJECT_NO.CURRVAL AS projectNo
           FROM DUAL
 		</selectKey>
         INSERT
@@ -459,6 +466,29 @@
         , #{ projectStatusCode }
         )
 	</insert>
+	
+	<insert id="registEntireHistoryProjectRegist">
+        INSERT
+          INTO TBL_ENTIRE_HISTORY A
+        (
+          A.HISTORY_NO
+        , A.UPDATED_DATE
+        , A.CONTENT
+        , A.CATEGORY_TYPE_NO
+        , A.PROJECT_NO
+        , A.REGISTER_NO
+        ) 
+        VALUES
+        (
+          HISTORY_NO.NEXTVAL
+        , SYSDATE
+        , #{ content }
+        , 1
+        , #{ projectNo }
+        , #{ managerNo }
+        )
+	</insert>
+	
 	
 	<insert id="registProjectHistory">
         INSERT
@@ -545,12 +575,14 @@
              , A.PROJECT_START_DATE 
              , A.PROJECT_DEADLINE 
              , A.PROJECT_PROGRESS_STATUS_CODE
+             , D.PROJECT_PROGRESS_STATUS_NAME
              , A.PROJECT_PROGRESSION
              , C.MEMBER_NO
              , C.MEMBER_NAME
           FROM TBL_PROJECT A
           JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
           JOIN TBL_MEMBER C ON (B.MEMBER_NO = C.MEMBER_NO)
+          JOIN TBL_PROJECT_STATUS D ON (A.PROJECT_PROGRESS_STATUS_CODE = D.PROJECT_PROGRESS_STATUS_CODE)
          WHERE B.ROLE_HISTORY_NO IN (SELECT MAX(D.ROLE_HISTORY_NO) 
                                        FROM TBL_ROLE_ASSIGNMENT_HISTORY D
                                       WHERE D.ROLE_NO = 8
@@ -571,7 +603,7 @@
 	
 	
 	
-	<select id="findMemberInProject" resultType="Integer">
+	<select id="findMemberInProject" resultType="_int">
         SELECT 
                A.MEMBER_NO
           FROM TBL_PROJECT_MEM_HISTORY A
@@ -620,14 +652,12 @@
         , #{ adminNo }
         )	
 	</insert>
-	<update id="kickOldPm">
-        UPDATE
-               TBL_PROJECT_MEM_HISTORY A
-           SET A.PROJECT_MEM_DROP_DATE = SYSDATE
+	<delete id="kickOldPm">
+        DELETE
+          FROM TBL_PROJECT_MEM_HISTORY A
          WHERE A.PROJECT_NO = #{ projectNo }
            AND A.MEMBER_NO = #{ pmNumber }
-	</update>
-
+	</delete>
 	<update id="removeProject">
         UPDATE
                TBL_PROJECT A
@@ -748,6 +778,17 @@
          WHERE B.ROLE_NO = 8
            AND B.PROJECT_NO = #{ projectNo }
 	</select>
+	
+	<delete id="projectRoleRemove">
+        DELETE
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+         WHERE A.PROJECT_NO = #{ projectNo }
+           AND A.MEMBER_NO = #{ pmNumber }
+	</delete>
+	
+	
+	
+	
 </mapper>
 
 

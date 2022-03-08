@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.common.exception.GuideModifyException;
+import com.greedy.waterfall.common.exception.GuideRemoveException;
 import com.greedy.waterfall.common.exception.issue.IssueRegistException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
+import com.greedy.waterfall.issue.model.dto.IssueHistoryDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.issue.model.mapper.IssueMapper;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -65,6 +68,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		boolean result = false;
 		
+		
 		List<IssueFileDTO> files = issue.getFile();
 		System.out.println("IssueServiceImpl의 registIssue의 files 는  " + files);
 		if(mapper.registIssue(issue) > 0) {
@@ -80,8 +84,14 @@ public class IssueServiceImpl implements IssueService {
 				if(count != files.size()) {
 					result = false;
 				} 
-				
 			}
+			/* 이슈 등록 시 히스토리 반영하기 위해서 mapper로 보내줌 */
+			mapper.registIssueHistory(issue);
+			
+			IssueHistoryDTO history = new IssueHistoryDTO();
+			history.setIssue(issue);
+					
+			mapper.writeRegistedIssueHistory(issue);
 		}
 		return result;
 	}
@@ -128,9 +138,56 @@ public class IssueServiceImpl implements IssueService {
 		
 		int result = mapper.updateIssue(issue);
 		
+		
+		List<IssueFileDTO> files = issue.getFile();
+		System.out.println("IssueServiceImpl의 updateIssue의 files 는  " + files);
+		if(mapper.updateIssue(issue) > 0) {
+//			result = true;
+		
+			if(files != null) {
+				int count = 0;
+				for(int i = 0; i < files.size(); i++) {
+					
+					files.get(i).setRefIssueNo(issue.getNo());
+					count += mapper.registIssueFile(files.get(i));
+				}
+				if(count != files.size()) {
+//					result = false;
+				} 
+				
+			}
+			mapper.updateIssueHistory(issue);
+			
+			mapper.writeUpdatedIssueHistory(issue);
+			
+		}
+		
 //		if(!(result > 0)) {
 //			throw new GuideModifyException("가이드 게시글 수정에 실패하셨습니다.");
 //		}
+	}
+
+	@Override
+	public int removeGuide(int no) {
+		
+		System.out.println("int no의 정보는 :" + no);
+		
+		IssueDTO issue = mapper.selectIssueDetail(no);
+		
+		int taskNo = issue.getTaskNo();
+		
+		System.out.println("removeGuide의 DTO 정보는 : " + issue);
+
+		int result = mapper.deleteIssue(issue);
+		
+//		if(!(result > 0)) {
+//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
+//		}
+		mapper.deleteIssueHistory(issue);
+		
+		mapper.writeDeletedIssueHistory(issue);
+		
+		return taskNo;
 	}
 }
 

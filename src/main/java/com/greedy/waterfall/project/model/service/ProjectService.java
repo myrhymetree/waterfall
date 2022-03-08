@@ -39,7 +39,7 @@ public interface ProjectService {
 
 	boolean modifyProject(RegistProjectDTO project);
 	
-	boolean removeProject(int projectNo);
+	boolean removeProject(Map<String, Integer> removeInfo);
 
 	boolean restoreProject(int projectNo);
 	

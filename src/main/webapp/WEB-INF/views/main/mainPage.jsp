@@ -10,6 +10,7 @@
 </head>
 <body>
 
+
 	<c:if test="${ sessionScope.loginMember.role eq 1 }">
 		<jsp:include page="/WEB-INF/views/main/adminMain.jsp"/>
 	</c:if>

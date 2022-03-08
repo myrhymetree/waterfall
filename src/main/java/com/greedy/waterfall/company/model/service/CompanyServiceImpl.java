@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.common.exception.company.DeptModifyException;
 import com.greedy.waterfall.common.exception.company.DeptRegistException;
+import com.greedy.waterfall.common.exception.company.DeptRemoveException;
 import com.greedy.waterfall.common.exception.company.JobModifyException;
 import com.greedy.waterfall.common.exception.company.JobRegistException;
 import com.greedy.waterfall.common.exception.company.JobRemoveException;
+import com.greedy.waterfall.common.exception.company.TeamModifyException;
 import com.greedy.waterfall.common.exception.company.TeamRegistException;
+import com.greedy.waterfall.common.exception.company.TeamRemoveException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.company.model.dao.CompanyMapper;
 import com.greedy.waterfall.company.model.dto.DeptDTO;
@@ -46,6 +50,48 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
+	/* 부서 상세 */
+	@Override
+	public DeptDTO detailDept(String code) {
+
+		DeptDTO deptDetail = null;
+		
+		deptDetail = mapper.detailDept(code);
+		
+		return deptDetail;
+	}
+	
+	/* 부서 수정 */
+	@Override
+	public void modifyDept(DeptDTO dept) throws DeptModifyException {
+
+		int result = mapper.updateDept(dept);
+		
+		if(!(result > 0)) {
+			throw new DeptModifyException("부서 수정에 실패하셨습니다.");
+		}
+	}
+	
+	/* 부서 삭제 */
+	@Override
+	public void removeDept(String code) throws DeptRemoveException {
+		
+		int result = mapper.deleteDept(code);
+		
+		if(!(result > 0)) {
+			throw new DeptRemoveException("부서 삭제에 실패하셨습니다.");
+		}
+	}
+
+	/* 팀 조회 */
+	@Override
+	public List<TeamDTO> findTeam(SelectCriteria selectCriteria) {
+
+		List<TeamDTO> teamList = mapper.findTeam(selectCriteria);
+		
+		return teamList;
+	}
+	
 	/* 팀 생성 */
 	@Override
 	public void registTeam(TeamDTO team) throws TeamRegistException {
@@ -56,7 +102,40 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new TeamRegistException("팀 등록에 실패하셨습니다.");
 		}
 	}
+	
+	/* 팀 상세 */
+	@Override
+	public TeamDTO detailTeam(String code) {
 
+		TeamDTO teamDetail = null;
+		
+		teamDetail = mapper.detailTeam(code);
+		
+		return teamDetail;
+	}
+
+	/* 팀 수정 */
+	@Override
+	public void modifyTeam(TeamDTO team) throws TeamModifyException {
+		
+		int result = mapper.updateTeam(team);
+		
+		if(!(result > 0)) {
+			throw new TeamModifyException("팀 수정에 실패하셨습니다.");
+		}
+	}
+	
+	/* 팀 삭제 */
+	@Override
+	public void removeTeam(String code) throws TeamRemoveException {
+
+		int result = mapper.deleteTeam(code);
+		
+		if(!(result > 0)) {
+			throw new TeamRemoveException("팀 삭제에 실패하셨습니다.");
+		}
+	}
+	
 	/* 직급 조회 */
 	@Override
 	public List<JobDTO> findJob(SelectCriteria selectCriteria) {

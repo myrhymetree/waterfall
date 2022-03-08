@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<!-- 등록 모달 encType="multipart/form-data"-->
+<!-- 등록 모달 -->
 <div class="modal" id="registModal">
     <form id="registForm" onsubmit="test()"  encType="multipart/form-data">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
@@ -44,13 +44,6 @@
                        
                            <div class="col-2 center"><label for="start-date">마감일</label></div>
                            <div class="col"><input type="date" id="start-date" name="deadline"></div>
-                       </div>
-
-                       <div class="mt-4 row">
-                           <div class="col-2 center"><label>이슈 제기자</label></div>
-                           <div class="col"><input type="text" readonly></div>
-                           <div class="col-2 center"><label>이슈 담당자</label></div>
-                           <div class="col"><input type="text" readonly></div>
                        </div>
 
                        <div class="mt-4 row">

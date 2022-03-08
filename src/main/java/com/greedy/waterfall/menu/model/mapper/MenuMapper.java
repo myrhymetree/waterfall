@@ -1,10 +1,12 @@
 package com.greedy.waterfall.menu.model.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
 
 /**
@@ -28,7 +30,7 @@ public interface MenuMapper {
 	 * 
 	 * @author 홍성원
 	 */
-	public int findProjectCount();
+	public int findProjectCount(MemberDTO member);
 	
 	/**
 	 * findMainProjectList : 메소드 설명 작성 부분
@@ -46,6 +48,12 @@ public interface MenuMapper {
 	 * 
 	 * @author 홍성원
 	 */
-	public ProjectDTO findProjectInfo(int projectNo); 
+	public ProjectDTO findProjectInfo(int projectNo);
+
+	public int findJoinProjectCount(MemberDTO loginMember);
+
+	public List<ProjectDTO> findJoinProjectList(SelectCriteria selectCriteria);
+
+	public ProjectDTO findJoinProjectDetail(Map<String, Integer> searchMap); 
 	
 }

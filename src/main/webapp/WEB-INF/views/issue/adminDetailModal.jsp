@@ -6,10 +6,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+<script>
+/* $(function(){
+	$("#read-completedDate").datepicker({
+		
+	});
+
+}); */
+</script>
 </head>
 <body>
 
 <!-- 조회 모달 -->
+<form action="${ pageContext.servletContext.contextPath }/issue/admin/update"  method="post" encType="multipart/form-data">
 <div class="modal" id="myModal">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -24,9 +36,8 @@
                    <div class="modal-body" id="modal-body">
                         <div class="mt-4 row">
                         	<input type="hidden" id="read-no" name="no">
-                        	<input type="hidden" id="#read-projectNo" name="projectNo">
-                        	<input type="hidden" id="#read-taskNo" name="taskNo">
-                        	<input type="hidden" id="#read-fileNo" name="fileNo">
+                        	<input type="hidden" id="read-projectNo" name="projectNo">
+                        	<input type="hidden" id="read-taskNo" name="taskNo">
                         	
                             <div class="col-2 center"><label>이슈명</label></div>
                             <div class="col"><input type="text" id="read-name" name="name"></div>
@@ -45,7 +56,7 @@
                        		<div class="col-2 center"><label for="read-createdDate">등록일</label></div>
                             <div class="col"><input type="date" id="read-createdDate" name="createdDate"></div>
                        
-                            <div class="col-2 center"><label for="read-deadline">처리일</label></div>
+                            <div class="col-2 center"><label for="read-deadline">마감일</label></div>
                             <div class="col-4"><input type="date" id="read-deadline" name="deadline"></div>
                         </div>
 
@@ -67,15 +78,18 @@
                         <div class="mt-4 row">
                             <div class="col-2 center"><label>중요도</label></div>
                             <div class="col-4">
-                            <select class="importance ms-auto" id="read-importance" name="importance">
-                                <option value="낮음">낮음</option>
-                                <option value="보통">보통</option>
-                                <option value="긴급">긴급</option>
-                            </select>
-                            
+	                            <select class="importance ms-auto" id="read-importance" name="importance">
+	                                <option value="낮음">낮음</option>
+	                                <option value="보통">보통</option>
+	                                <option value="긴급">긴급</option>
+	                            </select>
                             </div>
+                            
                        </div>
-						
+                       
+                       <div class="mt-4 row" id="completedDateZone">
+					   </div>
+					   
                         <div class="mt-4 row">
                             <div class="col-2 center" style="vertical-align: top;"><label>이슈내용</label></div>
 			                <div class="col-10"><textarea id="read-content" cols="80" rows="10" name="content"></textarea></div>
@@ -86,17 +100,24 @@
 			                <div class="col-10"><textarea id="read-answer" cols="80" rows="10" name="answer"></textarea></div>
 			            </div>
 						
+						<div id="uploadZone">
+			            	<input type="file"  name="multiFiles" multiple>
+			            </div>
+						
 						<div id="downloadZone">
 						</div>
         </div> 	 
 
         <!-- Modal footer -->
         <div class="modal-footer row">
-                <div class="col-5">
-                    <button type="submit" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">수정</button>
+                <div class="col-2">
+                    <button type="submit" id="submit" class="btn btn-outline-dark" data-target="#mySubModal">수정</button>
+                </div>
+                <div class="col-3">
+                    <button id="delete" type="button" class="btn btn-outline-dark">삭제</button>
                 </div>
                 <div class="col-4">
-                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
+                    <button type="button" id="cancel" class="btn btn-outline-dark" data-dismiss="#myModal">취소</button>
                 </div>
         </div>
     </div>
@@ -125,13 +146,29 @@
             <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">확인</button>
             </div>
             <div class="col-4">
-            <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="text-align: left;">취소</button>
+            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">취소</button>
             </div>
         </div>
 
     </div>
     </div>
 </div>
-
+</form>
+<script>
+/* 이슈 삭제 이벤트 */
+$(function(){
+      $("#delete").click(function(){
+         const no = $("#read-no").val();
+         location.href="${ pageContext.servletContext.contextPath }/issue/admin/delete?no=" + no;
+      });
+});
+$(function(){
+	$("#cancel").click(function(){
+		const taskNo = $("#read-taskNo").val();
+		console.log("no는 no" + taskNo)
+	    location.href="${ pageContext.servletContext.contextPath }/issue/admin/list/" + taskNo;
+	});
+});
+</script>
 </body>
 </html>

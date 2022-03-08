@@ -372,7 +372,7 @@ td {
         <div class="modal fade" id="readModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
-                <form action="${ pageContext.servletContext.contextPath }/notice/update" method="post">
+                <form action="${ pageContext.servletContext.contextPath }/notice/update" method="post" encType="multipart/form-data">
                    <div class="modal-content" style="top: 172px" >
                         <div class="my-modal-header mb-4">
                             <label class="me-2" for="title-write">제목</label>

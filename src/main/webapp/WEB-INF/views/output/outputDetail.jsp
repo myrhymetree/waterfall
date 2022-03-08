@@ -40,7 +40,9 @@
 	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
 	rel="stylesheet" />
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">	
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />	
 <style>
 /* #output_header {
 	position: absolute;
@@ -50,10 +52,12 @@
 	width: 90%;
 	height: 800px;
 } */
-
+.test{
+	display: none;
+}
 .box {
 	width: 600px;
-	height: 570px;
+	height: 580px;
 	border-style: solid;
 	border-color: #888686;
 	
@@ -181,7 +185,28 @@ input{
 	background-color: #D16B6B;
 	color: white;
 }
+.box2Title{
+	background-color : transparent;
+	color : white;
+	width : 30px;
+}
+#box2Name{
+	width : 150px;
+}
+#downloadArea{
+	border : solid;
+	background-color : orangered;
+	display : block;
+}
+
 </style>
+<script>
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
@@ -220,31 +245,41 @@ input{
 			
 				<div class="box" id="outputbox2">
 					<div id="box2_border_top">
-						<p id="box2_header">&nbsp;&nbsp;ver&nbsp;<c:out value="${requestScope.outputDetail.outputVer}"/><c:out value="${requestScope.outputDetail.childTask.taskCategory.categoryName}" /></p>
+						<label id="box2_header">&nbsp;&nbsp;ver&nbsp;</label>
+						<input class="box2Title" type="text" name="box2Ver">
+						<input class="box2Title" type="text" id="box2Name" name="box2Name">
 						</div>
 						<div class="box2_body" id="box2_sq1">
 							<button id="deleteBtn" rel="float" class="button float" data-bs-toggle="modal" data-bs-target="#deleteModal"><i style='font-size: 24px' class='far'>&#xf2ed;</i>삭제</button>
 							<div id="detail">
-								<label class="box2_sql_body" ">프로젝트이름</label>
-								<input id="box1_body" type="text" name="projectName"  /><br>
+								<label class="box2_sql_body">프로젝트이름</label>
+								<input class="test"  id="box1_body" type="text" name="projectName"  /><br>
 								
 								<label class="box2_sql_body" >상위업무</label>
-								<input class="box1_body" type="text" name="parentTaskName" /><br>
+								<input class="box1_body test" type="text" name="parentTaskName" /><br>
 								
 								<label class="box2_sql_body" >등록인</label>
-								<input class="box1_body" type="text" name="registedMember" /><br>
+								<input class="box1_body test" type="text" name="registedMember" /><br>
 								
 								<label class="box2_sql_body">등록일</label>
-								<input class="box1_body" type="text" name="registedDate" /><br>
+								<input class="box1_body test" type="text" name="registedDate" /><br>
 								
 								<label class="box2_sql_body" >첨부파일</label>
-								<input class="box1_body" type="text" name="output" /><br>
+								<div class="btn-group" >
+									<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
+									<button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+	                                <span class="caret"></span>
+	                                </button>
+	                                <div class="dropdown-menu" id="downloadarea">
+	                                </div>
+								</div><br>
 								
 								<label class="box2_sql_body" id="content">내용</label><br>
-								<textarea cols="75" rows="5"  style="font-size: 14px;margin-left:20px" name="content" ></textarea><br>
+								<textarea class="test" cols="75" rows="5"  style="font-size: 14px;margin-left:20px" name="content" ></textarea><br>
 								
-								<label class="box2_sql_body" id="modify" style="margin-left : 500px" >수정하기</label>
+								<button class="box2_sql_body button float" id="modifyBtn" style="margin-left : 500px;" >수정하기</button>
 								<input id="outputNo" type="hidden" name="outputNo"/>
+								<input id="taskNo" type="hidden" name="taskNo">
 								<!-- <label class="box2_sql_body" >취소</label> -->
 							</div>
 						</div>
@@ -253,7 +288,7 @@ input{
 		</main>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 	
-	<!-- Modal HTML  "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
+	<!-- 삭제 확인 Modal "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
               <div class="modal fade modal-dialog-scrollable" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
@@ -282,7 +317,93 @@ input{
                     </div>
                 </div>
             </div>
-                <!-- Modal HTML  -->
+                
+    <!-- 수정 Modal "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
+              <div class="modal fade modal-dialog-scrollable" id="modifyModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+                    <div class="modal-content" style="top: 200px">
+                        <div style="background-color: #212529;">
+                            <br>
+                        </div>
+                        <div class="modal-header">
+                            <span class="modal-title" id="exampleModalLabel"><strong>산출물 수정</strong></span>
+                        </div> 
+                    <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->
+                        <form action="${ pageContext.servletContext.contextPath }/output/update" method="post" encType="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
+                                    <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->
+                                  <label for="clieck-point" class="col-form-label">내용</label>
+                                  <textarea class="form-control" name="content" rows="5" cols="40"></textarea>
+                                  <label class="col-form-label">첨부파일</label>
+                                  <input type="file" class="form-control" name="outputFile" required>
+                                  <input id="outputNo" type="hidden" name="outputNo">
+                                </div>
+                            </div>
+                            <!-- 모달의 바디 끝  -->
+                            <div class="modal-footer">
+                                <button type="submit" id="modify" class="btn btn-secondary">확인</button>
+                                <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+     <!-- 수정 확인 Modal -->
+        <div class="modal fade" id="modifyModal2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+                <div class="modal-content" style="top: 200px; height: 252px; width: 402px; margin-left: 0px; left: 100px;">
+                    <div style="background-color: #212529;">
+                        <br>
+                    </div>
+                    <div class="modal-header">
+                        <span class="modal-title" id="exampleModalLabel"><strong></strong></span>
+                    </div> 
+                <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->           
+                        <div class="modal-body">  
+                            <h5 align="center" style="margin-top: 30px;"><strong>수정하시겠습니까?</strong></h5>                          
+                        </div>
+                        <!-- 모달의 바디 끝  -->
+                        <div class="modal-footer">                           
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin-right: 44%;">확인</button>
+                        </div>                    
+                </div>
+            </div>
+        </div>
+    <!-- 수정 확인 Modal 끝 -->         
+                
+	<!-- 산출물 오류 확인 Modal "modal-dialog-scrollable" 클래스에 추가하면 모달 길어지면 스크롤 생깁니다. -->
+              <div class="modal fade modal-dialog-scrollable" id="errorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
+                    <div class="modal-content" style="top: 200px">
+                        <div style="background-color: #212529;">
+                            <br>
+                        </div>
+                        <div class="modal-header">
+                            <span class="modal-title" id="exampleModalLabel"><strong>산출물</strong></span>
+                        </div> 
+                    <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->
+                        <form>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
+                                    <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->
+                                  <label for="clieck-point" class="col-form-label" style="margin-left: 27%; margin-top:5%;">산출물이 존재하지 않습니다.</label>
+                                </div>
+                            </div>
+                            <!-- 모달의 바디 끝  -->
+                            <div class="modal-footer">
+                                <button style="margin-right: 45%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+                <!--산출물 오류 확인 Modal -->                
 	
 	
 	
@@ -309,7 +430,7 @@ input{
 		for(let i = 0; i < $labels.length; i++){
 			 console.log($labels[i])
 			 $($labels[i]).click (function() {
-				 const parentTaskName = $($parentLabels[i]).html();
+				 const parentTaskName = $($parentLabels[i]).text();
 				 const no = $($no[i]).val();
 				 console.log(no);
 				 console.log(parentTaskName);
@@ -320,31 +441,90 @@ input{
 					 data : {"taskNo" : no},
 					 success : function(data, textStatus, xhr){
 						 console.log(data);
-						 console.log(data.childTask.taskCategory.categoryName);
-						 console.log(data.project.name)
-						 console.log(data.childTask.parentTaskName)
-						 console.log(data.memberName.name)
-						 console.log(data.registedDate)
-						 console.log(data.content)
-						 console.log(data.childTask.parentTask.taskCategory.categoryName)
+						 
+						const parentTask = JSON.parse(data.parentTask);
+						const childTask = JSON.parse(data.childTask);
+						const outputDetail = JSON.parse(data.outputDetail);
+						const outputFile = JSON.parse(data.outputFile);
+						const refOutputNo = outputFile.outputNo;
+						const fileNo = outputFile.fileNo;
+						console.log(parentTask);
+						console.log(childTask);
+						console.log(outputDetail);
+						console.log(outputFile);
+						console.log(fileNo);
+						
+						 
+						
+						 if(outputDetail == null){
+							 
+							 $("input[name=box2Ver]").val("");
+							 
+							 $("input[name=box2Name]").val("");
+							 
+							 $("input[name=projectName]").val(parentTask.projectName);
+							 
+							 $("input[name=registedMember]").val("");
+							 
+							 $("input[name=registedDate]").val("");
+							 
+							 $("#downloadarea").empty()
+							 
+							 $("input[name=parentTaskName]").val("");
+						     
+						     $("input[name=originalName]").val("");
+							 
+							 $("textarea[name=content]").val("산출물이 존재하지 않습니다.");
+							 
+							 $("input[name=taskNo]").val(no);
+							 $(".test").fadeIn();
+						 }
+						     $("input[name=parentTaskName]").val(childTask.parentTaskName);
+						 
+						 if(outputDetail != null && outputFile != null){
+							 
+							 
+							 $("input[name=box2Ver]").val(outputDetail.outputVer);
+							 
+							 $("input[name=box2Name]").val(childTask.taskCategory.categoryName);
+							 
+							 $("input[name=projectName]").val(outputDetail.project.name);
+							 
+							 $("input[name=registedMember]").val(outputDetail.memberName.name);	 
+							 
+							 $("input[name=registedDate]").val(outputDetail.registedDate);
+							 
+							 $("textarea[name=content]").val(outputDetail.content);
+							 
+							 $("input[name=outputNo]").val(outputDetail.outputNo);
+							 
+						     $("input[name=parentTaskName]").val(childTask.parentTask.taskCategory.categoryName);
+						     
+						     $("input[name=originalName]").val(outputFile.originName);
+						     
+						     $("input[name=taskNo]").val(no);
+							 
+			                 
+						     var $downloadTag = "<a href='${pageContext.servletContext.contextPath}/output/download/" + refOutputNo 
+		                     + "' class='dropdown-item' id='downloadOutput'>다운로드</a>";
+		 				     /*var $deleteTag = "<a href='${pageContext.servletContext.contextPath}/output/deleteFile/" + fileNo
+							 + "' class='dropdown-item' id='deleteOutputFile'>삭제</a>"; */
+							 
+		                     $("#downloadarea").empty();
+		                     $("#downloadarea").append($downloadTag);
+		                     /* $("#downloadarea").append($deleteTag); */
+							 $(".test").fadeIn();
+							 
+						 }
+						 $(".test").fadeIn();
 						 
 						 
-						 $("input[name=projectName]").val(data.project.name);
-						 
-						 $("input[name=parentTaskName]").val(data.childTask.parentTaskName);
-						 
-						 $("input[name=registedMember]").val(data.memberName.name);
-						 
-						 $("input[name=registedDate]").val(data.registedDate);
-						 
-						 $("textarea[name=content]").val(data.content);
-						 
-						 $("input[name=parentTaskName]").val(data.childTask.parentTask.taskCategory.categoryName);
-						 
-						 $("input[name=outputNo]").val(data.outputNo);
 						 
 					 }, error:function(data){
-						 console.log(data);
+						 
+						 $('#exceptionModal').on('shown.bs.modal', function () {
+							    $("#myModal").attr('aria-hidden', false);
+							});
 					 }
 				 })
 			 }); 
@@ -375,13 +555,56 @@ input{
 	//삭제 이벤트
 	$(function(){
             $("#delete").click(function(){
-               const outputNo = $("#outputNo").val();
-               console.log(outputNo);
-               location.href="${ pageContext.servletContext.contextPath }/output/delete?no=" + no;
+            	
+            	const taskNo = $("#taskNo").val();
+    			console.log(taskNo);
+    			const outputNo = $("#outputNo").val();
+    			
+    			$.ajax({
+    				url : "/waterfall/output/count",
+    				type : "get",
+    				data : {"taskNo" : taskNo},
+    				success : function(data, textStatus, xhr){
+    					const result = JSON.parse(data.result);
+    					
+    					if(result == 1){
+    						$("#errorModal").modal("show");
+    					} else{
+    						location.href="${ pageContext.servletContext.contextPath }/output/delete?outputNo=" + outputNo;
+    					}
+    				}
+    			});
+            	
+              
                
             });
          });
 	
+	//수정 이벤트
+	$(function(){
+		$("#modifyBtn").click(function(){
+			const taskNo = $("#taskNo").val();
+			console.log(taskNo);
+			/* location.href="${ pageContext.servletContext.contextPath }/output/count?outputNo=" + outputNo; */
+			$.ajax({
+				url : "/waterfall/output/count",
+				type : "get",
+				data : {"taskNo" : taskNo},
+				success : function(data, textStatus, xhr){
+					console.log(data);
+					
+					const result = JSON.parse(data.result);
+					
+					if(result == 1){
+						$("#errorModal").modal("show");
+					} else{
+						$("#modifyModal").modal("show");
+					}
+				}
+				
+			})
+		})
+	})
 	</script>
 	
 </body>

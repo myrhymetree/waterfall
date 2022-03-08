@@ -125,24 +125,24 @@
 	
 	<insert id="insertNotice" >
 		 INSERT
-          INTO TBL_BOARD A
-        (
-          A.BOARD_NO
-        , A.BOARD_TITLE
-        , A.BOARD_CONTENT
-        , A.MEMBER_NO
-        , A.PROJECT_NO
-        , A.BOARD_CATEGORY_NO
-        )
-        VALUES
-        (
-          BOARD_NO.NEXTVAL
-        , #{ title }
-        , #{ content }
-        , #{ memberNo }
-        , #{ projectNo }
-        , 1
-        )
+	       INTO TBL_BOARD A
+	          (
+	            A.BOARD_NO
+	          , A.BOARD_TITLE
+	          , A.BOARD_CONTENT
+	          , A.MEMBER_NO
+	          , A.PROJECT_NO
+	          , A.BOARD_CATEGORY_NO
+	          )
+	          VALUES
+	          (
+	            BOARD_NO.NEXTVAL
+	          , #{ title }
+	          , #{ content }
+	          , #{ memberNo }
+	          , #{ projectNo }
+	          , 1
+	        )
         <selectKey keyProperty="no" resultType="Integer" order="AFTER">
         	SELECT
         	       BOARD_NO.CURRVAL

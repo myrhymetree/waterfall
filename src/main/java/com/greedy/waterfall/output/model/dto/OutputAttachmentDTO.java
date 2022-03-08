@@ -22,5 +22,6 @@ public class OutputAttachmentDTO {
 	private String status;
 	private java.sql.Date registedDate;
 	private int outputNo;
+	private int taskNo;
 
 }

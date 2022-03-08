@@ -160,8 +160,9 @@
   </insert>
   
   <delete id="deleteGuide" parameterType="_int">
-  	DELETE /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#deleteGuide() */
-  	  FROM TBL_BOARD A
+  	UPDATE /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#deleteGuide() */
+  	       TBL_BOARD A
+  	   SET A.BOARD_STATUS = 'N'    
      WHERE A.BOARD_NO = #{ no }
   </delete>
   
@@ -205,24 +206,6 @@
          WHERE A.BOARD_NO = #{ guideNo }
    </select>
    
-   <select id="selectGuideDetail" resultMap="guideResultMap">
-   	  SELECT
-   	           A.BOARD_NO
-             , A.BOARD_UPDATED_DATE
-             , A.BOARD_POSTING_DATE
-             , A.BOARD_TITLE
-             , A.BOARD_CONTENT
-             , A.MEMBER_NO
-             , B.MEMBER_NAME
-             , A.BOARD_COUNT
-             , A.BOARD_POSTING_DATE
-             , A.BOARD_STATUS
-             , A.PROJECT_NO
-          FROM TBL_BOARD A
-          LEFT JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-         WHERE A.BOARD_NO = #{ guideNo }
-   </select>
-   
    <!-- 첨부파일번호로 첨부파일 전체 정보를 조회한다. -->
 	<select id="findFile" resultMap="fileResultMap">
         SELECT /* com.greedy.waterfall.board.model.mapper.GuideMapper#fineFile() */
@@ -245,4 +228,11 @@
      WHERE A.FILE_NO = #{ fileNo }
 	</delete>
   
+  	<select id="searchGuideFile" parameterType="_int" resultType="object">
+        SELECT
+               B.FILE_NO
+          FROM TBL_BOARD A
+          JOIN TBL_FILE B ON (A.BOARD_NO = B.REF_BOARD_NO)
+         WHERE A.BOARD_NO = #{ guideNo }
+  	</select>
 </mapper>

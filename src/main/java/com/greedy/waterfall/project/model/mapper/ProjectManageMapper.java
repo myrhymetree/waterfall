@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
+import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 import com.greedy.waterfall.project.model.dto.ProjectManageMemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
 
@@ -36,5 +37,7 @@ public interface ProjectManageMapper {
 
 	int removeMemberJoinHistory(Map<String, Integer> removeInfo);
 
-	
+	ProjectManageMemberDTO findMemberInfo(ProjectManageMemberDTO memberInfo);
+
+	Integer registEntireHistoryProjectRegist(ProjectHistoryDTO projectHistoryDTO); 
 }

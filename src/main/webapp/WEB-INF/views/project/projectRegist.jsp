@@ -39,6 +39,8 @@
 				<div class="mt-4">
 					<label style="margin-left: 2%; width: 20%">프로젝트 매니저</label>
 					<input type="hidden" id="pmNumber" name="pmNumber">
+					<input type="hidden" id="pmName" name="pmName">
+					<input type="hidden" id="adminNo" name="adminNo" value="${ sessionScope.loginMember.no }">
 					<input name="pm" id="pm-name-area" type="text" class="readonly" required autocomplete="off"> 
 				</div>
 				<div class="mt-4">
@@ -87,6 +89,7 @@
 		if("사원 선택" != $("#member option:selected").text()) {
 			$("#pm-name-area").val($("#member option:selected").text());
 			$("#pmNumber").val($("#member option:selected").val());
+			$("#pmName").val($("#member option:selected").text());
 			console.log($("#pmNumber").val());
 		}
 
