@@ -160,7 +160,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public String pwCheck(String id) {
 		
-		
+//		if(!passwordEncoder.matches(member.getPwd(), mapper.selectEncryptedPwd(member))) {
+//			int result = 0;	
+//			return result;
+//		}
+		System.out.println("확인3번째" + id);
 		return mapper.selectOne(id);
 	}
 

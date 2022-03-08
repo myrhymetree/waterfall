@@ -425,7 +425,8 @@
 	                    	)            
 	</delete>
 	
-	<select id="pwCheck" resultType="java.lang.String">
+	
+	<select id="selectOne" resultType="java.lang.String">
 		SELECT
 		       A.MEMBER_PWD
 		  FROM TBL_MEMBER A
@@ -436,7 +437,7 @@
 		UPDATE
 		       TBL_MEMBER A
 		   SET A.MEMBER_PWD = #{ pwd }
-		 WHERE A.MEMBER_ID = ${ id }  
+		 WHERE A.MEMBER_ID = #{ id }  
 	</update>
 	
 </mapper>

@@ -1,5 +1,7 @@
 package com.greedy.waterfall.user.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,9 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,12 +50,26 @@ public class UserController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/pwCheck" , method=RequestMethod.POST)
+	@PostMapping(value="/pmCheck", produces="application/json; charset=UTF-8")
 	@ResponseBody
-	public int pwCheck(@ModelAttribute MemberDTO member) {
+	public int pwCheck(@RequestParam Map<String, String> parameter) {
+
+		String id = parameter.get("id");
+		String pwd = parameter.get("pwd");
+		
+		MemberDTO member = new MemberDTO();
+		member.setId(id);
+		member.setPwd(pwd);
+		
+		System.out.println("확인" + "" + member);
 		
 		String memberPwd = memberService.pwCheck(member.getId());
+		
+		System.out.println("확인 2번째" + memberPwd);
+				
 		if(member == null || !BCrypt.checkpw(member.getPwd(), memberPwd)) {
+			System.out.println("확인 비번용" + "" + member.getPwd());
+			System.out.println("확인 비번용2" + "" + memberPwd);
 			return 0;
 		}
 		
@@ -62,10 +79,12 @@ public class UserController {
 	@RequestMapping(value="/pwUpdate", method=RequestMethod.POST)
 	public String pwUpdate(String id, String pwd1, RedirectAttributes rttr, HttpSession session) {
 		
+		System.out.println("업데이트아이디 " + " " + id);
+		System.out.println("업데이트비밀번호 " + " " + pwd1);
 		String hashedPw = BCrypt.hashpw(pwd1, BCrypt.gensalt());
 		memberService.pwUpdate(id, hashedPw);
 		session.invalidate();
-		rttr.addFlashAttribute("msg", "정보 수정이 완료되었습니다. 다시 로그인해주세요.");
+		rttr.addFlashAttribute("message", "정보 수정이 완료되었습니다. 다시 로그인해주세요.");
 		
 		return "redirect:/member/login";
 	}

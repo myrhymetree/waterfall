@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>            
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,6 +40,7 @@
 <link href="${ pageContext.servletContext.contextPath }/resources/css/styles.css" rel="stylesheet" />
         
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
 	<div class="modal fade modal-dialog-scrollable" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
@@ -86,8 +88,8 @@
                      </div>
                      <!-- 모달의 바디 끝  -->
                      <div class="modal-footer">
-                         <button type="button" name="pwdUpdate" id="pwdUpdate" class="btn btn-secondary" data-bs-toggle="modal">확인</button>
-                         <button style="margin-right: 36%;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                         <button type="button" name="pwdUpdate" id="pwdUpdate" class="btn btn-secondary">확인</button>
+                         <button style="margin-right: 36%;" id="cansle" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                      </div>
                  </form>
              </div>
@@ -206,51 +208,68 @@
             </div>
             
             <script>
-//             	$(document).ready(function(){
+            	$(document).ready(function(){
             		
             		$("#pwdUpdate").on("click", function(){
-            			console.log("들어와라");
-//             			if($("#pwd").val=="") {
-//             				alert("현재 비밀번호를 입력해주세요");
-//             				$("#pwd").focus();
-//             				return false
-//             			}
-            			
-//             			if($("#pwd1").val=="") {
-//             				alert("변경비밀번호를 입력해주세요");
-//             				$("pwd1").focus();
-//             				return false
-//             			}
-            			
-//             			if($("#pwd2").val()=="") {
-//             				alert("변경 비밀번호 확인을 입력해주세요");
-//             				$("pwd2").focus();
-//             				return false
-//             			}
-//             			if($("#pwd").val() != $("#pwd2").val()){
-//             				alert("변경 비밀번호가 일치하지 않습니다.");
-//             				$("#pwd2").focus();
-            				
-//             				$.ajax({
-//             					url: "pwCheck",
-//             					type : "POST",
-//             					dataType : "json",
-//             					data : $("#pwUpdateForm").serializeArray(),
-//             					success: function(data){
-            						
-//             						if(data == 0){
-//             							alert("패스워드가 틀렸습니다.");
-//             							return;
-//             						}else{
-//             							if(confirm("변경하시겠습니까?")){
-//             								$("#pwUpdateForm").submit();
-//             							}
-//             						}
-//             					}
-//             				})
+    			
+            			if($("#pwd").val()=="") {
+            				console.log("첫번 째 비밀번호");
+            				alert("현재 비밀번호를 입력해주세요");
+            				$("#pwd").focus();
+            				return false
             			}
+            			
+            			if($("#pwd1").val()=="") {
+            				console.log("두번 째 비밀번호");
+            				alert("변경비밀번호를 입력해주세요");
+            				$("pwd1").focus();
+            				return false
+            			}
+            			
+            			if($("#pwd2").val()=="") {
+            				alert("변경 비밀번호 확인을 입력해주세요");
+            				$("pwd2").focus();
+            				return false
+            			}
+            			if($("#pwd1").val() != $("#pwd2").val()){
+            				alert("새 비밀번호확인이 일치하지 않습니다.");
+            				$("#pwd2").focus();
+            				return false
+            			}
+            			
+            			if($("#pwd1").val() == $("#pwd2").val()){
+            				
+            				$.ajax({
+            					url: "pmCheck",
+            					type : "post",
+            					data : $("#pwUpdateForm").serializeArray(),
+            					success: function(data,status,xhr){
+            						
+            						if(data == 0){
+            							alert("패스워드가 틀렸습니다.");
+            							return;
+            						}else{
+            							if(confirm("변경하시겠습니까?")){
+            								$("#pwUpdateForm").submit();
+            							}
+            						}
+            					},
+            					error : function(data,xhr){
+            						console.log(data);
+            					}
+            				})
+            			}
+            		});	
+            	});
+            	
+            	$(document).ready(function(){
+            		$("#cansle").on("click", function(){
+            			$("#pwd").val("");
+            			$("#pwd1").val("");
+            			$("#pwd2").val("");            			
             		});
-//             	});
+            	});
+            	
             </script>
 	
 </body>
