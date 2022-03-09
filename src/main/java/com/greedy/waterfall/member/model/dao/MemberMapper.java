@@ -59,5 +59,7 @@ public interface MemberMapper {
 
 	int removeMemberInfo(String id);
 
+	String selectOne(String id);
 
+	void pwUpdate(Map<String, Object> map);
 }

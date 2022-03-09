@@ -33,6 +33,12 @@ public interface MemberService {
 
 	void removeMember(String id);
 
+	String pwCheck(String id);
+
+	void pwUpdate(String id, String hashedPw);
+
+
+
 
 
 }

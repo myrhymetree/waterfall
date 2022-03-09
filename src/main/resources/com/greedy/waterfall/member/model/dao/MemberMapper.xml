@@ -424,4 +424,20 @@
 		                       WHERE A.MEMBER_ID = #{ id }
 	                    	)            
 	</delete>
+	
+	
+	<select id="selectOne" resultType="java.lang.String">
+		SELECT
+		       A.MEMBER_PWD
+		  FROM TBL_MEMBER A
+		 WHERE MEMBER_ID = #{ id }       
+	</select>	
+	
+	<update id="pwUpdate">
+		UPDATE
+		       TBL_MEMBER A
+		   SET A.MEMBER_PWD = #{ pwd }
+		 WHERE A.MEMBER_ID = #{ id }  
+	</update>
+	
 </mapper>

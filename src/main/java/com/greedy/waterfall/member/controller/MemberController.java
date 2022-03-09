@@ -2,7 +2,6 @@ package com.greedy.waterfall.member.controller;
 
 
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -327,5 +327,16 @@ public class MemberController {
 		mv.setViewName("redirect:/member/list");
 		return mv;
 	}
+	
+	/* 이메일 인증 */
+	@RequestMapping(value="/mailCheck", method=RequestMethod.GET)
+	@ResponseBody
+	public void mailCheckGET(String email) {
+		
+		/* 뷰(view)로부터 넘어온 데이터 확인 */
+		System.out.println("이메일 데이터 전송 확인");
+		System.out.println("인증번호" + email);
+	}
+	
 	
 }

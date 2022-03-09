@@ -157,6 +157,30 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public String pwCheck(String id) {
+		
+//		if(!passwordEncoder.matches(member.getPwd(), mapper.selectEncryptedPwd(member))) {
+//			int result = 0;	
+//			return result;
+//		}
+		System.out.println("확인3번째" + id);
+		return mapper.selectOne(id);
+	}
+
+
+	@Override
+	public void pwUpdate(String id, String hashedPw) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("pwd", hashedPw);
+		
+		mapper.pwUpdate(map);
+	}
+
+
+
 	
 
 }
