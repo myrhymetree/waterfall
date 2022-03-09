@@ -226,10 +226,10 @@
 					</p>
 					<p>
 						<label>이슈 등록</label>
-							<label id="addIssue">
-							<button class="button float">등록</button>
-							<input type="hidden" name="parentTaskNo">
-							</label>
+                     <label id="addIssue">
+                     <button id="addIssue1" class="button float">등록</button>
+                     <input type="hidden" name="parentTaskNo">
+                     </label>
 							
 					</p>
 					
@@ -295,10 +295,10 @@
 					
 					<p>
 						<label>이슈 등록</label>
-							<label id="addIssue">
-							<button class="button float">등록</button>
-							<input type="hidden" name="childTaskNo">
-							</label>
+                     <label id="addIssue">
+                     <button id="addIssue2" class="button float">등록</button>
+                     <input type="hidden" name="childTaskNo">
+                     </label>
 					</p>
 					
 					<p>
