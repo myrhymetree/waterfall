@@ -27,16 +27,16 @@ for (i = 0; i < close.length; i++) {
 			  
 			  $("#badge").text(count);
 			  
-			  $("#liZone").empty();
-			  for(let i = 0; i < notificationList.length; i++) {
+			  if(notificationList.length > 0) {
 				  
-				  console.log(notificationList[i].issueUpdatedContent);
-				  content = notificationList[i].issueHistoryNo;
-				  $liTag = "<li><div id='note' class='dropdown-item note-content'>" + content  + "<span class='closebtn' value='" + notificationList[i].issueHistoryNo + "'>&times;</span></div></li>"
-				  $("#liZone").append($liTag);
-				  
-				  
-				  
+				  $("#liZone").empty();
+				  for(let i = 0; i < notificationList.length; i++) {
+					  
+					  console.log(notificationList[i].issueUpdatedContent);
+					  content = notificationList[i].issueUpdatedContent;
+					  $liTag = "<li><div id='note' class='dropdown-item note-content'>" + content  + "<span class='closebtn' value='" + notificationList[i].issueHistoryNo + "'>&times;</span></div></li>"
+							  $("#liZone").append($liTag);
+				  }
 				  
 			  }
 			  
@@ -47,7 +47,7 @@ for (i = 0; i < close.length; i++) {
 	  });
   });
   
-  $(".closebtn").click(function(){
+  $(document).on("click", ".closebtn", function(){
 	  issueHistoryNo = $(this).attr("value");
 	  console.log(issueHistoryNo)
 	  
@@ -57,6 +57,21 @@ for (i = 0; i < close.length; i++) {
 		  data : { issueHistoryNo : issueHistoryNo },
 	      success : function(data, textStatus, xhr) {
 			  
+			  const notificationList = JSON.parse(data.notificationList);
+			  console.log(notificationList);
+			  const count = JSON.parse(data.count);
+			  console.log(count);
+			  
+			  $("#badge").text(count);
+			  
+			  $("#liZone").empty();
+			  for(let i = 0; i < notificationList.length; i++) {
+				  
+				  console.log(notificationList[i].issueUpdatedContent);
+				  content = notificationList[i].issueHistoryNo;
+				  $liTag = "<li><div id='note' class='dropdown-item note-content'>" + content  + "<span class='closebtn' value='" + notificationList[i].issueHistoryNo + "'>&times;</span></div></li>"
+				  $("#liZone").append($liTag);
+			  }
 			  
 		  },
 	      error:function(data) {

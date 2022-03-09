@@ -428,7 +428,19 @@
 		 WHERE A.ISSUE_NO = #{ no }
 	</update>
 	
-	<insert id="registIssueHistory">
+	<insert id="registIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+	<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS loginMemberName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
 		INSERT
 		  INTO TBL_ISSUE_NOTIFICATION A
 		  (
@@ -447,12 +459,24 @@
 		  , #{ no }
 		  , #{ registerNo }
 		  , #{ managerNo }
-		  , '추가'
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
 		  , #{ projectNo }
 		  )
 	</insert>
 	
-	<insert id="updateIssueHistory">
+	<insert id="updateIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+	<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , D.MEMBER_NAME AS loginMemberName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	            JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
+	           WHERE B.TASK_NO = #{ taskNo }
+	             AND A.ISSUE_REGISTER = #{ registerNo }
+		</selectKey>
 		INSERT
 		  INTO TBL_ISSUE_NOTIFICATION A
 		  (
@@ -471,12 +495,22 @@
 		  , #{ no }
 		  , #{ registerNo }
 		  , #{ managerNo }
-		  , '수정'
+		   , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
 		  , #{ projectNo }
 		  )
 	</insert>
 	
-	<insert id="deleteIssueHistory">
+	<insert id="deleteIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+	<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+			SELECT 
+			DISTINCT 
+	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
+	               , (SELECT MEMBER_NAME FROM TBL_MEMBER WHERE MEMBER_NO = #{ loginMemberNo }) AS loginMemberName
+	            FROM TBL_ISSUE A
+	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
+	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
+	           WHERE B.TASK_NO = #{ taskNo }
+		</selectKey>
 		INSERT
 		  INTO TBL_ISSUE_NOTIFICATION A
 		  (
@@ -495,7 +529,7 @@
 		  , #{ no }
 		  , #{ registerNo }
 		  , #{ managerNo }
-		  , '삭제'
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
 		  , #{ projectNo }
 		  )
 	</insert>
@@ -625,8 +659,7 @@
                COUNT(A.ISSUE_HISTORY_NO) AS COUNT
           FROM TBL_ISSUE_NOTIFICATION A
          WHERE A.ISSUE_READ_CHECK = 1
-           AND A.ISSUE_MANAGER = #{ loginMemberNo }
-            OR A.ISSUE_REGISTER = #{ loginMemberNo }
+           AND (A.ISSUE_REGISTER = #{ loginMemberNo } OR A.ISSUE_MANAGER = #{ loginMemberNo })
     </select>
     
     <!-- x눌렀을 때 메시지 읽은것으로 처리되어 사용자에게는 더 이상 보여지지 않음 -->
