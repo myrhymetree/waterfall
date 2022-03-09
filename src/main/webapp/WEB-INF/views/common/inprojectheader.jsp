@@ -100,7 +100,26 @@
 								
 
 							</nav>
-						</div>	
+						</div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-book-open"></i>
+							</div>
+							<div class="menu-font">산출물</div>
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse" id="collapsePages"
+							aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav accordion"
+								id="sidenavAccordionPages">
+								<a class="nav-link menu-font2"
+									href="${ pageContext.servletContext.contextPath }/output/list?no="+ "${ projectAutority.projectNo }">
+									산출물관리 </a>
+
+							</nav>
+						</div>
 						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 							data-bs-target="#collapseLayouts4" aria-expanded="false"
 							aria-controls="collapseLayouts4">

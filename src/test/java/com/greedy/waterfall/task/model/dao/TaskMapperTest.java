@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.jta.SpringJtaSynchronizationAdapter;
 
+import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,6 +38,21 @@ public class TaskMapperTest {
 		List<TaskDTO> parentTaskList = mapper.selectParentTaskList(taskDTO);
 		
 		assertThat(parentTaskList.size(), is(2));
+	}
+	
+	@Test
+	public void childTask_상세정보_조사해오는가() {
+		
+		int taskNo = 72;
+		int memberNo = 1;
+		int projectNo = 54;
+		
+		ChildTaskDTO childTask = new ChildTaskDTO();
+		TaskDTO parentTask = childTask.getParentTask();
+		
+		childTask = mapper.selectChildTask(taskNo);
+		
+		
 	}
 	
 

@@ -490,7 +490,7 @@ input{
 							 
 							 $("input[name=projectName]").val(outputDetail.project.name);
 							 
-							 $("input[name=registedMember]").val(outputDetail.memberName.name);	 
+							 $("input[name=registedMember]").val(outputDetail.memberName);	 
 							 
 							 $("input[name=registedDate]").val(outputDetail.registedDate);
 							 
