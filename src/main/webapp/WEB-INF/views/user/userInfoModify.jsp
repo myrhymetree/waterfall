@@ -195,7 +195,7 @@
                                    	 	<input class="form-control mail_check_input" placeholder="이메일 인증번호" aria-label="Recipient's username" aria-describedby="basic-addon2" disabled="disabled">
                                     </div>
                                     <div class="mail_check_button">
-                                    	<span>인증번호 전송</span>
+                                    	<button class="mail_check_button">인증번호 전송</button>
                                     </div>
                                     <!-- <button class="ui secondary button" style="padding-left: 43px;">
                                         	인증코드 
@@ -289,7 +289,7 @@
             		
             		$.ajax({
             			type : "GET",
-            			url : "mailCheck?email=" + email
+            			url : "$mailCheck?email=" + email
             		});
 				});
             	
