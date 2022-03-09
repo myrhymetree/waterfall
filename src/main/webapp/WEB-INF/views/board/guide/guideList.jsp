@@ -176,7 +176,7 @@ input::-webkit-search-results-decoration{
                     <form action="${ pageContext.servletContext.contextPath }/guide/regist" method="POST" encType="multipart/form-data"> 
                         <div class="my-modal-header mb-4">
                             <label class="me-2" for="title-write">제목</label>
-                            <input type="text" id="title-write" name="title"placeholder="제목을 입력하세요" required>
+                            <input type="text" id="title-write" name="title" placeholder="제목을 입력하세요" required>
                         </div>
                         <div class="my-modal-body">
                             <div class="my-textarea-div mb-3">
@@ -185,7 +185,7 @@ input::-webkit-search-results-decoration{
                             </div>
                             <br>
                             <div class="my-modal-footer-read">
-                                <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
+                                <button type="submit" class="btn btn-secondary">등록</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                             </div>
                         </div>    
@@ -195,8 +195,8 @@ input::-webkit-search-results-decoration{
         </div>
         <!-- Modal HTML  -->
 
-        <!-- subModal -->
-        <div class="modal fade" id="subModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- subModal
+       <div class="modal fade" id="subModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content" style="left: 150px; top: 300px; width: 300px; height: 150px; margin: 0; padding: 0;">
                     <div class="modal-body align-middle my-modal-message">
@@ -208,7 +208,7 @@ input::-webkit-search-results-decoration{
                 </div>
             </div>
         </div>
-        <!-- //subModal -->
+ -->
 
         
 
@@ -263,30 +263,21 @@ input::-webkit-search-results-decoration{
                                       <form action="${ pageContext.servletContext.contextPath }/guide/update" method="POST" encType="multipart/form-data">
                                           <div class="my-modal-header mb-4">
                                               <label class="me-2" for="title-write">제목</label>
-                                              <input type="text" id="read-title" name="title">
+                                              <input type="text" id="read-title" name="title" required>
                                               <input type="hidden" id="read-no" name="no">
                                               <input type="hidden" id="read-writerNo" name="writerMemberNo">
+                                              <input type="hidden" id="read-projectNo" name="projectNo">
                                           </div>
                                           <div class="my-modal-body">
                                               <div class="my-textarea-div mb-3">
-                                                  <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
+                                                  <textarea name="content" id="read-content" cols="30" rows="10" required></textarea>
                                               </div>
                                               
                                               <div id="uploadZone">
 									              <input type="file"  name="singleFile">
 									          </div>
-									          <br>
-                                              
-                                                 <span><label>첨부파일</label></span>
-                                                 	<!-- btn-group 포함 총 8줄이 한 세트인 버튼 그룹 부트스트랩 입니다   -->
-                                                    <div class="btn-group">
-                                                        <input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
-                                                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-                                                          <span class="caret"></span>
-                                                        </button>
-                                                        <div class="dropdown-menu" id="downloadarea">
-                                                        </div>
-                                                     </div>
+                                              <div id="downloadZone">
+							                 </div>
                                           </div>
                                           <br>
                                           <div class="my-modal-footer-read">
@@ -328,7 +319,11 @@ input::-webkit-search-results-decoration{
           
 <script>
 
-$('#title-write').removeAttr('required');
+function manualValidate(ev) {
+    ev.target.checkValidity();
+    return false;
+}
+$("#form").bind("submit", manualValidate);
 
  $(function(){
    $("#submitButton").click(function(){
@@ -381,27 +376,26 @@ $(function() {
                   const guideArray = Object.entries(data);
                   
                   console.log(guideArray[3][1]);
-                  const $fileNo = guideArray[13][1];
+                  const $fileNo = guideArray[14][1];
                   console.log($fileNo);
                   
                   $("#read-no").val(guideArray[0][1]);      
                   $("#read-title").val(guideArray[2][1]);
                   $("#read-content").val(guideArray[3][1]);
                   $("#read-writerNo").val(guideArray[8][1]);
-                  $("#read-originalName").val(guideArray[14][1]);
+                  $("#read-originalName").val(guideArray[15][1]);
+                  $("#read-projectNo").val(guideArray[5][1]);
                   $("#readModal").modal("show");
-                  ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스, count
+                  ex.children[2].innerText=guideArray[10][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스, count
                   
-                  if($fileNo != null) {
+                  $("#downloadZone").empty();
+                  console.log(guideArray[13]);
+                  if(guideArray[13][1].length != 0) {
                      
-                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
-                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
-               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
-                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
+                     const $fileNo = guideArray[14][1];
                      
-                     $("#downloadarea").empty();
-                     $("#downloadarea").append($downloadTag);
-                     $("#downloadarea").append($deleteTag);
+                     $buttonsTag = "<div class='mt-4 row'><div class='col-3 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + guideArray[15][1] + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+             		 $("#downloadZone").append($buttonsTag);
                   }
               }, 
               error:function(data) {

@@ -12,7 +12,51 @@
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 <link href="${ pageContext.servletContext.contextPath }/resources/css/styles.css" rel="stylesheet" />
-<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>		
+<script src="${ pageContext.servletContext.contextPath }/resources/js/script.js"></script>
+<style>
+.notification {
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification .badge {
+  position: absolute;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+.note-content-container {
+  display: table;
+  width: 100%;
+}
+.note-content {
+  display: table-cell;
+  padding: 5px;
+}
+
+</style>	
 <title>Insert title here</title>
 
 <!-- 추가됐던거 -->
@@ -31,6 +75,17 @@
 	               
 	        </form>
 	        <!-- Navbar-->
+	        
+	        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4" id="aaa">
+	            <li class="nav-item dropdown">
+	                <a class="nav-link dropdown-toggle notification" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	                	<i class="fas fa-bell"></i><span class="badge" id="badge"></span>
+	                </a>
+	                <ul id="liZone" class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownNotification" style="overflow: auto">                       
+	                </ul>
+	            </li>
+	        </ul>
+	        
 	        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 	            <li class="nav-item dropdown">
 	                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
@@ -66,6 +121,7 @@
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/company/dept/list">부서관리</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/output/admin/list">산출물</a>
 		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/issue/project">이슈</a>
+		                                        <a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/project">히스토리</a>
 		                                    </nav>
 		                                </div>
 		                            </div>
@@ -104,5 +160,7 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-    </body>
+
+<script src="${ pageContext.servletContext.contextPath }/resources/js/notification.js"></script>         
+</body>
 </html>

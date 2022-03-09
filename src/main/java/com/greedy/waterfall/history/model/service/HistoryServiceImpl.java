@@ -34,4 +34,52 @@ private final HistoryMapper mapper;
 		return issueHistoryList;
 	}
 
+	@Override
+	public List<HistoryDTO> selectTaskHistoryList(int projectNo) {
+		
+		List<HistoryDTO> taskHistoryList = mapper.selectTaskHistoryList(projectNo);
+		
+		return taskHistoryList;
+	}
+
+	@Override
+	public List<HistoryDTO> selectOutputHistoryList(int projectNo) {
+		
+		List<HistoryDTO> outputHistoryList = mapper.selectOutputHistoryList(projectNo);
+		
+		return outputHistoryList;
+	}
+
+	@Override
+	public List<HistoryDTO> selectMemberHistoryList(int projectNo) {
+		
+		List<HistoryDTO> memberHistoryList = mapper.selectMemberHistoryList(projectNo);
+		
+		return memberHistoryList;
+	}
+
+	@Override
+	public List<HistoryDTO> selectBoardHistoryList(int projectNo) {
+		
+		List<HistoryDTO> boardHistoryList = mapper.selectBoardHistoryList(projectNo);
+		
+		return boardHistoryList;
+	}
+
+	@Override
+	public List<HistoryDTO> selectProjectHistoryList(int projectNo) {
+		
+		List<HistoryDTO> projectHistoryList = mapper.selectProjectHistoryList(projectNo);
+		
+		return projectHistoryList;
+	}
+
+	@Override
+	public List<HistoryDTO> selectAdminProjectHistoryList() {
+		
+		List<HistoryDTO> adminProjectHistoryList = mapper.selectAdminProjectHistoryList();
+		
+		return adminProjectHistoryList;
+	}
+
 }

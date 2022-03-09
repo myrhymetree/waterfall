@@ -26,7 +26,7 @@
 
                         <div class="mt-4 row">
                            <div class="col-2 center"><label>이슈명</label></div>
-                           <div class="col"><input type="text" name="name"></div>
+                           <div class="col"><input type="text" name="name" required></div>
                            <div class="col"></div>
                            <div class="col-2 center"><label>상태</label></div>
                            <div class="col-4">
@@ -40,10 +40,10 @@
 
                        <div class="mt-4 row">
                        	   <div class="col-2 center"><label for="start-date">시작일</label></div>
-                           <div class="col-4"><input type="date" id="start-date" name="createdDate"></div>
+                           <div class="col-4"><input type="date" id="start-date" name="createdDate" required></div>
                        
                            <div class="col-2 center"><label for="start-date">마감일</label></div>
-                           <div class="col"><input type="date" id="start-date" name="deadline"></div>
+                           <div class="col"><input type="date" id="start-date" name="deadline" required></div>
                        </div>
 
                        <div class="mt-4 row">
@@ -59,7 +59,7 @@
 
                        <div class="mt-4 row">
                            <div class="col-2 center" style="vertical-align: top;"><label>이슈내용</label></div>
-                		   <div class="col"><textarea name="content" id="" cols="100" rows="auto" name="content"></textarea></div>
+                		   <div class="col"><textarea name="content" id="" cols="100" rows="auto" name="content" required></textarea></div>
             		  </div>
 
             <div class="mt-4 row">
@@ -82,7 +82,7 @@
 	</form>
 </div>
 
-<!-- <!-- 모달 확인 버튼 누를 시 나오는 모달 -->
+<!-- 모달 확인 버튼 누를 시 나오는 모달 
 <div class="modal" id="mySubModal">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -110,7 +110,8 @@
 
     </div>
     </div>
-</div>
+</div> 
+-->
 
 <script>
 
@@ -125,10 +126,15 @@
 var taskNo = getParameterByName('taskNo');
 
 console.log("업무번호는 : " + taskNo)  */
-
+  
+	function manualValidate(ev) {
+	    ev.target.checkValidity();
+	    return false;
+	}
+	$("#form").bind("submit", manualValidate);
 
   function test(e) { 
-	
+	 
 	const $taskNo = ${ requestScope.taskNo  }
 	console.log($taskNo);
 
@@ -137,7 +143,10 @@ console.log("업무번호는 : " + taskNo)  */
 	 console.log(form);
 	 /* form.action = "${ pageContext.servletContext.contextPath }/issue/regist/" + taskNo; */
 	 form.action = "${ pageContext.servletContext.contextPath }/issue/regist/" + $taskNo;
-	 form.method="POST";	 
+	 form.method="POST";
+	 
+	 
+	 
  }
  
 /* 쿼리스트링 형태의 taskNo를 파라미터에서 추출해주는 함수와 form에 있는 data를 submit 했을 때 발생하는 이벤트 */

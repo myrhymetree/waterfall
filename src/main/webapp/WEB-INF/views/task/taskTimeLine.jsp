@@ -435,6 +435,10 @@ ul {
 }
 
 
+#registModal {
+	align-items: center;
+	justify-content: center;
+}
 
 </style>
 <script>
@@ -447,6 +451,7 @@ ul {
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
+	<jsp:include page="/WEB-INF/views/task/IssueModal.jsp"/>
 	<div class="taskList">
 		<div id="box1header">
 			<i style='font-size:24px' class='far'>&#xf328;</i>&nbsp;&nbsp;업무 관리 <br>
@@ -518,6 +523,7 @@ ul {
 			const deleteParentTaskNo = $("#outputParentTaskNo").val();
 			console.log(deleteParentTaskNo);
 			
+<<<<<<< HEAD
 			/*상위 업무 삭제를 클릭했을 때*/
 			location.href="${ pageContext.servletContext.contextPath }/task/delete?taskNo=" + deleteParentTaskNo ;
 		});
@@ -543,6 +549,134 @@ ul {
 			$("#readModal").css("display", "blcok");
 		} 
 	});
+=======
+		</div>
+	</div>
+	</form>
+	<!-- 업무 생성 끝 -->
+		
+	 <%-- 업무 조회 모달 --%>
+	<div>
+		<div class="layer" id="readModal">
+		<div class="header">업무 조회</div>
+			<div style="margin-left:30px;">
+				<p class="text-end mt-3">
+				</p>
+				<div class="detail" id="parentTaskDetail">
+				<label class="task">상위업무</label>
+					<p>
+						<label>업무명</label>
+						<input id="parentTaskName" type="text" name="parentTaskName"/>
+					</p>
+					<p>
+						<label>담당자</label>
+						<input id="parentTaskManager" type="text" name="parentTaskManager"/>
+					</p>	
+					<p>
+						<label>시작일</label>
+						<input type="date" id="parent-start-date" name="parentStartDate">
+					</p>	
+					<p>
+						<label>마감일</label>
+						<input type="date" id="parent-end-date" name="parentDeadline">
+					</p>
+					<p>
+						<label>중요도</label>
+						<input type="text" id="parnetImportance" name="parentImportance">
+					</p>
+					<p>
+						<label>진행률</label>
+						<input id="parentProgress" class="rate ms-2" type="number" name="parentProgress" value="0" min="0" max="100" >%
+					</p>
+					<p>
+						<label>마일스톤</label>
+						<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
+						<input type="hidden" name="typeNo" value="1">
+					</p>
+					<p>
+						<label>이슈 등록</label>
+							<label id="addIssue">
+							<button id="addIssue1" class="button float">등록</button>
+							<input type="hidden" name="parentTaskNo">
+							</label>
+							
+					</p>
+					
+					<p>
+						<label>산출물 등록</label>
+							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+								<button id="addOutput1" class="button float">등록</button>
+								<input id="outputParentTaskNo" type="hidden" name="parentTaskNo">
+							</c:if>
+							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
+								<input id="outputFileName1" type="file" name="outputFile" readonly>
+							</c:if>
+					</p>
+				</div>
+				<div class="detail"id="childTaskDetail">
+				<label class="task">하위업무</label>
+					<p>
+						<label>업무명</label>
+						<input id="childTaskName" type="text" name="childTaskName"/>
+					</p>
+					
+					<p>
+						<label>담당자</label>
+						<input id="childTaskManager" type="text" name="childTaskManager"/>
+					</p>
+					
+					<p>
+						<label>시작일</label>
+						<input type="date" id="child-start-date" name="childStartDate">
+					</p>
+					
+					<p>
+						<label>마감일</label>
+						<input type="date" id="child-end-date" name="childDeadline">
+					</p>
+					
+					<p>
+						<label>중요도</label>
+						<input type="text" id="childImportance" name="childImportance">
+					</p>
+					
+					<p>
+						<label>진행률</label>
+						<input class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" >%
+					</p>
+					
+					<p>
+						<label>마일스톤</label>
+						<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
+						<input type="hidden" name="typeNo" value="1">
+					</p>
+					
+					<p>
+						<label>이슈 등록</label>
+							<label id="addIssue">
+							<button id="addIssue2" class="button float">등록</button>
+							<input type="hidden" name="childTaskNo">
+							</label>
+					</p>
+					
+					<p>
+						<label>산출물 등록</label>
+							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
+								<button id="addOutput2" class="button float">등록</button>
+								<input id="outputChildTaskNo" type="hidden" name="childTaskNo">
+							</c:if>
+							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
+								<input id=outputFileName2 type="file" name="outputFile" readonly>
+							</c:if>
+					</p>
+					</div>
+						<button id="close" class="button float" style="float: none; padding:4px; margin-right:30px; margin-left: 600px;"  rel="float">업무 나가기</button>
+				
+			</div>
+		</div>
+	</div>
+	<%--업무 조회 모달 끝 --%>
+>>>>>>> origin/feature/issue/test
 	
 	<%-- 상위 업무 수정 이벤트 시작 --%>
 	/* 업무조회 모달에서 수정버튼을 클릭했을 경우 */
@@ -942,6 +1076,56 @@ ul {
 		
 		console.log(gantt_chart);
 		
+<<<<<<< HEAD
+=======
+		/* 이슈 등록 기능 모달 이벤트 */
+		
+		$("#closeIssue").click(function(){
+			$("#readModal").css("display", "block");
+			$("#registModal").css("display", "none");
+		});
+		
+		$("#addIssue1").click(function(){
+			if($("#registModal").css("display")=="none"){
+				$("#registModal").css("display", "flex");
+				$("#readModal").css("display", "none");
+			
+			}
+			
+			var projectNo = ${ sessionScope.projectAutority.projectNo };
+		   	$("#read-projectNo").val(projectNo);
+
+		    console.log("프로젝트 번호는 : " + projectNo);
+		      
+//		    var $taskNo = Number($("input[name=parentTaskNo]").val());
+			
+			const taskNo = Number($("input[name=parentTaskNo]").val());
+			$("#read-taskNo").val(taskNo);
+			console.log(Number(taskNo));
+			console.log($("#read-taskNo").val());
+		});
+		
+		$("#addIssue2").click(function(){
+			if($("#registModal").css("display")=="none"){
+				$("#registModal").css("display", "flex");
+				$("#readModal").css("display", "none");
+			}
+			
+//			var $taskNo = Number($("input[name=childTaskNo]").val());
+			
+			var projectNo = ${ sessionScope.projectAutority.projectNo };
+		    $("#read-projectNo").val(projectNo);
+
+		    console.log("프로젝트 번호는 : " + projectNo);
+		      
+		    var $taskNo = Number($("input[name=childTaskNo]").val());
+			
+			const taskNo = Number($("input[name=childTaskNo]").val());
+			$("#read-taskNo").val(taskNo);
+			console.log(Number(taskNo));
+			console.log($("#read-taskNo").val());
+		});
+>>>>>>> origin/feature/issue/test
 		
 	</script>
 	

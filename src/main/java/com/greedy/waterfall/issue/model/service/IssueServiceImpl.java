@@ -15,6 +15,7 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
 import com.greedy.waterfall.issue.model.dto.IssueHistoryDTO;
+import com.greedy.waterfall.issue.model.dto.IssueNotificationDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.issue.model.mapper.IssueMapper;
@@ -35,34 +36,25 @@ public class IssueServiceImpl implements IssueService {
 		List<ProjectIssueCountDTO> allProject = mapper.selectAllProjectList(managerNo);
 		return allProject;
 	}
+	
 	@Override
 	public List<IssueDTO> selectIssuesOfTask(int projectNo) {
 		List<IssueDTO> taskIssueList = mapper.selectIssuesOfTask(projectNo);
 		return taskIssueList;
 	}
+	
 	@Override
 	public List<IssueDTO> selectIssueList(int taskNo) {
 		List<IssueDTO> issueList = mapper.selectIssueList(taskNo);
 		return issueList;
 	}
+	
 	@Override
 	public List<IssueDTO> selectAllIssue() {
 		List<IssueDTO> allIssueList = mapper.selectAllIssue();
 		return allIssueList;
 	}
-	@Override
-	public IssueDTO selectTasks(int no) {
-		IssueDTO issue = mapper.selectTasks(no);
-		
-		return issue;
-	}
-	@Override
-	public List<IssueDTO> selectTask(int taskNo) {
-		List<IssueDTO> taskList = mapper.selectTask(taskNo);
-		
-		return taskList;
-	}
-	
+
 	@Override
 	public boolean registIssue(IssueDTO issue) {
 		
@@ -90,7 +82,7 @@ public class IssueServiceImpl implements IssueService {
 			
 			IssueHistoryDTO history = new IssueHistoryDTO();
 			history.setIssue(issue);
-					
+			
 			mapper.writeRegistedIssueHistory(issue);
 		}
 		return result;
@@ -134,7 +126,7 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public void modifyIssue(IssueDTO issue) {
+	public void modifyIssue(IssueDTO issue, int loginMember) {
 		
 		int result = mapper.updateIssue(issue);
 		
@@ -156,6 +148,8 @@ public class IssueServiceImpl implements IssueService {
 				} 
 				
 			}
+			issue.setLoginMemberNo(loginMember);
+			
 			mapper.updateIssueHistory(issue);
 			
 			mapper.writeUpdatedIssueHistory(issue);
@@ -168,26 +162,73 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public int removeGuide(int no) {
+	public int removeIssue(int issueNo, int loginMemberNo) {
 		
-		System.out.println("int no의 정보는 :" + no);
+		System.out.println("int no의 정보는 :" + issueNo);
 		
-		IssueDTO issue = mapper.selectIssueDetail(no);
+		IssueDTO issue = mapper.selectIssueDetail(issueNo);
 		
 		int taskNo = issue.getTaskNo();
 		
-		System.out.println("removeGuide의 DTO 정보는 : " + issue);
+		System.out.println("removeIssue의 DTO 정보는 : " + issue);
 
 		int result = mapper.deleteIssue(issue);
 		
 //		if(!(result > 0)) {
 //			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
 //		}
+		
+		issue.setLoginMemberNo(loginMemberNo);
+		System.out.println("로그인멤버 : " + loginMemberNo);
+		
 		mapper.deleteIssueHistory(issue);
 		
 		mapper.writeDeletedIssueHistory(issue);
 		
 		return taskNo;
+	}
+
+	@Override
+	public Map<String, Object> notifyIssueList(int loginMemberNo, int issueHistoryNo) {
+		
+		Map<String, Integer> condition = new HashMap<>();
+		
+		condition.put("loginMemberNo", loginMemberNo);
+		condition.put("issueHistoryNo", issueHistoryNo);
+		
+		mapper.removeCheck(condition);
+		
+		List<IssueNotificationDTO> notificationList = mapper.notifyIssueList(loginMemberNo);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		System.out.println("noficationList는 " + notificationList);
+		
+		int count = mapper.notifyCount(loginMemberNo);
+		
+		Map<String, Object> notification = new HashMap<>();
+		
+		notification.put("notificationList", notificationList);
+		notification.put("count", count);
+		
+		return notification;
 	}
 }
 

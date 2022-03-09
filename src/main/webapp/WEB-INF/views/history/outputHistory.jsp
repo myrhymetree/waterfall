@@ -47,28 +47,31 @@
 	        <div class="card mb-4">
 	            <div class="card-header">
 	                <i class="fas fa-table me-1"></i>
-	             	프로젝트 내 전체 이슈 히스토리
+	             	프로젝트 내 전체 산출물 히스토리
 	            </div>
 	            <div class="card-body">
 	                <table id="datatablesSimple">
 	                   <colgroup>
 	                        <col style="width:15%"/>
 	                        <col style="width:5%"/>
-	                        <col style="width:80%"/>
+	                        <col style="width:5%"/>
+	                        <col style="width:75%"/>
 	                    </colgroup>
 	                    <thead>
 	                        <tr>
 	                            <th>날짜</th>
 	                            <th>종류</th>
+	                            <th>프로젝트</th>
 	                            <th>내용</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
-	                    	<c:forEach var="issue" items="${ requestScope.issueHistoryList }" varStatus="status">
+	                    	<c:forEach var="output" items="${ requestScope.outputHistoryList }" varStatus="status">
 		                        <tr>
-		                            <td><c:out value="${ issue.updatedDate }"/></td>
-		                            <td><c:out value="${ issue.categoryTypeNo }"/></td>
-		                            <td><c:out value="${ issue.content }"/></td>
+		                            <td><c:out value="${ output.updatedDate }"/></td>
+		                            <td><c:out value="${ output.categoryTypeNo }"/></td>
+		                            <td><c:out value="${ output.projectNo }"/></td>
+		                            <td><c:out value="${ output.content }"/></td>
 		                        </tr>
 							</c:forEach>
 	

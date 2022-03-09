@@ -43,4 +43,10 @@ public interface GuideMapper {
 
 	Object searchGuideFile(int guideNo);
 
+	void writeRegistedGuideHistory(GuideDTO guide);
+
+	void writeUpdatedGuideHistory(GuideDTO guide);
+
+	void writeDeletedGuideHistory(GuideDTO guide);
+
 }

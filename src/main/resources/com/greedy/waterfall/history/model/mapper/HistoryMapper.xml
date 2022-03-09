@@ -24,7 +24,7 @@
      ORDER BY 1 DESC
   </select>
   
-  <select id="selectProjectHistoryList" resultMap="historyResultMap">
+  <select id="selectAdminProjectHistoryList" resultMap="historyResultMap">
 	SELECT
 	       A.HISTORY_NO
 	     , A.UPDATED_DATE
@@ -34,6 +34,20 @@
          , A.REGISTER_NO
       FROM TBL_ENTIRE_HISTORY A
      WHERE A.CATEGORY_TYPE_NO = 1
+     ORDER BY 1 DESC
+  </select>
+  
+  <!-- 개별 프로젝트 내 모든 히스토리 조회  -->
+  <select id="selectProjectHistoryList" resultMap="historyResultMap">
+	SELECT
+	       A.HISTORY_NO
+	     , A.UPDATED_DATE
+         , A.CONTENT
+         , A.CATEGORY_TYPE_NO
+         , A.PROJECT_NO
+         , A.REGISTER_NO
+      FROM TBL_ENTIRE_HISTORY A
+     WHERE A.PROJECT_NO = #{ projectNo }
      ORDER BY 1 DESC
   </select>
   
