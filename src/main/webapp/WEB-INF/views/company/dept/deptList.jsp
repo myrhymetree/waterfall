@@ -327,7 +327,7 @@ textarea {
 							</div>
 							<div class="my-modal-input mb-4">
 								<label class="me-2" for="code-read">부서코드</label>
-								<input type="text" id="code-read" name="code">
+								<input type="text" id="code-read" name="code" readonly>
 							</div>
 						</div>
 						<div class="my-modal-footer-read">
@@ -364,7 +364,7 @@ textarea {
 							</div>
 							<div class="my-modal-input mb-4">
 								<label class="me-2" for="team-code-read">팀코드</label>
-								<input type="text" id="team-code-read" name="code">
+								<input type="text" id="team-code-read" name="code" readonly>
 							</div>
 						</div>
 						<div class="my-modal-footer-read">
@@ -446,27 +446,27 @@ textarea {
 											<i class="fas" style="font-size: 24px">&#xf07b;</i>
 											<c:out value="${ dept.name }" />
 										</span>
-										<div style="display: inline-block; position: absolute; top: -12px; left: 279px">
+										<span style="position: absolute; top: -12px; left: 279px">
 											<button class="button float modDept" id="dept-mod" data-bs-toggle="modal" data-bs-target="#readModal">
 												<i class="far" style="font-size: 16px; color: white">&#xf044;</i>&nbsp;수정
 											</button>
 											<button class="button float delDept" id="dept-delete">
 												<i class="fas" style="font-size: 16px; color: white">&#xf2ed;</i>&nbsp;삭제
 											</button>
-										</div>
+										</span>
 										<c:forEach var="team" varStatus="st" items="${ requestScope.teamList }">
 											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: -10px; font-size: 1.1rem">
 												<li style="position: relative; line-height: 20px; margin-top: 20px">
 													<input type="hidden" value="<c:out value='${ team.code }' />">
-													<c:out value="${ team.name }" />
-													<div style="display: inline-block; position: absolute; top: -15px; left: 239px">
+													<c:out value="${ requestScope.teamList[st.index].name }" />
+													<span style="position: absolute; top: -15px; left: 239px">
 														<button class="button float modTeam" id="team-mod" data-bs-toggle="modal" data-bs-target="#readTeamModal">
-															<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
+															<i class="far" style="font-size: 16px; color: white">&#xf044;</i>&nbsp;수정
 														</button>
 														<button class="button float delTeam" id="team-delete">
-															<i style='font-size: 16px' class='fas' style='color: white;'>&#xf2ed;</i>&nbsp;삭제
+															<i class="fas" style="font-size: 16px; color: white">&#xf2ed;</i>&nbsp;삭제
 														</button>
-													</div>
+													</span>
 												</li>
 											</ul>
 										</c:forEach>
@@ -548,8 +548,8 @@ textarea {
 	} */
 	
 	/* 부서 수정 */
-	if(document.querySelectorAll("#deptName li div button.modDept")) {
-		const $btns = document.querySelectorAll("#deptName li div button.modDept");
+	if(document.querySelectorAll("#deptName li span button.modDept")) {
+		const $btns = document.querySelectorAll("#deptName li span button.modDept");
 		console.log($btns);
 		for(let i = 0; i < $btns.length; i++) {
 			$btns[i].onclick = function() {
@@ -577,15 +577,15 @@ textarea {
 	}
 	
 	/* 부서 삭제 */
-	$("#deptName li div button.delDept").click(function() {
+	$("#deptName li span button.delDept").click(function() {
 		const code = this.parentNode.parentNode.children[0].value;
 		console.log(code);
 		location.href="${ pageContext.servletContext.contextPath }/company/dept/delete?code=" + code;
 	});
 	
 	/* 팀 수정 */
-	if(document.querySelectorAll("ul.collapse li div button.modTeam")) {
-		const $btns = document.querySelectorAll("ul.collapse li div button.modTeam");
+	if(document.querySelectorAll("ul.collapse li span button.modTeam")) {
+		const $btns = document.querySelectorAll("ul.collapse li span button.modTeam");
 		console.log($btns);
 		for(let i = 0; i < $btns.length; i++) {
 			$btns[i].onclick = function() {
@@ -613,7 +613,7 @@ textarea {
 	}
 	
 	/* 팀 삭제 */
-	$("ul.collapse li div button.delTeam").click(function() {
+	$("ul.collapse li span button.delTeam").click(function() {
 		const code = this.parentNode.parentNode.children[0].value;
 		console.log(code);
 		location.href="${ pageContext.servletContext.contextPath }/company/team/delete?code=" + code;

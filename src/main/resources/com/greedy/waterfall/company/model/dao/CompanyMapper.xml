@@ -13,13 +13,15 @@
 		<id property="code" column="DEPT_CODE"/>
 		<result property="name" column="DEPT_NAME"/>
 		
-		<collection property="teamDTOList" resultMap="teamResultMap"></collection>
+		<!-- <collection property="subTeamList" resultMap="teamResultMap"></collection> -->
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.TeamDTO" id="teamResultMap">
 		<id property="code" column="TEAM_CODE"/>
 		<result property="name" column="TEAM_NAME"/>
 		<result property="deptCode" column="DEPT_CODE"/>
+		
+		<!-- <association property="supDept" resultMap="deptResultMap"></association> -->
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.JobDTO" id="jobResultMap">

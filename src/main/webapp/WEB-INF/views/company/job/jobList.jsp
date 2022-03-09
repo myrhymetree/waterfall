@@ -207,9 +207,9 @@ td{
 								<input type="text" id="name-read" name="name">
 							</div>
 							<!-- 직급코드 수정 안 됨 -->
-							<div class="my-modal-input mb-4" style="visibility: hidden">
+							<div class="my-modal-input mb-4">
 								<label class="me-2" for="code-read">직급코드</label>
-								<input type="hidden" id="code-read" name="code">
+								<input type="text" id="code-read" name="code" readonly>
 							</div>
 						</div>
 						<div class="my-modal-footer-read">

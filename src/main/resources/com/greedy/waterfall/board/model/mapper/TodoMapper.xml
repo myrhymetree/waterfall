@@ -11,6 +11,8 @@
 		<result property="status" column="BOARD_STATUS"/>
 		<result property="projectNo" column="PROJECT_NO"/>
 		<result property="categoryNo" column="BOARD_CATEGORY_NO"/>
+		<result property="updatedDate" column="BOARD_UPDATED_DATE"/>
+		<result property="memberNo" column="MEMBER_NO"/>
 		<result property="count" column="BOARD_COUNT"/>
 		
 		<association property="writer" resultMap="memberResultMap"/>
@@ -22,10 +24,10 @@
 		<result property="pwd" column="MEMBER_PWD"/>
 		<result property="phone" column="PHONE"/>
 		<result property="email" column="EMAIL"/>
-		<result property="createdDate" column="MEMBER_CREATED_DATE"/>
-		<result property="retiredDate" column="MEMBER_RETIRED_DATE"/>
 		<result property="status" column="MEMBER_STATUS"/>
 		<result property="name" column="MEMBER_NAME"/>
+		<result property="createdDate" column="MEMBER_CREATED_DATE"/>
+		<result property="retiredDate" column="MEMBER_RETIRED_DATE"/>
 		<result property="initStatus" column="MEMBER_PWD_INIT_STATUS"/>
 		<result property="role" column="MEMBER_AUTHORIZATION_NO"/>
 	</resultMap>
@@ -74,7 +76,7 @@
 			                 	E.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
 			                 </if>
 			                 AND C.BOARD_STATUS = 'Y'
-			                 <!-- AND C.PROJECT_NO = #{ projectNo } -->
+			                 AND C.PROJECT_NO = #{ projectNo }
 			                 AND D.BOARD_CATEGORY_NO = 5
 		                </where>
 		                 ORDER BY C.BOARD_NO DESC
@@ -106,7 +108,7 @@
 	           B.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'	
 			</if>
 	       AND A.BOARD_STATUS = 'Y'
-	       <!-- AND A.PROJECT_NO = #{ projectNo } -->
+	       AND A.PROJECT_NO = #{ projectNo }
 	       <!-- To Do 게시판 게시글만 카운트 -->
 	       AND A.BOARD_CATEGORY_NO = 5
     	</where>
@@ -165,14 +167,14 @@
 		VALUES
 		(
 		  BOARD_NO.NEXTVAL
-		, SYSDATE  
+		, SYSDATE
 		, #{ title }
 		, #{ content }
 		, 'Y'
-		, 3
+		, #{ projectNo }
 		, 5
-		, 7
-		, 0    
+		, #{ memberNo }
+		, 0 
 		)
 	</insert>
 	
