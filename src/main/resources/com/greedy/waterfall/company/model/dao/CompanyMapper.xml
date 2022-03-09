@@ -21,7 +21,7 @@
 		<result property="name" column="TEAM_NAME"/>
 		<result property="deptCode" column="DEPT_CODE"/>
 		
-		<!-- <association property="supDept" resultMap="deptResultMap"></association> -->
+		<association property="supDept" resultMap="deptResultMap"></association>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.JobDTO" id="jobResultMap">

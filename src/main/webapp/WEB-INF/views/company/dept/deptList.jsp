@@ -354,7 +354,7 @@ textarea {
 								<label class="me-2" for="dept-select">상위부서</label>
 								<select id="dept-select" name="deptCode">
 									<c:forEach var="dept" items="${ requestScope.deptList }">
-										<option value="${ dept.code }"><c:out value="${ dept.name }" /></option>
+										<option value="${ dept.code }" <c:if test="${ teamDetail.deptCode eq dept.code }">selected="selected"</c:if>><c:out value="${ dept.name }" /></option>
 									</c:forEach>
 								</select>
 							</div>
@@ -438,7 +438,7 @@ textarea {
 								</p>
 							</div> -->
 							<!-- 부서 및 팀 조회 -->
-							<c:forEach var="dept" varStatus="status" items="${ requestScope.deptList }">
+							<c:forEach var="dept" items="${ requestScope.deptList }" varStatus="status">
 								<ul id="deptName" style="list-style: none; text-indent: -20px">
 									<li style="position: relative; line-height: 20px">
 										<input type="hidden" value="<c:out value='${ dept.code }' />">
@@ -454,7 +454,7 @@ textarea {
 												<i class="fas" style="font-size: 16px; color: white">&#xf2ed;</i>&nbsp;삭제
 											</button>
 										</span>
-										<c:forEach var="team" varStatus="st" items="${ requestScope.teamList }">
+										<c:forEach var="team" items="${ requestScope.teamList }" varStatus="st">
 											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: -10px; font-size: 1.1rem">
 												<li style="position: relative; line-height: 20px; margin-top: 20px">
 													<input type="hidden" value="<c:out value='${ team.code }' />">
