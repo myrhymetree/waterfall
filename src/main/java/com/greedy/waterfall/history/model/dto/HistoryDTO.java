@@ -22,6 +22,7 @@ public class HistoryDTO {
 	private java.util.Date updatedDate;
 	private String content;
 	private int categoryTypeNo;
+	private String categoryTypeName;
 	private int projectNo;
 	private int registerNo;
 }

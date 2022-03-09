@@ -40,7 +40,6 @@
 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/issue">이슈</a> 
 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/output">산출물</a> 
 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/member">인원배정</a>
-				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/board">게시판</a>
 			</nav>
 		</div>
 	</div>
