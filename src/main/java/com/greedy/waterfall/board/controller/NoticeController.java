@@ -3,6 +3,8 @@ package com.greedy.waterfall.board.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -272,6 +275,33 @@ public class NoticeController {
 		noticeService.removeNotice(no);
 		
 		rttr.addFlashAttribute("message", "공지사항 삭제에 성공하셨습니다.");
+		
+		return "redirect:/notice/list";
+	}
+	
+	@GetMapping("/download/{no}")
+	public ModelAndView downloadNoticeFile(ModelAndView mv, @PathVariable("no") String no) throws NumberFormatException, UnsupportedEncodingException {
+		int noticeNo = Integer.parseInt(URLDecoder.decode(no, "UTF-8"));
+		
+		System.out.println("noticeNo 넘어오냐? : " + noticeNo);
+		
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		
+		NoticeAttachmentDTO file = noticeService.findNoticeFile(noticeNo);
+		fileInfo.put("filePath", file.getFilePath());
+		fileInfo.put("fileOriginName", file.getOriginName());
+		fileInfo.put("fileRandomName", file.getRandomName());
+		mv.addObject("downloadFile", fileInfo);
+		mv.setViewName("fileDownloadView");
+		
+		return mv;
+	}
+	
+	@GetMapping("/deleteFile/{no}")
+	public String removeNoticeFile(@PathVariable("no") String no, HttpServletRequest request, RedirectAttributes rttr) throws NumberFormatException, UnsupportedEncodingException {
+		int noticeNo = Integer.parseInt(URLDecoder.decode(no, "UTF-8"));
+		
+		noticeService.removeNoticeFile(noticeNo);
 		
 		return "redirect:/notice/list";
 	}

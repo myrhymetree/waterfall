@@ -21,6 +21,7 @@ public class NoticeAttachmentDTO {
 	private String randomName;
 	private String status;
 	private int noticeNo;
+	private int categoryNo;
 	
 
 }

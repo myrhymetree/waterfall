@@ -8,6 +8,7 @@ import com.greedy.waterfall.task.model.dto.ParentTaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskHistoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskRegistDTO;
 
 public interface TaskMapper {
@@ -35,5 +36,27 @@ public interface TaskMapper {
 	ChildTaskDTO selectChildTask(int taskNo);
 
 	TaskDTO selectParentTask(int parentNo);
+
+	int updateTask(TaskRegistDTO taskUpdateDTO);
+
+	int insertUpdateHistory(TaskRegistDTO taskUpdateDTO);
+
+	String selectMemberName(TaskHistoryDTO historyDTO);
+
+	String selectTaskName(TaskHistoryDTO history);
+
+	void insertEntireUpdateHistory(TaskRegistDTO taskUpdateDTO);
+
+	String selectRefTaskCode(TaskDTO task);
+
+	int deleteTask(TaskDTO task);
+
+	int insertDeleteHistory(TaskDTO task);
+
+	TaskHistoryDTO selectHistoryInfo(TaskHistoryDTO history);
+
+	int insertEntireDeleteHistory(TaskHistoryDTO history);
+
+	int deleteChildTask(TaskDTO task);
 
 }

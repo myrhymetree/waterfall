@@ -56,6 +56,10 @@ public interface OutputMapper {
 	int updateFile(OutputAttachmentDTO outputFile);
 
 	String selectOriginName(OutputDTO output);
+
+	String selectMemberName(OutputDTO output);
+
+	void insertEntireHistory(OutputDTO output);
 	
 	
 }

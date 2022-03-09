@@ -1,6 +1,7 @@
 
 package com.greedy.waterfall.board.model.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -103,12 +104,6 @@ public class NoticeServiceImpl implements NoticeService {
 			int attachmentResult = mapper.insertAttachment(attachmentDTO);
 		}
 		
-		
-		
-		
-		
-		
-	
 	}
 	/**
 	 * modifyNotice : 공지사항 수정
@@ -128,7 +123,38 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public void removeNotice(int no) {
 		
-		mapper.deleteNotice(no);
+		NoticeAttachmentDTO file = new NoticeAttachmentDTO();
+		
+		file = mapper.selectNoticeFile(no);
+		String fileUploadDirectory = file.getFilePath();
+		String savedName = file.getRandomName();
+		
+		int result = mapper.deleteNotice(no);
+		
+		if(result > 0) {
+			new File(fileUploadDirectory + "\\" + savedName).delete();
+			
+		}
+		
+	}
+
+	@Override
+	public NoticeAttachmentDTO findNoticeFile(int no) {
+		
+		
+		return mapper.selectNoticeFile(no);
+	}
+
+	@Override
+	public void removeNoticeFile(int no) {
+		
+		NoticeAttachmentDTO file = new NoticeAttachmentDTO();
+		
+		file = mapper.selectNoticeFile(no);
+		String fileUploadDirectory = file.getFilePath();
+		String savedName = file.getRandomName();
+		
+		new File(fileUploadDirectory + "\\" + savedName).delete();
 		
 	}
 

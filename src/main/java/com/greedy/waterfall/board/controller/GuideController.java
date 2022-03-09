@@ -238,7 +238,9 @@ public class GuideController {
 		
 		System.out.println("삭제하기 위해 no 받기 " + no );
 		
-		guideService.removeGuide(no);
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		guideService.removeGuide(no, loginMemberNo);
 		
 		rttr.addFlashAttribute("message", "가이드 게시판 삭제에 성공하셨습니다.");
 		
@@ -312,6 +314,10 @@ public class GuideController {
 				}
 			}
 		}
+		
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		guide.setLoginMemberNo(loginMemberNo);
 		
 		guideService.modifyGuide(guide);
 		

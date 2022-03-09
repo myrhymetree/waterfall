@@ -8,6 +8,7 @@ import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskHistoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskRegistDTO;
 
 public interface TaskService {
@@ -25,6 +26,10 @@ public interface TaskService {
 	List<ChildTaskDTO> findChildTaskList(int projectNo);
 
 	ChildTaskDTO findTaskDetail(int taskNo);
+
+	void updateTask(TaskRegistDTO taskUpdateDTO, TaskHistoryDTO history);
+
+	void removeTask(TaskDTO task, TaskHistoryDTO history);
 
 
 }

@@ -75,6 +75,8 @@ public class GuideServiceImpl implements GuideService {
 		
 		int result = mapper.insertGuide(guide);
 		
+		mapper.writeRegistedGuideHistory(guide);
+		
 		GuideFileDTO guideFileDTO = guide.getFile();
 		
 		if(guideFileDTO != null) {
@@ -95,9 +97,17 @@ public class GuideServiceImpl implements GuideService {
 	 * @author 박성준
 	 */
 	@Override
-	public void removeGuide(int no) throws GuideRemoveException {
+	public void removeGuide(int no, int loginMemberNo) throws GuideRemoveException {
 
 		int result = mapper.deleteGuide(no);
+		
+		GuideDTO guide = mapper.selectGuideDetailPlusFile(no);
+		
+		/* 게시글 삭제 히스토리에 로그인한 회원번호를 전달 해야함 */
+		guide.setLoginMemberNo(loginMemberNo);
+		
+		/* 게시글 삭제 히스토리 */
+		mapper.writeDeletedGuideHistory(guide);
 		
 		if(!(result > 0)) {
 			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
@@ -116,6 +126,8 @@ public class GuideServiceImpl implements GuideService {
 		
 		int result = mapper.updateGuide(guide);
 		
+		mapper.writeUpdatedGuideHistory(guide);
+		
 		GuideFileDTO file = guide.getFile();
 		System.out.println("GuideServiceImpl의 updateGuideFile의 file은 " + file);
 		
@@ -126,6 +138,7 @@ public class GuideServiceImpl implements GuideService {
 				mapper.insertGuideFile(file);
 			}
 		}
+		
 		
 		if(!(result > 0)) {
 			throw new GuideModifyException("가이드 게시글 수정에 실패하셨습니다.");

@@ -45,6 +45,7 @@ import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
+import com.greedy.waterfall.issue.model.dto.IssueNotificationDTO;
 import com.greedy.waterfall.issue.model.dto.IssueRegisterDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
@@ -61,17 +62,17 @@ public class IssueController {
 	private final IssueService issueService;
 	
 	@Autowired
-	private IssueController(IssueService IssueService) {
+	public IssueController(IssueService IssueService) {
 		this.issueService = IssueService;
 	}
 	
 	@GetMapping("/project")
 	public ModelAndView projectList(HttpServletRequest request, ModelAndView mv) {
 		
-		int No = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int memberNo = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
 		Map<String, Integer> managerNo = new HashMap<>();
-		managerNo.put("managerNo", No);
+		managerNo.put("managerNo", memberNo);
 
 		List<ProjectIssueCountDTO> allProject = issueService.selectAllProjectList(managerNo);
 		System.out.println("allProject" + allProject);
@@ -106,7 +107,7 @@ public class IssueController {
 	@GetMapping("/admin/list/{taskNo}")
 	public ModelAndView adminIssueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
-		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
+		Integer projectNo = (int) request.getSession().getAttribute("adminProjectNo");
 		System.out.println("list에 들어오는 프로젝트 no : " + projectNo);
 		
 		System.out.println(taskNo);
@@ -126,12 +127,15 @@ public class IssueController {
 	public ModelAndView adminRemoveGuide(ModelAndView mv, HttpServletRequest request, 
 			RedirectAttributes rttr) throws GuideRemoveException {
 		
-		int no = Integer.parseInt(request.getParameter("no"));
+		int issueNo = Integer.parseInt(request.getParameter("no"));
 		
-		System.out.println("삭제하기 위해 no 받기 " + no );
+		System.out.println("삭제하기 위해 no 받기 " + issueNo );
+		
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
 		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
-		int taskNo = issueService.removeGuide(no);
+		int taskNo = issueService.removeIssue(issueNo, loginMemberNo);
 		
 		rttr.addFlashAttribute("message", "이슈 삭제에 성공하셨습니다.");
 		
@@ -320,7 +324,10 @@ public class IssueController {
 		int taskNo = (int) request.getSession().getAttribute("taskNo");
 		System.out.println("update에 들어오는 업무번호 : " + taskNo);
 		
-		issueService.modifyIssue(issue);
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMember =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		issueService.modifyIssue(issue, loginMember);
 		
 		System.out.println("modifyIssue : " + issue);
 		
@@ -616,7 +623,10 @@ public class IssueController {
 		int taskNo = issue.getTaskNo();
 		System.out.println("update에 들어오는 업무 no : " + taskNo);
 		
-		issueService.modifyIssue(issue);
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMember =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		issueService.modifyIssue(issue, loginMember);
 		
 		System.out.println("modifyIssue : " + issue);
 		
@@ -632,12 +642,15 @@ public class IssueController {
 	public ModelAndView removeGuide(ModelAndView mv, HttpServletRequest request, 
 			RedirectAttributes rttr) throws GuideRemoveException {
 		
-		int no = Integer.parseInt(request.getParameter("no"));
+		int issueNo = Integer.parseInt(request.getParameter("no"));
 		
-		System.out.println("삭제하기 위해 no 받기 " + no );
+		System.out.println("삭제하기 위해 no 받기 " + issueNo );
+		
+		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
 		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
-		int taskNo = issueService.removeGuide(no);
+		int taskNo = issueService.removeIssue(issueNo, loginMemberNo);
 		
 		rttr.addFlashAttribute("message", "가이드 게시판 삭제에 성공하셨습니다.");
 		
@@ -646,6 +659,61 @@ public class IssueController {
 		
 		return mv;
 		
+	}
+	
+	@GetMapping("/notification")
+	public ModelAndView notifyIssueList(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) {
+		
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		int issueHistoryNo = 0;
+		
+		if(request.getParameter("issueHistoryNo") != null) {
+			issueHistoryNo = Integer.parseInt(request.getParameter("issueHistoryNo"));
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+		}
+		
+		Map<String, Object> notification = issueService.notifyIssueList(loginMemberNo,issueHistoryNo);
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls()
+				.disableHtmlEscaping()
+				.create();
+		List<IssueNotificationDTO> notificationList = (List<IssueNotificationDTO>) notification.get("notificationList");
+		
+		int count = (int) notification.get("count");
+		
+		
+		
+		mv.addObject("count", gson.toJson(count));
+		mv.addObject("notificationList", gson.toJson(notificationList));
+		mv.setViewName("jsonView");
+		return mv;
 	}
 	
 }

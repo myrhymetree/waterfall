@@ -79,6 +79,12 @@
 		<result property="parentTaskNo" column="TASK_NO"/>
 	</resultMap>
 	
+	<resultMap type="com.greedy.waterfall.task.model.dto.TaskHistoryDTO" id="taskHistoryResultMap">
+		<result property="taskNo" column="TASK_NO"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+		<result property="taskName" column="TASK_CATEGORY_NAME"/>
+	</resultMap>
+	
 	
 	<select id="selectParentTaskList" resultMap="taskResultMap">
 		SELECT
@@ -164,6 +170,14 @@
 		  FROM TBL_TASK
 		 WHERE PROJECT_NO = #{ projectNo }
 		   AND TASK_CATEGORY_CODE = #{ parentTaskCode }
+		   AND TASK_STATUS = 'Y'
+	</select>
+	
+	<select id="selectRefTaskCode" resultType="String">
+		SELECT
+		       TASK_REF_NO
+		  FROM TBL_TASK
+		 WHERE TASK_NO = #{ taskNo }
 	</select>
 	
 	<insert id="registTask">
@@ -284,5 +298,150 @@
 		   AND A.TASK_STATUS = 'Y'
 		   AND A.TASK_NO = #{ parentNo }
 	</select>
+	
+	<select id="selectMemberName" resultType="String">
+		SELECT
+		       MEMBER_NAME
+		  FROM TBL_MEMBER
+		 WHERE MEMBER_NO = #{ memberNo }
+	</select>
+	
+	<select id="selectTaskName" resultType="String">
+		SELECT
+		       TASK_CATEGORY_NAME
+		  FROM TBL_TASK_CODE_MANAGE
+		 WHERE TASK_CATEGORY_CODE = #{ taskCode }
+		       
+	</select>
+	
+	<select id="selectHistoryInfo" resultMap="taskHistoryResultMap">
+		SELECT
+		       (SELECT
+		               B.MEMBER_NAME
+		          FROM TBL_MEMBER B
+		         WHERE MEMBER_NO = #{ memberNo }
+		        ) AS MEMBER_NAME
+		     , C.TASK_CATEGORY_NAME
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE C ON(A.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE) 
+		 WHERE A.TASK_NO = #{ taskNo }
+	</select>
+	
+	<update id="updateTask">
+		UPDATE
+		       TBL_TASK
+		   SET TASK_START_DATE = #{ startDate }
+		     , TASK_DEADLINE = #{ deadline }
+		     , TASK_PROGRESSION = #{ progressRatio }
+		     , TASK_PROGRESS_STATUS = #{ progressStatus }
+		     , TASK_TYPE_NO = #{ typeNo }
+		     , PROJECT_NO = #{ projectNo }
+		     , MEMBER_NO = #{ taskMember }
+		     , TASK_CATEGORY_CODE = #{ taskCode }
+		     , TASK_IMPORTANCE = #{ importance }
+		 WHERE TASK_NO = #{ taskNo }
+	</update>
+	
+	<update id="deleteTask">
+		UPDATE
+               TBL_TASK
+           SET TASK_STATUS = 'N'
+         WHERE TASK_NO = #{ taskNo }
+            OR TASK_REF_NO = #{ taskNo }		 
+	</update>
+	
+	<update id="deleteChildTask">
+		UPDATE
+               TBL_TASK
+           SET TASK_STATUS = 'N'
+         WHERE TASK_NO = #{ taskNo }
+	</update>
+	
+	<insert id="insertUpdateHistory">
+		INSERT
+		  INTO TBL_TASK_HISTORY
+		     (
+		       TASK_HISTORY_NO
+		     , TASK_PROGRESS_STATUS
+		     , TASK_NO
+		     , MEMBER_NO
+		     , TASK_HISTORY_RECORD
+		     , TASK_UPDATED_DATE
+		     , TASK_UPDATED_CODE
+		     )
+		VALUES
+		     (
+		       TASK_HISTORY_NO.NEXTVAL
+		     , #{ progressStatus }
+		     , #{ taskNo }
+		     , #{ memberNo }
+		     , #{ taskCode }
+		     , SYSDATE
+		     , 2
+		     )
+	</insert>
+	<insert id="insertDeleteHistory">
+		INSERT
+		  INTO TBL_TASK_HISTORY
+		     (
+		       TASK_HISTORY_NO
+		     , TASK_NO
+		     , MEMBER_NO
+		     , TASK_UPDATED_DATE
+		     , TASK_UPDATED_CODE
+		     )
+		VALUES
+		     (
+		       TASK_HISTORY_NO.NEXTVAL
+		     , #{ taskNo }
+		     , #{ memberNo }
+		     , SYSDATE
+		     , 3
+		     )
+	</insert>
+		
+	<insert id="insertEntireUpdateHistory">
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+			 (
+			   A.HISTORY_NO
+			 , A.UPDATED_DATE
+		     , A.CONTENT
+		     , A.CATEGORY_TYPE_NO
+		     , A.PROJECT_NO
+		     , A.REGISTER_NO
+		     )
+		     VALUES
+		     (
+		       HISTORY_NO.NEXTVAL
+		     , SYSDATE
+		     , '[' || #{ memberName } || ']' || '님이 ' || #{ taskName  } || ' [' || '업무' || '] ' || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		     , 2
+		     , #{ projectNo }
+		     , #{ memberNo }
+	         )
+	</insert>
+	
+	<insert id="insertEntireDeleteHistory">
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+			 (
+			   A.HISTORY_NO
+			 , A.UPDATED_DATE
+		     , A.CONTENT
+		     , A.CATEGORY_TYPE_NO
+		     , A.PROJECT_NO
+		     , A.REGISTER_NO
+		     )
+		     VALUES
+		     (
+		       HISTORY_NO.NEXTVAL
+		     , SYSDATE
+		     , '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName  } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		     , 2
+		     , #{ projectNo }
+		     , #{ memberNo }
+	         )
+	</insert>
 	
 </mapper>

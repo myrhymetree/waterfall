@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
 	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
@@ -168,7 +170,7 @@ a {
 .layer {
 	display: none;
 	width: 850px;
-	height: 670px;
+	height: 750px;
 	background: #fff;
 	border: 1px solid black;
 	position: absolute;
@@ -184,7 +186,7 @@ a {
 .add{
 	display: none;
 	width: 770px;
-	height: 530px; !important
+	height: 530px !important;
 	background: #fff;
 	border: 1px solid black;
 	position: absolute;
@@ -343,10 +345,11 @@ ul {
 	padding-left: 500px;
 }
 #readModal{
+
 }
 
 #parentTaskDetail{
-	width : 30%;
+	width : 40%;
 	float : left;
 	
 }
@@ -419,6 +422,23 @@ ul {
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
+#parentTaskModifyBtn, #childTaskModifyBtn{
+	background-color: #9B91BF;
+	color: white;
+	margin : 0px;
+}
+#parentTaskDeleteBtn, #childTaskDeleteBtn{
+	background-color : #D16B6B;
+	color: white;
+	margin : 3px;
+
+}
+
+
+#registModal {
+	align-items: center;
+	justify-content: center;
+}
 
 </style>
 <script>
@@ -431,6 +451,7 @@ ul {
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/inprojectheader.jsp" />
+	<jsp:include page="/WEB-INF/views/task/IssueModal.jsp"/>
 	<div class="taskList">
 		<div id="box1header">
 			<i style='font-size:24px' class='far'>&#xf328;</i>&nbsp;&nbsp;업무 관리 <br>
@@ -449,7 +470,7 @@ ul {
 
 				<c:forEach var="parentTask" items="${ requestScope.parentTaskList }"
 					varStatus="status">
-					<label id="parentTaskName" type="button" class="folder_toggle"
+					<label  type="button" class="folder_toggle"
 						data-toggle="collapse" data-target="#demo${ status.index }"><i
 						style='font-size: 16px;' class='fas'>&#xf07b;</i>&nbsp;<c:out
 							value="${ parentTask.taskCategory.categoryName }" /></label>
@@ -483,235 +504,134 @@ ul {
 			</div>
 		</div>
 	</div>
-	<!-- 업무 생성 레이어 -->
-	<form action="${ pageContext.servletContext.contextPath }/task/regist" method="post">
-	<div>
-		
-		<div class="layer add" id="addModal">
-		<div class="header">업무 생성</div>
-			<div style="margin-left:30px;">
-				<p class="text-end mt-3">
-				</p>
-				<p>
-					<label>업무선택</label>
-					<select class="task-register-code" name="taskCode" required>
-					<option value="" selected disabled >선택</option>
-					<c:forEach var="taskList" items="${requestScope.taskCategoryList }" varStatus="status" >
-						<option value="${taskList.categoryCode }" ><c:out value="${ taskList.categoryName }"/></option>
-					</c:forEach>	
-					</select> <span class="trash"><i class="far fa-trash-alt ms-2"></i></span>
-				</p>
-				<p>
-					<label>종속관계</label>
-					<select class="relation ms-2 me-5" name="parentTaskCode" required>
-					<option value="" selected disabled >선택</option>
-					<c:forEach var="taskCode" items="${requestScope.allTaskCode.parentCategory }" varStatus="status">
-						<option value="${taskCode.parentCategoryCode }" ><c:out value="${taskCode.parentCategoryName }"/></option>
-					</c:forEach>
-						<option value= "NULL">미지정</option>
-					</select>
-					<label>담당자</label><i class="far fa-user ms-2"></i>
-					<select class="in-charge ms-0" name="taskMember" required>
-						<option value="" selected disabled>선택</option>
-						<c:forEach var="projectMember" items="${requestScope.projectMemberList }" varStatus="status">
-						<option value="${projectMember.memberNo }" ><c:out value="${projectMember.memberName }"/></option>
-						</c:forEach>
-					</select>
-				</p>
-				<p>
-					<label for="start-date">시작일</label><i
-						class="far fa-calendar-alt ms-2"></i>
-						<input type="date" id="start-date" name="startDate" required>
-				</p>
-				<p>
-					<label for="end-date">종료일</label><i class="far fa-calendar-alt ms-2"></i>
-					<input type="date" id="end-date" name="deadline" required>
-				</p>
-				<p>
-					<label>중요도</label>
-					<select class="importance ms-2" name="importance" required>
-						<option value="" selected disabled>선택</option>
-						<option value="낮음">낮음</option>
-						<option value="보통">보통</option>
-						<option value="긴급">긴급</option>
-					</select>
-				</p>
-				<p>
-					<label>진행상태</label> <select class="status ms-2" name="progressStatus" required>
-						<option value="" selected disabled>선택</option>
-						<option value="진행전">진행전</option>
-						<option value="진행중">진행중</option>
-						<option value="테스트중">테스트중</option>
-						<option value="진행완료">진행완료</option>
-						<option value="보류">보류</option>
-					</select>
-				</p>
-				<p>
-					<label>진행률</label>
-					<input class="rate ms-2" type="number" name="progressRatio" value="0" min="0" max="100" >%
-				</p>
-				
-				<p>
-					<label>마일스톤</label>
-					<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
-					<input type="hidden" name="typeNo" value="1">
-				</p>
-				</div>
-					<div id="footerBtn">
-						<button class="addTask button float" type="submit" style="padding:4px; " rel="float">업무 생성</button>
-						<button id="close" class="button float" style="padding:4px; margin-right:30px;" rel="float">업무 나가기</button>
-					</div>
-			
-		</div>
-	</div>
-	</form>
-	<!-- 업무 생성 끝 -->
-		
-	 <%-- 업무 조회 모달 --%>
-	<div>
-		<div class="layer" id="readModal">
-		<div class="header">업무 조회</div>
-			<div style="margin-left:30px;">
-				<p class="text-end mt-3">
-				</p>
-				<div class="detail" id="parentTaskDetail">
-				<label class="task">상위업무</label>
-					<p>
-						<label>업무명</label>
-						<input id="parentTaskName" type="text" name="parentTaskName"/>
-					</p>
-					<p>
-						<label>담당자</label>
-						<input id="parentTaskManager" type="text" name="parentTaskManager"/>
-					</p>	
-					<p>
-						<label>시작일</label>
-						<input type="date" id="parent-start-date" name="parentStartDate">
-					</p>	
-					<p>
-						<label>마감일</label>
-						<input type="date" id="parent-end-date" name="parentDeadline">
-					</p>
-					<p>
-						<label>중요도</label>
-						<input type="text" id="parnetImportance" name="parentImportance">
-					</p>
-					<p>
-						<label>진행률</label>
-						<input id="parentProgress" class="rate ms-2" type="number" name="parentProgress" value="0" min="0" max="100" >%
-					</p>
-					<p>
-						<label>마일스톤</label>
-						<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
-						<input type="hidden" name="typeNo" value="1">
-					</p>
-					<p>
-						<label>이슈 등록</label>
-							<label id="addIssue">
-							<button class="button float">등록</button>
-							<input type="hidden" name="parentTaskNo">
-							</label>
-							
-					</p>
-					
-					<p>
-						<label>산출물 등록</label>
-							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
-								<button id="addOutput1" class="button float">등록</button>
-								<input id="outputParentTaskNo" type="hidden" name="parentTaskNo">
-							</c:if>
-							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
-								<input id="outputFileName1" type="file" name="outputFile" readonly>
-							</c:if>
-					</p>
-				</div>
-				<div class="detail"id="childTaskDetail">
-				<label class="task">하위업무</label>
-					<p>
-						<label>업무명</label>
-						<input id="childTaskName" type="text" name="childTaskName"/>
-					</p>
-					
-					<p>
-						<label>담당자</label>
-						<input id="childTaskManager" type="text" name="childTaskManager"/>
-					</p>
-					
-					<p>
-						<label>시작일</label>
-						<input type="date" id="child-start-date" name="childStartDate">
-					</p>
-					
-					<p>
-						<label>마감일</label>
-						<input type="date" id="child-end-date" name="childDeadline">
-					</p>
-					
-					<p>
-						<label>중요도</label>
-						<input type="text" id="childImportance" name="childImportance">
-					</p>
-					
-					<p>
-						<label>진행률</label>
-						<input class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" >%
-					</p>
-					
-					<p>
-						<label>마일스톤</label>
-						<input class="milestone ms-2" type="checkbox" name="typeNo" value="2">
-						<input type="hidden" name="typeNo" value="1">
-					</p>
-					
-					<p>
-						<label>이슈 등록</label>
-							<label id="addIssue">
-							<button class="button float">등록</button>
-							<input type="hidden" name="childTaskNo">
-							</label>
-					</p>
-					
-					<p>
-						<label>산출물 등록</label>
-							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
-								<button id="addOutput2" class="button float">등록</button>
-								<input id="outputChildTaskNo" type="hidden" name="childTaskNo">
-							</c:if>
-							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
-								<input id=outputFileName2 type="file" name="outputFile" readonly>
-							</c:if>
-					</p>
-					</div>
-						<button id="close" class="button float" style="float: none; padding:4px; margin-right:30px; margin-left: 600px;"  rel="float">업무 나가기</button>
-				
-			</div>
-		</div>
-	</div>
-	<%--업무 조회 모달 끝 --%>
-	
-	<%-- 산출물 등록 모달 --%>
-	<form action="${ pageContext.servletContext.contextPath }/output/regist" method="post" encType="multipart/form-data">
-	<div id="outputModal" class="modal-overlay">
-		<div class="modal-window">
-			<div class="title">
-				<h4>산출물 등록</h4>
-			</div>
-			<div class="content-area">
-				<textarea name="content" rows="8" cols="45"></textarea>
-			</div>
-			<p>파일 업로드</p>
-			<input id="addOutput" type="file" name="outputFile" required>
-			<div class="close-area">
-				<button type="submit" id="submitOutput" class="button float">등록</button>
-				<input type="button" id="closeOutput" class="button float" value="돌아가기">
-				<input type="hidden" id="outputModalTaskNo" name="taskNo">
-			</div>
-		</div>
-	</div>
-	</form>
-	
-	
+	<jsp:include page="/WEB-INF/views/task/taskModal.jsp"/>	
 	<script>
+	<%--Modal drag 이벤트 --%>
+	/* $(function(){
+		$('#addModal').draggable({ handle: ".header" });
+
+	}); */
+	
+	$("#parentTaskDeleteBtn").click(function(){
+		
+		if($("#readModal").css("display")=="none"){
+			$("#readModal").css("display", "blcok");
+		} else{
+			$("#readModal").css("display", "none");
+		}
+		$("#delete").click(function(){
+			const deleteParentTaskNo = $("#outputParentTaskNo").val();
+			console.log(deleteParentTaskNo);
+			
+			/*상위 업무 삭제를 클릭했을 때*/
+			location.href="${ pageContext.servletContext.contextPath }/task/delete?taskNo=" + deleteParentTaskNo ;
+		});
+	});
+	$("#childTaskDeleteBtn").click(function(){
+		
+		if($("#readModal").css("display")=="none"){
+			$("#readModal").css("display", "blcok");
+		} else{
+			$("#readModal").css("display", "none");
+		}
+		$("#delete").click(function(){
+			const deleteChildTaskNo = $("#outputChildTaskNo").val();
+			console.log(deleteChildTaskNo);
+			
+			/*하위 업무 삭제를 클릭했을 때*/
+			location.href="${ pageContext.servletContext.contextPath }/task/delete?taskNo=" + deleteChildTaskNo ;
+		});
+		
+	});
+	$("#cancelDelete").click(function(){
+		if($("#readModal").css("display")=="none"){
+			$("#readModal").css("display", "blcok");
+		} 
+	});
+
+	
+	<%-- 상위 업무 수정 이벤트 시작 --%>
+	/* 업무조회 모달에서 수정버튼을 클릭했을 경우 */
+	$("#parentTaskModifyBtn").click(function(){
+		/* 수정모달에 보여질 정보들을 넣어준다. */
+		const modifyTaskCode= $("#parentTaskCode").val();
+		const modifyMemberName = $("#parentTaskManager").val();
+		const modifyMemberNo = $("#parentTaskManagerNo").val();
+		const modifyStartDate = $("#parent-start-date").val();
+		const modifyDeadline = $("#parent-end-date").val();
+		const modifyImportance = $("#parentImportance").val();
+		const modifyRatio = $("#parentProgress").val();
+		const modifyStatus = $("#parentStatus").val();
+		const modifyTaskNo = $("#outputParentTaskNo").val();
+		console.log(modifyTaskCode);
+		console.log(modifyMemberName);
+		console.log(modifyStartDate);
+		console.log(modifyDeadline);
+		console.log(modifyImportance);
+		console.log(modifyRatio);
+		console.log(modifyTaskNo);
+		$("#modifyCategoryName").val(modifyTaskCode).prop("selected", true);		//value가 선택한 taskCode와 동일한 것을 선택
+		$("#selectedNull").val('미지정').prop("selected", true);
+		$("#modifyMember").val(modifyMemberNo).prop("selected", true);
+		$("#modifyStartDate").val(modifyStartDate).prop("selected", true);
+		$("#modifyDeadline").val(modifyDeadline).prop("selected", true);
+		$("#modifyImportance").val(modifyImportance).prop("selected", true);
+		$("#modifyStatus").val(modifyStatus).prop("selected", true);
+		$("#modifyRatio").val(modifyRatio);
+		$("#modifyTaskNo").val(modifyTaskNo);
+		
+		
+		if($("#modifyModal").css("display")=="none"){
+			$("#modifyModal").css("display", "block");
+			$("#readModal").css("display", "none");
+		}	
+	});
+	
+	/* 하위업무 수정을 클릭하였을 때 */
+	$("#childTaskModifyBtn").click(function(){
+		/* 수정모달에 보여질 정보들을 넣어준다. */
+		const modifyTaskCode= $("#childTaskCode").val();
+		const modifyMemberName = $("#childTaskManager").val();
+		const modifyMemberNo = $("#childTaskManagerNo").val();
+		const modifyStartDate = $("#child-start-date").val();
+		const modifyDeadline = $("#child-end-date").val();
+		const modifyImportance = $("#childImportance").val();
+		const modifyRatio = $("#childProgress").val();
+		const modifyStatus = $("#childStatus").val();
+		const modifyParentTaskCode = $("#parentTaskCode").val();
+		const modifyTaskNo = $("#outputChildTaskNo").val();
+		
+		console.log(modifyTaskCode);
+		console.log(modifyMemberName);
+		console.log(modifyStartDate);
+		console.log(modifyDeadline);
+		console.log(modifyImportance);
+		console.log(modifyRatio);
+		console.log(modifyParentTaskCode);
+		console.log(modifyTaskNo);
+		$("#modifyCategoryName").val(modifyTaskCode).prop("selected", true);		//value가 선택한 taskCode와 동일한 것을 선택
+		$("#modifyParentTaskCode").val(modifyParentTaskCode).prop("selected", true);
+		$("#modifyMember").val(modifyMemberNo).prop("selected", true);
+		$("#modifyStartDate").val(modifyStartDate).prop("selected", true);
+		$("#modifyDeadline").val(modifyDeadline).prop("selected", true);
+		$("#modifyImportance").val(modifyImportance).prop("selected", true);
+		$("#modifyStatus").val(modifyStatus).prop("selected", true);
+		$("#modifyRatio").val(modifyRatio);
+		$("#modifyTaskNo").val(modifyTaskNo);
+		
+		if($("#modifyModal").css("display")=="none"){
+			$("#modifyModal").css("display", "block");
+			$("#readModal").css("display", "none");
+		}	
+	});
+	
+	$("#closeModify").click(function(){
+		$("#modifyModal").css("display", "none");
+		$("#readModal").css("display", "block");
+		
+	});
+
+
 	<%-- 상위업무 산출물 --%>
 	$("#addOutput1").click(function(){
 		if($("#outputModal").css("display")=="none"){
@@ -743,7 +663,7 @@ ul {
 	$("#closeOutput").click(function(){
 		$("#readModal").css("display", "block");
 		$("#outputModal").css("display", "none");
-	})
+	});
 	
 	<%-- hover event 추가 --%>
 		$(".folder_toggle").hover(function() {
@@ -813,6 +733,11 @@ ul {
 			$(".layer-bg").css("display", "none");
 		});
 		
+		$(".layer #close").click(function() {
+			$("#modifyModal").css("display", "none");
+			$(".layer-bg").css("display", "none");
+		});
+		
 		
 		/* 상세조회 이벤트 */
 		const $labels = document.querySelectorAll("#childTask label");
@@ -830,11 +755,15 @@ ul {
 					data : {"taskNo" : taskNo},
 					success : function(data, textStatus, xhr) {
 						const taskDetail = JSON.parse(data.taskDetail);
+						console.log(taskDetail.taskNo);
+						console.log(taskDetail.parentTask.taskNo);
 						
 						//상위업무
 						$("input[name=parentTaskName]").val(taskDetail.parentTask.taskCategory.categoryName);
 						
 						$("input[name=parentTaskManager]").val(taskDetail.parentTask.managerName);
+						
+						$("input[name=parentTaskManagerNo]").val(taskDetail.parentTask.managerNo);
 						
 						$("input[name=parentStartDate]").val(taskDetail.parentTask.startDate);
 						
@@ -846,10 +775,18 @@ ul {
 						
 						$("input[name=parentTaskNo]").val(taskDetail.parentTask.taskNo);
 						
+						$("input[name=parentTaskCode]").val(taskDetail.parentTask.taskCategory.categoryCode);
+						
+						$("input[name=parentStatus]").val(taskDetail.parentTask.progressStatus);
+						
 						//하위 업무
 						$("input[name=childTaskName]").val(taskDetail.taskCategory.categoryName);
 						
+						$("input[name=childTaskCode]").val(taskDetail.taskCategory.categoryCode);
+						
 						$("input[name=childTaskManager]").val(taskDetail.managerName);
+						
+						$("input[name=childTaskManagerNo]").val(taskDetail.managerNo);
 						
 						$("input[name=childStartDate]").val(taskDetail.startDate);
 						
@@ -860,6 +797,10 @@ ul {
 						$("input[name=childProgress]").val(taskDetail.progression);
 						
 						$("input[name=childTaskNo]").val(taskDetail.taskNo);
+						
+						$("input[name=childStatus]").val(taskDetail.progressStatus);
+						
+						
 						
 						$("#readModal").css("display", "block");
 						$(".layer-bg").css("display", "block");
@@ -988,10 +929,6 @@ ul {
                 })
 		}
 		
-		
-		
-		
-		
 		var gantt_chart = new Gantt(".gantt-target", taskArray, {
 			on_click : function(task) {
 				console.log(task);
@@ -1008,7 +945,58 @@ ul {
 			view_mode : 'Day',
 			language : 'en'
 		});
+		
 		console.log(gantt_chart);
+		
+		/* 이슈 등록 기능 모달 이벤트 */
+		
+		$("#closeIssue").click(function(){
+			$("#readModal").css("display", "block");
+			$("#registModal").css("display", "none");
+		});
+		
+		$("#addIssue1").click(function(){
+			if($("#registModal").css("display")=="none"){
+				$("#registModal").css("display", "flex");
+				$("#readModal").css("display", "none");
+			
+			}
+			
+			var projectNo = ${ sessionScope.projectAutority.projectNo };
+		   	$("#read-projectNo").val(projectNo);
+
+		    console.log("프로젝트 번호는 : " + projectNo);
+		      
+//		    var $taskNo = Number($("input[name=parentTaskNo]").val());
+			
+			const taskNo = Number($("input[name=parentTaskNo]").val());
+			$("#read-taskNo").val(taskNo);
+			console.log(Number(taskNo));
+			console.log($("#read-taskNo").val());
+		});
+		
+		$("#addIssue2").click(function(){
+			if($("#registModal").css("display")=="none"){
+				$("#registModal").css("display", "flex");
+				$("#readModal").css("display", "none");
+			}
+			
+//			var $taskNo = Number($("input[name=childTaskNo]").val());
+			
+			var projectNo = ${ sessionScope.projectAutority.projectNo };
+		    $("#read-projectNo").val(projectNo);
+
+		    console.log("프로젝트 번호는 : " + projectNo);
+		      
+		    var $taskNo = Number($("input[name=childTaskNo]").val());
+			
+			const taskNo = Number($("input[name=childTaskNo]").val());
+			$("#read-taskNo").val(taskNo);
+			console.log(Number(taskNo));
+			console.log($("#read-taskNo").val());
+		});
+
+		
 	</script>
 	
 </body>

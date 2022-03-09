@@ -112,7 +112,7 @@ function backButton_click() {
    location.href= document.referrer;
 }
 
- $("#registModal").click(function(){
+$("#registModal").click(function(){
 
       var projectNo = ${ requestScope.projectNo };
       

@@ -37,6 +37,8 @@ public class TaskDTO {
 	private String taskCode;			//업무코드
 	private String importance;
 	
+	private int memberNo;				//sessiond에 담긴 memberNo
+	
 	private List<ChildTaskDTO> childList;
 	private TaskCategoryDTO taskCategory;
 

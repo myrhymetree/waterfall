@@ -30,7 +30,7 @@ public interface GuideService {
 
 	void registGuide(GuideDTO guide) throws GuideRegistException;
 
-	void removeGuide(int no) throws GuideRemoveException;
+	void removeGuide(int no, int loginMemberNo) throws GuideRemoveException;
 
 	void modifyGuide(GuideDTO guide) throws GuideModifyException;
 

@@ -267,9 +267,15 @@ public class OutputServiceImpl implements OutputService {
 		}
 		/* 3. 산출물 히스토리 등록 성공 시 전체 히스토리에 등록한다. */
 		
-//		  if(historyResult > 0) {
-//		  mapper.insertEntireHistory(output); 
-//		  }
+		  if(historyResult > 0) {
+			  /*memberName 조회*/
+			  
+			  String memberName = mapper.selectMemberName(output);
+			  
+			  output.setMemberName(memberName);
+			  
+			  mapper.insertEntireHistory(output); 
+		  }
 	}
 
 	@Override

@@ -31,9 +31,11 @@ public interface NoticeMapper {
 
 	void updateNotice(NoticeDTO notice);									//공지사항 수정
 
-	void deleteNotice(int no);												//공지사항 삭제
+	int deleteNotice(int no);												//공지사항 삭제
 
 	int insertAttachment(NoticeAttachmentDTO attachmentDTO);				//첨부파일 등록
+
+	NoticeAttachmentDTO selectNoticeFile(int no);
 
 
 }

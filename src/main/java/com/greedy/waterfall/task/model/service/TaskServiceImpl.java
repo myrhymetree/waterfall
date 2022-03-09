@@ -14,6 +14,7 @@ import com.greedy.waterfall.task.model.dto.ParentTaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.ProjectMemberDTO;
 import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskHistoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskRegistDTO;
 
 /**
@@ -149,13 +150,6 @@ public class TaskServiceImpl implements TaskService{
 				
 			}
 			
-			
-			
-		
-		
-		
-		
-		
 	}
 
 	/**
@@ -201,6 +195,74 @@ public class TaskServiceImpl implements TaskService{
 		childTask.setParentTask(parentTask);
 		
 		return childTask;
+	}
+
+	@Override
+	public void updateTask(TaskRegistDTO taskUpdateDTO,  TaskHistoryDTO history) {
+		
+		/* 수정할 내용 업데이트 */
+		int result = mapper.updateTask(taskUpdateDTO);
+		
+		/* 업데이트 성공시 히스토리 등록 */
+		int historyResult = 0;
+		
+		if(result > 0) {
+			historyResult = mapper.insertUpdateHistory(taskUpdateDTO);
+		}
+		
+		/* Entire History 등록 */
+		if(historyResult > 0) {
+			String memberName = mapper.selectMemberName(history);
+			String taskName = mapper.selectTaskName(history);
+			
+			taskUpdateDTO.setMemberName(memberName);
+			taskUpdateDTO.setTaskName(taskName);
+			
+			
+			mapper.insertEntireUpdateHistory(taskUpdateDTO);
+		}
+		
+		
+		
+		
+	}
+
+	@Override
+	public void removeTask(TaskDTO task, TaskHistoryDTO history) {
+		
+		/* 지우기 전에 히스토리에 등록할 정보 조회*/
+		TaskHistoryDTO historyInfo = mapper.selectHistoryInfo(history);
+		
+		history.setMemberName(historyInfo.getMemberName());
+		history.setTaskName(historyInfo.getTaskName());
+		
+		String taskCodeResult = mapper.selectRefTaskCode(task);
+		
+		System.out.println("taskCodeResult : " + taskCodeResult);
+		
+		int deleteResult = 0;
+		/* 매개변수로 넘어온 taskNo가 상위업무 일 때 */
+		if(taskCodeResult == null) {
+			deleteResult = mapper.deleteTask(task);
+		/* 하위업무일 때*/	
+		} else {
+			deleteResult = mapper.deleteChildTask(task);
+		}
+		
+		int historyResult = 0;
+		if(deleteResult > 0) {
+			historyResult = mapper.insertDeleteHistory(task);
+		}
+		
+		int entireHistoryResult = 0;
+		if(historyResult > 0) {
+			
+			System.out.println("deleteHistoryInfo : " + history);
+			
+			entireHistoryResult = mapper.insertEntireDeleteHistory(history);
+		}
+		
+		
 	}
 	
 	

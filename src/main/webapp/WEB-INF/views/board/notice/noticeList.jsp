@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 /* 공지사항 게시판 */
 #layoutSidenav_content .notice h2 {
@@ -106,7 +107,7 @@ table, th, td {
 /* 모달 */
 .modal-content {
    width: 635px;
-   height: 650px;
+   height: 700px;
    padding: 30px;
 }
 
@@ -165,7 +166,17 @@ table, th, td {
 td {
    height: 30px !important;
 }
+.btn-group{
+	margin : 10px;
+}
 </style>
+<script>
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 </head>
 <body>
 
@@ -215,28 +226,6 @@ td {
                      <td><c:out value="${ notice.memberName.name }" /></td>
                   </tr>
                </tbody>
-                <%-- <!-- 게시글 조회 모달 -->
-                          <div class="modal fade" id="readModal${ notice.no }" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                  <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
-                                  <div class="modal-content" style="top: 172px">
-                                      <form>
-                                          <div class="my-modal-header mb-4">
-                                              <label class="me-2" for="title-write">제목</label>
-                                              <input type="text" id="title-write" value="${ notice.title }">
-                                          </div>
-                                          <div class="my-modal-body">
-                                              <div class="my-textarea-div mb-3">
-                                                  <textarea name="my-textarea" id="my-textarea" cols="30" rows="10" readonly><c:out value="${ notice.content }" /></textarea>
-                                              </div>
-                                          </div>
-                                          <div class="my-modal-footer-read">
-                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-                                          </div>
-                                      </form>
-                                  </div>
-                              </div>
-                          </div> --%>
             </c:forEach>
 
          </table>
@@ -384,8 +373,15 @@ td {
                             </div>
                         </div>
                         <div class="my-modal-footer-read">
-                           <input type="file" id="noticeFile" name="noticeFile" >
-                           <br>
+                           <input type="file" id="noticeFile" name="noticeFile" ><br>
+						<div class="btn-group">
+							<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
+							<button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+								<span class="caret"></span>
+							</button>
+							<div class="dropdown-menu" id="downloadarea"></div>
+						</div>
+						<br>
                            <c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
                            <button type="submit" class="btn btn-secondary">수정하기</button>
                            <button id="delete" class="btn btn-secondary">삭제하기</button>
@@ -491,38 +487,24 @@ td {
                         $("#read-title").val(data.title);
                         $("#read-content").val(data.content);
                         $("#readModal").modal("show");
+                        $("input[name=originalName]").val(data.fileOriginName);
                         ex.children[2].innerText=data.count;
+                        
+                        var $downloadTag = "<a href='${pageContext.servletContext.contextPath}/notice/download/" + no 
+	                     + "' class='dropdown-item' id='downloadNotice'>다운로드</a>";
+	 				    var $deleteTag = "<a href='${pageContext.servletContext.contextPath}/notice/deleteFile/" + no
+						 + "' class='dropdown-item' id='deleteNoticeFile'>삭제</a>";
+						 
+	                     $("#downloadarea").empty();
+	                     $("#downloadarea").append($downloadTag);
+	                     $("#downloadarea").append($deleteTag);
                         
                      }, error:function(data){
                         console.log(data);
                      }
                   });
                 
-               /*  $.ajax({
-                    url :"guideDetail",
-                    type : "get",
-                    data : { no : no },
-                    success : function(data, textStatus, xhr) {
-                       
-                       for(let index in data) {      //여기 this는  다름
-                          console.log(data);
-                          console.log(Object.entries(data));
-                          
-                          const guideArray = Object.entries(data);
-                          
-                          console.log(guideArray[3][1]);
-                          
-                          $("#read-no").val(guideArray[0][1]);      
-                          $("#read-title").val(guideArray[2][1]);
-                          $("#read-content").val(guideArray[3][1]);
-                          $("#read-originalName").val(guideArray[14][1]);
-                          $("#readModal").modal("show");
-                          ex.children[2].innerText=guideArray[9][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스
-                       }
-                      }, error:function(data) {
-                          console.log(data);
-                       }
-                  }); */
+               
 
                 
                 

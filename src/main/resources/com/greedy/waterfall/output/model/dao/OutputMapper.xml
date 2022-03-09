@@ -11,8 +11,8 @@
 	<result property="status" column="OUTPUT_STATUS"/>
 	<result property="memberNo" column="MEMBER_NO"/>
 	<result property="projectNo" column="PROJECT_NO"/>
+	<result property="memberName" column="MEMBER_NAME"/>
 	
-	<association property="memberName" resultMap="memberResultMap"></association>
 	<association property="outputFile" resultMap="fileResultMap"></association>
 	<association property="project" resultMap="projectResultMap"></association>
 	</resultMap>
@@ -361,6 +361,35 @@
 		     , #{ memberNo }
 		     )
 	</insert>
+	
+	<insert id="insertEntireHistory">
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY A
+			 (
+			   A.HISTORY_NO
+			 , A.UPDATED_DATE
+		     , A.CONTENT
+		     , A.CATEGORY_TYPE_NO
+		     , A.PROJECT_NO
+		     , A.REGISTER_NO
+		     )
+		     VALUES
+		     (
+		       HISTORY_NO.NEXTVAL
+		     , SYSDATE
+		     , '[' || #{ memberName } || ']' || '님이 ' || #{ taskName  } || ' [' || '업무' || '] ' || '에서 ' || '[' || '산출물' || '] 를 ' || '[' || '수정' || '] ' || '했습니다'
+		     , 4
+		     , #{ projectNo }
+		     , #{ memberNo } 
+		     )
+	</insert>
+	
+	<select id="selectMemberName" resultType="String">
+		 SELECT
+        		MEMBER_NAME
+  		   FROM TBL_MEMBER
+ 		  WHERE MEMBER_NO = #{ memberNo }
+	</select>
 	
 	<select id="selectOutputFile" resultMap="fileResultMap">
 		SELECT

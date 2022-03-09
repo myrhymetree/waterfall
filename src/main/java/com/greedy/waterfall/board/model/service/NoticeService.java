@@ -16,6 +16,7 @@ import java.util.Map;
 
 
 import com.greedy.waterfall.board.model.dto.NoticeDTO;
+import com.greedy.waterfall.board.model.noticedto.NoticeAttachmentDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
 public interface NoticeService {
@@ -32,6 +33,10 @@ public interface NoticeService {
 	void removeNotice(int no);
 
 	int findTotalCount(Map<String, String> searchMap);
+
+	NoticeAttachmentDTO findNoticeFile(int noticeNo);
+
+	void removeNoticeFile(int noticeNo);
 
 	
 	
