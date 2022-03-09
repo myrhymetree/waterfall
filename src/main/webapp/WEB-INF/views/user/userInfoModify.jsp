@@ -31,6 +31,14 @@
 }
 .select-phone{
     width: 500px;
+}
+
+#mail_check_input_box_false{
+    background-color:#ebebe4;
+}
+ 
+#mail_check_input_box_true{
+    background-color:white;
 }	
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
@@ -176,17 +184,22 @@
                                 </div> 
 
                                 <div class="mx-auto select-phone input-group mt-4">
-                                    <input type="text" class="form-control" placeholder="이메일" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                    <button class="ui secondary button">
+                                    <input class="form-control mail_input" name="memberMail" placeholder="이메일" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                   <!--  <button class="ui secondary button">
                                         	이메일 인증 
-                                    </button>                                  
+                                    </button>  -->                                 
                                 </div>
                                 
                                 <div class="mx-auto select-phone input-group mt-4">
-                                    <input type="text" class="form-control" placeholder="이메일 인증번호" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                    <button class="ui secondary button" style="padding-left: 43px;">
+                                	<div class="mail_check_input_box" id="mail_check_input_box_false">
+                                   	 	<input class="form-control mail_check_input" placeholder="이메일 인증번호" aria-label="Recipient's username" aria-describedby="basic-addon2" disabled="disabled">
+                                    </div>
+                                    <div class="mail_check_button">
+                                    	<span>인증번호 전송</span>
+                                    </div>
+                                    <!-- <button class="ui secondary button" style="padding-left: 43px;">
                                         	인증코드 
-                                    </button>                                  
+                                    </button>    -->                               
                                 </div> 
 
                                 <div class="mt-5 mx-auto" style="width: 16%;" >
@@ -269,6 +282,16 @@
             			$("#pwd2").val("");            			
             		});
             	});
+            	
+            	/* 인증번호 이메일 전송 */
+            	$(".mail_check_button").click(function(){
+            		var email = $(".mail_input").val(); //입력한 이메일
+            		
+            		$.ajax({
+            			type : "GET",
+            			url : "mailCheck?email=" + email
+            		});
+				});
             	
             </script>
 	
