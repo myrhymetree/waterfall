@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,9 +75,11 @@
 </style>
 </head>
 <body>
+
+
+	<!-- 게시판 등록용 모달 -->
 	<div class="modal fade" id="writeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
-	    <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
 	    	<div class="modal-content" style="top: 172px">
 	        	<form action="${ pageContext.servletContext.contextPath }/meeting/regist" method="post" encType="multipart/form-data">
 	            	<div class="my-modal-header mb-4">
@@ -104,28 +106,12 @@
 		</div>
 	</div>
 	
-	
-	
-	<!-- subModal -->
-	<div class="modal fade" id="subModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	    <div class="modal-dialog">
-	        <div class="modal-content" style="left: 150px; top: 300px; width: 300px; height: 150px; margin: 0; padding: 0;">
-	            <div class="modal-body align-middle my-modal-message">
-	                등록되었습니다.
-	            </div>
-	            <div class="modal-footer">
-	                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-	
 	<div class="modal fade" id="readModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     	<div class="modal-dialog">
 			<div class="modal-content" style="top: 172px">
                 	<div class="my-modal-header mb-4">
-                    	<label class="me-2" for="title-write">제목</label>
-	                    <input type="text" id="read-title" name="title">
+                    	<label class="me-2" for="title-write">제목 : </label>
+	                    <input type="text" id="read-title" name="title" style=" border: none; background: transparent;">
 	                    <input type ="hidden" id="read-no" name="no">
                 	</div>	
 	                <div class="my-modal-body">
@@ -136,8 +122,11 @@
 	               	<div class="my-modal-upload mb-4" id="upload-file-area">
 	            	</div>
 	                <div class="my-modal-footer-read">
-	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-	                    <input type="button" class="btn" id="delete" value="삭제하기">
+	                	${sessionscope.loginMember.role }
+	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가1기</button>
+	                    <c:if test="${ !empty sessionScope.loginMember and sessionscope.loginMember.role eq 1 or sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo}">
+	                    	<button type="button" class="btn btn-secondary" id="delete">삭제하기</button>
+                    	</c:if>
 	                </div>
 	        </div>
 	    </div>
@@ -148,7 +137,7 @@
 				<form action="${ pageContext.servletContext.contextPath }/meeting/modify" method="post">
                 	<div class="my-modal-header mb-4">
                     	<label class="me-2" for="title-write">제목</label>
-	                    <input type="text" id="read-title" name="title">
+	                    <input type="text" id="read-title" name="title" >
 	                    <input type ="hidden" id="read-no" name="no">
                 	</div>	
 	                <div class="my-modal-body">
@@ -159,7 +148,7 @@
 	                <div class="my-modal-footer-read">
 	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
 	                    <input type="button" class="btn" id="delete" value="삭제하기">
-	                  		<button type="submit" class="btn btn-secondary">수정하기</button>
+                  		<button type="submit" class="btn btn-secondary">수정하기</button>
 	                </div>
 	            </form>
 	        </div>

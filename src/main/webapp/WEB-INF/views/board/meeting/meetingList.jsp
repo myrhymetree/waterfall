@@ -9,7 +9,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <style>
-
 #layoutSidenav_content .todo h2 {
   height: 50px;
   line-height: 1.5;
@@ -95,7 +94,6 @@ th {
 td {
     height: 50px;
 }
-
 </style>
 
 
