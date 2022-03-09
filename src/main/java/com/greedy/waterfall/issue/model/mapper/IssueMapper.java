@@ -6,6 +6,7 @@ import java.util.Map;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
+import com.greedy.waterfall.issue.model.dto.IssueNotificationDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
 
@@ -47,4 +48,11 @@ public interface IssueMapper {
 
 	void writeDeletedIssueHistory(IssueDTO issue);
 
+	List<IssueNotificationDTO> notifyIssueList(int loginMemberNo);
+
+	int notifyCount(int loginMemberNo);
+
+	void removeCheck(Map<String, Integer> condition);
+
+	
 }

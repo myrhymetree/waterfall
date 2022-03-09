@@ -99,6 +99,18 @@
   		<result property="status" column="FILE_STATUS"></result>
   	</resultMap>
   	
+  	<resultMap type="com.greedy.waterfall.issue.model.dto.IssueNotificationDTO" id="notificationResultMap">
+  		<id property="issueHistoryNo" column="ISSUE_HISTORY_NO"/>
+  		<result property="issueProgressStatus" column="ISSUE_PROGRESS_STATUS"/>
+  		<result property="issueUpdatedDate" column="ISSUE_UPDATED_DATE"/>
+  		<result property="issueNo" column="ISSUE_NO"/>
+  		<result property="issueRegisterNo" column="ISSUE_REGISTER"/>
+  		<result property="issueManagerNo" column="ISSUE_MANAGER"/>
+  		<result property="issueUpdatedContent" column="ISSUE_UPDATED_CONTENT"/>
+  		<result property="issueReadCheckNo" column="ISSUE_READ_CHECK"/>
+  		<result property="issueProjectNo" column="PROJECT_NO"/>
+  	</resultMap>
+  	
   <select id="selectIssueList" parameterType="_int" resultMap="issueResultMap">
  	SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllIssueList() */
             A.ISSUE_NO
@@ -161,61 +173,71 @@
    </select>
   	
   	<select id="selectAllProjectList" parameterType="hashmap" resultMap="projectIssueCountResultMap">
-  	  SELECT DISTINCT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
-              A.PROJECT_NO
-            , A.PROJECT_NAME
-            , (SELECT
+  	      SELECT DISTINCT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
+                 A.PROJECT_NO
+               , A.PROJECT_NAME
+               , (SELECT
                          COUNT(C.ISSUE_NO)
-                   FROM TBL_ISSUE C 
+                    FROM TBL_ISSUE C
+                    JOIN TBL_TASK K ON (C.TASK_NO = K.TASK_NO) 
                    WHERE C.ISSUE_STATUS = 'Y'
+                     AND K.TASK_STATUS = 'Y'
                      AND C.PROJECT_NO = B.PROJECT_NO
                   ) AS ALL_ISSUE_COUNT
                 , ( SELECT
                            COUNT(D.ISSUE_NO) 
                       FROM TBL_ISSUE D
+                      JOIN TBL_TASK K ON (D.TASK_NO = K.TASK_NO)
                      WHERE D.ISSUE_STATUS = 'Y'
+                       AND K.TASK_STATUS = 'Y'
                        AND D.ISSUE_PROGRESS_STATUS = '대기중'
                        AND D.PROJECT_NO = B.PROJECT_NO
                   ) AS PENDING_ISSUE_COUNT
                 , ( SELECT
                            COUNT(E.ISSUE_NO)  
                       FROM TBL_ISSUE E
+                      JOIN TBL_TASK K ON (E.TASK_NO = K.TASK_NO)
                      WHERE E.ISSUE_STATUS = 'Y'
+                       AND K.TASK_STATUS = 'Y'
                        AND E.ISSUE_PROGRESS_STATUS = '처리중'
                        AND E.PROJECT_NO = B.PROJECT_NO
                    ) AS PROCESSING_ISSUE_COUNT
                  , ( SELECT
                             COUNT(F.ISSUE_NO) 
                        FROM TBL_ISSUE F
+                       JOIN TBL_TASK K ON (F.TASK_NO = K.TASK_NO)
                       WHERE F.ISSUE_STATUS = 'Y'
+                        AND K.TASK_STATUS = 'Y'
                         AND F.ISSUE_PROGRESS_STATUS = '완료'
                         AND F.PROJECT_NO = B.PROJECT_NO
                     ) AS COMPLETED_ISSUE_COUNT
             , H.MEMBER_NO AS PM_NO
             , H.MEMBER_NAME AS PM_NAME
            FROM TBL_PROJECT A
-          LEFT JOIN TBL_ISSUE B ON (A.PROJECT_NO = B.PROJECT_NO)
-          LEFT JOIN TBL_ROLE_ASSIGNMENT_HISTORY G ON (A.PROJECT_NO = G.PROJECT_NO)
-          LEFT JOIN TBL_MEMBER H ON (G.MEMBER_NO = H.MEMBER_NO)
+           LEFT JOIN TBL_ISSUE B ON (A.PROJECT_NO = B.PROJECT_NO)
+           LEFT JOIN TBL_ROLE_ASSIGNMENT_HISTORY G ON (A.PROJECT_NO = G.PROJECT_NO)
+           LEFT JOIN TBL_MEMBER H ON (G.MEMBER_NO = H.MEMBER_NO)
+           LEFT JOIN TBL_TASK I ON (B.TASK_NO = I.TASK_NO)
           WHERE A.PROJECT_STATUS = 'Y'
-            AND G.ROLE_HISTORY_NO IN (SELECT MAX(J.ROLE_HISTORY_NO)
-                                   FROM TBL_ROLE_ASSIGNMENT_HISTORY J
-                                  WHERE J.ROLE_NO = 8
-                                  GROUP BY J.PROJECT_NO
-                                )
+            AND I.TASK_STATUS = 'Y'
             AND G.ROLE_NO = 8
            <if test="managerNo != 1">
            	AND G.MEMBER_NO = #{ managerNo } 
            </if>
+            AND G.ROLE_HISTORY_NO IN (SELECT MAX(J.ROLE_HISTORY_NO)
+                                        FROM TBL_ROLE_ASSIGNMENT_HISTORY J
+                                       WHERE J.ROLE_NO = 8
+                                       GROUP BY J.PROJECT_NO
+                                     )
           ORDER BY 1 DESC
   	</select>
   	
   	<select id="selectIssuesOfTask" parameterType="_int" resultMap="taskIssueCountResultMap" >
-  		SELECT DISTINCT
-                A.TASK_NO
-              , C.TASK_CATEGORY_NAME
-              , I.MEMBER_NAME
-			  , (SELECT
+  		   SELECT DISTINCT
+                  A.TASK_NO
+                , C.TASK_CATEGORY_NAME
+                , I.MEMBER_NAME
+			    , (SELECT
                          COUNT(D.ISSUE_NO)
 	                FROM TBL_ISSUE D 
                    WHERE D.ISSUE_STATUS = 'Y'
@@ -408,14 +430,15 @@
 	
 	<insert id="registIssueHistory">
 		INSERT
-		  INTO TBL_ISSUE_HISTORY A
+		  INTO TBL_ISSUE_NOTIFICATION A
 		  (
 		    A.ISSUE_HISTORY_NO
 		  , A.ISSUE_PROGRESS_STATUS 
 		  , A.ISSUE_NO 
 		  , A.ISSUE_REGISTER
 		  , A.ISSUE_MANAGER
-		  , A.ISSUE_UPDATED_CONTENT 
+		  , A.ISSUE_UPDATED_CONTENT
+		  , A.PROJECT_NO
 		  )
 		  VALUES
 		  (
@@ -425,12 +448,13 @@
 		  , #{ registerNo }
 		  , #{ managerNo }
 		  , '추가'
+		  , #{ projectNo }
 		  )
 	</insert>
 	
 	<insert id="updateIssueHistory">
 		INSERT
-		  INTO TBL_ISSUE_HISTORY A
+		  INTO TBL_ISSUE_NOTIFICATION A
 		  (
 		    A.ISSUE_HISTORY_NO
 		  , A.ISSUE_PROGRESS_STATUS 
@@ -438,6 +462,7 @@
 		  , A.ISSUE_REGISTER
 		  , A.ISSUE_MANAGER
 		  , A.ISSUE_UPDATED_CONTENT 
+		  , A.PROJECT_NO
 		  )
 		  VALUES
 		  (
@@ -447,19 +472,21 @@
 		  , #{ registerNo }
 		  , #{ managerNo }
 		  , '수정'
+		  , #{ projectNo }
 		  )
 	</insert>
 	
 	<insert id="deleteIssueHistory">
 		INSERT
-		  INTO TBL_ISSUE_HISTORY A
+		  INTO TBL_ISSUE_NOTIFICATION A
 		  (
 		    A.ISSUE_HISTORY_NO
 		  , A.ISSUE_PROGRESS_STATUS 
 		  , A.ISSUE_NO 
 		  , A.ISSUE_REGISTER
 		  , A.ISSUE_MANAGER
-		  , A.ISSUE_UPDATED_CONTENT 
+		  , A.ISSUE_UPDATED_CONTENT
+		  , A.PROJECT_NO
 		  )
 		  VALUES
 		  (
@@ -469,6 +496,7 @@
 		  , #{ registerNo }
 		  , #{ managerNo }
 		  , '삭제'
+		  , #{ projectNo }
 		  )
 	</insert>
 	
@@ -569,5 +597,47 @@
 		  , #{ loginMemberNo } 
 		  )
 	</insert>
-  
+	
+	<!-- ======= 알림 기능 구현 ======= -->
+	
+	<!-- 알림 리스트 가져오기 -->
+	<select id="notifyIssueList" parameterType="_int" resultMap="notificationResultMap">
+		SELECT
+	           A.ISSUE_HISTORY_NO
+	         , A.ISSUE_PROGRESS_STATUS
+             , A.ISSUE_UPDATED_DATE
+             , A.ISSUE_NO
+             , A.ISSUE_REGISTER
+             , A.ISSUE_MANAGER
+             , A.ISSUE_UPDATED_CONTENT
+             , A.ISSUE_READ_CHECK
+             , A.PROJECT_NO
+          FROM TBL_ISSUE_NOTIFICATION A
+         WHERE A.ISSUE_READ_CHECK = 1
+           AND A.ISSUE_REGISTER = #{ loginMemberNo }
+            OR A.ISSUE_MANAGER = #{ loginMemberNo }
+         ORDER BY 4
+	</select>
+	
+    <!-- 안읽은 메시지 갯수 가져오기  -->
+    <select id="notifyCount" parameterType="_int" resultType="_int">
+  		SELECT
+               COUNT(A.ISSUE_HISTORY_NO) AS COUNT
+          FROM TBL_ISSUE_NOTIFICATION A
+         WHERE A.ISSUE_READ_CHECK = 1
+           AND A.ISSUE_MANAGER = #{ loginMemberNo }
+            OR A.ISSUE_REGISTER = #{ loginMemberNo }
+    </select>
+    
+    <!-- x눌렀을 때 메시지 읽은것으로 처리되어 사용자에게는 더 이상 보여지지 않음 -->
+    <update id="removeCheck" parameterType="hashmap">
+    	UPDATE
+               TBL_ISSUE_NOTIFICATION A
+           SET A.ISSUE_READ_CHECK = 0
+         WHERE A.ISSUE_READ_CHECK = 1
+           AND A.ISSUE_HISTORY_NO = #{ issueHistoryNo }
+            OR A.ISSUE_MANAGER = #{ loginMemberNo }
+           AND A.ISSUE_REGISTER =  #{ loginMemberNo }
+    </update>
+    
   </mapper>

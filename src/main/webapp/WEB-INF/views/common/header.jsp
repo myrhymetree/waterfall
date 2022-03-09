@@ -31,6 +31,31 @@
   background-color: red;
   color: white;
 }
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+.note-content-container {
+  display: table;
+  width: 100%;
+}
+.note-content {
+  display: table-cell;
+  padding: 5px;
+}
+
 </style>	
 <title>Insert title here</title>
 
@@ -51,14 +76,12 @@
 	        </form>
 	        <!-- Navbar-->
 	        
-	        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+	        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4" id="aaa">
 	            <li class="nav-item dropdown">
-	                <a class="nav-link dropdown-toggle notification" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-bell"></i><span class="badge">3</span></a>
-	                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownNotification" style="width: 300px; height: 200px; overflow: auto">                       
-	                    <li><a class="dropdown-item" href="#!">계정정보 관리fffffffffffffffffffffffffffffffffffffffffffffffffffffff</a></li>
-	                    <li><a class="dropdown-item" href="#!">프로필 관리</a></li>
-	                    <li><hr class="dropdown-divider" /></li>
-	                    <li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/member/logout">로그아웃</a></li>
+	                <a class="nav-link dropdown-toggle notification" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	                	<i class="fas fa-bell"></i><span class="badge" id="badge"></span>
+	                </a>
+	                <ul id="liZone" class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownNotification" style="overflow: auto">                       
 	                </ul>
 	            </li>
 	        </ul>
@@ -137,5 +160,7 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-    </body>
+
+<script src="${ pageContext.servletContext.contextPath }/resources/js/notification.js"></script>         
+</body>
 </html>

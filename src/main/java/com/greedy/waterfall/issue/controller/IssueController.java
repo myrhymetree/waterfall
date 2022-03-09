@@ -45,6 +45,7 @@ import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
+import com.greedy.waterfall.issue.model.dto.IssueNotificationDTO;
 import com.greedy.waterfall.issue.model.dto.IssueRegisterDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectIssueCountDTO;
 import com.greedy.waterfall.issue.model.dto.ProjectMemberDTO;
@@ -658,6 +659,61 @@ public class IssueController {
 		
 		return mv;
 		
+	}
+	
+	@GetMapping("/notification")
+	public ModelAndView notifyIssueList(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) {
+		
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		int issueHistoryNo = 0;
+		
+		if(request.getParameter("issueHistoryNo") != null) {
+			issueHistoryNo = Integer.parseInt(request.getParameter("issueHistoryNo"));
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+			System.out.println("issueHistoryNo " + issueHistoryNo);
+		}
+		
+		Map<String, Object> notification = issueService.notifyIssueList(loginMemberNo,issueHistoryNo);
+		
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd")
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.serializeNulls()
+				.disableHtmlEscaping()
+				.create();
+		List<IssueNotificationDTO> notificationList = (List<IssueNotificationDTO>) notification.get("notificationList");
+		
+		int count = (int) notification.get("count");
+		
+		
+		
+		mv.addObject("count", gson.toJson(count));
+		mv.addObject("notificationList", gson.toJson(notificationList));
+		mv.setViewName("jsonView");
+		return mv;
 	}
 	
 }

@@ -276,18 +276,8 @@ input::-webkit-search-results-decoration{
                                               <div id="uploadZone">
 									              <input type="file"  name="singleFile">
 									          </div>
-									          <br>
-                                              
-                                                 <span><label>첨부파일</label></span>
-                                                 	<!-- btn-group 포함 총 8줄이 한 세트인 버튼 그룹 부트스트랩 입니다   -->
-                                                    <div class="btn-group">
-                                                        <input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
-                                                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-                                                          <span class="caret"></span>
-                                                        </button>
-                                                        <div class="dropdown-menu" id="downloadarea">
-                                                        </div>
-                                                     </div>
+                                              <div id="downloadZone">
+							                 </div>
                                           </div>
                                           <br>
                                           <div class="my-modal-footer-read">
@@ -398,16 +388,14 @@ $(function() {
                   $("#readModal").modal("show");
                   ex.children[2].innerText=guideArray[10][1];      //ex가 tr이고 행 전체의 2번 인덱스에 guideArray 9번째 배열의 1번 인덱스, count
                   
-                  if($fileNo != null) {
+                  $("#downloadZone").empty();
+                  console.log(guideArray[13]);
+                  if(guideArray[13][1].length != 0) {
                      
-                     const $downloadTag = "<a href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo 
-                                           + "' class='dropdown-item' id='downloadguide'>다운로드</a>";
-               		 const $deleteTag = "<a href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo 
-                     + "' class='dropdown-item' id='downloadguide'>삭제</a>";                                 
+                     const $fileNo = guideArray[14][1];
                      
-                     $("#downloadarea").empty();
-                     $("#downloadarea").append($downloadTag);
-                     $("#downloadarea").append($deleteTag);
+                     $buttonsTag = "<div class='mt-4 row'><div class='col-3 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + guideArray[15][1] + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+             		 $("#downloadZone").append($buttonsTag);
                   }
               }, 
               error:function(data) {

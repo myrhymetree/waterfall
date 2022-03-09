@@ -41,7 +41,9 @@
 <jsp:include page="/WEB-INF/views/issue/modal.jsp"/>
 <jsp:include page="/WEB-INF/views/issue/detailModal.jsp"/>
      <main>
+     <c:if test="${ sessionScope.loginMember.role eq 1 or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
      	 <button type="button" class="btn btn-pink mb-2" id="backButon" onclick="backButton_click();"><i class="fas fa-backward"></i></button>
+    </c:if>
          <div class="container-fluid px-4">
              <br>
              <br>
@@ -80,6 +82,7 @@
                          </thead>
                          <tbody id="tbody">
                          	<c:forEach var="issue" items="${ requestScope.issueList }" varStatus="status">
+                         	<c:if test="${ (sessionScope.loginMember.role eq 1) or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo)) or (sessionScope.loginMember.no eq issue.register.no) or (sessionScope.loginMember.no eq issue.manager.no)}">
                              <tr id="listArea" class="issueSelect">
                                  <td><c:out value="${ issue.no }"/></td>
                                  <td><c:out value="${ issue.name }"/></td>
@@ -91,6 +94,7 @@
                                  <td><c:out value="${ issue.register.name }"/></td>
                                  <td><c:out value="${ issue.manager.name }"/></td>
                              </tr>
+							</c:if>
 							</c:forEach>
                          </tbody>
                          <tfoot></tfoot>
