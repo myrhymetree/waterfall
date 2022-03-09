@@ -16,4 +16,7 @@ public class TeamDTO {
 	private String code;
 	private String name;
 	private String deptCode;
+	
+	private DeptDTO supDept;
+	
 }
