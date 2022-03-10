@@ -204,8 +204,9 @@ table, th, td {
                             <c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">	
                             	<button type="submit" class="btn btn-secondary">수정하기</button>
                             </c:if>      
-						    <div calss="btn-group" style="margin-top: 5%;margin-left: 38%;">
-                            	<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName">
+						    <div calss="btn-group" style="margin-top: 5%; float: right;">
+                            	<input type="button" class="btn btn-outline-dark" name="originalName" id="read-originalName"
+  	                        		style="text-overflow:ellipsis; overflow:hidden; width: 326px;">
                             	<button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
                             		<span class="caret"></span>
                             	</button>
@@ -224,7 +225,9 @@ table, th, td {
                     <hr>
                     <div class="tbl-wrapper mx-auto">
                         <div class="write">
-                            <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#writeModal"><i class="far fa-edit me-1"></i>등록</button>
+                    		<c:if test="${ sessionScope.loginMember.role eq 1 or (!empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
+                            	<button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#writeModal"><i class="far fa-edit me-1"></i>등록</button>
+                        	</c:if>
                         </div>
                         <table class="todo-tbl">
                             <colgroup>

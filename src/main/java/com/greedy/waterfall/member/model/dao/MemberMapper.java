@@ -62,4 +62,10 @@ public interface MemberMapper {
 	String selectOne(String id);
 
 	void pwUpdate(Map<String, Object> map);
+
+	void memberInfoUpdate(MemberDTO member);
+
+	void memberInfoPhone(MemberDTO member);
+
+	void memberInfoEmail(MemberDTO member);
 }

@@ -83,7 +83,7 @@ public class EduController {
 		
 		/* 검색 결과가 담겨져 있을 경우 담을 곳*/
 		if(searchCondition != null && !"".equals(searchCondition) ) {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue, projectNo, null);
 		} else {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}

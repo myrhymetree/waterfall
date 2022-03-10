@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.member.model.service.MemberService;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 @Controller
 @RequestMapping("/user")
@@ -87,5 +88,27 @@ public class UserController {
 		rttr.addFlashAttribute("message", "정보 수정이 완료되었습니다. 다시 로그인해주세요.");
 		
 		return "redirect:/member/login";
+	}
+	
+	@PostMapping("memberInfo")
+	public ModelAndView memberInfo(ModelAndView mv,@RequestParam Map<String, String> parameter , RedirectAttributes rttr,
+			HttpSession session) {
+		
+		MemberDTO member = new MemberDTO();
+		
+		member.setId(((MemberDTO) session.getAttribute("loginMember")).getId());
+		String email = parameter.get("email");
+		String phone = parameter.get("phone");
+
+		member.setEmail(email);
+		member.setPhone(phone);
+		System.out.println("실험 정보" + "" + member);
+		System.out.println("실험 정보" + "" + member);
+		memberService.memberInfo(member);
+		
+		rttr.addFlashAttribute("message", "정보 수정이 완료되었습니다.");
+		mv.setViewName("redirect:/user/info");
+		
+		return mv;
 	}
 }

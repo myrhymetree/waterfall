@@ -18,7 +18,7 @@ public class AdminMemberDTO {
 	private int no;
 	private String id;
 	private String name;
-	private int phone;
+	private String phone;
 	private String email;
 	private java.sql.Date createDate;
 	private DeptDTO dept; 
