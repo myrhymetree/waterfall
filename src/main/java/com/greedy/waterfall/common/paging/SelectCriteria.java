@@ -14,6 +14,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Builder
 public class SelectCriteria implements java.io.Serializable {
 	
 	private int pageNo;					//요청한 페이지 번호

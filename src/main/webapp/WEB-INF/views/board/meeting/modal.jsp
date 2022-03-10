@@ -10,6 +10,9 @@
 
 <style>
 
+#downloadZone {
+	width: 100px;
+}
 .my-modal-footer button {
   color: #000;
   background: none;
@@ -42,7 +45,7 @@
 }
 
 #title-write {
-  width: 390px;
+  width: 377px;
 }
 .my-modal-body {
   margin-left: 0px;
@@ -75,8 +78,6 @@
 </style>
 </head>
 <body>
-
-
 	<!-- 게시판 등록용 모달 -->
 	<div class="modal fade" id="writeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -105,10 +106,11 @@
 			</div>
 		</div>
 	</div>
-	
+	<!-- 게시판 상세조회 모달 -->
 	<div class="modal fade" id="readModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     	<div class="modal-dialog">
 			<div class="modal-content" style="top: 172px">
+				<form action="${ pageContext.servletContext.contextPath }/meeting/modify" method="post">
                 	<div class="my-modal-header mb-4">
                     	<label class="me-2" for="title-write">제목 : </label>
 	                    <input type="text" id="read-title" name="title" style=" border: none; background: transparent;">
@@ -119,38 +121,16 @@
 	                        <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
 	                    </div>
 	                </div>
-	               	<div class="my-modal-upload mb-4" id="upload-file-area">
+	               	<div class="my-modal-upload mb-4" id="downloadZone" style="overflow-y:auto;overflow-x:hidden; width:100%; height:150px;">
 	            	</div>
 	                <div class="my-modal-footer-read">
-	                	${sessionscope.loginMember.role }
-	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가1기</button>
-	                    <c:if test="${ !empty sessionScope.loginMember and sessionscope.loginMember.role eq 1 or sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo}">
+	                    <c:if test="${ !empty sessionScope.loginMember and sessionScope.loginMember.role eq 1 or sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo}">
+	                    	<button type="submit" class="btn btn-secondary" id="delete">수정하기</button>
 	                    	<button type="button" class="btn btn-secondary" id="delete">삭제하기</button>
                     	</c:if>
-	                </div>
-	        </div>
-	    </div>
-	</div>
-	<div class="modal fade" id="modifyModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    	<div class="modal-dialog">
-			<div class="modal-content" style="top: 172px">
-				<form action="${ pageContext.servletContext.contextPath }/meeting/modify" method="post">
-                	<div class="my-modal-header mb-4">
-                    	<label class="me-2" for="title-write">제목</label>
-	                    <input type="text" id="read-title" name="title" >
-	                    <input type ="hidden" id="read-no" name="no">
-                	</div>	
-	                <div class="my-modal-body">
-	                    <div class="my-read-textarea-div mb-3">
-	                        <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
-	                    </div>
-	                </div>
-	                <div class="my-modal-footer-read">
 	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
-	                    <input type="button" class="btn" id="delete" value="삭제하기">
-                  		<button type="submit" class="btn btn-secondary">수정하기</button>
 	                </div>
-	            </form>
+                </form>
 	        </div>
 	    </div>
 	</div>

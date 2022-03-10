@@ -219,7 +219,7 @@
 		</where>
 	</select>	
 	
-	<!-- 게시글을 삭제한다. -->
+	<!-- 해당 번호의 게시글을 삭제한다. -->
 	<delete id="removeMeetingBoard" parameterType="_int">
         DELETE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#removeMeetingBoard() */
           FROM TBL_BOARD A
@@ -268,94 +268,9 @@
           FROM TBL_FILE A
          WHERE A.FILE_NO = #{ no }
 	</select>
-	<select id ="findMainList" resultMap="meetingResult">
-        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMainList() */
-               ROWNUM
-             , A.BOARD_NO
-             , A.BOARD_UPDATED_DATE
-             , A.BOARD_POSTING_DATE
-             , A.BOARD_TITLE
-             , A.BOARD_CONTENT
-             , A.BOARD_STATUS
-             , A.BOARD_CATEGORY_NO
-             , A.PROJECT_NO
-             , A.MEMBER_NO
-          FROM TBL_BOARD A
-         WHERE A.PROJECT_NO = #{ projectNo }
-		<![CDATA[ 
-           AND ROWNUM <= 6  
-		]]>
-	</select>
+	<delete id="removeMeetingBoardFile">
+        DELETE
+          FROM TBL_FILE A
+         WHERE A.FILE_NO = #{ fileNo }
+	</delete>
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -172,23 +172,55 @@ public class MeetingServiceImpl implements MeetingService {
 	 * @author 홍성원
 	 */
 	@Override
-	public FileDTO findFile(int no) {
+	public Map<String, Object> findFile(int no) {
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+
+		FileDTO file = mapper.fineFile(no);
 		
+		fileInfo.put("filePath", file.getFilePath());
+		fileInfo.put("fileOriginName", file.getFileOriginName());
+		fileInfo.put("fileRandomName", file.getFileRandomName());
 		
-		return mapper.fineFile(no);
+		return fileInfo;
 	}
 
-	/**
-	 * findMainList : 프로젝트 메인화면에서 최근 게시글6개를 조회한다.
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
-	 * 
-	 * @author 홍성원
-	 */
 	@Override
-	public List<MeetingDTO> findMainList(int projectNo) {
-
-		return mapper.findMainList(projectNo);
+	public boolean removeMeetingBoardFile(int fileNo) {
+		
+		return mapper.removeMeetingBoardFile(fileNo);
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

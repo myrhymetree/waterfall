@@ -8,7 +8,15 @@
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
 <style>
+#downloadZone #read-originalName {
+  width:250px;
+  overflow:hidden
+  white-space:nowrap
+  text-overflow: ellipsis;
+}
 #layoutSidenav_content .todo h2 {
   height: 50px;
   line-height: 1.5;
@@ -176,7 +184,7 @@ td {
 						url: "${pageContext.servletContext.contextPath}/meeting/detail/"+ no,
 						success: function(data, status, xhr) {
 							meeting = JSON.parse(data.meeting);
-							$("#upload-file-area").empty();
+							$("#downloadZone").empty();
 							$("#read-no").val(meeting.no);
 							$("#read-title").val(meeting.title);
 							$("#read-content").val(meeting.content);
@@ -186,9 +194,9 @@ td {
 								for(let i = 0;i < meeting.file.length; i++) {
 									const $fileName = meeting.file[i].fileOriginName;
 									const $fileNo = meeting.file[i].fileNo;
-									const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
-									$("#upload-file-area").append($fileTag);
-									$("#upload-file-area").append("<br>");
+				                     $buttonsTag = "<div class='mt-4 row'><div class='col-3 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + $fileName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/meeting/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/meeting/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+
+									$("#downloadZone").append($buttonsTag);
 								}
 							}
 						},

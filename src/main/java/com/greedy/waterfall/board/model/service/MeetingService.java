@@ -3,9 +3,7 @@ package com.greedy.waterfall.board.model.service;
 import java.util.List;
 import java.util.Map;
 
-import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
-import com.greedy.waterfall.common.paging.SelectCriteria;
 
 /**
  * <pre>
@@ -31,20 +29,10 @@ public interface MeetingService {
 	boolean removeMeetingBoard(int meetingNo);
 	
 	boolean modifyMeetingBoard(Map<String, String> meeting);
-
+	
 	MeetingDTO findOneMeetingBoard(int meetingNo);
 
-	FileDTO findFile(int no);
+	Map<String, Object> findFile(int no);
 
-	/**
-	 * findMainList : 프로젝트 컨트롤러에서 프로젝트 메인화면에 회의록 게시글 6개를 조회한다.
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
-	 * 
-	 * @author 홍성원
-	 * @param projectNo 
-	 */
-	List<MeetingDTO> findMainList(int projectNo);
-
-
+	boolean removeMeetingBoardFile(int fileNo);
 }

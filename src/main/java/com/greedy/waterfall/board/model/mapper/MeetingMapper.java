@@ -22,7 +22,6 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
  */
 @Repository
 public interface MeetingMapper {
-
 	/**
 	 * findMeetingList : 현재페이지의 게시글 목록을 조회한다.
 	 * @param 페이징처리와 검색값을 담고있는 SelectCriteria변수를 전달받는다.
@@ -114,13 +113,13 @@ public interface MeetingMapper {
 	FileDTO fineFile(int no);
 
 	/**
-	 * findMainList : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * removeMeetingBoardFile : 회의록 게시글의 첨부파일을 삭제한다.
+	 * @param 삭제할 첨부파일의 파일번호를 전달받는다.
+	 * @return 삭제 성공여부를 반환한다.
 	 * 
 	 * @author 홍성원
 	 */
-	List<MeetingDTO> findMainList(int projectNo);
+	boolean removeMeetingBoardFile(int fileNo);
 
 
 }

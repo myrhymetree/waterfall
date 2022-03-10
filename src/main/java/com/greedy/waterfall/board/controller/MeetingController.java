@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,35 +56,37 @@ public class MeetingController {
 	}
 	
 	/**
-	 * findMeetingBoardList : 조회된 회의록 게시글 전체 목록을 view로 전달해주는 메소드
-	 * @param mv : 전체 게시글을 담을 매개변수 
-	 * @param request : 현재 페이지 정보를 담고있는 매개변수 
-	 * @return mv : 전달받은 현재페이지로 조회한 게시글 전체 목록과, 되돌아갈 주소를 저장한 ModelAndView 변수 반환
+	 * downloadFile : 회의록 게시판의 업로드된 파일을 다운로드를 한다.
+	 * @param 다운로드할 파일의 번호를 전달받는다.
+	 * @return 다운로드할 파일의 정보를 반환한다.
 	 * 
 	 * @author 홍성원
-	 * @throws IOException 
 	 */
-	
 	@GetMapping("/download/{fileNo}")
 	public ModelAndView downloadFile(ModelAndView mv, @PathVariable("fileNo") String fileNo) throws IOException {
+		/* 전달받은 파일 번호로 DB에 저장된  해당 파일의 정보를 반환받는다.*/
 		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
+		Map<String, Object> fileInfo = meetingService.findFile(no);
 		
-		Map<String, Object> fileInfo = new HashMap<String, Object>();
-		
-		FileDTO file = meetingService.findFile(no);
-		fileInfo.put("filePath", file.getFilePath());
-		fileInfo.put("fileOriginName", file.getFileOriginName());
-		fileInfo.put("fileRandomName", file.getFileRandomName());
+		/* ModelAdnVIew에 파일 정보를 저장 한 후 파일 다운로드를 담당하는 viewResolver로 전달한다. */
 		mv.addObject("downloadFile", fileInfo);
 		mv.setViewName("fileDownloadView");
 		
 		return mv;
 	}
 	
+	/**
+	 * findMeetingBoardList : 조회된 회의록 게시글 전체 목록을 view로 전달해주는 메소드
+	 * @param mv : 전체 게시글을 담을 매개변수 
+	 * @param request : 현재 페이지 정보를 담고있는 매개변수 
+	 * @return mv : 전달받은 현재페이지로 조회한 게시글 전체 목록과, 되돌아갈 주소를 저장한 ModelAndView 변수를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@GetMapping("/list")
 	public ModelAndView findMeetingBoardList(ModelAndView mv, HttpServletRequest request) {
-		/* 페이징 처리를 위한 변수 선언 및 초기화 */
-		Map<String, String> searchMap = new HashMap<>();					//검색조건과 검색값을 담을 HashMap 변수를 선언한다.
+		/* 페이징 처리를 위해 검색 조건과 현재 페이지번호, 프로젝트의 번호를 HashMap에 저장한다. */
+		Map<String, String> searchMap = new HashMap<>();					
 		String projectNo = Integer.toString(((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		String currentPage = request.getParameter("currentPage");
 		String searchCondition = request.getParameter("searchCondition");	
@@ -94,7 +97,7 @@ public class MeetingController {
 		searchMap.put("projectNo", projectNo);
 		searchMap.put("currenPage", currentPage);
 
-		/* 검색조건을 전달해, 게시물 목록을 반환받는다. */
+		/* 검색조건을 전달하고, 게시물 목록과 페이징 처리를 위해 페이징 정보를 반환받는다. */
 		Map<String, Object> findResult = meetingService.findMeetingBoardList(searchMap);
 		List<MeetingDTO> meetingList = (List<MeetingDTO>) findResult.get("meetingList");
 		SelectCriteria selectCriteria = (SelectCriteria) findResult.get("selectCriteria");
@@ -118,16 +121,12 @@ public class MeetingController {
 	 * @throws JsonProcessingException 
 	 */
 	@GetMapping("/detail/{meetingNo}")
-	public ModelAndView findMeetingBoardDetail(ModelAndView mv, @PathVariable("meetingNo") int meetingNo
-			, HttpServletResponse response) throws JsonProcessingException {
+	public ModelAndView findMeetingBoardDetail(ModelAndView mv, @PathVariable("meetingNo") int meetingNo, HttpServletResponse response) throws JsonProcessingException {
 		/* 전달받은 게시물번호로 조회된 게시물 정보를 저장한다. */
-		
-		
 		MeetingDTO meeting = meetingService.findMeetingBoardDetail(meetingNo);
-		
-		response.setContentType("application/json; charset=UTF-8");
-		
 		ObjectMapper mapper = new ObjectMapper();
+		/* 응답 헤더의 언어설정을 UTF-8로 해준다. */
+		response.setContentType("application/json; charset=UTF-8");
 		
 		/* 조회된 게시물의 정보와 요청 url을 저장한 후 반환한다. */
 		mv.addObject("meeting", mapper.writeValueAsString(meeting));
@@ -145,24 +144,21 @@ public class MeetingController {
 	 * @author 홍성원
 	 */
 	@GetMapping("/remove/{meetingNo}")
-	public ModelAndView removeMeetingBoard(ModelAndView mv, @PathVariable("meetingNo") int meetingNo) {
+	public ModelAndView removeMeetingBoard(ModelAndView mv, @PathVariable("meetingNo") int meetingNo, RedirectAttributes rttr) {
 		/* 매개변수로 받은 게시물번호로 해당 게시물을 삭제 한 후 결과에 따라 메세지를 저장한다. */
-		String message = "";
-		
+		String message = "게시물 삭제에 실패했습니다.";
 		if(meetingService.removeMeetingBoard(meetingNo)) {
 			message = "게시물을 삭제했습니다.";
-		} else {
-			message = "게시물 삭제에 실패했습니다.";
-		}
-		
+		} 
 		/* 요청 주소값을 저장한 후 반환한다. */
+		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/meeting/list");
 		
 		return mv;
 	}
 	
 	/**
-	 * registMeetingBoard : 회의록 게시글 등록을 담당하는 컨트롤러
+	 * registMeetingBoard : 회의록 게시글을 등록한다.
 	 * @param mv : 요청주소값을 담을 ModelAndView변수
 	 * @param parameter : 게시글 제목과 내용을 담고있는 Map 변수
 	 * @return mv : 요청 주소값을 반환
@@ -170,26 +166,26 @@ public class MeetingController {
 	 * @author 홍성원
 	 */
 	@PostMapping("/regist")
-	public ModelAndView registMeetingBoard(ModelAndView mv, 
-			@RequestParam(name = "meetingfile",required = false) List<MultipartFile> multiFile, 
-			@ModelAttribute MeetingDTO meeting,
-			HttpServletRequest request) throws UnsupportedEncodingException {
-		/* 매개변수로 받은 게시물번호로 해당 게시물을 등록 한 후 결과에 따라 메세지를 저장한다. */
-		String message = "";
+	public ModelAndView registMeetingBoard(ModelAndView mv, @RequestParam(name = "meetingfile",required = false) List<MultipartFile> multiFile, 
+			@ModelAttribute MeetingDTO meeting, HttpServletRequest request, RedirectAttributes rttr) throws UnsupportedEncodingException {
+		/* 게시물의 등록정보를 담을 Map변수를 생성한다. */
 		Map<String, String> parameter = new HashMap<>();
+		String message = "게시글등록에 실패했습니다.";					//게시물 등록 성공여부를 출력할 메세지를 담을 변수를 생성한다.
 		
+		/* 업로드한 파일을 저장할 저장경로를 설정한다. */
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		String filePath = root + "\\uploadFiles\\meetingBoard";
+		
+		/* 설정한 경로에 폴더가 없다면 설정한 경로대로 폴더를 생성한다. */
 		File mkdir = new File(filePath);
 		if(!mkdir.exists()) {
 			mkdir.mkdirs();
 		}
+		
+		/* 업로드한 파일이 있다면, 무작위 아이디로 변환 후 저장경로에 저장한다. */
 		List<FileDTO> fileList = new ArrayList<FileDTO>();
 		if(multiFile.get(0).getOriginalFilename().length() != 0) {
-			System.out.println(multiFile);
-			System.out.println(multiFile.isEmpty());
-			System.out.println("multiFile.size() : " + multiFile.size());
-			System.out.println("multiFiles.get(0) is not null");
+			/* 업로드한 파일의 업로드명, 변경한 파일명, 저장경로를 저장한다. */
 			for(int i = 0; i < multiFile.size(); i++) {
 				String fileOriginName = multiFile.get(i).getOriginalFilename();
 				String ext = fileOriginName.substring(fileOriginName.lastIndexOf("."));
@@ -198,13 +194,15 @@ public class MeetingController {
 				
 				fileList.add(file);
 			}
-			
-			
+			/* 업로드한 파일들을 업로드한다.*/
 			try {
 				for(int i = 0; i < multiFile.size(); i++) {
 					FileDTO uploadFile = fileList.get(i);
 					multiFile.get(i).transferTo(new File(filePath + "\\" + uploadFile.getFileRandomName()));
+					
+					
 				}
+			/* 만약 업로드중 실패가 발생한다면 이전에 올렸던 파일들을 다 삭제한다. */
 			} catch (Exception e) {
 				e.printStackTrace();
 				
@@ -213,24 +211,17 @@ public class MeetingController {
 					
 					new File(filePath + "\\" + uploadFile.getFileRandomName()).delete();
 				}
-				
-				System.out.println("업로드 실패");
-				System.out.println("업로드 실패");
-				System.out.println("업로드 실패");
-				System.out.println("업로드 실패");
 			}
 			
 			meeting.setFile(fileList);
 		}
+		
 		if(meetingService.registMeetingBoard(meeting)) {
 			message = "게시글을 등록했습니다.";
-			System.out.println(message);
-		} else {
-			message = "게시글등록에 실패했습니다.";
-			System.out.println(message);
 		}
 		
-		/* 요청 주소를 저장 후 반환한다. */
+		/* 게시글 등록 성공여부 메세지와, 요청 주소를 저장 후 반환한다. */
+		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/meeting/list");
 		
 		return mv;
@@ -276,6 +267,27 @@ public class MeetingController {
 		
 		/* 요청 주소값과 수정한 수정한 게시물을 저장 후 반환한다. */
 		mv.addObject("meeting", meeting);
+		mv.setViewName("redirect:/meeting/list");
+		
+		return mv;
+	}
+	
+	/**
+	 * removeMeetingBoardFile : 회의록 게시물의 첨부파일을 삭제한다.
+	 * @param fileNo : 삭제할 첨부파일의 번호를 전달받는다.
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	@GetMapping("/deleteFile/{fileNo}")
+	public ModelAndView removeMeetingBoardFile(ModelAndView mv, @PathVariable("fileNo") int fileNo, RedirectAttributes rttr) {
+		String message = "게시물 업데이트에 실패했습니다."; 
+		if(meetingService.removeMeetingBoardFile(fileNo)) {
+			message = "게시물 업데이트에 성공했습니다.";
+		} 
+
+		/* 삭제 성공여부메세지를 저장 후 회의록 목록 페이지로 리다이렉트한다. */
+		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/meeting/list");
 		
 		return mv;
