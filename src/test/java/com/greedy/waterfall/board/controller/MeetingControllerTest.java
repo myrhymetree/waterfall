@@ -1,6 +1,7 @@
 package com.greedy.waterfall.board.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -8,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.greedy.waterfall.board.model.service.MeetingService;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
@@ -84,25 +88,36 @@ public class MeetingControllerTest {
 			.andExpect(flash().attributeExists("message"))
 			.andDo(print());
 	}
-//
-//	@Test
-//	public void testRegistMeetingBoard() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testModifyBoard() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testModifyMeetingBoard() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testRemoveMeetingBoardFile() {
-//		fail("Not yet implemented");
-//	}
-//
+
+	/* 여까지테스트 */
+	@Test
+	public void testRegistMeetingBoard() throws Exception {
+		mvc.perform(
+				post("/meeting/regist")
+				)
+			.andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/meeting/list"))
+			.andExpect(flash().attributeExists("message"))
+			.andDo(print());
+	}
+
+	@Test
+	public void testModifyBoard() throws Exception {
+		mvc.perform(get("/meeting/modify/22"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("meeting"))
+			.andExpect(forwardedUrl("/board/meeting/meetingModify"))
+			.andDo(print());
+	}
+
+	@Test
+	public void testRemoveMeetingBoardFile() throws Exception {
+		mvc.perform(get("/meeting/deleteFile/22"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(flash().attributeExists("message"))
+		.andExpect(redirectedUrl("/meeting/list"))
+		.andDo(print());
+	
+	}
+
 }

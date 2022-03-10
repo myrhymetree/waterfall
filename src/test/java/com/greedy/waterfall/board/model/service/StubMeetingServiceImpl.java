@@ -38,7 +38,7 @@ public class StubMeetingServiceImpl implements MeetingService{
 	@Override
 	public boolean registMeetingBoard(MeetingDTO parameter) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class StubMeetingServiceImpl implements MeetingService{
 	@Override
 	public MeetingDTO findOneMeetingBoard(int meetingNo) {
 		// TODO Auto-generated method stub
-		return null;
+		return new MeetingDTO();
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class StubMeetingServiceImpl implements MeetingService{
 
 	@Override
 	public boolean removeMeetingBoardFile(int fileNo) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub 
 		return false;
 	}
 
