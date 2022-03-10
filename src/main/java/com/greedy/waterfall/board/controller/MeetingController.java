@@ -182,6 +182,7 @@ public class MeetingController {
 			mkdir.mkdirs();
 		}
 		
+		
 		/* 업로드한 파일이 있다면, 무작위 아이디로 변환 후 저장경로에 저장한다. */
 		List<FileDTO> fileList = new ArrayList<FileDTO>();
 		if(multiFile.get(0).getOriginalFilename().length() != 0) {
