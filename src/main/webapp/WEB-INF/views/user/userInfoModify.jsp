@@ -33,13 +33,66 @@
     width: 500px;
 }
 
-#mail_check_input_box_false{
-    background-color:#ebebe4;
+/* 메일 영역 */
+.mail_wrap{
+	width: 100%;
+    margin-top: 20px;
 }
- 
+.mail_name{
+	font-size: 25px;
+    font-weight: bold;
+}
+.mail_input_box{
+	border: 1px solid black;
+	height:31px;
+	padding: 10px 14px;	
+	
+}
+.mail_input{
+	width:100%;
+	height:100%;
+	border:none;
+	font-size:28px;
+}
+.mail_check_wrap{
+	margin-top: 20px;	
+}
+.mail_check_input_box{
+    height: 31px;
+    width: 33%;
+    float: left;
+}
+#mail_check_input_box_false{
+	background-color:#ebebe4;
+}
 #mail_check_input_box_true{
-    background-color:white;
-}	
+	background-color:white;
+}
+.mail_check_input{
+	width:100%;
+	height:100%;
+	border:none;
+	font-size:28px;
+}
+.mail_check_button{
+    
+}
+.mail_check_button :active{
+	box-shadow: 1px 1px 0 rgb(0,0,0,0.5); 
+	position: relative; 
+	top:2px;
+}
+.correct{
+    color : green;
+}
+.incorrect{
+    color : red;
+}
+.clearfix{
+	clear: both;
+}
+
+	
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 <link href="${ pageContext.servletContext.contextPath }/resources/css/buttons.css" rel="stylesheet" type="text/css">
@@ -49,6 +102,14 @@
         
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+	/* 비지니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+		alert(message);
+	}
+</script>
 </head>
 <body>
 	<div class="modal fade modal-dialog-scrollable" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
@@ -153,7 +214,7 @@
                         </div>
                         <hr align="left" style="border: solid 2px rgb(0, 0, 0); width: 100%;">
                         <div>
-                            <form action="" method="get">
+                            <form action="${ pageContext.servletContext.contextPath }/user/memberInfo" method="post">
                                 <div>
                                     <button type="button" class="ui secondary button" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                         	비밀번호 변경
@@ -161,66 +222,54 @@
                                 </div>
                                
                                 <div class="mx-auto search-bar input-group mt-5">
-                                    <input type="text" class="form-control" placeholder="아이디" aria-label="Recipient's username" aria-describedby="basic-addon2" style="margin-top: 50px;left: 40;left: 75px;"
-                                    	value="${ sessionScope.loginMember.id }">                              
+                                    <input type="text" class="form-control" placeholder="아이디" aria-label="Recipient's username" aria-describedby="basic-addon2" style="margin-top: 50px; left: 0px;margin-left: 30%;margin-right: 30%;"
+                                    	value="${ sessionScope.loginMember.id }" readonly>                              
                                 </div> 
                                 <div class="mx-auto search-bar input-group mt-4">
-                                    <input type="text" class="form-control" placeholder="이름 입력" aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                    	value="${ sessionScope.loginMember.name }">
+                                    <input type="text" class="form-control" placeholder="이름 입력" aria-label="Recipient's username" aria-describedby="basic-addon2" style="margin-left: 30%;margin-right: 30%;"
+                                    	value="${ sessionScope.loginMember.name }" readonly>
                                 </div>
 
                                 <div class="mx-auto select-phone input-group mt-4">
-                                    <input type="text" class="form-control" placeholder="휴대전화" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                    <button class="ui secondary button">
-                                        	핸드폰 인증
-                                    </button>                                  
-                                </div>  
+                                    <input type="text" class="form-control" name="phone" placeholder="휴대전화" aria-label="Recipient's username" aria-describedby="basic-addon2" style="margin-left: 30%;margin-right: 30%;"
+                                    	value="${ sessionScope.loginMember.phone }">                                                        
+                                </div>                            
                                 
                                 <div class="mx-auto select-phone input-group mt-4">
-                                    <input type="text" class="form-control" placeholder="휴대폰 인증번호" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                    <button class="ui secondary button" style="padding-left: 43px;">
-                                        	인증번호 
-                                    </button>                                  
-                                </div> 
-
-                                <div class="mx-auto select-phone input-group mt-4">
-                                    <input class="form-control mail_input" name="memberMail" placeholder="이메일" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                   <!--  <button class="ui secondary button">
-                                        	이메일 인증 
-                                    </button>  -->                                 
+                                    <input class="form-control mail_input" name="email" placeholder="이메일" aria-label="Recipient's username" aria-describedby="basic-addon2" style="margin-left: 30%;margin-right: 30%;"
+                                    	value="${ sessionScope.loginMember.email }">                                                             
                                 </div>
                                 
-                                <div class="mx-auto select-phone input-group mt-4">
-                                	<div class="mail_check_input_box" id="mail_check_input_box_false">
+                                <div class="mx-auto select-phone input-group mt-4 mail_check_wrap">
+                                	<div class="mail_check_input_box" id="mail_check_input_box_false" style="margin-left: 30%;width: 530px;">
                                    	 	<input class="form-control mail_check_input" placeholder="이메일 인증번호" aria-label="Recipient's username" aria-describedby="basic-addon2" disabled="disabled">
                                     </div>
                                     <div class="mail_check_button">
-                                    	<button class="mail_check_button">인증번호 전송</button>
+                                    	<span class="ui secondary button" style="height: 35.1428px; margin-left: 12px;">인증번호 전송</span>
                                     </div>
-                                    <!-- <button class="ui secondary button" style="padding-left: 43px;">
-                                        	인증코드 
-                                    </button>    -->                               
+                                    <div class="clearfix"></div>
+                                    <span id="mail_check_input_box_warn"></span>                                    
                                 </div> 
 
                                 <div class="mt-5 mx-auto" style="width: 16%;" >
                                     <div style="float: left; width: 50%;">
-                                        <button class="ui secondary button">
+                                        <button class="ui secondary button" type="submit">
                                             	등록
                                         </button>
                                     </div>    
+                            
                                     <div style="float: left; width: 50%;">
-                                        <button class="ui secondary button">
-                                            	취소
-                                        </button>                                                                                                                        
+                                        <input type="button" class="ui secondary button" value="취소" onclick="location.href='${pageContext.servletContext.contextPath }/project/list/'">                                                                                                                       
                                     </div> 
                                 </div>
-                            </form>
+                            </form>    
                         </div>
                     </div>
                 </main>
             </div>
             
             <script>
+				var code = "";
             	$(document).ready(function(){
             		
             		$("#pwdUpdate").on("click", function(){
@@ -286,13 +335,36 @@
             	/* 인증번호 이메일 전송 */
             	$(".mail_check_button").click(function(){
             		var email = $(".mail_input").val(); //입력한 이메일
+            		var checkBox = $(".mail_check_input");		//인증번호 입력란
+            		var boxWrap = $(".mail_check_input_box");	//인증번호 입력란 박스
             		
             		$.ajax({
             			type : "GET",
-            			url : "$mailCheck?email=" + email
+            			url : "${pageContext.servletContext.contextPath}/member/mailCheck?email=" + email,
+            			success:function(data){
+            				console.log("data" + data);
+            				
+            				checkBox.attr("disabled", false);
+            				boxWrap.attr("id", "mail_check_input_box_true");
+            				code = data;
+            			}
             		});
 				});
             	
+            	/* 인증번호 비교 */
+            	$(".mail_check_input").blur(function(){
+            		
+            		var inputCode = $(".mail_check_input").val();  		
+            		var checkResult = $("#mail_check_input_box_warn");	
+            		
+            		if(inputCode == code){								
+            			checkResult.html("인증번호가 일치합니다.");
+            	        checkResult.attr("class", "correct");        
+            	    } else {                                            
+            	        checkResult.html("인증번호를 다시 확인해주세요.");
+            	        checkResult.attr("class", "incorrect");
+            	    }
+            	});
             </script>
 	
 </body>

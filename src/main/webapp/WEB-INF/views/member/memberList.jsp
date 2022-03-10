@@ -82,18 +82,18 @@
                              <input type="text" class="form-control" placeholder="이름" id="name" name="name" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3">                                   
-                            <select id="dept" name="dept" class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option value=""></option>
+                            <select id="dept" name="dept" class="form-select" style="width: 70%; margin-left: 15%;" required="required">
+                                <option value="" selected disabled></option>
                             </select> 
                         </div>
                         <div class="mb-3">                                  
-                            <select id="team" name="team" class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option value=""></option>
+                            <select id="team" name="team" class="form-select" style="width: 70%; margin-left: 15%;" required="required">
+                                <option value="" selected disabled></option>
                             </select> 
                         </div>
                         <div class="mb-3">                              
-                            <select id="job" name="job" class="form-select" style="width: 70%; margin-left: 15%;">
-                                <option value=""></option>
+                            <select id="job" name="job" class="form-select" style="width: 70%; margin-left: 15%;" required="required">
+                                <option value="" selected disabled></option>
                             </select> 
                         </div>
                         <!-- 아래 텍스트박스는 글쓴이가 쓰는 만큼 늘어날 수 있다. 초기 크기 설정은 위에 일반 텍스트 박스 참조 -->

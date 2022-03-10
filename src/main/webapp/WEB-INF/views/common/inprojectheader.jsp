@@ -38,7 +38,6 @@
 				</a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/user/info">계정정보 관리</a></li>
-					<li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/user/list">프로필 관리</a></li>
 					<li><hr class="dropdown-divider" /></li>
 					<li><a class="dropdown-item" href="${ pageContext.servletContext.contextPath }/member/logout">로그아웃</a></li>
 				</ul>

@@ -37,6 +37,8 @@ public interface MemberService {
 
 	void pwUpdate(String id, String hashedPw);
 
+	void memberInfo(MemberDTO member);
+
 
 
 

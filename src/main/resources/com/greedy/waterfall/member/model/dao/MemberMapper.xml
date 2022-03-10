@@ -53,6 +53,14 @@
 		<result property="deptCode" column="DEPT_CODE"/>
 	</resultMap>
 	
+	<resultMap type="com.greedy.waterfall.member.model.dto.MemberInfoDTO" id="memberInfoResultMap">
+		<id property="historyNo" column="MEM_HISTORY_NO"/>
+		<result property="code" column="MEM_HISTORY_CODE"/>
+		<result property="content" column="MEM_HISTORY_CONTENT"/>
+		<result property="date" column="MEM_HISTORY_UPDATED_DATE"/>
+		<result property="no" column="MEMBER_NO"/>
+	</resultMap>
+	
 	<select id="selectEncryptedPwd" resultType="java.lang.String">
 		SELECT
 		       A.MEMBER_PWD
@@ -397,7 +405,7 @@
 		, #{ job.jobCode }  
 		)  
 	</insert>
-	
+		
 	<update id="oneMember" parameterType="com.greedy.waterfall.member.model.dto.AdminMemberDTO">
 		UPDATE
 		       TBL_MEMBER_COM_INFO A
@@ -424,8 +432,7 @@
 		                       WHERE A.MEMBER_ID = #{ id }
 	                    	)            
 	</delete>
-	
-	
+
 	<select id="selectOne" resultType="java.lang.String">
 		SELECT
 		       A.MEMBER_PWD
@@ -440,4 +447,63 @@
 		 WHERE A.MEMBER_ID = #{ id }  
 	</update>
 	
+	<update id="memberInfoUpdate">
+		UPDATE
+			   TBL_MEMBER A
+		   SET A.EMAIL = #{ email }
+		     , A.PHONE = #{ phone }
+		 WHERE A.MEMBER_ID = #{ id }   		   
+	</update>
+	
+	<insert id="memberInfoPhone" parameterType="com.greedy.waterfall.member.model.dto.MemberDTO">
+		<selectKey keyProperty="no" resultType="com.greedy.waterfall.member.model.dto.MemberDTO" order="BEFORE">
+			SELECT
+			       A.MEMBER_NO AS no
+			  FROM TBL_MEMBER A
+			 WHERE A.MEMBER_ID = #{ id } 		          
+		</selectKey>
+		INSERT
+		  INTO TBL_MEMBER_HISTORY A
+		(
+		  A.MEM_HISTORY_NO
+		, A.MEM_HISTORY_CODE
+		, A.MEM_HISTORY_CONTENT
+		, A.MEMBER_NO
+		, A.MEM_HISTORY_UPDATED_DATE 	
+		)
+		VALUES
+		(
+		  MEM_HISTORY_NO.NEXTVAL
+		, '핸드폰번호'
+		, #{ phone }
+		, #{ no }  
+		, sysdate 
+		)  
+	</insert>
+	
+	<insert id="memberInfoEmail" parameterType="com.greedy.waterfall.member.model.dto.MemberDTO">
+		<selectKey keyProperty="no" resultType="com.greedy.waterfall.member.model.dto.MemberDTO" order="BEFORE">
+			SELECT
+			       A.MEMBER_NO AS no
+			  FROM TBL_MEMBER A
+			 WHERE A.MEMBER_ID = #{ id }   
+		</selectKey>
+		INSERT
+		  INTO TBL_MEMBER_HISTORY A
+		(
+		  A.MEM_HISTORY_NO
+		, A.MEM_HISTORY_CODE
+		, A.MEM_HISTORY_CONTENT
+		, A.MEMBER_NO
+		, A.MEM_HISTORY_UPDATED_DATE 	
+		)
+		VALUES
+		(
+		  MEM_HISTORY_NO.NEXTVAL
+		, '이메일'
+		, #{ email }
+		, #{ no }  
+		, sysdate 
+		)  
+	</insert>
 </mapper>

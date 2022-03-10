@@ -101,15 +101,10 @@ public class EduServiceImpl implements EduService {
 	@Override
 	public EduDTO findEduFileDetail(int no) {
 
-		int result = mapper.incrementEduCount(no);
-		
 		EduDTO eduFileDetail = new EduDTO();
-		
-		if(result > 0) {
-			
-			eduFileDetail = mapper.selectEduDetailFile(no);
-		}
-		
+
+		eduFileDetail = mapper.selectEduDetailFile(no);
+
 		return eduFileDetail;
 	}
 

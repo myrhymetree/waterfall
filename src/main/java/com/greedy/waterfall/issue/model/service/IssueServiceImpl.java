@@ -199,27 +199,6 @@ public class IssueServiceImpl implements IssueService {
 		mapper.removeCheck(condition);
 		
 		List<IssueNotificationDTO> notificationList = mapper.notifyIssueList(loginMemberNo);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
-		System.out.println("noficationList는 " + notificationList);
 		
 		int count = mapper.notifyCount(loginMemberNo);
 		

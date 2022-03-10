@@ -180,6 +180,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public void memberInfo(MemberDTO member) {
+
+		mapper.memberInfoUpdate(member);
+		System.out.println("성공 " + member);
+		mapper.memberInfoPhone(member);
+		System.out.println("성공 2번째 "+ ":" + member);
+		mapper.memberInfoEmail(member);
+	}
+
+
 
 	
 

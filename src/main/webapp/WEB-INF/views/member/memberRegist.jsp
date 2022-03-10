@@ -98,7 +98,7 @@ label {
                             <form action="${pageContext.servletContext.contextPath}/member/regist3" method="post">
                                 <div class="mx-auto search-bar input-group mt-5">
                                     <input type="text" id="name" name="name" class="form-control" placeholder="이름 입력" aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                     style="border-left-width: auto; margin-left: 31%; margin-right: 31%;">
+                                     style="border-left-width: auto; margin-left: 31%; margin-right: 31%;" required="required">
                                 </div>        
                                 <div class="mx-auto search-bar mt-5 form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -110,9 +110,9 @@ label {
                                 <div class="mt-5">
                                     <table align="center" width="510">
                                         <tr>
-                                            <td align="center">
+                                            <td align="center">				
                                                 <select class="select-bar form-select" aria-label="Default select example" id="dept" name="dept">
-                                                    <option value="" selected>부서</option>
+                                                    <option value="" selected>부서</option> 
                                                   	<c:forEach var="dept" items="${ deptList }">
                                                   		<option value="${ dept.deptCode }"><c:out value="${ dept.deptName }"/></option>
                                                   	</c:forEach>                                                    
@@ -165,9 +165,7 @@ label {
                                         </button>
                                     </div>    
                                     <div style="float: left; width: 50%;">
-                                        <button class="ui secondary button">
-                                          	  취소
-                                        </button>                                                                                                                        
+                                        <input class="ui secondary button" type="button" value="취소" onclick="location.href='${ pageContext.servletContext.contextPath }/member/list'">                                                                                                                       
                                     </div> 
                                 </div>
                             </form>

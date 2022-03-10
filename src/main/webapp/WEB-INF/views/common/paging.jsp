@@ -20,8 +20,13 @@
 	
 		<div class="paging mt-3">
 			<!-- 맨 앞으로 이동 버튼 -->
-		    <button id="startPage"><i class="fas fa-angle-double-left"></i></button>
+			<c:if test="${ requestScope.selectCriteria.pageNo <= 1 }">
+		    <button id="startPage" disabled><i class="fas fa-angle-double-left"></i></button>
+		    </c:if>
 		    
+		    <c:if test="${ requestScope.selectCriteria.pageNo > 1 }">
+		    <button id="startPage"><i class="fas fa-angle-double-left"></i></button>
+		    </c:if>
 			
 			<!-- 이전 페이지 버튼 -->
 			<c:if test="${ requestScope.selectCriteria.pageNo <= 1 }">
@@ -51,7 +56,12 @@
 			</c:if>
 			
 			<!-- 마지막 페이지로 이동 버튼 -->
-			<button id="maxPage"><i class="fas fa-angle-double-right"></i></button>
+			<c:if test="${ requestScope.selectCriteria.pageNo < requestScope.selectCriteria.maxPage }">
+				<button id="maxPage"><i class="fas fa-angle-double-right"></i></button>
+			</c:if>
+			<c:if test="${ requestScope.selectCriteria.pageNo >= requestScope.selectCriteria.maxPage }">
+				<button id="maxPage" disabled><i class="fas fa-angle-double-right"></i></button>
+			</c:if>
 		</div>
 	</div>
 	
