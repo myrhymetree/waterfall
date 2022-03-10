@@ -19,7 +19,7 @@ public interface TaskService {
 
 	List<ProjectMemberDTO> findProjectMember(int projectNo);
 
-	void registTask(TaskRegistDTO taskRegistDTO);
+	boolean registTask(TaskRegistDTO taskRegistDTO);
 
 	List<TaskCategoryDTO> findAllCategoryCode();
 

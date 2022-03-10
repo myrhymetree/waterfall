@@ -128,20 +128,26 @@ public class TaskController {
 	 * @author 김서영
 	 */
 	@PostMapping("/regist")
-	public String taskRegist(@ModelAttribute TaskRegistDTO taskRegistDTO, HttpSession session, RedirectAttributes rttr) {
+	public String taskRegist(@ModelAttribute TaskRegistDTO taskRegistDTO,HttpServletRequest request, HttpSession session, RedirectAttributes rttr) {
 		
 		/* session 내 projectNo 저장 */
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
-
-		System.out.println("projectNo : " + projectNo);
+		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()); 
 		
 		taskRegistDTO.setProjectNo(projectNo);
+		taskRegistDTO.setMemberNo(memberNo);
 		System.out.println("TaskRegistDTO : " + taskRegistDTO);
 		
-		/* projectNo가 담긴 taskRegistDTO 매개변수로 service method 호출 */
-		taskService.registTask(taskRegistDTO);
+		String taskCode = taskRegistDTO.getTaskCode();
 		
-		rttr.addFlashAttribute("message", "업무 등록에 성공하셨습니다.");
+		
+		/* projectNo가 담긴 taskRegistDTO 매개변수로 service method 호출 */
+		if(taskService.registTask(taskRegistDTO)) {
+			rttr.addFlashAttribute("message", "업무 등록에 성공하셨습니다.");
+		} else {
+			rttr.addFlashAttribute("message", "등록할 업무를 확인 해주세요.");
+		}
+		
 		
 		return "redirect:/task/timeline";
 		

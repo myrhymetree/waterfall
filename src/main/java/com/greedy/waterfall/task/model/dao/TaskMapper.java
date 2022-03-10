@@ -25,7 +25,7 @@ public interface TaskMapper {
 
 	List<ChildTaskCategoryDTO> selectChildCategory();
 
-	int selectParentTaskNo(TaskRegistDTO taskRegistDTO);
+	Integer selectParentTaskNo(TaskRegistDTO taskRegistDTO);
 
 	void registHistory(TaskRegistDTO taskRegistDTO);
 
@@ -41,7 +41,7 @@ public interface TaskMapper {
 
 	int insertUpdateHistory(TaskRegistDTO taskUpdateDTO);
 
-	String selectMemberName(TaskHistoryDTO historyDTO);
+	String selectMemberName(int memberNo);
 
 	String selectTaskName(TaskHistoryDTO history);
 
@@ -58,5 +58,9 @@ public interface TaskMapper {
 	int insertEntireDeleteHistory(TaskHistoryDTO history);
 
 	int deleteChildTask(TaskDTO task);
+
+	void insertEntireregistHistroy(TaskRegistDTO taskRegistDTO);
+
+	Integer selectParentTaskNoCurrval(TaskRegistDTO taskRegistDTO);
 
 }

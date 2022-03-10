@@ -180,6 +180,13 @@
 		 WHERE TASK_NO = #{ taskNo }
 	</select>
 	
+	<select id="selectParentTaskNoCurrval" resultType = "_int">
+		SELECT
+		       TASK_NO.CURRVAL
+		  FROM DUAL
+	</select>
+	
+	
 	<insert id="registTask">
 		INSERT
   		  INTO TBL_TASK
@@ -206,7 +213,12 @@
 		     , #{ typeNo }
 		     , #{ projectNo }
 		     , #{ taskMember }
+		     <if test="parentTaskNo == 0">
+		     , #{ parentTaskCode }
+		     </if>
+		     <if test="parentTaskNo != 0">
 		     , #{ taskCode }
+		     </if>
 		     <if test="parentTaskNo == 0">
 		     , NULL
 		     </if>
@@ -399,6 +411,28 @@
 		     , 3
 		     )
 	</insert>
+	
+	<insert id="insertEntireregistHistroy">
+		INSERT
+		  INTO TBL_ENTIRE_HISTORY
+		     (
+		       HISTORY_NO
+		     , UPDATED_DATE
+		     , CONTENT
+		     , CATEGORY_TYPE_NO
+		     , PROJECT_NO
+		     , REGISTER_NO  
+		     )
+		VALUES
+		     (
+		       HISTORY_NO.NEXTVAL
+		     , SYSDATE
+		     , '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '등록' || '] ' || '했습니다'
+		     , 2
+		     , #{ projectNo }
+		     , #{ memberNo }
+		     )
+	</insert>
 		
 	<insert id="insertEntireUpdateHistory">
 		INSERT
@@ -411,11 +445,11 @@
 		     , A.PROJECT_NO
 		     , A.REGISTER_NO
 		     )
-		     VALUES
+		VALUES
 		     (
 		       HISTORY_NO.NEXTVAL
 		     , SYSDATE
-		     , '[' || #{ memberName } || ']' || '님이 ' || #{ taskName  } || ' [' || '업무' || '] ' || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		     , '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '수정' || '] ' || '했습니다'
 		     , 2
 		     , #{ projectNo }
 		     , #{ memberNo }

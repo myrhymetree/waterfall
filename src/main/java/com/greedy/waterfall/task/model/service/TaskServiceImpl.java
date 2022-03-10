@@ -129,27 +129,103 @@ public class TaskServiceImpl implements TaskService{
 	 * @author 김서영
 	 */
 	@Override
-	public void registTask(TaskRegistDTO taskRegistDTO) {
-		System.out.println(taskRegistDTO.getParentTaskCode());
-			
+	public boolean registTask(TaskRegistDTO taskRegistDTO) {
+		
+		String taskCode = taskRegistDTO.getTaskCode();
+		String parentTaskCode = taskRegistDTO.getParentTaskCode();
+		int memberNo = taskRegistDTO.getMemberNo();
+		TaskHistoryDTO history = new TaskHistoryDTO();
+			/*종속관계가 Null이면서 상위업무 코드일때만 등록가능*/
 			if(taskRegistDTO.getParentTaskCode().equals("NULL")) {
 				
-				int result = mapper.registTask(taskRegistDTO);
-				if(result > 0) {
-					mapper.registHistory(taskRegistDTO);
+				if(taskCode.equals("REQ") || taskCode.equals("MAINTENANCE") || taskCode.equals("DEVELOPMENT") ||
+						taskCode.equals("TEST") || taskCode.equals("DEVELOPMENT")) {
+					
+					int result = mapper.registTask(taskRegistDTO);
+					if(result > 0) {
+						mapper.registHistory(taskRegistDTO);
+						
+						String memberName = mapper.selectMemberName(memberNo);
+						taskRegistDTO.setMemberName(memberName);
+						
+						mapper.insertEntireregistHistroy(taskRegistDTO);
+						return true;
+					}
+				/*상위업무가 등록안된 상태로 하위업무를 등록하려고 할 때*/	
+				} else {
+					return false;
 				}
 				
-			/* 상위업무 등록 시 */	
+				
+				
+			/* 하위 업무 등록 시 */
 			} else {
-				int parentTaskNo = mapper.selectParentTaskNo(taskRegistDTO);
-				taskRegistDTO.setParentTaskNo(parentTaskNo);
-				int result = mapper.registTask(taskRegistDTO);
-				if(result > 0) {
-					mapper.registHistory(taskRegistDTO);
+				/*상위업무, 하위업무 동시에 들어올때 상위업무 먼저 등록*/
+				Integer parentTaskNo = mapper.selectParentTaskNo(taskRegistDTO);
+				if(parentTaskNo == null) {
+					parentTaskNo = 0;
 				}
 				
+				System.out.println("상위업무 없을 때 등록 테스트 : "+ parentTaskNo);
+				/*등록된 상위업무가 있을 때 하위업무로 바로 등록*/
+				if(parentTaskNo > 0) {
+					taskRegistDTO.setParentTaskNo(parentTaskNo);
+					int result = mapper.registTask(taskRegistDTO);
+					
+					if(result > 0) {
+						mapper.registHistory(taskRegistDTO);
+						
+						String memberName = mapper.selectMemberName(memberNo);
+						taskRegistDTO.setMemberName(memberName);
+						
+						mapper.insertEntireregistHistroy(taskRegistDTO);
+						
+						return true;
+					}
+				/*등록된 상위업무가 없을 때 */	
+				} else {
+					
+					/*상위업무와 종속관계가 둘다 상위업무 코드로 들어올 때*/
+					if(taskCode.equals("REQ") || taskCode.equals("MAINTENANCE") || taskCode.equals("DEVELOPMENT") ||
+						taskCode.equals("TEST") || taskCode.equals("DEVELOPMENT") && parentTaskCode.equals("REQ") || parentTaskCode.equals("MAINTENANCE") || parentTaskCode.equals("DEVELOPMENT") ||
+							taskCode.equals("TEST") || taskCode.equals("DEVELOPMENT")) {
+						return false;
+					}
+					/*상위업무 먼저 등록*/
+					int parentTaskResult = mapper.registTask(taskRegistDTO);
+					
+					if(parentTaskResult > 0) {
+						/* 상위업무 등록한 후 히스토리 등록*/
+						String memberName = mapper.selectMemberName(memberNo);
+						taskRegistDTO.setMemberName(memberName);
+						history.setTaskCode(taskRegistDTO.getParentTaskCode());
+						String taskName = mapper.selectTaskName(history);
+						taskRegistDTO.setTaskName(taskName);
+						System.out.println("야야야ㅑ야야야야야야taskRegistDTO : " + taskRegistDTO);
+						mapper.insertEntireregistHistroy(taskRegistDTO);
+						
+						/*하위업무 등록*/
+						parentTaskNo = mapper.selectParentTaskNoCurrval(taskRegistDTO);
+						taskRegistDTO.setParentTaskNo(parentTaskNo);
+						int result = mapper.registTask(taskRegistDTO);
+						
+						if(result > 0) {
+							mapper.registHistory(taskRegistDTO);
+							
+							history.setTaskCode(taskRegistDTO.getTaskCode());
+							taskName = mapper.selectTaskName(history);
+							taskRegistDTO.setTaskName(taskName);
+							System.out.println("야야야ㅑ야야야야야야taskRegistDTO22222222 : " + taskRegistDTO);
+							mapper.insertEntireregistHistroy(taskRegistDTO);
+							return true;
+						}
+					/*상위업무 등록 실패시*/	
+					} else {
+						return false;
+					}
+				}
 			}
-			
+			return false;
 	}
 
 	/**
@@ -202,6 +278,7 @@ public class TaskServiceImpl implements TaskService{
 		
 		/* 수정할 내용 업데이트 */
 		int result = mapper.updateTask(taskUpdateDTO);
+		int memberNo = history.getMemberNo();
 		
 		/* 업데이트 성공시 히스토리 등록 */
 		int historyResult = 0;
@@ -212,7 +289,7 @@ public class TaskServiceImpl implements TaskService{
 		
 		/* Entire History 등록 */
 		if(historyResult > 0) {
-			String memberName = mapper.selectMemberName(history);
+			String memberName = mapper.selectMemberName(memberNo);
 			String taskName = mapper.selectTaskName(history);
 			
 			taskUpdateDTO.setMemberName(memberName);
