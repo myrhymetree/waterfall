@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.board.model.service.MeetingService;
-import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
@@ -101,7 +100,7 @@ public class MeetingController {
 		Map<String, Object> findResult = meetingService.findMeetingBoardList(searchMap);
 		List<MeetingDTO> meetingList = (List<MeetingDTO>) findResult.get("meetingList");
 		SelectCriteria selectCriteria = (SelectCriteria) findResult.get("selectCriteria");
-
+		
 		/* 반환받은 게시물 목록과, 검색조건, 전달할 주소값을 저장한 뒤  반환 주소로 전달한다.*/
 		mv.addObject("meetingList", meetingList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -171,7 +170,7 @@ public class MeetingController {
 		/* 게시물의 등록정보를 담을 Map변수를 생성한다. */
 		Map<String, String> parameter = new HashMap<>();
 		String message = "게시글등록에 실패했습니다.";					//게시물 등록 성공여부를 출력할 메세지를 담을 변수를 생성한다.
-		
+		request.getSession().getAttribute("dsf");
 		/* 업로드한 파일을 저장할 저장경로를 설정한다. */
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		String filePath = root + "\\uploadFiles\\meetingBoard";
