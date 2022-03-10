@@ -143,36 +143,6 @@
     ORDER BY 1 DESC
    </select>
    
-   <select id="selectAllIssue" resultMap="issueResultMap">
- 	SELECT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllIssueList() */
-            A.ISSUE_NO
-          , A.ISSUE_NAME
-          , A.ISSUE_CREATED_DATE
-		  , A.ISSUE_PROGRESS_STATUS
-		  , A.ISSUE_IMPORTANCE
-		  , A.ISSUE_CONTENT
-		  , A.ISSUE_ANSWER
-		  , A.ISSUE_DEADLINE
-		  , A.ISSUE_COMPLETED_DATE 
-		  , A.ISSUE_STATUS
-		  , A.ISSUE_REGISTER
-		  , A.PROJECT_NO
-		  , A.ISSUE_MANAGER 
-		  , A.TASK_NO
-		  , D.MEMBER_NAME AS REGISTER_NAME
-		  , H.MEMBER_NAME AS MANAGER_NAME
-		  , E.PROJECT_NAME
-		  , G.TASK_CATEGORY_NAME
-     FROM TBL_ISSUE A 
-     JOIN TBL_MEMBER D ON (A.ISSUE_REGISTER = D.MEMBER_NO)
-     JOIN TBL_PROJECT E ON (A.PROJECT_NO = E.PROJECT_NO)
-     JOIN TBL_TASK F ON (A.TASK_NO = F.TASK_NO)
-     JOIN TBL_TASK_CODE_MANAGE G ON (F.TASK_CATEGORY_CODE = G.TASK_CATEGORY_CODE)
-     JOIN TBL_MEMBER H ON (A.ISSUE_MANAGER = H.MEMBER_NO)
-    WHERE A.ISSUE_STATUS = 'Y'
-    ORDER BY 1 DESC 
-   </select>
-  	
   	<select id="selectAllProjectList" parameterType="hashmap" resultMap="projectIssueCountResultMap">
   	      SELECT DISTINCT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
                  A.PROJECT_NO

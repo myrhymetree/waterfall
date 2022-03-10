@@ -249,10 +249,8 @@ input::-webkit-search-results-decoration{
                             <tbody>
                                 <c:forEach var="guide" items="${ requestScope.guideList }" varStatus="status">
                                 <tr  id="listArea" class="guideSelect">
-                                    <td> <c:out value="${ guide.no }" />   
-                                       <%-- <c:out value="${ status.index }"/> --%>
-                                    </td>
-                                    <td><c:out value="${ guide.title }" /></td>
+                                    <td><c:out value="${ guide.no }"/></td>
+                                    <td><c:out value="${ guide.title }"/></td>
                                     <td><c:out value="${ guide.count}"/></td>
                                     <td><c:out value="${ guide.updatedDate }"/></td>
                                     <td><c:out value="${ guide.writer.name }"/></td>

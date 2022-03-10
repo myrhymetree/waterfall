@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="com.greedy.waterfall.board.model.guidemapper.GuideMapper">
+  <mapper namespace="com.greedy.waterfall.board.model.mapper.GuideMapper">
   	<resultMap type="com.greedy.waterfall.board.model.dto.GuideDTO" id="guideResultMap">
   		<id property="no" column="BOARD_NO"></id>
   		<result property="postingDate" column="BOARD_POSTING_DATE"/>
@@ -37,7 +37,7 @@
   		<result property="fileCategoryNo" column="FILE_CATEGORY_NO"></result>
   	</resultMap>
   	
-  
+  <!-- 게시판의 게시글 목록 조회, 페이징처리, 검색 값에 따른 게시글 목록 조회 -->
   <select id="selectAllGuideList" parameterType="com.greedy.waterfall.common.paging.SelectCriteria" resultMap="guideResultMap"> 
   SELECT /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#selectAllGuideList() */
   	       A.RNUM
@@ -93,6 +93,7 @@
   	 		  ORDER BY 1 ASC
   </select>
   
+  <!-- 검색어 혹은 검색어가 없을 때 해당 게시글의 총 합 조회 -->
   <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
   	SELECT /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#selectTotalCount() */
   		   COUNT(*)
@@ -110,6 +111,7 @@
   	 </where>
   </select>
   
+  <!-- 게시글 등록 -->
   <insert id="insertGuide" parameterType="com.greedy.waterfall.board.model.dto.GuideDTO">
   	INSERT /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#insertGuide() */
   	  INTO TBL_BOARD A
@@ -137,6 +139,7 @@
   	</selectKey>
   </insert>
   
+  <!-- 게시글 첨부파일 등록   -->
   <insert id="insertGuideFile" parameterType="com.greedy.waterfall.board.model.dto.GuideFileDTO">
   	INSERT
   	  INTO TBL_FILE A
@@ -159,6 +162,7 @@
   	)
   </insert>
   
+  <!-- 게시글 삭제 -->
   <delete id="deleteGuide" parameterType="_int">
   	UPDATE /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#deleteGuide() */
   	       TBL_BOARD A
@@ -166,6 +170,7 @@
      WHERE A.BOARD_NO = #{ no }
   </delete>
   
+  <!-- 게시글 수정 -->
   <update id="updateGuide" parameterType="com.greedy.waterfall.board.model.dto.GuideDTO">
   	UPDATE /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#updateGuide() */
   	       TBL_BOARD A
@@ -174,6 +179,7 @@
   	 WHERE A.BOARD_NO = #{ no }
   </update>
   
+  <!-- 게시글 조회 수 -->
   <update id="incrementGuideCount">
       UPDATE 
                TBL_BOARD A
@@ -184,6 +190,7 @@
          WHERE A.BOARD_NO = #{ no }
    </update>
   
+  <!-- 게시글 조회 -->
   <select id="selectGuideDetailPlusFile" resultMap="guideResultMap">
       SELECT
                A.BOARD_NO
@@ -222,12 +229,14 @@
          WHERE A.FILE_NO = #{ fileNo }
 	</select>
 	
+	<!-- 게시글 내 첨부파일 삭제 -->
 	<delete id="deleteGuideFile" parameterType="_int">
     DELETE /* com.greedy.waterfall.board.model.guidemapper.GuideMapper#deleteGuideFile() */
   	  FROM TBL_File A
      WHERE A.FILE_NO = #{ fileNo }
 	</delete>
-  
+  	
+  	<!-- 다운로드, 삭제 하기 위해서 첨부파일 조회 -->
   	<select id="searchGuideFile" parameterType="_int" resultType="object">
         SELECT
                B.FILE_NO
@@ -235,95 +244,5 @@
           JOIN TBL_FILE B ON (A.BOARD_NO = B.REF_BOARD_NO)
          WHERE A.BOARD_NO = #{ guideNo }
   	</select>
-  	
-  	<insert id="writeRegistedGuideHistory" parameterType="com.greedy.waterfall.board.model.dto.GuideDTO">
-		<selectKey keyProperty="writerMemberName" resultType="com.greedy.waterfall.board.model.dto.GuideDTO" order="BEFORE">
-			SELECT
-            DISTINCT 
-                     B.MEMBER_NAME AS writerMemberName
-                FROM TBL_BOARD A
-                JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-               WHERE A.MEMBER_NO = #{ writerMemberNo }
-		</selectKey>
-		INSERT
-		  INTO TBL_ENTIRE_HISTORY A
-		  (
-		    A.HISTORY_NO
-		  , A.UPDATED_DATE
-		  , A.CONTENT
-		  , A.CATEGORY_TYPE_NO
-		  , A.PROJECT_NO
-		  , A.REGISTER_NO
-		  )
-		  VALUES
-		  (
-		    HISTORY_NO.NEXTVAL
-		  , SYSDATE
-		  , '[' || #{ writerMemberName } || ']' || '님이 ' || '[가이드 게시판]에 ' || #{ title } || ' [게시글]을 [등록]했습니다'
-		  , 6
-		  , #{ projectNo }
-		  , #{ writerMemberNo } 
-		  )
-	</insert>
-	
-	<insert id="writeUpdatedGuideHistory" parameterType="com.greedy.waterfall.board.model.dto.GuideDTO">
-		<selectKey keyProperty="loginMemberName" resultType="com.greedy.waterfall.board.model.dto.GuideDTO" order="BEFORE">
-			SELECT
-            DISTINCT 
-                     B.MEMBER_NAME AS loginMemberName
-                FROM TBL_BOARD A
-                JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-               WHERE A.MEMBER_NO = #{ loginMemberNo }
-		</selectKey>
-		INSERT
-		  INTO TBL_ENTIRE_HISTORY A
-		  (
-		    A.HISTORY_NO
-		  , A.UPDATED_DATE
-		  , A.CONTENT
-		  , A.CATEGORY_TYPE_NO
-		  , A.PROJECT_NO
-		  , A.REGISTER_NO
-		  )
-		  VALUES
-		  (
-		    HISTORY_NO.NEXTVAL
-		  , SYSDATE
-		  , '[' || #{ loginMemberName } || ']' || '님이 ' || '[가이드 게시판]에 ' || #{ title } || ' [게시글]을 [수정]했습니다'
-		  , 6
-		  , #{ projectNo }
-		  , #{ loginMemberNo } 
-		  )
-	</insert>
-	
-	<insert id="writeDeletedGuideHistory" parameterType="com.greedy.waterfall.board.model.dto.GuideDTO">
-		<selectKey keyProperty="loginMemberName" resultType="com.greedy.waterfall.board.model.dto.GuideDTO" order="BEFORE">
-			SELECT
-            DISTINCT 
-                     B.MEMBER_NAME AS loginMemberName
-                FROM TBL_BOARD A
-                JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-               WHERE A.MEMBER_NO = #{ loginMemberNo }
-		</selectKey>
-		INSERT
-		  INTO TBL_ENTIRE_HISTORY A
-		  (
-		    A.HISTORY_NO
-		  , A.UPDATED_DATE
-		  , A.CONTENT
-		  , A.CATEGORY_TYPE_NO
-		  , A.PROJECT_NO
-		  , A.REGISTER_NO
-		  )
-		  VALUES
-		  (
-		    HISTORY_NO.NEXTVAL
-		  , SYSDATE
-		  , '[' || #{ loginMemberName } || ']' || '님이 ' || '[가이드 게시판]에 ' || #{ title } || ' [게시글]을 [삭제]했습니다'
-		  , 6
-		  , #{ projectNo }
-		  , #{ loginMemberNo } 
-		  )
-	</insert>
   	
 </mapper>

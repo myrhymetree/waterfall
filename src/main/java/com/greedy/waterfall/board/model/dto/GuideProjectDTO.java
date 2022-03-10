@@ -25,5 +25,5 @@ import lombok.ToString;
 @Setter
 public class GuideProjectDTO {
 
-	int no;
+	int no;		//프로젝트 번호
 }

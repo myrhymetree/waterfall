@@ -50,12 +50,6 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public List<IssueDTO> selectAllIssue() {
-		List<IssueDTO> allIssueList = mapper.selectAllIssue();
-		return allIssueList;
-	}
-
-	@Override
 	public boolean registIssue(IssueDTO issue) {
 		
 		boolean result = false;
@@ -144,7 +138,6 @@ public class IssueServiceImpl implements IssueService {
 		
 		int result = mapper.updateIssue(issue);
 		
-		
 		List<IssueFileDTO> files = issue.getFile();
 		System.out.println("IssueServiceImpl의 updateIssue의 files 는  " + files);
 		if(mapper.updateIssue(issue) > 0) {
@@ -213,7 +206,6 @@ public class IssueServiceImpl implements IssueService {
 		
 		condition.put("loginMemberNo", loginMemberNo);
 		condition.put("issueHistoryNo", issueHistoryNo);
-		
 		
 		mapper.removeCheck(condition);
 		

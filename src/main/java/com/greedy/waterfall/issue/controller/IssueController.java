@@ -54,9 +54,20 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 
+/**
+ * <pre>
+ * Class : IssueController
+ * Comment : 이슈 기능의 조회, 추가, 수정, 삭제, 업로드, 다운로드, 알림 기능을 담당하는 클래스
+ * 
+ * History
+ * 2022. 3. 11.  (박성준)
+ * </pre>
+ * @version 1
+ * @author 박성준
+ */
 @RestController
 @RequestMapping("/issue")
-@SessionAttributes({"adminProjectNo", "taskNo"})		//이것때문에 세션에 못넣어준 현상 빈번했었음
+@SessionAttributes({"adminProjectNo", "taskNo"})		//세션에 키 값 넣어줌
 public class IssueController {
 	
 	private final IssueService issueService;
@@ -66,6 +77,14 @@ public class IssueController {
 		this.issueService = IssueService;
 	}
 	
+	/**
+	 * projectList : 이슈가 있는 프로젝트의 목록을 반환하며 해당 프로젝트에 이슈 상태에 따른 이슈의 개수를 조회함
+	 * @param request : 현재 페이지의 정보를 담고 있는 requestScope의 매개 변수
+	 * @param mv : 요청 값을 전송하기 위해 model에 값을 담아주고, 해당 view에 대한 요청 주소를 담아주는 매개변수
+	 * @return mv :key&value형태로 요청 값과 요청주소를 반환
+	 * 
+	 * @author 박성준
+	 */
 	@GetMapping("/project")
 	public ModelAndView projectList(HttpServletRequest request, ModelAndView mv) {
 		
@@ -84,13 +103,18 @@ public class IssueController {
 		return mv;
 	}
 	
+	/**
+	 * adminTaskList : 이슈가 있는 업무의 목록을 반환하며 해당 업무에 이슈 상태에 따른 이슈의 개수를 조회함
+	 * @param request :  현재 페이지의 정보를 담고 있는 requestScope의 매개 변수
+	 * @param mv : 요청 값을 전송하기 위해 model에 값을 담아주고, 해당 view에 대한 요청 주소를 담아주는 매개변수
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 박성준
+	 */
 	@GetMapping("/admin/task")
 	public ModelAndView adminTaskList(HttpServletRequest request, ModelAndView mv) {
 		
 		int projectNo = Integer.parseInt(request.getParameter("projectNo"));
-		
-//		Map<String, Integer> projectNoMap = new HashMap<>();
-//		projectNoMap.put("projectNo", projectNo);
 		
 		System.out.println("projectNo :" + projectNo);
 		
@@ -199,18 +223,17 @@ public class IssueController {
 					
 					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
 					
-					System.out.println("이슈 등록 확인 " + issue);
-					
+					System.out.println("파일 등록 성공 확인 " + issue);
 				}
 				
-				rttr.addFlashAttribute("message", "파일 업로드 성공");
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 				
 				for(int i = 0; i < multiFiles.size(); i++) {
 					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
+					
+					System.out.println("파일 등록 실패 확인 " + issue);
 				}
-				rttr.addFlashAttribute("message", "파일 업로드 실패");
 			  }
 		
 		}
@@ -220,9 +243,11 @@ public class IssueController {
 		if(issueService.registIssue(issue)) {
 			message = "게시글을 등록했습니다.";
 			System.out.println(message);
+			rttr.addFlashAttribute("message", "이슈 등록에 성공하셨습니다.");
 		} else {
 			message = "게시글등록에 실패했습니다.";
 			System.out.println(message);
+			rttr.addFlashAttribute("message", "이슈 등록에 실패하셨습니다.");
 		}
 
 		mv.setViewName("redirect:/issue/admin/list/"+taskNo);
@@ -235,10 +260,10 @@ public class IssueController {
 	public ModelAndView adminfindIssueDetail(ModelAndView mv, HttpServletRequest request) {
 		
 		int no = Integer.parseInt(request.getParameter("no"));		//이슈번호
-		System.out.println("detail에 들어오는 이슈 no : " + no);
+		System.out.println("detail에 들어오는 이슈 번호 : " + no);
 		
 		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
-		System.out.println("detail에 들어오는 프로젝트 no : " + projectNo);
+		System.out.println("detail에 들어오는 프로젝트 번호 : " + projectNo);
 		
 		IssueDTO issueDetail = issueService.selectIssueDetail(no);
 		
@@ -306,18 +331,17 @@ public class IssueController {
 					
 					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
 					
-					System.out.println("이슈 등록 확인 " + issue);
-					
+					System.out.println("파일 등록 성공 확인 " + issue);
 				}
 				
-				rttr.addFlashAttribute("subMessage", "파일 업로드 성공");
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 				
 				for(int i = 0; i < multiFiles.size(); i++) {
 					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
+					
+					System.out.println("파일 등록 실패 확인 " + issue);
 				}
-				rttr.addFlashAttribute("subMessage", "파일 업로드 실패");
 			  }
 		}
 		
@@ -342,8 +366,6 @@ public class IssueController {
 	@GetMapping("/list/{taskNo}")
 	public ModelAndView issueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
-//		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
-		
 		System.out.println(taskNo);
 		
 		List<IssueDTO> issueList = issueService.selectIssueList(taskNo);
@@ -359,17 +381,11 @@ public class IssueController {
 	@GetMapping("/task")
 	public ModelAndView taskList(HttpServletRequest request, ModelAndView mv) {
 		
-//		int projectNo = Integer.parseInt(request.getParameter("projectNo"));
-
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
-		
-//		Map<String, Integer> projectNoMap = new HashMap<>();
-//		projectNoMap.put("projectNo", projectNo);
 		
 		System.out.println("projectNo :" + projectNo);
 
 		List<IssueDTO> taskIssueList = issueService.selectIssuesOfTask(projectNo);
-
 		
 		mv.addObject("taskIssueList", taskIssueList);
 		mv.addObject("intent", "/issue/task");
@@ -378,25 +394,9 @@ public class IssueController {
 		return mv;
 	}
 	
-	
-	@GetMapping("/all")
-	public ModelAndView allIssueList(HttpServletRequest request, ModelAndView mv) {
-		
-		List<IssueDTO> allIssueList = issueService.selectAllIssue();
-		
-		mv.addObject("allIssueList", allIssueList);
-		mv.addObject("intent", "/issue/all");
-		mv.setViewName("/issue/allIssueList");
-		
-		return mv;
-	}
-	
-
-//	@RequestMapping(value = "regist/{taskNo}", method = RequestMethod.POST)
 	@PostMapping("regist/{taskNo}")
 	public ModelAndView registIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request, ModelAndView mv,
 			@PathVariable("taskNo") int taskNo, RedirectAttributes rttr,  @RequestParam List<MultipartFile> multiFiles) {
-//		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		System.out.println("업무 넘버는 : " + taskNo);
 		issue.setTaskNo(taskNo);
 		
@@ -406,9 +406,6 @@ public class IssueController {
 		int writerMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		System.out.println("작성자 넘버는 : " +  writerMemberNo);
 		issue.setRegisterNo(writerMemberNo);
-		
-//		rttr.addFlashAttribute("taskNo", taskNo);		//없어도 문제없음
-		/* redirect:/issue/list로 보낼 때 taskNo를 못 가져오는 문제가 발생해서 이렇게 작성함  */
 		
 		System.out.println("MultiFiles : " + multiFiles);
 		
@@ -440,7 +437,6 @@ public class IssueController {
 				issueFileDTO.setSavedPath(filePath);
 				issueFileDTO.setOriginalName(originFileName);
 				issueFileDTO.setRandomName(savedName);
-//				issue.setFile(issueFileDTO);
 				fileList.add(issueFileDTO);
 				issue.setFile(fileList);
 				
@@ -452,29 +448,29 @@ public class IssueController {
 					
 					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
 					
-					System.out.println("이슈 등록 확인 " + issue);
-					
+					System.out.println("이슈 등록 성공 확인 " + issue);
 				}
 				
-				rttr.addFlashAttribute("message", "파일 업로드 성공");
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 				
 				for(int i = 0; i < multiFiles.size(); i++) {
 					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
+					
+					System.out.println("이슈 등록 실패 확인 " + issue);
 				}
-				rttr.addFlashAttribute("message", "파일 업로드 실패");
 			  }
-		
 		}
 		
 		String message = "";
 		if(issueService.registIssue(issue)) {
 			message = "게시글을 등록했습니다.";
 			System.out.println(message);
+			rttr.addFlashAttribute("message", "이슈 등록에 성공하셨습니다");
 		} else {
 			message = "게시글등록에 실패했습니다.";
 			System.out.println(message);
+			rttr.addFlashAttribute("message", "이슈 등록에 실패하셨습니다");
 		}
 		
 		mv.setViewName("redirect:/issue/list/"+taskNo);
@@ -529,7 +525,7 @@ public class IssueController {
 	
 	@GetMapping("/deleteFile/{fileNo}")
 	public ModelAndView deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session, 
-			RedirectAttributes rttr, ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
+		   ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
 		
 		int taskNo = (int) session.getAttribute("taskNo");
 		System.out.println("delete에 들어오는 업무 no : " + taskNo);
@@ -550,8 +546,6 @@ public class IssueController {
 		
 		mv.addObject("intent", "/issue/deleteFile");
 		mv.setViewName("redirect:/issue/list/" + taskNo);
-		
-		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
 		
 		return mv; 
 	}
@@ -591,7 +585,6 @@ public class IssueController {
 				issueFileDTO.setSavedPath(filePath);
 				issueFileDTO.setOriginalName(originFileName);
 				issueFileDTO.setRandomName(savedName);
-//				issue.setFile(issueFileDTO);
 				fileList.add(issueFileDTO);
 				issue.setFile(fileList);
 				
@@ -604,20 +597,17 @@ public class IssueController {
 					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
 					
 					System.out.println("이슈 등록 확인 " + issue);
-					
 				}
 				
-				rttr.addFlashAttribute("subMessage", "파일 업로드 성공");
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 				
 				for(int i = 0; i < multiFiles.size(); i++) {
 					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
 				}
-				rttr.addFlashAttribute("subMessage", "파일 업로드 실패");
+				System.out.println("이슈 실패 확인 " + issue);
 			  }
 		}
-		
 		
 		/* 이슈 수정 */
 		int taskNo = issue.getTaskNo();
@@ -630,7 +620,7 @@ public class IssueController {
 		
 		System.out.println("modifyIssue : " + issue);
 		
-		rttr.addFlashAttribute("message", "가이드 게시판 수정에 성공하셨습니다");
+		rttr.addFlashAttribute("message", "이슈 수정에 성공하셨습니다");
 		
 		mv.addObject("intent", "/issue/update");
 		mv.setViewName("redirect:/issue/list/" + taskNo);
@@ -652,7 +642,7 @@ public class IssueController {
 		/* 반환해줄 경로를 찾기 위해서 뽑아낸 업무 번호 */
 		int taskNo = issueService.removeIssue(issueNo, loginMemberNo);
 		
-		rttr.addFlashAttribute("message", "가이드 게시판 삭제에 성공하셨습니다.");
+		rttr.addFlashAttribute("message", "이슈 삭제에 성공하셨습니다");
 		
 		mv.addObject("intent", "/issue/delete");
 		mv.setViewName("redirect:/issue/list/" + taskNo);
@@ -678,12 +668,7 @@ public class IssueController {
 		identification.put("loginMember", loginMemberNo);
 		identification.put("issueHistoryNo", issueHistoryNo);
 		
-//		int issueRegisterNo = Integer.parseInt(request.getParameter("issueRegisterNo"));
-		
-//		int issueManagerNo = Integer.parseInt(request.getParameter("issueManagerNo"));
-		
 		Map<String, Object> notification = issueService.notifyIssueList(identification);
-		
 		
 		Gson gson = new GsonBuilder()
 				.setDateFormat("yyyy-MM-dd")
@@ -692,15 +677,13 @@ public class IssueController {
 				.serializeNulls()
 				.disableHtmlEscaping()
 				.create();
+		
 		List<IssueNotificationDTO> notificationList = (List<IssueNotificationDTO>) notification.get("notificationList");
 		
 		int count = (int) notification.get("count");
 		
-		List<IssueNotificationDTO> eachNotificationList = (List<IssueNotificationDTO>) notification.get("eachNotificationList");
-		
 		mv.addObject("count", gson.toJson(count));
 		mv.addObject("notificationList", gson.toJson(notificationList));
-		mv.addObject("eachNotificationList", eachNotificationList);
 		mv.setViewName("jsonView");
 		return mv;
 	}
