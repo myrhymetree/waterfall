@@ -82,7 +82,7 @@
 				</p>
 				</div>
 					<div id="footerBtn">
-						<button class="addTask button float" type="submit" style="padding:4px; " rel="float">업무 생성</button>
+						<button id="addTaskBtn" class="addTask button float" type="submit" style="padding:4px; " rel="float">업무 생성</button>
 						<input type="button" id="close" class="button float" style="padding:4px; margin-right:30px;" rel="float" value="업무 나가기">
 					</div>
 			

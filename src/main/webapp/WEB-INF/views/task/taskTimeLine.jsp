@@ -440,6 +440,20 @@ ul {
 	justify-content: center;
 }
 
+#addOutput1, #addOutput2{
+	background-color: #92B8DE;
+	color : white;
+}
+
+#addIssue1, #addIssue2{
+	background-color: #FBEB83;
+	color : gray;
+}
+
+#addTaskBtn{
+	background-color: #9ED2B2;
+}
+
 </style>
 <script>
 	/* 비지니스 로직 성공 alert 메시지 처리 */
@@ -515,9 +529,9 @@ ul {
 	$("#parentTaskDeleteBtn").click(function(){
 		
 		if($("#readModal").css("display")=="none"){
-			$("#readModal").css("display", "blcok");
+			$("#readModal").fadeIn().css("display", "blcok");
 		} else{
-			$("#readModal").css("display", "none");
+			$("#readModal").fadeOut().css("display", "none");
 		}
 		$("#delete").click(function(){
 			const deleteParentTaskNo = $("#outputParentTaskNo").val();
@@ -530,9 +544,9 @@ ul {
 	$("#childTaskDeleteBtn").click(function(){
 		
 		if($("#readModal").css("display")=="none"){
-			$("#readModal").css("display", "blcok");
+			$("#readModal").fadeIn().css("display", "blcok");
 		} else{
-			$("#readModal").css("display", "none");
+			$("#readModal").fadeOut().css("display", "none");
 		}
 		$("#delete").click(function(){
 			const deleteChildTaskNo = $("#outputChildTaskNo").val();
@@ -545,7 +559,7 @@ ul {
 	});
 	$("#cancelDelete").click(function(){
 		if($("#readModal").css("display")=="none"){
-			$("#readModal").css("display", "blcok");
+			$("#readModal").fadeIn().css("display", "blcok");
 		} 
 	});
 
@@ -582,8 +596,8 @@ ul {
 		
 		
 		if($("#modifyModal").css("display")=="none"){
-			$("#modifyModal").css("display", "block");
-			$("#readModal").css("display", "none");
+			$("#modifyModal").fadeIn().css("display", "block");
+			$("#readModal").fadeOut().css("display", "none");
 		}	
 	});
 	
@@ -620,14 +634,14 @@ ul {
 		$("#modifyTaskNo").val(modifyTaskNo);
 		
 		if($("#modifyModal").css("display")=="none"){
-			$("#modifyModal").css("display", "block");
-			$("#readModal").css("display", "none");
+			$("#modifyModal").fadeIn().css("display", "block");
+			$("#readModal").fadeOut().css("display", "none");
 		}	
 	});
 	
 	$("#closeModify").click(function(){
-		$("#modifyModal").css("display", "none");
-		$("#readModal").css("display", "block");
+		$("#modifyModal").fadeOut().css("display", "none");
+		$("#readModal").fadeIn().css("display", "block");
 		
 	});
 
@@ -635,8 +649,8 @@ ul {
 	<%-- 상위업무 산출물 --%>
 	$("#addOutput1").click(function(){
 		if($("#outputModal").css("display")=="none"){
-			$("#outputModal").css("display", "flex");
-			$("#readModal").css("display", "none");
+			$("#outputModal").fadeIn().css("display", "flex");
+			$("#readModal").fadeOut().css("display", "none");
 			
 		}
 		
@@ -649,8 +663,8 @@ ul {
 	<%-- 하위업무 산출물 --%>
 	$("#addOutput2").click(function(){
 		if($("#outputModal").css("display")=="none"){
-			$("#outputModal").css("display", "flex");
-			$("#readModal").css("display", "none");
+			$("#outputModal").fadeIn().css("display", "flex");
+			$("#readModal").fadeOut().css("display", "none");
 			
 		}
 		
@@ -661,8 +675,8 @@ ul {
 	});
 	
 	$("#closeOutput").click(function(){
-		$("#readModal").css("display", "block");
-		$("#outputModal").css("display", "none");
+		$("#readModal").fadeIn().css("display", "block");
+		$("#outputModal").fadeOut().css("display", "none");
 	});
 	
 	<%-- hover event 추가 --%>
@@ -718,23 +732,23 @@ ul {
 
 		// 모달 이벤트
 		$(".layerPopup").click(function() {
-			$("#addModal").css("display", "block");
+			$("#addModal").fadeIn().css("display", "block");
 			$(".layer-bg").css("display", "block");
 			
 			
 		});
 		$(".layer #close").click(function() {
-			$("#addModal").css("display", "none");
+			$("#addModal").fadeOut().css("display", "none");
 			$(".layer-bg").css("display", "none");
 		});
 		
 		$(".layer #close").click(function() {
-			$("#readModal").css("display", "none");
+			$("#readModal").fadeOut().css("display", "none");
 			$(".layer-bg").css("display", "none");
 		});
 		
 		$(".layer #close").click(function() {
-			$("#modifyModal").css("display", "none");
+			$("#modifyModal").fadeOut().css("display", "none");
 			$(".layer-bg").css("display", "none");
 		});
 		
@@ -802,7 +816,7 @@ ul {
 						
 						
 						
-						$("#readModal").css("display", "block");
+						$("#readModal").fadeIn().css("display", "block");
 						$(".layer-bg").css("display", "block");
 						
 					}, error:function(data){
