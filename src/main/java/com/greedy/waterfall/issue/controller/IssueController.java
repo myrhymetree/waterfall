@@ -671,31 +671,19 @@ public class IssueController {
 		if(request.getParameter("issueHistoryNo") != null) {
 			issueHistoryNo = Integer.parseInt(request.getParameter("issueHistoryNo"));
 			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
-			System.out.println("issueHistoryNo " + issueHistoryNo);
 		}
 		
-		Map<String, Object> notification = issueService.notifyIssueList(loginMemberNo,issueHistoryNo);
+		Map<String, Integer> identification = new HashMap<>();
+		
+		identification.put("loginMember", loginMemberNo);
+		identification.put("issueHistoryNo", issueHistoryNo);
+		
+//		int issueRegisterNo = Integer.parseInt(request.getParameter("issueRegisterNo"));
+		
+//		int issueManagerNo = Integer.parseInt(request.getParameter("issueManagerNo"));
+		
+		Map<String, Object> notification = issueService.notifyIssueList(identification);
+		
 		
 		Gson gson = new GsonBuilder()
 				.setDateFormat("yyyy-MM-dd")
@@ -708,10 +696,11 @@ public class IssueController {
 		
 		int count = (int) notification.get("count");
 		
-		
+		List<IssueNotificationDTO> eachNotificationList = (List<IssueNotificationDTO>) notification.get("eachNotificationList");
 		
 		mv.addObject("count", gson.toJson(count));
 		mv.addObject("notificationList", gson.toJson(notificationList));
+		mv.addObject("eachNotificationList", eachNotificationList);
 		mv.setViewName("jsonView");
 		return mv;
 	}

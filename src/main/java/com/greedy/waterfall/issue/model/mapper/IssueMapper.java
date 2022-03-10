@@ -54,5 +54,4 @@ public interface IssueMapper {
 
 	void removeCheck(Map<String, Integer> condition);
 
-	
 }

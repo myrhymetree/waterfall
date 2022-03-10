@@ -109,6 +109,7 @@
   		<result property="issueUpdatedContent" column="ISSUE_UPDATED_CONTENT"/>
   		<result property="issueReadCheckNo" column="ISSUE_READ_CHECK"/>
   		<result property="issueProjectNo" column="PROJECT_NO"/>
+  		<result property="issueReader" column="ISSUE_READER"/>
   	</resultMap>
   	
   <select id="selectIssueList" parameterType="_int" resultMap="issueResultMap">
@@ -441,16 +442,17 @@
 	           WHERE B.TASK_NO = #{ taskNo }
 	             AND A.ISSUE_REGISTER = #{ registerNo }
 		</selectKey>
-		INSERT
-		  INTO TBL_ISSUE_NOTIFICATION A
+		INSERT ALL
+		  INTO TBL_ISSUE_NOTIFICATION
 		  (
-		    A.ISSUE_HISTORY_NO
-		  , A.ISSUE_PROGRESS_STATUS 
-		  , A.ISSUE_NO 
-		  , A.ISSUE_REGISTER
-		  , A.ISSUE_MANAGER
-		  , A.ISSUE_UPDATED_CONTENT
-		  , A.PROJECT_NO
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
 		  )
 		  VALUES
 		  (
@@ -459,9 +461,33 @@
 		  , #{ no }
 		  , #{ registerNo }
 		  , #{ managerNo }
+		  , #{ registerNo }
 		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
 		  , #{ projectNo }
 		  )
+		  INTO TBL_ISSUE_NOTIFICATION
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    GET_HISTORY_NO_SEQUENCE()
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ managerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
+		  SELECT * FROM DUAL
 	</insert>
 	
 	<insert id="updateIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
@@ -477,16 +503,17 @@
 	           WHERE B.TASK_NO = #{ taskNo }
 	             AND A.ISSUE_REGISTER = #{ registerNo }
 		</selectKey>
-		INSERT
-		  INTO TBL_ISSUE_NOTIFICATION A
+		INSERT ALL
+		  INTO TBL_ISSUE_NOTIFICATION
 		  (
-		    A.ISSUE_HISTORY_NO
-		  , A.ISSUE_PROGRESS_STATUS 
-		  , A.ISSUE_NO 
-		  , A.ISSUE_REGISTER
-		  , A.ISSUE_MANAGER
-		  , A.ISSUE_UPDATED_CONTENT 
-		  , A.PROJECT_NO
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT 
+		  , PROJECT_NO
 		  )
 		  VALUES
 		  (
@@ -495,9 +522,33 @@
 		  , #{ no }
 		  , #{ registerNo }
 		  , #{ managerNo }
-		   , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , #{ registerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
 		  , #{ projectNo }
 		  )
+		  INTO TBL_ISSUE_NOTIFICATION
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    GET_HISTORY_NO_SEQUENCE()
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ managerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
+		  SELECT * FROM DUAL
 	</insert>
 	
 	<insert id="deleteIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
@@ -511,27 +562,52 @@
 	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
 	           WHERE B.TASK_NO = #{ taskNo }
 		</selectKey>
-		INSERT
-		  INTO TBL_ISSUE_NOTIFICATION A
+		INSERT ALL
+		  INTO TBL_ISSUE_NOTIFICATION
 		  (
-		    A.ISSUE_HISTORY_NO
-		  , A.ISSUE_PROGRESS_STATUS 
-		  , A.ISSUE_NO 
-		  , A.ISSUE_REGISTER
-		  , A.ISSUE_MANAGER
-		  , A.ISSUE_UPDATED_CONTENT
-		  , A.PROJECT_NO
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
 		  )
 		  VALUES
 		  (
 		    ISSUE_HISTORY_NO.NEXTVAL
-		 , #{ progressStatus }
+		  , #{ progressStatus }
 		  , #{ no }
 		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ registerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
+		  INTO TBL_ISSUE_NOTIFICATION
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    GET_HISTORY_NO_SEQUENCE()
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
 		  , #{ managerNo }
 		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
 		  , #{ projectNo }
 		  )
+		  SELECT * FROM DUAL
 	</insert>
 	
  	<insert id="writeRegistedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
@@ -646,10 +722,10 @@
              , A.ISSUE_UPDATED_CONTENT
              , A.ISSUE_READ_CHECK
              , A.PROJECT_NO
+             , A.ISSUE_READER
           FROM TBL_ISSUE_NOTIFICATION A
          WHERE A.ISSUE_READ_CHECK = 1
-           AND A.ISSUE_REGISTER = #{ loginMemberNo }
-            OR A.ISSUE_MANAGER = #{ loginMemberNo }
+         AND A.ISSUE_READER = #{ loginMemberNo }
          ORDER BY 4
 	</select>
 	
@@ -659,7 +735,7 @@
                COUNT(A.ISSUE_HISTORY_NO) AS COUNT
           FROM TBL_ISSUE_NOTIFICATION A
          WHERE A.ISSUE_READ_CHECK = 1
-           AND (A.ISSUE_REGISTER = #{ loginMemberNo } OR A.ISSUE_MANAGER = #{ loginMemberNo })
+            AND A.ISSUE_READER = #{ loginMemberNo }
     </select>
     
     <!-- x눌렀을 때 메시지 읽은것으로 처리되어 사용자에게는 더 이상 보여지지 않음 -->
@@ -669,8 +745,7 @@
            SET A.ISSUE_READ_CHECK = 0
          WHERE A.ISSUE_READ_CHECK = 1
            AND A.ISSUE_HISTORY_NO = #{ issueHistoryNo }
-            OR A.ISSUE_MANAGER = #{ loginMemberNo }
-           AND A.ISSUE_REGISTER =  #{ loginMemberNo }
+           AND A.ISSUE_READER = #{ loginMemberNo }
     </update>
     
   </mapper>

@@ -26,4 +26,5 @@ public class IssueHistoryDTO {
 	private ProjectMemberDTO projectMember;
 	private int registerNo;
 	private String registerName;
+	private int issueReader;
 }

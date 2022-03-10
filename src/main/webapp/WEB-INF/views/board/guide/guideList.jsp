@@ -138,13 +138,10 @@ table, th, td {
   margin-right: 306px;
 }
 /* 다운로드 할 파일 이름이 길 경우 모달 밖으로 삐져나오는것을 방지함 */
-#downloadZone #read-originalName {
+#read-originalName {
   width:300px;
-  overflow:hidden
-  white-space:nowrap
-  text-overflow: ellipsis;
 }
-#
+
 
 /* 검색 인풋 버튼 */ 
 /* input::-ms-clear,
