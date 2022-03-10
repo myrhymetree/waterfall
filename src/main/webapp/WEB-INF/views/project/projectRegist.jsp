@@ -58,7 +58,7 @@
 						</select>
 					</span>
 					<span>
-						<select id="member" name="member">
+						<select id="member" name="member" required>
 							<option value="" selected disabled>사원 선택</option>
 						</select>
 					</span>

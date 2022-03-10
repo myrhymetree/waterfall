@@ -223,8 +223,7 @@
 	<delete id="removeMeetingBoard" parameterType="_int">
         DELETE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#removeMeetingBoard() */
           FROM TBL_BOARD A
-         WHERE A.BOARD_CATEGORY_NO = 4
-           AND A.BOARD_NO = #{ meetingNo }	
+         WHERE A.BOARD_NO = #{ meetingNo }	
 	</delete>
 	
 	<!-- 입력받은 정보로 게시글을 수정한다. -->
@@ -248,9 +247,11 @@
              , A.BOARD_STATUS
              , A.BOARD_CATEGORY_NO
              , A.PROJECT_NO
+             , A.BOARD_COUNT
              , A.MEMBER_NO
           FROM TBL_BOARD A
          WHERE A.BOARD_NO = #{ meetingNo }
+           AND A.BOARD_STATUS = 'Y'
 	</select>	
 	
 	<!-- 첨부파일번호로 첨부파일 전체 정보를 조회한다. -->
