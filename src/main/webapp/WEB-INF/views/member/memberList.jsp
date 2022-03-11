@@ -74,7 +74,7 @@
                 <form action="${ pageContext.servletContext.contextPath }/member/memberModify" method="post">
                     <div class="modal-body" style="margin-top: 5%;">
                         <div>
-                            <input type="text" class="form-control" placeholder="아이디" id="id" name="id" style="width: 70%; margin-left: 15%;">
+                            <input type="text" class="form-control" placeholder="아이디" id="id" name="id" style="width: 70%; margin-left: 15%;" readonly="readonly">
                         </div>
                         <div class="mb-3" style="margin-top: 3%;"> 
                             <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->

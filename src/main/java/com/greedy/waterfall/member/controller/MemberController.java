@@ -108,15 +108,6 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 	
-	/*
-	 * @GetMapping("/list") public ModelAndView MemberSelectList(HttpServletRequest
-	 * request, ModelAndView mv) {
-	 * 
-	 * String currentPage = request.getParameter("currentPage");
-	 * 
-	 * return mv; }
-	 */
-	
 	@GetMapping("list")
 	public ModelAndView findAdminMemberList(HttpServletRequest request ,ModelAndView mv) {
 		
@@ -128,16 +119,8 @@ public class MemberController {
 		}
 		
 		String searchCondition = request.getParameter("searchCondition");
-		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
-		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
-		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
-		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
 		String searchValue = request.getParameter("searchValue");
-		System.out.println("확인용서치 두번쨰" + " " + searchValue);
-		System.out.println("확인용서치 두번쨰" + " " + searchValue);
-		System.out.println("확인용서치 두번쨰" + " " + searchValue);
-		System.out.println("확인용서치 두번쨰" + " " + searchValue);
-		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+
 		Map<String, String> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
@@ -157,14 +140,6 @@ public class MemberController {
 		}
 		
 		List<AdminMemberDTO> adminMemberList = memberService.findAdminMember(selectCriteria); 
-		
-		System.out.println("확인" + adminMemberList);
-		System.out.println("확인" + adminMemberList);
-		System.out.println("확인" + adminMemberList);
-		System.out.println("확인" + adminMemberList);
-		System.out.println("확인" + adminMemberList);
-		System.out.println("확인" + adminMemberList);
-		System.out.println("확인" + adminMemberList);
 		
 		mv.addObject("adminMemberList", adminMemberList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -192,8 +167,6 @@ public class MemberController {
 	@GetMapping("regist2/{deptCode}")
 	/* @ResponseBody */
 	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,HttpServletResponse response) throws JsonProcessingException {
-
-//		response.setContentType("application/json; charset=UTF-8");
 		
 		List<TeamDTO> teamList = memberService.findTeamList(deptCode);
 		
@@ -201,24 +174,8 @@ public class MemberController {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		mv.addObject("teamList", mapper.writeValueAsString(teamList));
-		mv.setViewName("jsonView"); // 매퍼 안에 담긴 
+		mv.setViewName("jsonView"); 
 		
-//		Gson gson = new GsonBuilder()
-//			      .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
-//			      .setPrettyPrinting()
-//			      .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
-//			      .serializeNulls()
-//			      .disableHtmlEscaping()																			
-//			      .create();
-                                                                                                        	
-		//		mv.addObject("teamList", gson.toJson(teamList));										
-//		                                                                                                		 
-//		System.out.println("왜 안될까?" + mv);																	
-//		System.out.println("왜 안될까?" + mv);																	
-//		System.out.println("왜 안될까?" + mv);																		
-//		mv.setViewName("jsonView");																				
-//																										
-																										
 		return mv;                                                                                            	
 	}                                                                     										
 																													
@@ -236,9 +193,7 @@ public class MemberController {
 		TeamDTO teamDTO = new TeamDTO();
 		JobDTO jobDTO = new JobDTO();
 		
-		deptDTO.setDeptCode(dept);
-//		deptDTO.setDeptName(deptName);
-		
+		deptDTO.setDeptCode(dept);;
 		teamDTO.setTeamCode(team);
 		jobDTO.setJobCode(job);
 		
@@ -287,15 +242,10 @@ public class MemberController {
 	public ModelAndView memberModify(ModelAndView mv, @RequestParam Map<String, String> parameter, RedirectAttributes rttr) {
 		
 		String id = parameter.get("id");
-		System.out.println("id" + id);
 		String name = parameter.get("name");
-		System.out.println("name" + name);
 		String dept = parameter.get("dept");
-		System.out.println("dept" + dept);
 		String team = parameter.get("team");
-		System.out.println("team" + team);
 		String job = parameter.get("job");
-		System.out.println("job" + job);
 		
 		id = id.replace("\"", "");
 		
@@ -313,8 +263,7 @@ public class MemberController {
 		adminMember.setDept(deptDTO);
 		adminMember.setTeam(teamDTO);
 		adminMember.setJob(jobDTO);
-		System.out.println("adminMember" + adminMember);
-		System.out.println("adminMember" + adminMember);
+
 		memberService.memberModify(adminMember);
 		
 		String message = "수정에 성공하셨습니다.";
@@ -329,15 +278,15 @@ public class MemberController {
 	public ModelAndView removeMember(ModelAndView mv, HttpServletRequest request, RedirectAttributes rttr) {
 		
 		String id = request.getParameter("id");
-		System.out.println("id 확인용" + "" + id);
 		id = id.replace("\"", "");
-		System.out.println("id 확인용 두번째" + "" + id);
+
 		memberService.removeMember(id);
 		
 		String message = "삭제에 성공하셨습니다.";
 		
 		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/member/list");
+		
 		return mv;
 	}
 	
@@ -346,15 +295,10 @@ public class MemberController {
 	@ResponseBody
 	public String mailCheckGET(String email) {
 		
-		/* 뷰(view)로부터 넘어온 데이터 확인 */
-		System.out.println("이메일 데이터 전송 확인");
-		System.out.println("인증번호" + email);
-		
 		Random random = new Random();
+		
 		int checkNum = random.nextInt(888888) + 111111; //111111~999999 범위
-		
-		System.out.println("인증번호" + checkNum);
-		
+
 		/* 이메일 보내기 */
 		String setFrom = "zxcv4097@naver.com";
 		String toMail = email;
