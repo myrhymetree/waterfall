@@ -19,6 +19,8 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet"
    href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   <!-- 게시판 모달 다운로드 토글 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- chart -->
 <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js"></script>
@@ -340,9 +342,9 @@ td {
 					for(let i = 0;i < $boardInfo.file.length; i++) {
 						const $fileName = $boardInfo.file[i].fileOriginName;
 						const $fileNo = $boardInfo.file[i].fileNo;
-						const $fileTag = "<a href='"+'${pageContext.servletContext.contextPath}/meeting/download/' + $fileNo + "'>"+$fileName+"</a>";
-						$("#upload-file-area").append($fileTag);
-						$("#upload-file-area").append("<br>");
+						$buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + $fileName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/meeting/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/meeting/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+						$("#downloadZone").append($buttonsTag);
+
 					}
 				}
 				$("#board-category-name").append($boardInfo.boardCategoryName);

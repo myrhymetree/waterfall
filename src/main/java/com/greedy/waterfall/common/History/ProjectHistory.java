@@ -118,8 +118,18 @@ public class ProjectHistory implements History{
 
 	@Override
 	public List<ProjectHistoryDTO> recoveryHistory(Object info) {
+		List<ProjectHistoryDTO> historyList = new ArrayList<>();
+		
+		RegistProjectDTO projectInfo = (RegistProjectDTO) ((Map<String, Object>) info).get("projectInfo");
+		MemberDTO memberInfo = (MemberDTO) ((Map<String, Object>) info).get("memberInfo");
 
-		return null;
+		ProjectHistoryDTO history = new ProjectHistoryDTO().builder().projectNo(projectInfo.getProjectNo())
+				.managerNo(memberInfo.getNo()).contentType(1)
+				.content("[" + memberInfo.getName() + "]님이 [" + projectInfo.getProjectName() + "] 프로젝트를 복구했습니다.")
+				.build();
+
+		historyList.add(history);		
+		return historyList;
 	}
 
 }

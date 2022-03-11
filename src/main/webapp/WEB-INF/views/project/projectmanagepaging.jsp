@@ -7,6 +7,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+.paging button {
+	background: none;
+	border: none;
+}
+</style>
 </head>
 <body>
 	<div class="pagingArea" align="center">

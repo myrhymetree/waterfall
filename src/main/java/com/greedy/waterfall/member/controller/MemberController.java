@@ -82,8 +82,9 @@ public class MemberController {
 	public String login(@ModelAttribute MemberDTO member, Model model) throws LoginFailedException {
 		
 		if(member.getId().equals("admin")) {
-			model.addAttribute("loginMember", memberService.findMember(member));
-			
+			MemberDTO loginMember = memberService.findMember(member);
+			model.addAttribute("loginMember", loginMember);
+			System.out.println("login2 member : " + loginMember );
 			return "redirect:/menu/main"; 
 		
 		} else {			

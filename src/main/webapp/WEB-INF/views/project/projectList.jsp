@@ -8,19 +8,18 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
-
-
+<script>
+   /* 비즈니스 로직 성공 alert 메시지 처리 */
+   const message = '${ requestScope.message }';
+   if(message != null && message !== '') {
+      alert(message);
+   }
+</script>
 <style>
-
-tr {
-height: 24px;
-}
+	tr {
+		height: 24px;
+	}
 </style>
-
-
-
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
@@ -89,8 +88,8 @@ height: 24px;
 									<td><c:out value="${ project.name}" /></td>
 									<td><c:out value="${ project.member.memberName}" /></td>
 									<td><c:out value="${ project.progression }" /></td>
-									<td>대기</td>
-									<td>대기</td>
+									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
+									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>
 									<td><c:out value="${ project.startDate }" /></td>
 									<td><c:out value="${ project.deadLine }" /></td>
 									<td><input type="hidden" value="${ project.no }" name="projectNo"></td>
@@ -155,8 +154,8 @@ height: 24px;
 									<td><c:out value="${ project.name}" /></td>
 									<td><c:out value="${ project.member.memberName}" /></td>
 									<td><c:out value="${ project.progression }" /></td>
-									<td>대기</td>
-									<td>대기</td>
+									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
+									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>
 									<td><c:out value="${ project.startDate }" /></td>
 									<td><c:out value="${ project.deadLine }" /></td>
 									<td><input type="hidden" value="${ project.no }" name="projectNo"></td>

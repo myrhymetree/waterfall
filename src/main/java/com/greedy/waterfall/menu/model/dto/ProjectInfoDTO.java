@@ -11,6 +11,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <pre>
+ * Class : ProjectInfoDTO
+ * Comment : 클래스 설명 작성부분
+ * 
+ * History
+ * 2022. 3. 4.  (홍성원)
+ * </pre>
+ * @version 1
+ * @author 홍성원
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -20,10 +31,12 @@ import lombok.ToString;
 public class ProjectInfoDTO {
 	private int outputAmount;				//산출물 갯수
 	
+	private int totalIssueAmount;			//이슈 총 갯수
 	private int watingIssueAmount;			//대기중 이슈 갯수
 	private int progressingIssueAmount;		//처리중 이슈 갯수
 	private int solvedIssueAmount;			//완료 이슈 갯수
 	
+	private int totalTaskAmount;			//업무 총 갯수
 	private int beforeProceedingTaskAmount;	//진행전 업무 갯수 
 	private int progressingTaskAmount;		//진행중 업무 갯수
 	private int testingTaskAmount;			//테스트중 업무 갯수

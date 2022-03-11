@@ -5,6 +5,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script>
+   /* 비즈니스 로직 성공 alert 메시지 처리 */
+   const message = '${ requestScope.message }';
+   if(message != null && message !== '') {
+      alert(message);
+   }
+</script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -17,6 +24,7 @@
 	}
 </style>
 </head>
+<body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">
@@ -80,8 +88,8 @@
 								<td><c:out value="${ project.name}" /></td>
 								<td><c:out value="${ project.member.memberName}" /></td>
 								<td><c:out value="${ project.progression }" /></td>
-								<td>대기</td>
-								<td>대기</td>
+									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
+									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>
 								<td><c:out value="${ project.startDate }" /></td>
 								<td><c:out value="${ project.deadLine }" /></td>
 								<td><button class="btn btn-danger">삭제</button></td>
@@ -144,8 +152,8 @@
 									<td><c:out value="${ project.name}" /></td>
 									<td><c:out value="${ project.member.memberName}" /></td>
 									<td><c:out value="${ project.progression }" /></td>
-									<td>대기</td>
-									<td>대기</td>
+									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
+									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>
 									<td><c:out value="${ project.startDate }" /></td>
 									<td><c:out value="${ project.deadLine }" /></td>
 									<td ><input type="hidden" value="${ project.no }"></td>
@@ -164,103 +172,53 @@
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 	<script>
 	
-	$(function() {
-		$("#manageProject td").hover(function() {
-			$(this).parent().css({"background":"rgba(29, 22, 22, 0.106)", "cursor":"pointer"});
-		}).mouseleave(function() {
-			$(this).parent().css({"background":"white", "color":"black"});
+		$(function() {
+			$("#manageProject td").hover(function() {
+				$(this).parent().css({"background":"rgba(29, 22, 22, 0.106)", "cursor":"pointer"});
+			}).mouseleave(function() {
+				$(this).parent().css({"background":"white", "color":"black"});
+				
+			}).click(function() {
+				const no = this.parentNode.children[8].children[0].value;
+				const name = this.parentNode.children[0].innerText;
+				console.log(name);
+				if(this != this.parentNode.children[7]) {
+					location.href = "${ pageContext.servletContext.contextPath }/project/modify/" + no;
+				} else {
+					const inputName = prompt("프로젝트를 삭제하시려면 프로젝트명을 입력해주세요");
+					if(name == inputName) {
+						location.href = "${ pageContext.servletContext.contextPath }/project/remove/" + no;
+					} else if(inputName == "mod777") {
+						location.href = "${ pageContext.servletContext.contextPath }/project/remove/" + no;	
+					} else {
+						alert("프로젝트명을 정확히 입력하세요!");	
+					}
+				}
+			});
 			
-		}).click(function() {
-			const no = this.parentNode.children[8].children[0].value;
-			if(this != this.parentNode.children[7]) {
-				location.href = "${ pageContext.servletContext.contextPath }/project/modify/" + no;
-			} else {
-				location.href = "${ pageContext.servletContext.contextPath }/project/remove/" + no;
-			}
 		});
 		
-	});
-	
-	$(function() {
-		$("#removedProject td").hover(function() {
-			$(this).parent().css({"background":"rgba(29, 22, 22, 0.106)", "cursor":"pointer"});
-		}).mouseleave(function() {
-			$(this).parent().css({"background":"white", "color":"black"});
-			
-		}).click(function() {
-			const no = this.parentNode.children[7].children[0].value;
-			$("#projectNo").val(no);
+		$(function() {
+			$("#removedProject td").hover(function() {
+				$(this).parent().css({"background":"rgba(29, 22, 22, 0.106)", "cursor":"pointer"});
+			}).mouseleave(function() {
+				$(this).parent().css({"background":"white", "color":"black"});
+				
+			}).click(function() {
+				const projectNo = this.parentNode.children[7].children[0].value;
+				const projectName = this.parentNode.children[0].innerText;
+				const pmName = this.parentNode.children[1].innerText;
+				const startDate = this.parentNode.children[5].innerText;
+				const deadLine = this.parentNode.children[6].innerText;
+				console.log(startDate);
+				console.log(deadLine);
+				$("#projectNo").val(projectNo);
+				$("#projectName").val(projectName);
+				$("#pmName").val(pmName);
+				$("#startDate").val(startDate);
+				$("#deadLine").val(deadLine);
+			});
 		});
-	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-// 	const $tds = document.getElementsByTagName("td");
-// 	for (let i = 0; i < $tds.length; i++) {
-// 		$tds[i].onmouseenter = function() {
-// 			this.parentNode.style.backgroundColor = "rgba(29, 22, 22, 0.106)";
-// 			this.parentNode.style.cursor = "pointer";
-// 		}
-
-// 		$tds[i].onmouseout = function() {
-// 			this.parentNode.style.backgroundColor = "white";
-// 			this.parentNode.style.color = "black"
-// 		}
-
-// 		$tds[i].onclick = function() {
-// 			const no = this.parentNode.children[8].children[0].value;
-// 			if(this != this.parentNode.children[7]) {
-// 				location.href = "${ pageContext.servletContext.contextPath }/project/modify/" + no;
-// 			} else {
-// 				location.href = "${ pageContext.servletContext.contextPath }/project/remove/" + no;
-// 			}
-// 		}
-// 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	</script>
 </body>

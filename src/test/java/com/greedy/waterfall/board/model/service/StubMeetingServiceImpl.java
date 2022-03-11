@@ -10,6 +10,17 @@ import org.springframework.stereotype.Component;
 import com.greedy.waterfall.board.model.dto.MeetingDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
+/**
+ * <pre>
+ * Class : StubMeetingServiceImpl
+ * Comment : MeetingController를 단위테스트하기위한 Stub 클래스
+ * 
+ * History
+ * 2022. 3. 11.  (홍성원)
+ * </pre>
+ * @version 1
+ * @author 홍성원
+ */
 @Component("stubMeetingService")
 @Primary
 public class StubMeetingServiceImpl implements MeetingService{

@@ -1,7 +1,5 @@
 package com.greedy.waterfall.common.result;
 
-import org.springframework.stereotype.Component;
-
 public class Result {
 	
 	boolean result;
@@ -16,6 +14,9 @@ public class Result {
 		if(nullCheck(checkValue)) {
 			integerCheck(checkValue);
 		}
+	}
+	public Result(boolean checkValue) {
+		this.result = checkValue;
 	}
 	
 	public Result and(Integer checkValue) {

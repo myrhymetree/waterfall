@@ -45,8 +45,8 @@ public class PagingPage implements Paging {
 		int pageNo = 1;														//입력받은 현재페이지가 없으면 1페이지를 보여준다.
 		int limit =  pageSetting.getLimit();								//한 페이지에 출력될 게시물의 수로 초기화한다.
 		int buttonAmount = pageSetting.getButtonAmount();					//한 페이지에 출력될 버튼의 갯수로 초기화한다.
-		int projectNo = pageSetting.getMemberNo();
-		
+		MemberDTO member = new MemberDTO().builder().no(pageSetting.getMemberNo()).build();
+		int projectNo = 0;
 		int totalCount = Integer.parseInt(searchMap.get("totalCount"));			
 		String currentPage = searchMap.get("currentPage");
 		String searchCondition = searchMap.get("searchCondition");	
@@ -61,14 +61,7 @@ public class PagingPage implements Paging {
 			pageNo = Integer.parseInt(currentPage);
 		}
 
-		/* 검색여부에 따른 페이징처리를 한다.*/
-		if(searchCondition != null && !"".equals(searchValue)) {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue, projectNo, null);
-		} else {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, projectNo);
-		}
-		
-		return selectCriteria;
+		return Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue, projectNo, member);
 	}
 
 	@Override
@@ -78,7 +71,8 @@ public class PagingPage implements Paging {
 		int pageNo = 1;														//입력받은 현재페이지가 없으면 1페이지를 보여준다.
 		int limit =  pagingSetting.getLimit();								//한 페이지에 출력될 게시물의 수로 초기화한다.
 		int buttonAmount = pagingSetting.getButtonAmount();					//한 페이지에 출력될 버튼의 갯수로 초기화한다.
-		int projectNo = pagingSetting.getMemberNo();
+		MemberDTO member = new MemberDTO().builder().no(pagingSetting.getMemberNo()).build();
+		int projectNo = 0;
 		
 		int totalCount = Integer.parseInt(searchMap.get("subtotalCount"));			
 		String currentPage = searchMap.get("subcurrentPage");
@@ -95,13 +89,7 @@ public class PagingPage implements Paging {
 		}
 
 		/* 검색여부에 따른 페이징처리를 한다.*/
-		if(searchCondition != null && !"".equals(searchValue)) {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue, projectNo, null);
-		} else {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, projectNo);
-		}
-		
-		return selectCriteria;
+		return Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue, projectNo, member);
 	}
 
 	@Override
