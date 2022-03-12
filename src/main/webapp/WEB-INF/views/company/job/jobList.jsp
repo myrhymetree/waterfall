@@ -148,6 +148,11 @@ td{
   margin-right: 5px;
 }
 
+input[type="text"]:focus {
+	outline-color: lightseagreen;
+	background: paleturquoise;
+}
+
 </style>
 </head>
 <body>
@@ -206,10 +211,10 @@ td{
 								<label class="me-2" for="name-read">직급명</label>
 								<input type="text" id="name-read" name="name">
 							</div>
-							<!-- 직급코드 수정 안 됨 -->
+							<!-- 직급코드 읽기 전용 -->
 							<div class="my-modal-input mb-4">
 								<label class="me-2" for="code-read">직급코드</label>
-								<input type="text" id="code-read" name="code" readonly>
+								<input id="code-read" name="code" style="border: none; outline: none" readonly>
 							</div>
 						</div>
 						<div class="my-modal-footer-read">

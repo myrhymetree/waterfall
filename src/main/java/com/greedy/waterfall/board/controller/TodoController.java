@@ -32,6 +32,8 @@ import com.greedy.waterfall.common.exception.TodoRegistException;
 import com.greedy.waterfall.common.exception.TodoRemoveException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
 /**
  * <pre>
@@ -54,6 +56,112 @@ public class TodoController {
 	public TodoController(TodoService todoService) {
 		this.todoService = todoService;
 	}
+	
+	/* 게시글 등록 */
+	@PostMapping("/regist")
+	public String registTodo(@ModelAttribute TodoDTO todo, HttpServletRequest request,
+			RedirectAttributes rttr) throws TodoRegistException {
+		
+		String title = request.getParameter("title");
+		String body = request.getParameter("body");
+		
+		todo.setTitle(title);
+		todo.setContent(body);
+		todo.setProjectNo(((ProjectAuthorityDTO)(request.getSession().getAttribute("projectAutority"))).getProjectNo());
+		todo.setMemberNo(((MemberDTO)(request.getSession().getAttribute("loginMember"))).getNo());
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		System.out.println(todo);
+		todoService.registTodo(todo);
+		
+//		rttr.addFlashAttribute("message", "To Do 등록에 성공하셨습니다!");
+		
+		return "redirect:/todo/list";
+	}
+	
+	/* 게시글 등록 + 다중 파일 업로드 */
+//	@PostMapping("/regist")
+//	public String registTodo(@ModelAttribute TodoDTO todo, 
+//			@RequestParam("todoUpload") List<MultipartFile> todoUpload, 
+//			HttpServletRequest request, RedirectAttributes rttr) throws TodoRegistException {
+//		
+//		/* 게시글 등록 */
+//		String title = request.getParameter("title");
+//		String body = request.getParameter("body");
+//		
+//		todo.setTitle(title);
+//		todo.setContent(body);
+//		
+//		/* 다중 파일 업로드 */
+//		String root = request.getSession().getServletContext().getRealPath("resources");	//webapp폴더 하위 resources폴더
+//		
+//		String filePath = root + "\\uploadFiles";	//resources폴더 하위 uploadFiles폴더 생성
+//		
+//		File mkdir = new File(filePath);
+//		if(!mkdir.exists()) {
+//			mkdir.mkdirs();
+//		}
+//		
+//		List<Map<String, String>> files = new ArrayList<>();
+//		for(int i = 0; i < todoUpload.size(); i++) {
+//			/*파일명 변경 처리*/
+//			String originFileName = todoUpload.get(i).getOriginalFilename();
+//			String ext = originFileName.substring(originFileName.lastIndexOf("."));
+//			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+//			
+//			Map<String, String> file = new HashMap<>();
+//			file.put("originFileName", originFileName);
+//			file.put("savedName", savedName);
+//			file.put("filePath", filePath);
+//			
+//			files.add(file);
+//		}
+//		
+//		/*파일 저장*/
+//		try {
+//			for(int i = 0; i < todoUpload.size(); i++) {
+//				Map<String, String> file = files.get(i);
+//				todoUpload.get(i).transferTo(new File(filePath + "\\" + file.get("savedName")));
+//			}
+//			
+////			rttr.addFlashAttribute("message", "To Do 다중 파일 업로드에 성공하셨습니다!");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			
+//			/*실패시 파일 삭제*/
+//			for(int i = 0; i < todoUpload.size(); i++) {
+//				Map<String, String> file = files.get(i);
+//				
+//				new File(filePath + "\\" + file.get("savedName")).delete();
+//			}
+//			
+//			rttr.addFlashAttribute("message", "To Do 다중 파일 업로드에 실패하셨습니다!");
+//		}
+//		
+//		todoService.registTodo(todo);
+//		
+//		return "redirect:/todo/list";
+//	}
 	
 	/**
 	 * todoSelectList : 메소드 설명 작성 부분
@@ -80,6 +188,7 @@ public class TodoController {
 		
 		String searchCondition = request.getParameter("searchCondition");
 		String searchValue = request.getParameter("searchValue");
+		int projectNo = ((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo();
 		
 		Map<String, String> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
@@ -110,7 +219,43 @@ public class TodoController {
 		} else {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
+		selectCriteria.setProjectNo(projectNo);
 		
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
+		System.out.println(selectCriteria);
 		System.out.println(selectCriteria);
 		
 		/* 조회해 온다 */
@@ -123,88 +268,6 @@ public class TodoController {
 		mv.setViewName("/board/todo/todoList");
 		
 		return mv;
-	}
-	
-	/* 게시글 등록 */
-//	@PostMapping("/regist")
-//	public String registTodo(@ModelAttribute TodoDTO todo, HttpServletRequest request,
-//			RedirectAttributes rttr) throws TodoRegistException {
-//		
-//		String title = request.getParameter("title");
-//		String body = request.getParameter("body");
-//		
-//		todo.setTitle(title);
-//		todo.setContent(body);
-//		
-//		todoService.registTodo(todo);
-//		
-////		rttr.addFlashAttribute("message", "To Do 등록에 성공하셨습니다!");
-//		
-//		return "redirect:/todo/list";
-//	}
-	
-	/* 게시글 등록 + 다중 파일 업로드 */
-	@PostMapping("/regist")
-	public String registTodo(@ModelAttribute TodoDTO todo, 
-			@RequestParam("todoUpload") List<MultipartFile> todoUpload, 
-			HttpServletRequest request, RedirectAttributes rttr) throws TodoRegistException {
-		
-		/* 게시글 등록 */
-		String title = request.getParameter("title");
-		String body = request.getParameter("body");
-		
-		todo.setTitle(title);
-		todo.setContent(body);
-		
-		/* 다중 파일 업로드 */
-		String root = request.getSession().getServletContext().getRealPath("resources");	//webapp폴더 하위 resources폴더
-		
-		String filePath = root + "\\uploadFiles";	//resources폴더 하위 uploadFiles폴더 생성
-		
-		File mkdir = new File(filePath);
-		if(!mkdir.exists()) {
-			mkdir.mkdirs();
-		}
-		
-		List<Map<String, String>> files = new ArrayList<>();
-		for(int i = 0; i < todoUpload.size(); i++) {
-			/*파일명 변경 처리*/
-			String originFileName = todoUpload.get(i).getOriginalFilename();
-			String ext = originFileName.substring(originFileName.lastIndexOf("."));
-			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-			
-			Map<String, String> file = new HashMap<>();
-			file.put("originFileName", originFileName);
-			file.put("savedName", savedName);
-			file.put("filePath", filePath);
-			
-			files.add(file);
-		}
-		
-		/*파일 저장*/
-		try {
-			for(int i = 0; i < todoUpload.size(); i++) {
-				Map<String, String> file = files.get(i);
-				todoUpload.get(i).transferTo(new File(filePath + "\\" + file.get("savedName")));
-			}
-			
-//			rttr.addFlashAttribute("message", "To Do 다중 파일 업로드에 성공하셨습니다!");
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			/*실패시 파일 삭제*/
-			for(int i = 0; i < todoUpload.size(); i++) {
-				Map<String, String> file = files.get(i);
-				
-				new File(filePath + "\\" + file.get("savedName")).delete();
-			}
-			
-			rttr.addFlashAttribute("message", "To Do 다중 파일 업로드에 실패하셨습니다!");
-		}
-		
-		todoService.registTodo(todo);
-		
-		return "redirect:/todo/list";
 	}
 	
 	/* 게시글 상세 조회 */

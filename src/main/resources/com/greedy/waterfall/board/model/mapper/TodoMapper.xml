@@ -32,6 +32,35 @@
 		<result property="role" column="MEMBER_AUTHORIZATION_NO"/>
 	</resultMap>
 	
+	<!-- 게시글 등록 -->
+	<insert id="insertTodo" parameterType="com.greedy.waterfall.board.model.dto.TodoDTO">
+		INSERT
+		  INTO TBL_BOARD A
+		(
+		  A.BOARD_NO
+        , A.BOARD_POSTING_DATE
+        , A.BOARD_TITLE
+        , A.BOARD_CONTENT
+        , A.BOARD_STATUS
+        , A.PROJECT_NO
+        , A.BOARD_CATEGORY_NO
+        , A.MEMBER_NO
+        , A.BOARD_COUNT
+		)
+		VALUES
+		(
+		  BOARD_NO.NEXTVAL
+		, SYSDATE
+		, #{ title }
+		, #{ content }
+		, 'Y'
+		, #{ projectNo }
+		, 5
+		, #{ memberNo }
+		, 0 
+		)
+	</insert>
+	
 	<!-- 게시글 전체 목록 조회 -->
 	<select id="findTodo" resultMap="todoResultMap">
 		SELECT /* com.greedy.waterfall.board.model.mapper.TodoMapper#findTodo() */
@@ -42,6 +71,7 @@
 		     , A.BOARD_COUNT
 		     , A.BOARD_POSTING_DATE
 		     , A.BOARD_STATUS
+		     , A.PROJECT_NO
 		     , A.BOARD_CATEGORY_NO
 		     , A.MEMBER_NAME
 		  FROM (SELECT ROWNUM RNUM
@@ -51,6 +81,7 @@
 		             , B.BOARD_COUNT
 		             , B.BOARD_POSTING_DATE
 		             , B.BOARD_STATUS
+		             , B.PROJECT_NO
 		             , B.BOARD_CATEGORY_NO
 		             , B.MEMBER_NAME
 		          FROM (SELECT C.BOARD_NO
@@ -72,9 +103,9 @@
 			                 <if test="searchCondition == 'content'">
 			                 	C.BOARD_CONTENT LIKE '%' || #{ searchValue } || '%'
 			                 </if>
-			                 <if test="searchCondition == 'writer'">
+			                 <!-- <if test="searchCondition == 'writer'">
 			                 	E.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'
-			                 </if>
+			                 </if> -->
 			                 AND C.BOARD_STATUS = 'Y'
 			                 AND C.PROJECT_NO = #{ projectNo }
 			                 AND D.BOARD_CATEGORY_NO = 5
@@ -94,9 +125,9 @@
 		SELECT /* com.greedy.waterfall.board.model.mapper.TodoMapper#selectTotalCount() */
                COUNT(*)
           FROM TBL_BOARD A
-          <if test="searchCondition == 'writer'">
+          <!-- <if test="searchCondition == 'writer'">
 	      	JOIN TBL_MEMBER B ON(A.MEMBER_NO = B.MEMBER_NO)
-    	  </if>
+    	  </if> -->
     	<where>
 			<if test="searchCondition == 'title'">
 	           A.BOARD_TITLE LIKE '%' || #{ searchValue } || '%' 	
@@ -104,11 +135,11 @@
 			<if test="searchCondition == 'content'">
 	           A.BOARD_CONTENT LIKE '%' || #{ searchValue } || '%' 	
 			</if>
-			<if test="searchCondition == 'writer'">
+			<!-- <if test="searchCondition == 'writer'">
 	           B.MEMBER_NAME LIKE '%' || #{ searchValue } || '%'	
-			</if>
+			</if> -->
 	       AND A.BOARD_STATUS = 'Y'
-	       AND A.PROJECT_NO = #{ projectNo }
+	       <!-- AND A.PROJECT_NO = #{ projectNo } -->
 	       <!-- To Do 게시판 게시글만 카운트 -->
 	       AND A.BOARD_CATEGORY_NO = 5
     	</where>
@@ -148,35 +179,6 @@
 		     , A.BOARD_CONTENT = #{ content }
 		 WHERE A.BOARD_NO = #{ no }    
 	</update>
-	
-	<!-- 게시글 등록 -->
-	<insert id="insertTodo" parameterType="com.greedy.waterfall.board.model.dto.TodoDTO">
-		INSERT
-		  INTO TBL_BOARD A
-		(
-		  A.BOARD_NO
-        , A.BOARD_POSTING_DATE
-        , A.BOARD_TITLE
-        , A.BOARD_CONTENT
-        , A.BOARD_STATUS
-        , A.PROJECT_NO
-        , A.BOARD_CATEGORY_NO
-        , A.MEMBER_NO
-        , A.BOARD_COUNT
-		)
-		VALUES
-		(
-		  BOARD_NO.NEXTVAL
-		, SYSDATE
-		, #{ title }
-		, #{ content }
-		, 'Y'
-		, #{ projectNo }
-		, 5
-		, #{ memberNo }
-		, 0 
-		)
-	</insert>
 	
 	<!-- 게시글 삭제 -->
 	<delete id="deleteTodo" parameterType="_int">
