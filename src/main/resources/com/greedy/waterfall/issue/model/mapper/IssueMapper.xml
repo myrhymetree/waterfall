@@ -147,13 +147,13 @@
   	      SELECT DISTINCT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
                  A.PROJECT_NO
                , A.PROJECT_NAME
-               , ( SELECT
-                          COUNT(C.ISSUE_NO)
-                     FROM TBL_ISSUE C
-                     JOIN TBL_TASK K ON (C.TASK_NO = K.TASK_NO) 
-                    WHERE C.ISSUE_STATUS = 'Y'
-                      AND K.TASK_STATUS = 'Y'
-                      AND C.PROJECT_NO = B.PROJECT_NO
+               , (SELECT
+                         COUNT(C.ISSUE_NO)
+                    FROM TBL_ISSUE C
+                    JOIN TBL_TASK K ON (C.TASK_NO = K.TASK_NO) 
+                   WHERE C.ISSUE_STATUS = 'Y'
+                     AND K.TASK_STATUS = 'Y'
+                     AND C.PROJECT_NO = B.PROJECT_NO
                   ) AS ALL_ISSUE_COUNT
                 , ( SELECT
                            COUNT(D.ISSUE_NO) 
@@ -208,11 +208,11 @@
                   A.TASK_NO
                 , C.TASK_CATEGORY_NAME
                 , I.MEMBER_NAME
-			    , ( SELECT
-                           COUNT(D.ISSUE_NO)
-	                  FROM TBL_ISSUE D 
-                     WHERE D.ISSUE_STATUS = 'Y'
-                       AND D.TASK_NO = B.TASK_NO
+			    , (SELECT
+                         COUNT(D.ISSUE_NO)
+	                FROM TBL_ISSUE D 
+                   WHERE D.ISSUE_STATUS = 'Y'
+                     AND D.TASK_NO = B.TASK_NO
                   ) AS ALL_TASK_ISSUE_COUNT
                 , ( SELECT
                            COUNT(E.ISSUE_NO) 
@@ -246,7 +246,7 @@
 	       ORDER BY 1 DESC
   	</select>
   	
-  	<insert id="registIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
+  	<insert id="registIssue" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO" >
   		INSERT
 		  INTO TBL_ISSUE A
 	    ( 
@@ -414,54 +414,54 @@
 		</selectKey>
 		INSERT ALL
 		  INTO TBL_ISSUE_NOTIFICATION
-		(
-		  ISSUE_HISTORY_NO
-		, ISSUE_PROGRESS_STATUS 
-		, ISSUE_NO 
-		, ISSUE_REGISTER
-		, ISSUE_MANAGER
-		, ISSUE_READER
-		, ISSUE_UPDATED_CONTENT
-		, PROJECT_NO
-		)
-		VALUES
-		(
-		  ISSUE_HISTORY_NO.NEXTVAL
-		, #{ progressStatus }
-		, #{ no }
-		, #{ registerNo }
-		, #{ managerNo }
-		, #{ registerNo }
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
-		, #{ projectNo }
-		)
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ registerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
 		  INTO TBL_ISSUE_NOTIFICATION
-		(
-		  ISSUE_HISTORY_NO
-		, ISSUE_PROGRESS_STATUS 
-		, ISSUE_NO 
-		, ISSUE_REGISTER
-		, ISSUE_MANAGER
-		, ISSUE_READER
-		, ISSUE_UPDATED_CONTENT
-		, PROJECT_NO
-		)
-		VALUES
-	    (
-		  GET_HISTORY_NO_SEQUENCE()
-		, #{ progressStatus }
-		, #{ no }
-		, #{ registerNo }
-		, #{ managerNo }
-		, #{ managerNo }
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
-		, #{ projectNo }
-		)
-		SELECT * FROM DUAL
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    GET_HISTORY_NO_SEQUENCE()
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ managerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
+		  SELECT * FROM DUAL
 	</insert>
 	
 	<insert id="updateIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
-		<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+	<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
 			SELECT 
 			DISTINCT 
 	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
@@ -475,54 +475,54 @@
 		</selectKey>
 		INSERT ALL
 		  INTO TBL_ISSUE_NOTIFICATION
-		(
-		  ISSUE_HISTORY_NO
-		, ISSUE_PROGRESS_STATUS 
-		, ISSUE_NO 
-		, ISSUE_REGISTER
-		, ISSUE_MANAGER
-		, ISSUE_READER
-		, ISSUE_UPDATED_CONTENT 
-		, PROJECT_NO
-		)
-		VALUES
-	    (
-		  ISSUE_HISTORY_NO.NEXTVAL
-		, #{ progressStatus }
-		, #{ no }
-		, #{ registerNo }
-		, #{ managerNo }
-		, #{ registerNo }
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
-		, #{ projectNo }
-		)
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT 
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ registerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
 		  INTO TBL_ISSUE_NOTIFICATION
-		(
-		  ISSUE_HISTORY_NO
-		, ISSUE_PROGRESS_STATUS 
-		, ISSUE_NO 
-		, ISSUE_REGISTER
-		, ISSUE_MANAGER
-		, ISSUE_READER
-		, ISSUE_UPDATED_CONTENT
-		, PROJECT_NO
-		)
-		VALUES
-		(
-		  GET_HISTORY_NO_SEQUENCE()
-		, #{ progressStatus }
-		, #{ no }
-		, #{ registerNo }
-		, #{ managerNo }
-		, #{ managerNo }
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
-		, #{ projectNo }
-		)
-		SELECT * FROM DUAL
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    GET_HISTORY_NO_SEQUENCE()
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ managerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
+		  SELECT * FROM DUAL
 	</insert>
 	
 	<insert id="deleteIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
-		<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
+	<selectKey keyProperty="taskCodeManageName,loginMemberName" resultType="com.greedy.waterfall.issue.model.dto.IssueDTO" order="BEFORE">
 			SELECT 
 			DISTINCT 
 	                 C.TASK_CATEGORY_NAME AS taskCodeManageName
@@ -531,53 +531,53 @@
 	            JOIN TBL_TASK B ON (A.TASK_NO = B.TASK_NO)
 	            JOIN TBL_TASK_CODE_MANAGE C ON (B.TASK_CATEGORY_CODE = C.TASK_CATEGORY_CODE)
 	           WHERE B.TASK_NO = #{ taskNo }
-			</selectKey>
+		</selectKey>
 		INSERT ALL
 		  INTO TBL_ISSUE_NOTIFICATION
-		(
-		  ISSUE_HISTORY_NO
-		, ISSUE_PROGRESS_STATUS 
-		, ISSUE_NO 
-		, ISSUE_REGISTER
-		, ISSUE_MANAGER
-		, ISSUE_READER
-		, ISSUE_UPDATED_CONTENT
-		, PROJECT_NO
-		)
-		VALUES
-		(
-		  ISSUE_HISTORY_NO.NEXTVAL
-		, #{ progressStatus }
-		, #{ no }
-		, #{ registerNo }
-		, #{ managerNo }
-		, #{ registerNo }
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
-		, #{ projectNo }
-		)
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    ISSUE_HISTORY_NO.NEXTVAL
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ registerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
 		  INTO TBL_ISSUE_NOTIFICATION
-		(
-		  ISSUE_HISTORY_NO
-		, ISSUE_PROGRESS_STATUS 
-		, ISSUE_NO 
-		, ISSUE_REGISTER
-		, ISSUE_MANAGER
-		, ISSUE_READER
-		, ISSUE_UPDATED_CONTENT
-		, PROJECT_NO
-		)
-		VALUES
-		(
-		  GET_HISTORY_NO_SEQUENCE()
-		, #{ progressStatus }
-		, #{ no }
-		, #{ registerNo }
-		, #{ managerNo }
-		, #{ managerNo }
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
-		, #{ projectNo }
-		)
-		SELECT * FROM DUAL
+		  (
+		    ISSUE_HISTORY_NO
+		  , ISSUE_PROGRESS_STATUS 
+		  , ISSUE_NO 
+		  , ISSUE_REGISTER
+		  , ISSUE_MANAGER
+		  , ISSUE_READER
+		  , ISSUE_UPDATED_CONTENT
+		  , PROJECT_NO
+		  )
+		  VALUES
+		  (
+		    GET_HISTORY_NO_SEQUENCE()
+		  , #{ progressStatus }
+		  , #{ no }
+		  , #{ registerNo }
+		  , #{ managerNo }
+		  , #{ managerNo }
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		  , #{ projectNo }
+		  )
+		  SELECT * FROM DUAL
 	</insert>
 	
  	<insert id="writeRegistedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
@@ -595,23 +595,23 @@
 		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
-		(
-		  A.HISTORY_NO
-		, A.UPDATED_DATE
-		, A.CONTENT
-		, A.CATEGORY_TYPE_NO
-		, A.PROJECT_NO
-		, A.REGISTER_NO
-		)
-		VALUES
-		(
-		  HISTORY_NO.NEXTVAL
-	    , SYSDATE
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
-		, 3
-		, #{ projectNo }
-		, #{ registerNo } 
-		)
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '추가' || '] ' || '했습니다'
+		  , 3
+		  , #{ projectNo }
+		  , #{ registerNo } 
+		  )
 	</insert>
 	
 	<insert id="writeUpdatedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
@@ -627,23 +627,23 @@
 		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
-		(
-		  A.HISTORY_NO
-		, A.UPDATED_DATE
-		, A.CONTENT
-		, A.CATEGORY_TYPE_NO
-		, A.PROJECT_NO
-		, A.REGISTER_NO
-		)
-		VALUES
-		(
-		  HISTORY_NO.NEXTVAL
-		, SYSDATE
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
-		, 3
-		, #{ projectNo }
-		, #{ loginMemberNo } 
-		)
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		  , 3
+		  , #{ projectNo }
+		  , #{ loginMemberNo } 
+		  )
 	</insert>
 	
 	<insert id="writeDeletedIssueHistory" parameterType="com.greedy.waterfall.issue.model.dto.IssueDTO">
@@ -659,23 +659,23 @@
 		</selectKey>
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
-		(
-		  A.HISTORY_NO
-		, A.UPDATED_DATE
-		, A.CONTENT
-		, A.CATEGORY_TYPE_NO
-		, A.PROJECT_NO
-		, A.REGISTER_NO
-		)
-		VALUES
-		(
-		  HISTORY_NO.NEXTVAL
-		, SYSDATE
-		, '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
-		, 3
-		, #{ projectNo }
-		, #{ loginMemberNo } 
-		)
+		  (
+		    A.HISTORY_NO
+		  , A.UPDATED_DATE
+		  , A.CONTENT
+		  , A.CATEGORY_TYPE_NO
+		  , A.PROJECT_NO
+		  , A.REGISTER_NO
+		  )
+		  VALUES
+		  (
+		    HISTORY_NO.NEXTVAL
+		  , SYSDATE
+		  , '[' || #{ loginMemberName } || ']' || '님이 ' || #{ taskCodeManageName } || ' [' || '업무' || '] ' || '에서 ' || '[' || '이슈' || '] ' || #{ name } || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		  , 3
+		  , #{ projectNo }
+		  , #{ loginMemberNo } 
+		  )
 	</insert>
 	
 	<!-- ======= 알림 기능 구현 ======= -->
