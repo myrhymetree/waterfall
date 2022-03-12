@@ -58,7 +58,6 @@
                  <div class="card-header">
                      <i class="fas fa-table me-1"></i>
                      	업무 당 이슈 목록
-					 <button class="btn btn-outline-dark" data-toggle="modal" data-target="#registModal" style="float: right;">등록</button>
                  </div>
                  <div class="card-body" id="card-body">
                      <table id="datatablesSimple">
