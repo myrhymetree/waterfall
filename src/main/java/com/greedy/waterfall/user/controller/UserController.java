@@ -23,6 +23,17 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.member.model.service.MemberService;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
+/**
+ * <pre>
+ * Class : UserController
+ * Comment : 회원의 계정수정, 비밀번호, 이메일, 핸드폰 등록
+ * 
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
 @Controller
 @RequestMapping("/user")
 @SessionAttributes("loginMember")
@@ -37,20 +48,28 @@ public class UserController {
 		this.passwordEncoder = passwordEncoder;
 	}
 
+	/**
+	 * info : 개인정보조회 메소드
+	 * @param : 개인정보조회 페이지 요청
+	 * @return mv("/user/userInfoModify") : 요청주소로 반환  
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("info")
-	public ModelAndView info(ModelAndView mv, HttpServletRequest request) {
-		
-		/* 세션에 뭐가 들었는지 확인하기 */
-//		MemberDTO member = (MemberDTO) request.getSession().getAttribute("loginMember");
-//		
-//		System.out.println("확인용" + "" + member);
-		
-		
+	public ModelAndView info(ModelAndView mv) {
+			
 		mv.setViewName("/user/userInfoModify");
 		
 		return mv;
 	}
 	
+	/**
+	 * pwCheck : 현재 비밀번호를 비교 해주는 메소드 
+	 * @param parameter : 아이디와 비밀번호가 정보가 담겨있는 변수 
+	 * @return : 일치하면 1 일치하지 않으면 0을 반환한다. 
+	 * 
+	 * @author 김영광
+	 */
 	@PostMapping(value="/pmCheck", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public int pwCheck(@RequestParam Map<String, String> parameter) {
@@ -62,34 +81,48 @@ public class UserController {
 		member.setId(id);
 		member.setPwd(pwd);
 		
-		System.out.println("확인" + "" + member);
-		
 		String memberPwd = memberService.pwCheck(member.getId());
-		
-		System.out.println("확인 2번째" + memberPwd);
 				
 		if(member == null || !BCrypt.checkpw(member.getPwd(), memberPwd)) {
-			System.out.println("확인 비번용" + "" + member.getPwd());
-			System.out.println("확인 비번용2" + "" + memberPwd);
+
 			return 0;
 		}
 		
 		return 1;
 	}
 	
+	/**
+	 * pwUpdate : 새로운 비밀번호 암호화 등록 메소드
+	 * @param id : 입력한 아이디를 담고있는 변수
+	 * @param pwd1 : 입력한 새로운 비밀번호를 담고있는 변수
+	 * @param rttr : 수정 성공시 담고있는 메세지
+	 * @param session : 세션을 만료시키기 위한 변수
+	 * @return "redirect:/member/login" : 요청한 주소로 반환한다.
+	 * 
+	 * @author 김영광
+	 */
 	@RequestMapping(value="/pwUpdate", method=RequestMethod.POST)
 	public String pwUpdate(String id, String pwd1, RedirectAttributes rttr, HttpSession session) {
 		
-		System.out.println("업데이트아이디 " + " " + id);
-		System.out.println("업데이트비밀번호 " + " " + pwd1);
 		String hashedPw = BCrypt.hashpw(pwd1, BCrypt.gensalt());
+		
 		memberService.pwUpdate(id, hashedPw);
+		
 		session.invalidate();
 		rttr.addFlashAttribute("message", "정보 수정이 완료되었습니다. 다시 로그인해주세요.");
 		
 		return "redirect:/member/login";
 	}
 	
+	/**
+	 * memberInfo : 새로운 이메일, 핸드폰 번호를 등록 or 수정 등록 메소드
+	 * @param parameter : 이메일과 핸드폰번호를 정보를 담고 있는 변수
+	 * @param session : 회원정보가 담겨있는 변수
+	 * @param rttr : 성공 시 메세지가 담겨있는 변수
+	 * @return mv("redirect:/user/info") : 개인정보로 요청한 주소로 반환한다. 
+	 * 
+	 * @author 김영광
+	 */
 	@PostMapping("memberInfo")
 	public ModelAndView memberInfo(ModelAndView mv,@RequestParam Map<String, String> parameter , RedirectAttributes rttr,
 			HttpSession session) {
@@ -97,13 +130,13 @@ public class UserController {
 		MemberDTO member = new MemberDTO();
 		
 		member.setId(((MemberDTO) session.getAttribute("loginMember")).getId());
+		
 		String email = parameter.get("email");
 		String phone = parameter.get("phone");
 
 		member.setEmail(email);
 		member.setPhone(phone);
-		System.out.println("실험 정보" + "" + member);
-		System.out.println("실험 정보" + "" + member);
+
 		memberService.memberInfo(member);
 		
 		rttr.addFlashAttribute("message", "정보 수정이 완료되었습니다.");

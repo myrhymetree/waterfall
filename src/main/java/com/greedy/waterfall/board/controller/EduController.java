@@ -40,6 +40,17 @@ import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 
+/**
+ * <pre>
+ * Class : EduController
+ * Comment : 교육 게시판 등록, 수정, 삭제, 조회 
+ * 
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
 @Controller
 @RequestMapping("/edu")
 public class EduController {
@@ -51,6 +62,13 @@ public class EduController {
 		this.eduService = eduService;
 	}
 	
+	/**
+	 * eduSelectList : 게시판 전체 목록 조회 메소드
+	 * @param request : 현재 페이지, 프로젝트 번호, 검색 내용 정보가 담긴 변수  
+	 * @return mv("/board/edu/eduList") : 
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("/list")
 	public ModelAndView eduSelectList(HttpServletRequest request, ModelAndView mv) {
 		
