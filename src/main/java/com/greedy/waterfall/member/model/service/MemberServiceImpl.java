@@ -18,6 +18,17 @@ import com.greedy.waterfall.member.model.dto.JobDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.member.model.dto.TeamDTO;
 
+/**
+ * <pre>
+ * Class : MemberServiceImpl
+ * Comment : 회
+ * 
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -45,15 +56,6 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<AdminMemberDTO> findAdminMember(SelectCriteria selectCriteria) {
 		
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
 		List<AdminMemberDTO> adminMemberList = mapper.findAdminMemberList(selectCriteria);
 		
 		return adminMemberList;
