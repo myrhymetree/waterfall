@@ -177,9 +177,9 @@ table, th, td {
 						<div class="my-textarea-div mb-2">
 							<textarea name="body" id="my-textarea" cols="30" rows="10"></textarea>
 						</div>
-						<div class="my-modal-upload mb-3">
+						<!-- <div class="my-modal-upload mb-3">
 	            			<input type="file" id="todoUploadInput" name="todoUpload" multiple>
-	            		</div>
+	            		</div> -->
 						<div class="my-modal-footer">
 							<button type="submit" class="btn btn-secondary"
 								data-bs-toggle="modal" data-bs-target="#subModal">등록</button>
@@ -226,8 +226,8 @@ table, th, td {
 						<div class="my-textarea-div mb-2">
 							<textarea name="content" id="read-content" cols="30" rows="10"></textarea>
 						</div>
-						<div class="my-modal-upload mb-3" id="upload-file-area">
-	            		</div>
+						<!-- <div class="my-modal-upload mb-3" id="upload-file-area">
+	            		</div> -->
 					</div>
 					<div class="my-modal-footer-read">
 						<input type="button" class="btn btn-secondary" id="delete" value="삭제">

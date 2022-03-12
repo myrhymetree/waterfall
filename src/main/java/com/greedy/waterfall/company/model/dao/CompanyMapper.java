@@ -11,6 +11,10 @@ public interface CompanyMapper {
 
 	List<DeptDTO> findDept(SelectCriteria selectCriteria);
 
+	List<TeamDTO> findTeam(SelectCriteria selectCriteria);
+
+	List<TeamDTO> findTeamList(String deptCode);
+
 	int insertDept(DeptDTO dept);
 
 	DeptDTO detailDept(String code);
@@ -18,8 +22,6 @@ public interface CompanyMapper {
 	int updateDept(DeptDTO dept);
 
 	int deleteDept(String code);
-
-	List<TeamDTO> findTeam(SelectCriteria selectCriteria);
 
 	int insertTeam(TeamDTO team);
 

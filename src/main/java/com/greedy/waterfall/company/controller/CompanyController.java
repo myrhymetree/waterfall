@@ -1,5 +1,6 @@
 package com.greedy.waterfall.company.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +22,7 @@ import com.greedy.waterfall.company.model.dto.DeptDTO;
 import com.greedy.waterfall.company.model.dto.JobDTO;
 import com.greedy.waterfall.company.model.dto.TeamDTO;
 import com.greedy.waterfall.company.model.service.CompanyService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -51,12 +54,34 @@ public class CompanyController {
 		SelectCriteria selectCriteria = null;
 		List<DeptDTO> deptList = companyService.findDept(selectCriteria);
 		List<TeamDTO> teamList = companyService.findTeam(selectCriteria);
+		
 		mv.addObject("deptList", deptList);
 		mv.addObject("teamList", teamList);
 		mv.addObject("selectCriteria", selectCriteria);
 		mv.addObject("intent", "/company/dept/list");
 		mv.setViewName("/company/dept/deptList");
 
+		return mv;
+	}
+	
+	/* 팀 리스트 조회 */
+	@GetMapping("/dept/list/{deptCode}")
+	public ModelAndView findTeamList(ModelAndView mv, @PathVariable("deptCode") String deptCode, HttpServletResponse response) throws IOException {
+		
+		List<TeamDTO> teamDTOList = companyService.findTeamList(deptCode);
+		
+		System.out.println("deptCode : " + deptCode);
+		System.out.println();
+		for(int i = 0; i < teamDTOList.size(); i++) {
+			System.out.println("     teamDTOList[i] : " + teamDTOList.get(i));
+		}
+		
+		response.setContentType("application/json; charset=UTF-8");
+		ObjectMapper mapper = new ObjectMapper();
+		
+		mv.addObject("teamDTOList", mapper.writeValueAsString(teamDTOList));
+		mv.setViewName("jsonView");
+		
 		return mv;
 	}
 	

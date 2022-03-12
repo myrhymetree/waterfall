@@ -18,6 +18,6 @@ public class DeptDTO {
 	private String code;
 	private String name;
 	
-//	private List<TeamDTO> subTeamList;
+	private List<TeamDTO> subTeamList;
 	
 }

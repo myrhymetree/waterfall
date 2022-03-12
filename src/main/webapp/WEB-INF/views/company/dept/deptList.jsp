@@ -46,13 +46,29 @@
 }
 
 #outputbox1 {
-	position: absolute;
+	/* 수평 가운데 정렬 */
+	margin: 0 auto;
+/* 	position: absolute;
 	left: 100px;
-	top: 100px;
-	border-width: 1px;
+	top: 100px; */
+	border-width: 10px;
 	/* 높이 길어지면 스크롤바 생기게 */
 	overflow: auto;
 }
+/* 
+#outputbox1::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px lightseagreen; 
+  border-radius: 10px;
+}
+
+#outputbox1::-webkit-scrollbar-thumb {
+  background: paleturquoise; 
+  border-radius: 10px;
+} */
 
 #outputbox2 {
 	position: absolute;
@@ -235,6 +251,15 @@ textarea {
 .my-modal-footer-read button:first-child {
   margin-right: 5px;
 }
+
+input[type="text"]:focus {
+	outline-color: lightseagreen;
+	background: paleturquoise;
+}
+select:focus {
+	outline-color: lightseagreen;
+	background: paleturquoise;
+}
 </style>
 </head>
 <body>
@@ -325,9 +350,10 @@ textarea {
 								<label class="me-2" for="name-read">부서명</label>
 								<input type="text" id="name-read" name="name">
 							</div>
+							<!-- 부서코드 읽기 전용 -->
 							<div class="my-modal-input mb-4">
 								<label class="me-2" for="code-read">부서코드</label>
-								<input type="text" id="code-read" name="code" readonly>
+								<input id="code-read" name="code" style="border: none; outline: none" readonly>
 							</div>
 						</div>
 						<div class="my-modal-footer-read">
@@ -354,7 +380,7 @@ textarea {
 								<label class="me-2" for="dept-select">상위부서</label>
 								<select id="dept-select" name="deptCode">
 									<c:forEach var="dept" items="${ requestScope.deptList }">
-										<option value="${ dept.code }" <c:if test="${ teamDetail.deptCode eq dept.code }">selected="selected"</c:if>><c:out value="${ dept.name }" /></option>
+										<option value="${ dept.code }"><c:out value="${ dept.name }" /></option>
 									</c:forEach>
 								</select>
 							</div>
@@ -362,9 +388,10 @@ textarea {
 								<label class="me-2" for="team-name-read">팀명</label>
 								<input type="text" id="team-name-read" name="name">
 							</div>
+							<!-- 팀코드 읽기 전용 -->
 							<div class="my-modal-input mb-4">
 								<label class="me-2" for="team-code-read">팀코드</label>
-								<input type="text" id="team-code-read" name="code" readonly>
+								<input id="team-code-read" name="code" style="border: none; outline: none" readonly>
 							</div>
 						</div>
 						<div class="my-modal-footer-read">
@@ -454,11 +481,11 @@ textarea {
 												<i class="fas" style="font-size: 16px; color: white">&#xf2ed;</i>&nbsp;삭제
 											</button>
 										</span>
-										<c:forEach var="team" items="${ requestScope.teamList }" varStatus="st">
 											<ul id="demo${ status.index }" class="collapse" style="list-style: none; text-indent: -10px; font-size: 1.1rem">
+											<c:forEach var="team" items="${ requestScope.teamList }" varStatus="st">
 												<li style="position: relative; line-height: 20px; margin-top: 20px">
 													<input type="hidden" value="<c:out value='${ team.code }' />">
-													<c:out value="${ requestScope.teamList[st.index].name }" />
+													<c:out value="${ team.name }" />
 													<span style="position: absolute; top: -15px; left: 239px">
 														<button class="button float modTeam" id="team-mod" data-bs-toggle="modal" data-bs-target="#readTeamModal">
 															<i class="far" style="font-size: 16px; color: white">&#xf044;</i>&nbsp;수정
@@ -468,8 +495,8 @@ textarea {
 														</button>
 													</span>
 												</li>
+											</c:forEach>
 											</ul>
-										</c:forEach>
 									</li>
 								</ul>
 							</c:forEach>
@@ -492,15 +519,14 @@ textarea {
 							</c:forEach> --%>
 						</div>
 					</div>
-
-
+					
 				</div>
 
-				<div class="box" id="outputbox2">
+				<!-- <div class="box" id="outputbox2">
 					<div id="box2_border_top">
 						<p id="box2_header">&nbsp;&nbsp; 부서 정보</p>
 						<div class="box2_body" id="box2_sq1">
-							<!--  value="<c:out value="${ requestScope.selectCriteria.searchValue }"/> -->
+							 value="<c:out value="${ requestScope.selectCriteria.searchValue }"/>
 							<label class="box2_content" id="box2_content1">부서명</label> <input
 								id="searchBox" type="search" id="searchValue"
 								name="searchDeptName"> <br> <label
@@ -527,7 +553,7 @@ textarea {
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</main>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
@@ -546,6 +572,31 @@ textarea {
 		}
 		
 	} */
+	
+	/* 부서 토글 팀 리스트 조회 */
+	$("#deptName li").on("click", ".folder_toggle", function() {
+		event.preventDefault();
+		const deptCode = this.parentNode.children[0].value;
+		console.log(deptCode);
+//		$("ul .collapse").empty().toggle();
+		$.ajax({
+			url: "${ pageContext.servletContext.contextPath }/company/dept/list/" + deptCode,
+			type: "get",
+			data: {deptCode:deptCode},
+			success: function(data) {
+				teamDTOList = JSON.parse(data.teamDTOList);
+				console.log(teamDTOList);
+				for(let i = 0; i < teamDTOList.length; i++) {
+					const $teamTag = "<li style='"+"position: relative; line-height: 20px; margin-top: 20px'"+"><input type='"+"hidden'"+" value='" + teamDTOList[i].code + "'>" + teamDTOList[i].name +"<span style='"+"position: absolute; top: -15px; left: 239px'"+"><button class='"+"button float modTeam'"+" id='"+"team-mod'"+" data-bs-toggle='"+"modal'"+" data-bs-target='"+"#readTeamModal'"+"><i class='"+"far'"+" style='"+"font-size: 16px; color: white'"+">&#xf044;</i>&nbsp;수정</button><button class='"+"button float delTeam'"+" id='"+"team-delete'"+"><i class='"+"fas'"+" style='"+"font-size: 16px; color: white'"+">&#xf2ed;</i>&nbsp;삭제</button></span></li>";
+					console.log($teamTag);
+//					$("ul .collapse").append($teamTag);
+				}
+			},
+			error: function(data) {
+				console.log("ajax 통신 실패 에러");
+			}
+		});
+	});
 	
 	/* 부서 수정 */
 	if(document.querySelectorAll("#deptName li span button.modDept")) {

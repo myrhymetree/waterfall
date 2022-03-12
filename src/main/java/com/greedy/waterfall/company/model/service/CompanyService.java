@@ -19,6 +19,10 @@ import com.greedy.waterfall.company.model.dto.TeamDTO;
 public interface CompanyService {
 
 	List<DeptDTO> findDept(SelectCriteria selectCriteria);
+	
+	List<TeamDTO> findTeam(SelectCriteria selectCriteria);
+
+	List<TeamDTO> findTeamList(String deptCode);
 
 	void registDept(DeptDTO dept) throws DeptRegistException;
 
@@ -27,8 +31,6 @@ public interface CompanyService {
 	void modifyDept(DeptDTO dept) throws DeptModifyException;
 
 	void removeDept(String code) throws DeptRemoveException;
-
-	List<TeamDTO> findTeam(SelectCriteria selectCriteria);
 
 	void registTeam(TeamDTO team) throws TeamRegistException;
 

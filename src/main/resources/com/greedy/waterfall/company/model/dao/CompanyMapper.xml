@@ -13,15 +13,13 @@
 		<id property="code" column="DEPT_CODE"/>
 		<result property="name" column="DEPT_NAME"/>
 		
-		<!-- <collection property="subTeamList" resultMap="teamResultMap"></collection> -->
+		<collection property="subTeamList" resultMap="teamResultMap"></collection>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.TeamDTO" id="teamResultMap">
 		<id property="code" column="TEAM_CODE"/>
 		<result property="name" column="TEAM_NAME"/>
 		<result property="deptCode" column="DEPT_CODE"/>
-		
-		<association property="supDept" resultMap="deptResultMap"></association>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.company.model.dto.JobDTO" id="jobResultMap">
@@ -37,6 +35,26 @@
 		     , DEPT_NAME
 		  FROM TBL_DEPT
 		 ORDER BY 1 ASC
+	</select>
+	
+	<!-- 팀 조회 -->
+	<select id="findTeam" resultMap="teamResultMap">
+		SELECT
+		       A.TEAM_CODE
+		     , A.TEAM_NAME
+		     , A.DEPT_CODE
+		  FROM TBL_TEAM A
+		  JOIN TBL_DEPT B ON (A.DEPT_CODE = B.DEPT_CODE)
+		 ORDER BY 3 ASC, 1
+	</select>
+	
+	<!-- 팀 리스트 조회 -->
+	<select id="findTeamList" resultMap="teamResultMap">
+        SELECT
+               A.TEAM_CODE
+             , A.TEAM_NAME
+          FROM TBL_TEAM A
+         WHERE A.DEPT_CODE = #{ deptCode }
 	</select>
 	
 	<!-- 부서 생성 -->
@@ -78,17 +96,6 @@
 		  FROM TBL_DEPT
 		 WHERE DEPT_CODE = #{ code }
 	</delete>
-	
-	<!-- 팀 조회 -->
-	<select id="findTeam" resultMap="teamResultMap">
-		SELECT
-		       A.TEAM_CODE
-		     , A.TEAM_NAME
-		     , A.DEPT_CODE
-		  FROM TBL_TEAM A
-		  JOIN TBL_DEPT B ON (A.DEPT_CODE = B.DEPT_CODE)
-		 ORDER BY 3 ASC, 1
-	</select>
 	
 	<!-- 팀 생성 -->
 	<insert id="insertTeam" parameterType="com.greedy.waterfall.company.model.dto.TeamDTO">

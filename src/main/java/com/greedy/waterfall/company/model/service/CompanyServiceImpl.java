@@ -38,7 +38,23 @@ public class CompanyServiceImpl implements CompanyService {
 
 		return deptList;
 	}
+
+	/* 팀 조회 */
+	@Override
+	public List<TeamDTO> findTeam(SelectCriteria selectCriteria) {
+
+		List<TeamDTO> teamList = mapper.findTeam(selectCriteria);
+		
+		return teamList;
+	}
 	
+	/* 팀 리스트 조회 */
+	@Override
+	public List<TeamDTO> findTeamList(String deptCode) {
+
+		return mapper.findTeamList(deptCode);
+	}
+
 	/* 부서 생성 */
 	@Override
 	public void registDept(DeptDTO dept) throws DeptRegistException {
@@ -83,15 +99,6 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 
-	/* 팀 조회 */
-	@Override
-	public List<TeamDTO> findTeam(SelectCriteria selectCriteria) {
-
-		List<TeamDTO> teamList = mapper.findTeam(selectCriteria);
-		
-		return teamList;
-	}
-	
 	/* 팀 생성 */
 	@Override
 	public void registTeam(TeamDTO team) throws TeamRegistException {
