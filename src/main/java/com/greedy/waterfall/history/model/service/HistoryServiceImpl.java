@@ -59,14 +59,6 @@ private final HistoryMapper mapper;
 	}
 
 	@Override
-	public List<HistoryDTO> selectBoardHistoryList(int projectNo) {
-		
-		List<HistoryDTO> boardHistoryList = mapper.selectBoardHistoryList(projectNo);
-		
-		return boardHistoryList;
-	}
-
-	@Override
 	public List<HistoryDTO> selectProjectHistoryList(int projectNo) {
 		
 		List<HistoryDTO> projectHistoryList = mapper.selectProjectHistoryList(projectNo);

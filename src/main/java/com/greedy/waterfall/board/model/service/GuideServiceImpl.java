@@ -6,10 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
-import com.greedy.waterfall.board.model.guidemapper.GuideMapper;
+import com.greedy.waterfall.board.model.mapper.GuideMapper;
 import com.greedy.waterfall.common.exception.GuideModifyException;
 import com.greedy.waterfall.common.exception.GuideRegistException;
 import com.greedy.waterfall.common.exception.GuideRemoveException;
@@ -75,8 +74,6 @@ public class GuideServiceImpl implements GuideService {
 		
 		int result = mapper.insertGuide(guide);
 		
-		mapper.writeRegistedGuideHistory(guide);
-		
 		GuideFileDTO guideFileDTO = guide.getFile();
 		
 		if(guideFileDTO != null) {
@@ -101,14 +98,6 @@ public class GuideServiceImpl implements GuideService {
 
 		int result = mapper.deleteGuide(no);
 		
-		GuideDTO guide = mapper.selectGuideDetailPlusFile(no);
-		
-		/* 게시글 삭제 히스토리에 로그인한 회원번호를 전달 해야함 */
-		guide.setLoginMemberNo(loginMemberNo);
-		
-		/* 게시글 삭제 히스토리 */
-		mapper.writeDeletedGuideHistory(guide);
-		
 		if(!(result > 0)) {
 			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
 		}
@@ -126,8 +115,6 @@ public class GuideServiceImpl implements GuideService {
 		
 		int result = mapper.updateGuide(guide);
 		
-		mapper.writeUpdatedGuideHistory(guide);
-		
 		GuideFileDTO file = guide.getFile();
 		System.out.println("GuideServiceImpl의 updateGuideFile의 file은 " + file);
 		
@@ -138,7 +125,6 @@ public class GuideServiceImpl implements GuideService {
 				mapper.insertGuideFile(file);
 			}
 		}
-		
 		
 		if(!(result > 0)) {
 			throw new GuideModifyException("가이드 게시글 수정에 실패하셨습니다.");
@@ -155,10 +141,12 @@ public class GuideServiceImpl implements GuideService {
 	 */
 	@Override
 	public GuideDTO selectGuideFileDetail(int no) {
+		/* 게시글 조회 수 */
 		int result = mapper.incrementGuideCount(no);
 		
 		GuideDTO guideFileDetail = new GuideDTO();
 		
+		/* 조회수가 0보다 크면 게시글 상세정보를 불러옴 */
 		if(result > 0) {
 	         
 	        guideFileDetail = mapper.selectGuideDetailPlusFile(no);
@@ -168,28 +156,48 @@ public class GuideServiceImpl implements GuideService {
 		return guideFileDetail;
 	}
 
+	/**
+	 * findFile : 파일 다운로드 하기 위해서 해당 파일을 찾는 메소드
+	 * @param no : 파일번호
+	 * @return mapper.findFile(no) : 해당 파일에 대한 정보를 반환함
+	 * 
+	 * @author 박성준
+	 */
 	@Override
 	public GuideFileDTO findFile(int no) {
 		
 		return mapper.findFile(no);
 	}
 
+	/**
+	 * removeGuideFile : 게시글 첨부파일  삭제 메소드
+	 * @param fileNumber : 파일번호
+ 	 * @return guideFileDTO : 조회한 파일을 삭제하기 위해서 파일정보를 반환
+	 * 
+	 * @author 박성준
+	 */
 	@Override
 	public GuideFileDTO removeGuideFile(int fileNumber) {
 		
 		GuideFileDTO guideFileDTO = mapper.findFile(fileNumber);
 		
-		int result = mapper.deleteGuideFile(fileNumber);
-		
-//		if(!(result > 0)) {
-//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
-//		}
+		mapper.deleteGuideFile(fileNumber);
 		
 		return guideFileDTO;
 	}
 
+	/**
+	 * searchGuideFile : 첨부파일을 조회하는 메소드
+	 * @param guideNo : 해당 게시글 번호
+	 * @return result : 첨부파일 번호, 첨부파일이 없을 경우 null값 반환
+	 * 
+	 * @author 박성준
+	 */
 	@Override
 	public Object searchGuideFile(int guideNo) {
+		
+		/* 게시물 당 1개의 첨부파일만 지원하기 때문에 기존에 등록된 첨부파일이
+		 * 있는지 확인이 필요하다 */
 		Object result = mapper.searchGuideFile(guideNo);
 		
 		return result;

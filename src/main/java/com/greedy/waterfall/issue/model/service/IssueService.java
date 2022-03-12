@@ -18,8 +18,6 @@ public interface IssueService {
 
 	List<IssueDTO> selectIssueList(int taskNo);
 
-	List<IssueDTO> selectAllIssue();
-
 	boolean registIssue(IssueDTO issue);
 
 	IssueDTO selectIssueDetail(int no);
@@ -34,6 +32,6 @@ public interface IssueService {
 
 	int removeIssue(int issueNo, int loginMemberNo);
 
-	Map<String, Object> notifyIssueList(int loginMemberNo, int issueHistoryNo);
+	Map<String, Object> notifyIssueList(Map<String, Integer> identification);
 
 }

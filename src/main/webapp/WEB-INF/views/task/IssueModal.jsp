@@ -11,7 +11,7 @@
 
 <!-- 등록 모달 -->
 <div class="modal" id="registModal">
-    <form id="registForm" onsubmit="test()"  encType="multipart/form-data" target="_blank">
+    <form id="registForm" onsubmit="test()"  encType="multipart/form-data" target="_parent">
     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
 
@@ -98,7 +98,7 @@
 	 console.log("호출됨"); 
 	 var form = document.forms["registForm"];
 	 console.log(form);
-	 form.action = "${ pageContext.servletContext.contextPath }/issue/regist/" + $taskNo;
+	 form.action = "${ pageContext.servletContext.contextPath }/issue/task/regist/" + $taskNo;
 	 form.method="POST";	 
  }
  

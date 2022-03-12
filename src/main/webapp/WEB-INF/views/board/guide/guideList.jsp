@@ -137,6 +137,11 @@ table, th, td {
 .my-modal-footer button:first-child {
   margin-right: 306px;
 }
+/* 다운로드 할 파일 이름이 길 경우 모달 밖으로 삐져나오는것을 방지함 */
+#read-originalName {
+  width:300px;
+}
+
 
 /* 검색 인풋 버튼 */ 
 /* input::-ms-clear,
@@ -244,10 +249,8 @@ input::-webkit-search-results-decoration{
                             <tbody>
                                 <c:forEach var="guide" items="${ requestScope.guideList }" varStatus="status">
                                 <tr  id="listArea" class="guideSelect">
-                                    <td> <c:out value="${ guide.no }" />   
-                                       <%-- <c:out value="${ status.index }"/> --%>
-                                    </td>
-                                    <td><c:out value="${ guide.title }" /></td>
+                                    <td><c:out value="${ guide.no }"/></td>
+                                    <td><c:out value="${ guide.title }"/></td>
                                     <td><c:out value="${ guide.count}"/></td>
                                     <td><c:out value="${ guide.updatedDate }"/></td>
                                     <td><c:out value="${ guide.writer.name }"/></td>
@@ -318,6 +321,10 @@ input::-webkit-search-results-decoration{
                 <!-- 가이드 게시판 끝 -->
           
 <script>
+$("#read-originalName").mouseenter(
+		
+);
+
 
 function manualValidate(ev) {
     ev.target.checkValidity();
@@ -394,7 +401,7 @@ $(function() {
                      
                      const $fileNo = guideArray[14][1];
                      
-                     $buttonsTag = "<div class='mt-4 row'><div class='col-3 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + guideArray[15][1] + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+                     $buttonsTag = "<div class='mt-4 row'><div class='col-3 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' title='" + guideArray[13][1].originalName + "' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + guideArray[15][1] + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/guide/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
              		 $("#downloadZone").append($buttonsTag);
                   }
               }, 

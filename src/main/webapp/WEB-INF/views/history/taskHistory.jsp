@@ -69,7 +69,7 @@
 	                    	<c:forEach var="task" items="${ requestScope.taskHistoryList }" varStatus="status">
 		                        <tr>
 		                            <td><c:out value="${ task.updatedDate }"/></td>
-		                            <td><c:out value="${ task.categoryTypeNo }"/></td>
+		                            <td><c:out value="${ task.categoryTypeName }"/></td>
 		                            <td><c:out value="${ task.projectNo }"/></td>
 		                            <td><c:out value="${ task.content }"/></td>
 		                        </tr>

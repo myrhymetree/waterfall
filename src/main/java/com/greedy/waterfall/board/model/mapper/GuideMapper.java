@@ -1,4 +1,4 @@
-package com.greedy.waterfall.board.model.guidemapper;
+package com.greedy.waterfall.board.model.mapper;
 
 import java.util.List;
 import java.util.Map;
@@ -42,11 +42,5 @@ public interface GuideMapper {
 	int deleteGuideFile(int fileNumber);
 
 	Object searchGuideFile(int guideNo);
-
-	void writeRegistedGuideHistory(GuideDTO guide);
-
-	void writeUpdatedGuideHistory(GuideDTO guide);
-
-	void writeDeletedGuideHistory(GuideDTO guide);
 
 }

@@ -33,6 +33,13 @@
 </style>
 </head>
 <body>
+<script>
+	/* 비즈니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+	   alert(message);
+	}
+</script>
 
    <c:choose>
        <c:when test="${ sessionScope.loginMember.role eq 1 }"><jsp:include page="../common/header.jsp"/></c:when>

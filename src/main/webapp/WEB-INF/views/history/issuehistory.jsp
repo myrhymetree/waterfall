@@ -69,7 +69,7 @@
 	                    	<c:forEach var="issue" items="${ requestScope.issueHistoryList }" varStatus="status">
 		                        <tr>
 		                            <td><c:out value="${ issue.updatedDate }"/></td>
-		                            <td><c:out value="${ issue.categoryTypeNo }"/></td>
+		                            <td><c:out value="${ issue.categoryTypeName }"/></td>
 		                            <td><c:out value="${ issue.projectNo }"/></td>
 		                            <td><c:out value="${ issue.content }"/></td>
 		                        </tr>

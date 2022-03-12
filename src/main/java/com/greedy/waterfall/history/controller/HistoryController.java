@@ -112,20 +112,4 @@ public class HistoryController {
 		mv.setViewName("/history/memberHistory");
 		return mv;
 	}
-	
-	@GetMapping("/board")
-	public ModelAndView boardHistoryList(HttpServletRequest request, ModelAndView mv) {
-		
-		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
-		
-		System.out.println("projectNo :" + projectNo);
-		
-		List<HistoryDTO> boardHistoryList = historyService.selectBoardHistoryList(projectNo);
-		System.out.println("게시판 히스토리 목록은 : " + boardHistoryList);
-		
-		mv.addObject("boardHistoryList", boardHistoryList);
-		mv.addObject("intent", "/history/board");
-		mv.setViewName("/history/boardHistory");
-		return mv;
-	}
 }

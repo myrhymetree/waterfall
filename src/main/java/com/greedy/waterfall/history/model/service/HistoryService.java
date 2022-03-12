@@ -16,8 +16,6 @@ public interface HistoryService {
 
 	List<HistoryDTO> selectMemberHistoryList(int projectNo);
 
-	List<HistoryDTO> selectBoardHistoryList(int projectNo);
-
 	List<HistoryDTO> selectProjectHistoryList(int projectNo);
 
 	List<HistoryDTO> selectAdminProjectHistoryList();

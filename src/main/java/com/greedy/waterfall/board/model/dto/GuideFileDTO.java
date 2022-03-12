@@ -24,7 +24,7 @@ import lombok.ToString;
 @ToString
 public class GuideFileDTO implements java.io.Serializable {
 
-	private int fileNo;					// 파일 번호(식별자)
+	private int fileNo;				// 파일 번호(식별자)
 	private int refBoardNo;			// 게시글 번호
 	private String savedPath;		// 파일이 저장된 경로
 	private String originalName;	// 원래 파일 이름

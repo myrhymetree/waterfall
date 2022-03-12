@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>IssueList</title>
+<title>업무 당 이슈목록</title>
 <script src="${ pageContext.servletContext.contextPath }/resources/assets/demo/chart-area-demo.js"></script>
 <script src="${ pageContext.servletContext.contextPath }/resources/assets/demo/chart-bar-demo.js"></script>
 <script src="${ pageContext.servletContext.contextPath }/resources/js/datatables-simple-demo.js"></script>
@@ -35,7 +35,13 @@
 </style>
 </head>
 <body>
-
+<script>
+	/* 비즈니스 로직 성공 alert 메시지 처리 */
+	const message = '${ requestScope.message }';
+	if(message != null && message !== '') {
+	   alert(message);
+	}
+</script>
 <jsp:include page="../common/inprojectheader.jsp"/>
 	
 <jsp:include page="/WEB-INF/views/issue/modal.jsp"/>

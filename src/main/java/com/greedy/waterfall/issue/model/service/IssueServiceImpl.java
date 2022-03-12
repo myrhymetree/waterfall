@@ -50,12 +50,6 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public List<IssueDTO> selectAllIssue() {
-		List<IssueDTO> allIssueList = mapper.selectAllIssue();
-		return allIssueList;
-	}
-
-	@Override
 	public boolean registIssue(IssueDTO issue) {
 		
 		boolean result = false;
@@ -77,10 +71,24 @@ public class IssueServiceImpl implements IssueService {
 					result = false;
 				} 
 			}
+			
+			
+			
 			/* 이슈 등록 시 히스토리 반영하기 위해서 mapper로 보내줌 */
-			mapper.registIssueHistory(issue);
+			
+			int registerNo = issue.getRegisterNo();
+			
+			int managerNo = issue.getManagerNo();
+			
+			Map<String, Integer> condition = new HashMap<>();
+			
+			condition.put("registerNo", registerNo);
+			condition.put("managerNo", managerNo);
 			
 			IssueHistoryDTO history = new IssueHistoryDTO();
+			
+			mapper.registIssueHistory(issue);
+			
 			history.setIssue(issue);
 			
 			mapper.writeRegistedIssueHistory(issue);
@@ -129,7 +137,6 @@ public class IssueServiceImpl implements IssueService {
 	public void modifyIssue(IssueDTO issue, int loginMember) {
 		
 		int result = mapper.updateIssue(issue);
-		
 		
 		List<IssueFileDTO> files = issue.getFile();
 		System.out.println("IssueServiceImpl의 updateIssue의 files 는  " + files);
@@ -189,7 +196,11 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public Map<String, Object> notifyIssueList(int loginMemberNo, int issueHistoryNo) {
+	public Map<String, Object> notifyIssueList(Map<String, Integer> identification) {
+		
+		int loginMemberNo = identification.get("loginMember");
+
+		int issueHistoryNo = identification.get("issueHistoryNo");
 		
 		Map<String, Integer> condition = new HashMap<>();
 		

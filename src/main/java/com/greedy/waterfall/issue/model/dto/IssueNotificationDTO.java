@@ -25,4 +25,5 @@ public class IssueNotificationDTO {
 	private int issueReadCheckNo;				//이슈 읽었는지 여부
 	private int issueProjectNo;				//이슈가 소속된 프로젝트 번호
 	private int loginMemberNo;
+	private int issueReader;
 }

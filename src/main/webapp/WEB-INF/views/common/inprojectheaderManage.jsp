@@ -8,21 +8,6 @@
 </head>
 <body>
 
-	
-	<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
-		<div class="sb-nav-link-icon">
-			<i class="fas fa-book-open"></i>
-		</div>
-		<div class="menu-font">이슈</div>
-		<div class="sb-sidenav-collapse-arrow">
-			<i class="fas fa-angle-down"></i>
-		</div>
-	</a>
-	<div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-		<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-			<a class="nav-link collapsed, menu-font2" href="${ pageContext.servletContext.contextPath }/issue/task">이슈관리</a>									
-		</nav>
-	</div>
 	<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts5" aria-expanded="false" aria-controls="collapseLayouts5">
 		<div class="sb-nav-link-icon">
 			<i class="fas fa-columns"></i>
@@ -40,7 +25,6 @@
 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/issue">이슈</a> 
 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/output">산출물</a> 
 				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/member">인원배정</a>
-				<a class="nav-link" href="${ pageContext.servletContext.contextPath }/history/board">게시판</a>
 			</nav>
 		</div>
 	</div>

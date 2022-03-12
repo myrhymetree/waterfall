@@ -119,6 +119,26 @@
 
 							</nav>
 						</div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseIssue" aria-expanded="false" aria-controls="collapseIssue">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-book-open"></i>
+							</div>
+							<div class="menu-font">이슈</div>
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse" id="collapseIssue"
+							aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav accordion"
+								id="sidenavAccordionPages">
+								<a class="nav-link menu-font2"
+									href="${ pageContext.servletContext.contextPath }/issue/task">
+									이슈관리 </a>
+
+							</nav>
+						</div>
+						
 						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 							data-bs-target="#collapseLayouts4" aria-expanded="false"
 							aria-controls="collapseLayouts4">

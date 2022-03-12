@@ -68,7 +68,7 @@ for (i = 0; i < close.length; i++) {
 			  for(let i = 0; i < notificationList.length; i++) {
 				  
 				  console.log(notificationList[i].issueUpdatedContent);
-				  content = notificationList[i].issueHistoryNo;
+				  content = notificationList[i].issueUpdatedContent;
 				  $liTag = "<li><div id='note' class='dropdown-item note-content'>" + content  + "<span class='closebtn' value='" + notificationList[i].issueHistoryNo + "'>&times;</span></div></li>"
 				  $("#liZone").append($liTag);
 			  }

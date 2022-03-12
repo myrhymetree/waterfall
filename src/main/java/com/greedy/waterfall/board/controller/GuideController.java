@@ -74,9 +74,11 @@ public class GuideController {
 	@GetMapping("/list")
 	public ModelAndView guideList( HttpServletRequest request, ModelAndView mv) {
 		
+		/* 해당 게시판의 프로젝트 번호 */
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		System.out.println("projectNo 있냐? " + projectNo);
 		
+		/* 현재 페이지, 페이징 처리를 위해 변수 초기화 */
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
 		
@@ -99,8 +101,10 @@ public class GuideController {
 		
 		System.out.println("totalGuideCount : " + totalCount);
 		
+		/* 페이징 처리 시 화면에 보여질 게시글의 수 */
 		int limit = 10;
 		
+		/* 페이지 당 페이징 버튼 */
 		int buttonAmount = 5;
 		
 		SelectCriteria selectCriteria = null;
@@ -154,19 +158,10 @@ public class GuideController {
 		
 		System.out.println("singleFile : " + singleFile);
 		
-		String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 		파일서버를 따로둠
+		/* 절대경로 지정 */
+		String root = request.getSession().getServletContext().getRealPath("resources");
 		
-//		String root1 = request.getSession().getServletContext().getContextPath();				// 상대경로방식, 하지만 이렇게 경로를 지정해놓으면 나중에 다운로드 시 db에 이 주소로 저장되어있기때문에 c 하위 폴더로 생성이 되기 때문에 주의가 필요함
-		
-//		String root2 = request.getServletContext().getRealPath("resources");					// 절대경로
-		
-//		String root3 = request.getServletContext().getContextPath();							// 상대경로
-		
-		
-//		System.out.println("root : " + root);		//절대경로 반환
 		System.out.println("root : " + root);		
-		
-//		String filePath = root + "/uploadFiles";
 		
 		String filePath = root + "/guideUploadFiles";
 		
@@ -197,20 +192,16 @@ public class GuideController {
 			/* 파일 저장 */
 			try {
 				singleFile.transferTo(new File(filePath + "\\" + savedName));
-//				singleFile.transferTo(new File(filePath1 + "/" + savedName));
 				
 				System.out.println("등록 용 가이드 확인 " + guide);
 				
 				guideService.registGuide(guide);
 				
-				rttr.addFlashAttribute("message", "파일 업로드 성공");
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 				
 				/* 실패 시 파일 삭제*/
 				new File(filePath + "\\" + savedName).delete();
-//				new File(filePath + "/" + savedName).delete();
-				rttr.addFlashAttribute("message", "파일 업로드 실패");
 			}
 		
 		} else {
@@ -224,7 +215,7 @@ public class GuideController {
 	
 	/**
 	 * removeGuide : 해당 게시글을 삭제하는 메소드
-	 * @param request : 해당 게시글의 번호를 가져오기 위한 매개변수
+	 * @param request : 현재 페이지의 정보를 담고 있는 requestScope의 매개 변수
 	 * @param rttr : 삭제 성공 시 출력할 메시지
 	 * @return "redirect:/guide/list" : 전달 받은 현재 페이지의 주소가 담긴 문자열을 viewResolver에 반환한다
 	 * 
@@ -249,9 +240,12 @@ public class GuideController {
 	}
 	
 	/**
-	 * modifyGuide :  해당 게시글을 수정하는 메소드(이 부분은 첨부파일도 수정해야하고 할게 있음)
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * modifyGuide : 해당 게시글을 수정하고 파일 업로드 기능을 하는 메소드
+	 * @param guide : 수정할 게시글의 정보가 담긴 변수
+	 * @param request : 현재 페이지의 정보를 담고 있는 requestScope의 매개 변수
+	 * @param rttr : 수정 성공 시 출력할 메시지
+	 * @param singleFile : 단일 파일에 대한 정보
+	 * @return  "redirect:/guide/list" : 반환할 주소
 	 * 
 	 * @author 박성준
 	 */
@@ -261,14 +255,15 @@ public class GuideController {
 		
 		System.out.println("update에 들어오는 가이드 게시글 : " + guide);
 		
-		int guideNo = guide.getNo();
+		int guideNo = guide.getNo();		//게시글 번호
 		
 		/* 파일업로드는 기존에 파일이 저장 되어 있지 않아야 추가가 가능하다 */
 		if(guideService.searchGuideFile(guideNo) == null) {
 			
 			System.out.println("singleFile : " + singleFile);
 			
-			String root = request.getSession().getServletContext().getRealPath("resources");		// 절대경로, 임시 사용코드, 파일을 이 위치에 저장하기 위해 어거지로 넣은것, 실제로 현업에서는 		파일서버를 따로둠
+			/* 절대 경로 */
+			String root = request.getSession().getServletContext().getRealPath("resources");		
 			
 			System.out.println("root : " + root);		
 			
@@ -339,13 +334,14 @@ public class GuideController {
 	@GetMapping(value="guideDetail", produces ="application/json; charset= UTF-8")
     @ResponseBody
     public String findguideDetail(HttpServletRequest request) {
-    
+		
+		/* 게시글 번호 */
 	    int no = Integer.parseInt(request.getParameter("no"));
-	    System.out.println("detail에 들어오는 no " + no);
+	    System.out.println("guideDetail에 들어오는 게시글 번호 " + no);
+	    
 	    GuideDTO guideFileDetail = guideService.selectGuideFileDetail(no);
 	    System.out.println("상세조회 guideDetail : " + guideFileDetail);
-	    System.out.println((((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getPmNo()));
-	    System.out.println((((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()));
+	    
 	    Gson gson = new GsonBuilder()
 	          .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
 	          .setPrettyPrinting()
@@ -357,6 +353,13 @@ public class GuideController {
     	return gson.toJson(guideFileDetail); 
    }
 	
+	/**
+	 * downloadFile : 게시글 상세 조회 시 첨부파일 다운로드 기능 메소드
+	 * @param fileNo : 해당 첨부파일번호를 가져옴 
+	 * @return new ModelAndView("fileDownloadView", "downloadFile", fileInfo) : fileDownloadView 에 downloadFile 라는 이름의 모델을 전송하고 file의 정보를 담은 fileInfo를 전송  
+	 * 
+	 * @author 박성준
+	 */
 	@GetMapping("/download/{fileNo}")
 	public ModelAndView downloadFile(@PathVariable("fileNo") String fileNo) throws IOException {
 		int no = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
@@ -365,15 +368,26 @@ public class GuideController {
 		
 		GuideFileDTO file = guideService.findFile(no);
 		fileInfo.put("filePath", file.getSavedPath());
-		System.out.println(file.getSavedPath());
-		System.out.println(file.getRandomName());
+		System.out.println("파일이 저장된 경로를 출력 : " + file.getSavedPath());
+		System.out.println("변경 이후 파일이름 출력 : " + file.getRandomName());
 		fileInfo.put("fileOriginName", file.getOriginalName());
 		fileInfo.put("fileRandomName", file.getRandomName());
 		return new ModelAndView("fileDownloadView", "downloadFile", fileInfo);
 	}
 	
+	
+	/**
+	 * deleteFile : 파일 삭제 기능 메소드
+	 * @param fileNo : 삭제할 파일 번호
+	 * @param session : 절대경로를 넣기 위해서 세션에서 서블릿 컨텍스트에 대한 정보를 받기 위한 객체
+	 * @param rttr : 파일 삭제 시 첨부파일 삭제 메시지를 출력할 세션 객체
+	 * @param mv : 요청 주소를 반환하는 매개변수
+	 * @return mv : 요청 주소를 반환
+	 * 
+	 * @author 박성준
+	 */
 	@GetMapping("/deleteFile/{fileNo}")
-	public String deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session, 
+	public ModelAndView deleteFile(@PathVariable("fileNo") String fileNo, HttpSession session, 
 			RedirectAttributes rttr, ModelAndView mv) throws NumberFormatException, UnsupportedEncodingException {
 		int fileNumber = Integer.parseInt(URLDecoder.decode(fileNo, "UTF-8"));
 		
@@ -390,10 +404,10 @@ public class GuideController {
 		}
 		
 		mv.addObject("intent", "/guide/deleteFile");
-		mv.setViewName("/board/guide/guideList");
+		mv.setViewName("redirect:/guide/list");
 		
 		rttr.addFlashAttribute("message", "가이드 게시판 첨부파일 삭제에 성공하셨습니다.");
 		
-		return "redirect:/guide/list"; 
+		return mv; 
 	}
 }

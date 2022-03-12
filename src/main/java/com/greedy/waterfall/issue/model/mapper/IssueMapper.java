@@ -18,8 +18,6 @@ public interface IssueMapper {
 
 	List<IssueDTO> selectIssueList(int taskNo);
 
-	List<IssueDTO> selectAllIssue();
-
 	int registIssue(IssueDTO issue);
 
 	int registIssueFile(IssueFileDTO issueFileDTO);
@@ -54,5 +52,4 @@ public interface IssueMapper {
 
 	void removeCheck(Map<String, Integer> condition);
 
-	
 }
