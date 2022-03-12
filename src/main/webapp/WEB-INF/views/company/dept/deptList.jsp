@@ -578,7 +578,7 @@ select:focus {
 		event.preventDefault();
 		const deptCode = this.parentNode.children[0].value;
 		console.log(deptCode);
-		$("ul .collapse").empty().toggle();
+//		$("ul .collapse").empty().toggle();
 		$.ajax({
 			url: "${ pageContext.servletContext.contextPath }/company/dept/list/" + deptCode,
 			type: "get",
@@ -589,7 +589,7 @@ select:focus {
 				for(let i = 0; i < teamDTOList.length; i++) {
 					const $teamTag = "<li style='"+"position: relative; line-height: 20px; margin-top: 20px'"+"><input type='"+"hidden'"+" value='" + teamDTOList[i].code + "'>" + teamDTOList[i].name +"<span style='"+"position: absolute; top: -15px; left: 239px'"+"><button class='"+"button float modTeam'"+" id='"+"team-mod'"+" data-bs-toggle='"+"modal'"+" data-bs-target='"+"#readTeamModal'"+"><i class='"+"far'"+" style='"+"font-size: 16px; color: white'"+">&#xf044;</i>&nbsp;수정</button><button class='"+"button float delTeam'"+" id='"+"team-delete'"+"><i class='"+"fas'"+" style='"+"font-size: 16px; color: white'"+">&#xf2ed;</i>&nbsp;삭제</button></span></li>";
 					console.log($teamTag);
-					$("ul .collapse").append($teamTag);
+//					$("ul .collapse").append($teamTag);
 				}
 			},
 			error: function(data) {
