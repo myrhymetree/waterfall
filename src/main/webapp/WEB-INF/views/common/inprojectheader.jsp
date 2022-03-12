@@ -135,7 +135,7 @@
 								id="sidenavAccordionPages">
 								<a class="nav-link menu-font2"
 									href="${ pageContext.servletContext.contextPath }/issue/task">
-									이슈조회 </a>
+									이슈관리 </a>
 
 							</nav>
 						</div>

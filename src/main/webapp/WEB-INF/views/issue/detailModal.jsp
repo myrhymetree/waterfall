@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>이슈조회 및 수정</title>
 </head>
 <body>
 
@@ -56,12 +56,13 @@
 								</select>
 									
                             </div>
-                            
+                            <c:if test="${ (sessionScope.loginMember.role eq 1) or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo)) }">
                             <div class="col-2 center"><label>이슈 담당자</label></div>
                             <div class="col">
                             	<select class="importance ms-auto" id="manager" name="managerNo" onfocus="this.value=''">
 								</select>
                             </div>
+                            </c:if>
                         </div>
 
                         <div class="mt-4 row">

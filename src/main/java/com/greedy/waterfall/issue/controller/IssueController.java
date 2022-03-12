@@ -688,4 +688,87 @@ public class IssueController {
 		return mv;
 	}
 	
+	@PostMapping("task/regist/{taskNo}")
+	public ModelAndView taskRegistIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request, ModelAndView mv,
+			@PathVariable("taskNo") int taskNo, RedirectAttributes rttr,  @RequestParam List<MultipartFile> multiFiles) {
+		System.out.println("업무 넘버는 : " + taskNo);
+		issue.setTaskNo(taskNo);
+		
+		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
+		issue.setProjectNo(projectNo);
+		
+		int writerMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		System.out.println("작성자 넘버는 : " +  writerMemberNo);
+		issue.setRegisterNo(writerMemberNo);
+		
+		System.out.println("MultiFiles : " + multiFiles);
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		System.out.println("root : " + root);
+		
+		String filePath = root + "/issueUploadFiles";
+		
+		File mkdir = new File(filePath);
+		
+		/* 폴더 생성 완료 */
+		if(!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+		/* 사진 개수 출력 완료 */
+		System.out.println("multiFiles.size() : " + multiFiles.size());
+
+		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
+		if(multiFiles.get(0).getSize() != 0) {
+			for(int i = 0; i < multiFiles.size(); i++) {
+				String originFileName = multiFiles.get(i).getOriginalFilename();
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				System.out.println("originFileName" + originFileName);
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+				System.out.println("savedName : " + savedName);
+				
+				IssueFileDTO issueFileDTO = new IssueFileDTO();
+				issueFileDTO.setSavedPath(filePath);
+				issueFileDTO.setOriginalName(originFileName);
+				issueFileDTO.setRandomName(savedName);
+				fileList.add(issueFileDTO);
+				issue.setFile(fileList);
+				
+				System.out.println("issue : " + issue);
+			}
+			
+			try {
+				for(int i = 0; i < multiFiles.size(); i++) {
+					
+					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
+					
+					System.out.println("이슈 등록 성공 확인 " + issue);
+				}
+				
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				
+				for(int i = 0; i < multiFiles.size(); i++) {
+					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
+					
+					System.out.println("이슈 등록 실패 확인 " + issue);
+				}
+			  }
+		}
+		
+		String message = "";
+		if(issueService.registIssue(issue)) {
+			message = "게시글을 등록했습니다.";
+			System.out.println(message);
+			rttr.addFlashAttribute("message", "이슈 등록에 성공하셨습니다");
+		} else {
+			message = "게시글등록에 실패했습니다.";
+			System.out.println(message);
+			rttr.addFlashAttribute("message", "이슈 등록에 실패하셨습니다");
+		}
+		
+		mv.setViewName("redirect:/task/timeline");
+		return mv;
+	}
+	
 }
