@@ -120,10 +120,6 @@ public class EduController {
 		return mv;
  	}
 	
-	@GetMapping("edu/eduList")
-	public void registEduBoard() {
-		
-	}
 	
 	@PostMapping("/regist")
 	public String registEduBoard(@ModelAttribute EduDTO eduBoard, HttpServletRequest request,
