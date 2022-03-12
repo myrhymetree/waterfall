@@ -275,10 +275,11 @@ input::-webkit-search-results-decoration{
                                               <div class="my-textarea-div mb-3">
                                                   <textarea name="content" id="read-content" cols="30" rows="10" required></textarea>
                                               </div>
-                                              
+                                              <c:if var="guide" test="${ sessionScope.loginMember.role eq 1 or ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no eq sessionScope.projectAutority.pmNo))}">
                                               <div id="uploadZone">
 									              <input type="file"  name="singleFile">
 									          </div>
+									          </c:if>
                                               <div id="downloadZone">
 							                 </div>
                                           </div>

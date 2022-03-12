@@ -29,11 +29,11 @@
                         	<input type="hidden" id="read-taskNo" name="taskNo">
                         	
                             <div class="col-2 center"><label>이슈명</label></div>
-                            <div class="col"><input type="text" id="read-name" name="name" required onfocus="this.value=''"></div>
+                            <div class="col"><input type="text" id="read-name" name="name" required></div>
                             <div class="col"></div>
                             <div class="col-2 center"><label>상태</label></div>
                             <div class="col-4">
-                                <select class="importance ms-auto" id="read-progressStatus" name="progressStatus" required onfocus="this.value=''">
+                                <select class="importance ms-auto" id="read-progressStatus" name="progressStatus" required>
                                     <option value="대기중">대기중</option>
                                     <option value="처리중">처리중</option>
                                     <option value="완료">완료</option>
@@ -43,16 +43,16 @@
 
                         <div class="mt-4 row">
                        		<div class="col-2 center"><label for="read-createdDate">등록일</label></div>
-                            <div class="col"><input type="date" id="read-createdDate" name="createdDate" required onfocus="this.value=''"></div>
+                            <div class="col"><input type="date" id="read-createdDate" name="createdDate" required ></div>
                        
                             <div class="col-2 center"><label for="read-deadline">마감일</label></div>
-                            <div class="col-4"><input type="date" id="read-deadline" name="deadline" required onfocus="this.value=''"></div>
+                            <div class="col-4"><input type="date" id="read-deadline" name="deadline" required ></div>
                         </div>
 
                          <div class="mt-4 row">
                             <div class="col-2 center"><label>이슈 제기자</label></div>
                             <div class="col">
-                            	<select class="importance ms-auto" id="register" name="registerNo" required onfocus="this.value=''">
+                            	<select class="importance ms-auto" id="register" name="registerNo" required>
 								</select>
 									
                             </div>
@@ -63,12 +63,19 @@
 								</select>
                             </div>
                             </c:if>
+                            <c:if test="${ (sessionScope.loginMember.role ne 1) and ( !empty sessionScope.loginMember.no and (sessionScope.loginMember.no ne sessionScope.projectAutority.pmNo)) }">
+                            <div class="col-2 center"><label>이슈 담당자</label></div>
+                            <div class="col">
+                            	<select class="importance ms-auto" id="manager" name="managerNo" disabled>
+								</select>
+                            </div>
+                            </c:if>
                         </div>
 
                         <div class="mt-4 row">
                             <div class="col-2 center"><label>중요도</label></div>
                             <div class="col-4">
-                            <select class="importance ms-auto" id="read-importance" name="importance" required onfocus="this.value=''">
+                            <select class="importance ms-auto" id="read-importance" name="importance" required >
                                 <option value="낮음">낮음</option>
                                 <option value="보통">보통</option>
                                 <option value="긴급">긴급</option>
@@ -81,12 +88,12 @@
 						
                         <div class="mt-4 row">
                             <div class="col-2 center" style="vertical-align: top;"><label>이슈내용</label></div>
-			                <div class="col-10"><textarea id="read-content" cols="80" rows="10" name="content" required onfocus="this.value=''"></textarea></div>
+			                <div class="col-10"><textarea id="read-content" cols="80" rows="10" name="content" required ></textarea></div>
 			            </div>
 			            
 			            <div class="mt-4 row">
 			                <div class="col-2 center" style="vertical-align: top;"><label>처리내용</label></div>
-			                <div class="col-10"><textarea id="read-answer" cols="80" rows="10" name="answer" onfocus="this.value=''"></textarea></div>
+			                <div class="col-10"><textarea id="read-answer" cols="80" rows="10" name="answer" ></textarea></div>
 			            </div>
 			            
 			            <div id="uploadZone">

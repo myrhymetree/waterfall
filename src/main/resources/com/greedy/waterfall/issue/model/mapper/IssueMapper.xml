@@ -150,7 +150,7 @@
                , (SELECT
                          COUNT(C.ISSUE_NO)
                     FROM TBL_ISSUE C
-                    JOIN TBL_TASK K ON (C.TASK_NO = K.TASK_NO) 
+                    LEFT JOIN TBL_TASK K ON (C.TASK_NO = K.TASK_NO) 
                    WHERE C.ISSUE_STATUS = 'Y'
                      AND K.TASK_STATUS = 'Y'
                      AND C.PROJECT_NO = B.PROJECT_NO
@@ -158,7 +158,7 @@
                 , ( SELECT
                            COUNT(D.ISSUE_NO) 
                       FROM TBL_ISSUE D
-                      JOIN TBL_TASK K ON (D.TASK_NO = K.TASK_NO)
+                      LEFT JOIN TBL_TASK K ON (D.TASK_NO = K.TASK_NO)
                      WHERE D.ISSUE_STATUS = 'Y'
                        AND K.TASK_STATUS = 'Y'
                        AND D.ISSUE_PROGRESS_STATUS = '대기중'
@@ -167,7 +167,7 @@
                 , ( SELECT
                            COUNT(E.ISSUE_NO)  
                       FROM TBL_ISSUE E
-                      JOIN TBL_TASK K ON (E.TASK_NO = K.TASK_NO)
+                      LEFT JOIN TBL_TASK K ON (E.TASK_NO = K.TASK_NO)
                      WHERE E.ISSUE_STATUS = 'Y'
                        AND K.TASK_STATUS = 'Y'
                        AND E.ISSUE_PROGRESS_STATUS = '처리중'
@@ -176,7 +176,7 @@
                  , ( SELECT
                             COUNT(F.ISSUE_NO) 
                        FROM TBL_ISSUE F
-                       JOIN TBL_TASK K ON (F.TASK_NO = K.TASK_NO)
+                       LEFT JOIN TBL_TASK K ON (F.TASK_NO = K.TASK_NO)
                       WHERE F.ISSUE_STATUS = 'Y'
                         AND K.TASK_STATUS = 'Y'
                         AND F.ISSUE_PROGRESS_STATUS = '완료'
@@ -190,11 +190,6 @@
            LEFT JOIN TBL_MEMBER H ON (G.MEMBER_NO = H.MEMBER_NO)
            LEFT JOIN TBL_TASK I ON (B.TASK_NO = I.TASK_NO)
           WHERE A.PROJECT_STATUS = 'Y'
-            AND I.TASK_STATUS = 'Y'
-            AND G.ROLE_NO = 8
-           <if test="managerNo != 1">
-           	AND G.MEMBER_NO = #{ managerNo } 
-           </if>
             AND G.ROLE_HISTORY_NO IN (SELECT MAX(J.ROLE_HISTORY_NO)
                                         FROM TBL_ROLE_ASSIGNMENT_HISTORY J
                                        WHERE J.ROLE_NO = 8
