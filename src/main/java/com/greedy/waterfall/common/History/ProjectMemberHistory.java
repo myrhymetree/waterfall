@@ -28,19 +28,14 @@ public class ProjectMemberHistory implements History{
 		
 		List<ProjectHistoryDTO> historyList = new ArrayList<>();
 		
-		historyList.add(new ProjectHistoryDTO().builder()
-				.projectNo(historyInfo.getProjectNo())
-				.managerNo(historyInfo.getManagerNo())
-				.contentType(5)
-				.content("[" + historyInfo.getManagerName() + "]님이 [" + historyInfo.getProjectName() + "]프로젝트에 [" + historyInfo.getMemberName() +"]님을 " + roleName + "역할로 배정했습니다.")
-				.build());
+		historyList.add(new ProjectHistoryDTO().builder().content("[" + historyInfo.getManagerName() + "]님이 [" + historyInfo.getProjectName() + "]프로젝트에 [" + historyInfo.getMemberName() +"]님을 " + roleName + "역할로 배정했습니다.")
+				.projectNo(historyInfo.getProjectNo()).managerNo(historyInfo.getManagerNo()).contentType(MEMBER_HISTORY).build());
 		
 		return historyList;
 	}
 
 	@Override
 	public List<ProjectHistoryDTO> modifyHistory(Object info) {
-
 		Map<String, Object> historyInfo = (Map<String, Object>) info;
 		ProjectManageMemberDTO oldInfo = (ProjectManageMemberDTO) historyInfo.get("oldInfo"); 
 		ProjectManageMemberDTO newInfo = (ProjectManageMemberDTO) historyInfo.get("newInfo"); 
@@ -48,15 +43,10 @@ public class ProjectMemberHistory implements History{
 		String oldRole = roleString(oldInfo.getRole());
 		String newRole = roleString(newInfo.getRole());
 		
-		
 		List<ProjectHistoryDTO> historyList = new ArrayList<>();
 		
-		historyList.add(new ProjectHistoryDTO().builder()
-				.projectNo(oldInfo.getProjectNo())
-				.managerNo(oldInfo.getManagerNo())
-				.contentType(5)
-				.content("[" + oldInfo.getManagerName() + "]님이 [" + oldInfo.getMemberName() + "]님의 역할을 " + oldRole +" 에서  " + newRole + "로 수정했습니다.")
-				.build());
+		historyList.add(new ProjectHistoryDTO().builder().content("[" + oldInfo.getManagerName() + "]님이 [" + oldInfo.getMemberName() + "]님의 역할을 " + oldRole +" 에서  " + newRole + "로 수정했습니다.")
+				.projectNo(oldInfo.getProjectNo()).managerNo(oldInfo.getManagerNo()).contentType(MEMBER_HISTORY).build());
 		
 		return historyList;
 	}
@@ -64,15 +54,10 @@ public class ProjectMemberHistory implements History{
 	@Override
 	public List<ProjectHistoryDTO> removeHistory(Object info) {
 		ProjectManageMemberDTO historyInfo = (ProjectManageMemberDTO) info;
-		
 		List<ProjectHistoryDTO> historyList = new ArrayList<>();
 		
-		historyList.add(new ProjectHistoryDTO().builder()
-				.projectNo(historyInfo.getProjectNo())
-				.managerNo(historyInfo.getManagerNo())
-				.contentType(5)
-				.content("[" + historyInfo.getManagerName() + "]님이 [" + historyInfo.getProjectName() + "]프로젝트에서 [" + historyInfo.getMemberName() +"]님을 내보냈습니다.")
-				.build());
+		historyList.add(new ProjectHistoryDTO().builder().content("[" + historyInfo.getManagerName() + "]님이 [" + historyInfo.getProjectName() + "]프로젝트에서 [" + historyInfo.getMemberName() +"]님을 내보냈습니다.")
+				.projectNo(historyInfo.getProjectNo()).managerNo(historyInfo.getManagerNo()).contentType(MEMBER_HISTORY).build());
 		
 		return historyList;
 	}
@@ -95,5 +80,4 @@ public class ProjectMemberHistory implements History{
 		
 		return roleName;
 	}
-
 }

@@ -210,19 +210,6 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	/**
-	 * findPmNumber : 전달받은 프로젝트 번호를 관리하는 pm의 번호를 조회한다.
-	 * @param 프로젝트번호를 전달받는다.
-	 * @return 프로젝트 pm의 회원번호를 반환한다.
-	 * 
-	 * @author 홍성원
-	 */
-	@Override
-	public int findPmNumber(int projectNo) {
-
-		return mapper.findPmNumber(projectNo);
-	}
-
-	/**
 	 * findOneProjectInfo : 전달받은 프로젝트 번호로 해당 프로젝트 상세정보를 조회한다.
 	 * @param projectNo : 프로젝트의 번호를 전달받는다.
 	 * @return : 프로젝트의 상세정보를 반환한다.
@@ -352,7 +339,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public Map<String, Object> findProjectMainInfo(int projectNo) {
 		Map<String, Object> projectMainInfo = new HashMap<String, Object>();
 		/* 전달받은 프로젝트의 pm번호와 프로젝트번호를 저장한다. */
-		ProjectAuthorityDTO projectAutority = new ProjectAuthorityDTO().builder().pmNo(mapper.findPmNumber(projectNo)).projectNo(projectNo).build();
+		ProjectAuthorityDTO projectAutority = mapper.findPmNumber(projectNo);
 		BoardCategoryDTO SearchCondition = new BoardCategoryDTO(projectNo);
 		
 		/* 전달받은 프로젝트에 등록된 각 게시판의 최근등록순 게시글을 5개씩 조회해 저장한다. */
@@ -417,36 +404,3 @@ public class ProjectServiceImpl implements ProjectService {
 		return boardInfo;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

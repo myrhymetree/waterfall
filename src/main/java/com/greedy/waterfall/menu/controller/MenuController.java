@@ -16,15 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.menu.model.dto.MainInfoDTO;
 import com.greedy.waterfall.menu.model.service.MenuService;
-import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
-import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
 
 /**
  * <pre>
@@ -40,7 +37,6 @@ import com.greedy.waterfall.project.model.dto.ProjectRoleDTO;
 @Controller
 @RequestMapping("/menu/*")
 public class MenuController {
-
 	private final MenuService menuService;
 
 	@Autowired
@@ -48,6 +44,17 @@ public class MenuController {
 		this.menuService = menuService;
 	}
 	
+	/**
+	 * sendToMainpage : 메인페이지에 필요한 관리프로젝트 목록, 참여프로젝트목록을 조회한다.
+	 * @param 프로젝트목록의 페이징처리를 위한 정보와 회원정보다 저장된 request를 전달받는다.
+	 * @return projectList : 관리중인 프로젝트의 목록을 반환한다.
+	 * @return joinProjectList : 참여중인 프로젝트의 목록을 반환한다.
+	 * @return selectCriteria : 관리중인 프로젝트의 페이징정보를 반환한다.
+	 * @return subselectCriteria : 참여중인 프로젝트의 페이징정보를 반환한다.
+	 * @return intent : 페이징처리를 위해, 요청주소값을 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@GetMapping("/main")
 	public ModelAndView sendToMainpage(ModelAndView mv, HttpServletRequest request) {
 		String currentPage = request.getParameter("currentPage");
@@ -65,7 +72,6 @@ public class MenuController {
 		SelectCriteria selectCriteria = (SelectCriteria) findProjectResult.get("selectCriteria");
 		SelectCriteria subselectCriteria = (SelectCriteria) findProjectResult.get("subselectCriteria");
 		
-		
 		mv.addObject("projectList", projectList);
 		mv.addObject("joinProjectList", joinProjectList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -77,9 +83,9 @@ public class MenuController {
 	}
 
 	/**
-	 * findAdminMainProjectList : 메인화면 관리자 ajax부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * findAdminMainProjectList : 메인화면에서 관리자가 선택한 프로젝트의 상세정보를 반환한다.
+	 * @param 프로젝트번호를 전달받는다.
+	 * @return 해당 프로젝트의 업무, 이슈, 산출물갯수를 반환한다.
 	 * 
 	 * @author 홍성원
 	 * @throws IOException 
@@ -103,6 +109,13 @@ public class MenuController {
 		return mv;
 	}
 	
+	/**
+	 * findJoinProjectInfo : 참여중인 프로젝트에대한 정보를 조회한다.
+	 * @param 프로젝트번호와 회원정보를 전달받는다.
+	 * @return 프로젝트정보와 해당 프로젝트에서 맡은 업무갯수를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@GetMapping("main/join/project/{projectNo}")
 	public ModelAndView findJoinProjectInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response
 															, @PathVariable("projectNo") int projectNo) throws IOException {
@@ -128,70 +141,4 @@ public class MenuController {
 		
 		return mv;
 	}
-	
-	
-	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

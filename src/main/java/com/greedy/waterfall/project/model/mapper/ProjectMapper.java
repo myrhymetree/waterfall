@@ -11,6 +11,7 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
 import com.greedy.waterfall.project.model.dto.BoardCategoryDTO;
 import com.greedy.waterfall.project.model.dto.DeptDTO;
+import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
 import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 import com.greedy.waterfall.project.model.dto.ProjectStatusDTO;
@@ -56,15 +57,6 @@ public interface ProjectMapper {
 
 	int findAllManageProjectCount(Map<String, String> searchMap);
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * findPmNumber : 프로젝트메인페이지 이동 시 , 해당 프로젝트의 pm 회원번호를 조회한다.
 	 * @param 이동하는 프로젝트의 번호를 전달받는다.
@@ -72,7 +64,7 @@ public interface ProjectMapper {
 	 * 
 	 * @author 홍성원
 	 */
-	int findPmNumber(int projectNo);
+	ProjectAuthorityDTO findPmNumber(int projectNo);
 
 	/**
 	 * findOneProjectInfo : 프로젝트 수정을 위해 프로젝트 상세정보를 조회한다.

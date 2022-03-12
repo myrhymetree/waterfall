@@ -16,6 +16,7 @@
 		<association property="member" resultMap="memberResult"/>
 		<collection property="projectInfo" resultMap="projectInfoResult"/>
 	</resultMap>
+	
 	<resultMap type="com.greedy.waterfall.project.model.dto.RegistProjectDTO" id="registProjectResult">
 		<id property="projectNo" column="PROJECT_NO"/>
 		<result property="projectName" column="PROJECT_NAME"/>	
@@ -30,6 +31,7 @@
 		<result property="team" column="TEAM_CODE"/>
 		<result property="adminNo" column="MANAGER_NO"/>
 	</resultMap>
+	
 	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
 		<result property="memberName" column="MEMBER_NAME"/>
 	</resultMap>
@@ -38,6 +40,7 @@
 		<id property="deptCode" column="DEPT_CODE"/>
 		<result property="deptName" column="DEPT_NAME"/>
 	</resultMap>
+	
 	<resultMap type="com.greedy.waterfall.project.model.dto.BoardCategoryDTO" id="boardCategoryResult">
 		<id property="projectNo" column="PROJECT_NO"/>
 		<result property="categoryNo" column="CATEGORY_NO"/>
@@ -58,6 +61,7 @@
 		<id property="no" column="MEMBER_NO"/>
 		<result property="name" column="MEMBER_NAME"/>
 	</resultMap>
+	
 	<resultMap type="com.greedy.waterfall.board.model.dto.BoardDTO" id="boardResult">
 	 	<id property="no" column="BOARD_NO"/>
 	 	<result property="updatedDate" column="BOARD_UPDATED_DATE"/>
@@ -86,15 +90,12 @@
 		<result property="fileCategoryNo" column="FILE_CATEGORY_NO"/>
 	</resultMap>
 
-	
 	<resultMap type="com.greedy.waterfall.menu.model.dto.ProjectInfoDTO" id="projectInfoResult">
 		<result property="outputAmount" column="OUTPUT_AMOUNT"/>
-		
 		<result property="totalIssueAmount" column="TOTAL_ISSUE"/>
 		<result property="watingIssueAmount" column="WAIT_ISSUE"/>
 		<result property="progressingIssueAmount" column="PROGRESS_ISSUE"/>
 		<result property="solvedIssueAmount" column="SOLVED_ISSUE"/>
-		
 		<result property="totalTaskAmount" column="TOTAL_TASK"/>
 		<result property="beforeProceedingTaskAmount" column="BEFORE_TASK"/>
 		<result property="progressingTaskAmount" column="PROGRESS_TASK"/>
@@ -102,6 +103,13 @@
 		<result property="finishedTaskAmount" column="FINISH_TASK"/>
 		<result property="pendingTaskAmount" column="PENDING_TASK"/>
 	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO" id="projectAutority">
+		<result property="projectNo" column="PROJECT_NO"/>
+		<result property="pmNo" column="MEMBER_NO"/>
+		<result property="projectName" column="PROJECT_NAME"/>
+	</resultMap>
+	
 	<select id="findAdminInfo" resultMap="memberResultMap">
         SELECT 
                A.MEMBER_NO
@@ -112,17 +120,16 @@
 	
 	<select id="findManageProjectCount" resultType="_int">
         SELECT
-                COUNT(*)
-           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
-           JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-           JOIN TBL_PROJECT C ON (A.PROJECT_NO = C.PROJECT_NO)
+               COUNT(*)
+          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
+          JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
+          JOIN TBL_PROJECT C ON (A.PROJECT_NO = C.PROJECT_NO)
 		<where>
 			<if test="searchValue == 'projectName'">
-                C.PROJECT_NAME LIKE '%' || #{ searchValue } || '%'			
+               C.PROJECT_NAME LIKE '%' || #{ searchValue } || '%'			
 			</if>
-           AND ROLE_NO = 8
-           AND
-            B.MEMBER_NO = TO_NUMBER(#{ memberNo })
+          AND ROLE_NO = 8
+          AND B.MEMBER_NO = TO_NUMBER(#{ memberNo })
 		</where>
 	</select>
 	<select id="findAllManageProjectCount" resultType="_int" parameterType="hashmap">
@@ -214,6 +221,7 @@
              , A.PROJECT_PROGRESS_STATUS_NAME
           FROM TBL_PROJECT_STATUS A
 	</select>
+	
 	<select id="findAllDept" resultMap="deptResult">
         SELECT
                A.DEPT_CODE
@@ -280,7 +288,7 @@
           		           AND D.ROLE_NO = 8
                            AND C.PROJECT_STATUS = 'Y'
         				</where>
-                         ORDER BY C.PROJECT_NO
+                         ORDER BY C.PROJECT_NO DESC
                        ) B
 				<![CDATA[
                  WHERE ROWNUM <= #{ endRow }      
@@ -491,7 +499,7 @@
                            AND D.PROJECT_STATUS = 'Y'
                            AND C.MEMBER_NO = #{ member.no }
 						</where>
-                         ORDER BY D.PROJECT_NO
+                         ORDER BY D.PROJECT_NO DESC
                        ) B
 				<![CDATA[
                  WHERE ROWNUM <= #{ endRow }
@@ -619,15 +627,19 @@
         , 1
         )
 	</insert>
-	<select id="findPmNumber" resultType="_int">
+	
+	<select id="findPmNumber" resultMap="projectAutority">
         SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findPmNumber() */
                A.MEMBER_NO
+             , B.PROJECT_NO
+             , B.PROJECT_NAME
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
-         WHERE PROJECT_NO = #{ projectNo }
-           AND A.ROLE_HISTORY_NO = (SELECT MAX(B.ROLE_HISTORY_NO) 
-                                      FROM TBL_ROLE_ASSIGNMENT_HISTORY B 
-                                     WHERE B.PROJECT_NO = #{ projectNo }            
-                                       AND ROLE_NO = 8
+          JOIN TBL_PROJECT B ON (A.PROJECT_NO = B.PROJECT_NO)
+         WHERE A.PROJECT_NO = #{ projectNo }
+           AND A.ROLE_HISTORY_NO = (SELECT MAX(C.ROLE_HISTORY_NO) 
+                                      FROM TBL_ROLE_ASSIGNMENT_HISTORY C 
+                                     WHERE C.PROJECT_NO = #{ projectNo }            
+                                       AND C.ROLE_NO = 8
                                    )
 	</select> 
  	

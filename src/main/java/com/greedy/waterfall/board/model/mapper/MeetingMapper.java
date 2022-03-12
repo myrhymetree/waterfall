@@ -120,6 +120,4 @@ public interface MeetingMapper {
 	 * @author 홍성원
 	 */
 	boolean removeMeetingBoardFile(int fileNo);
-
-
 }

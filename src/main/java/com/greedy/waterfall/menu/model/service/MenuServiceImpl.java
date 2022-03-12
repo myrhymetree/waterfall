@@ -39,9 +39,9 @@ public class MenuServiceImpl implements MenuService{
 	}
 	
 	/**
-	 * findMainProjectList : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * findMainProjectList : 회원번호를 전달받아 관리중인 프로젝트 목록을 반환한다.
+	 * @param 회원정보를 전달받는다.
+	 * @return 회원이 관리중인 프로젝트목록을 반환한다.
 	 * 
 	 * @author 홍성원
 	 */
@@ -60,7 +60,6 @@ public class MenuServiceImpl implements MenuService{
 		/* 페이지에대한 정보가 담긴 searchMap과  출력 설정정보가 담겨져있는 pageSetting, 로그인회원의 정보가 담긴 정보를 전달해, 
 		 * 검색조건이 담겨져있는 SelectCriteria변수를 반환받아, 프로젝트목록을 조회한다. */
 		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap, pageSetting, loginMember);
-		System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());
 		List<ProjectDTO> projectList = mapper.findMainProjectList(selectCriteria);
 		
 		/* 관리자가 아닌경우 참여중인 프로젝트 목록을 반환한다. */
@@ -88,11 +87,9 @@ public class MenuServiceImpl implements MenuService{
 	 */
 	@Override
 	public Map<String, Object> findAdminPageInfo(int projectNo) {
-
+		/* 프로젝트번호에 해당하는 정보를 반환한다. */
 		Map<String, Object> pageInfo = new HashMap<>();
-		
 		ProjectDTO projectInfo = mapper.findProjectInfo(projectNo);
-		
 		pageInfo.put("projectInfo", projectInfo);
 		
 		return pageInfo;
@@ -101,13 +98,13 @@ public class MenuServiceImpl implements MenuService{
 	/**
 	 * findJoinProjectInfo : 개발자의 메인화면에 참여중인 프로젝트의 상세정보를 조회한다.
 	 * @param searchMap: 개발자의 회원번호와 조회하려는 프로젝트의 번호를 담고있는 Map을 전달받는다.
-	 * @return 전달받은 정보로 참여중인 프로젝트의 상세정보를 반환한다.
+	 * @return 전달받은 정보로 참여중인 프로젝트의 상세정보와 관리중인 업무 갯수를 반환한다.
 	 * 
 	 * @author 홍성원
 	 */
 	@Override
 	public ProjectDTO findJoinProjectInfo(Map<String, Integer> searchMap) {
-
+		
 		return mapper.findJoinProjectDetail(searchMap);
 	}
 

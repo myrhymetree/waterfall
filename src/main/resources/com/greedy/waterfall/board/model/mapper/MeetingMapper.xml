@@ -39,7 +39,6 @@
 		<id property="no" column="MEMBER_NO"/>
 	</resultMap>
 
-	<!-- 게시물 조회시  조회수를 1 증가시킨다.-->
 	<update id="increseCount">
         UPDATE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#increseCount() */
                TBL_BOARD A
@@ -50,8 +49,6 @@
          WHERE A.BOARD_NO = #{ meetingNo } 
 	</update>
 	
-	<!--#보류 projectNo, memberNo 기능 추가될시 수정 -->
-	<!-- 게시판 게시물 등록 후 등록한 게시물의 번호를 MeetingDTO의 no에 넣준다.. -->
 	<insert id="registMeetingBoard" parameterType="com.greedy.waterfall.board.model.dto.MeetingDTO">
         INSERT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#registMeetingBoard() */
           INTO TBL_BOARD A
@@ -84,9 +81,7 @@
         	  FROM DUAL
         </selectKey>
 	</insert>
-	<!-- //memberNo -->
 	
-	<!-- 게시물의 첨부파일을 저장한다. -->
 	<insert id="registMeetingFile" parameterType="com.greedy.waterfall.board.model.dto.FileDTO">
         INSERT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#registMeetingFile() */
           INTO TBL_FILE A
@@ -109,7 +104,6 @@
         ) 
 	</insert>
 	
-	<!-- 회의록 게시판의 게시글을 조회한다. selectCriteria안에 담긴 현재페이지에 출력될 시작행과 끝 행으로 게시글의 갯수를 정하고, serchCondition과  searchValue로 검색을 한다. -->
 	<select id="findMeetingList" resultMap="meetingResult">
        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMeetingList() */  
               A.RNUM
@@ -171,7 +165,6 @@
         ORDER BY A.BOARD_NO DESC
 	</select>
 	
-	<!-- 전달받은 게시글번호로 해당 게시물의 상세내역을 조회한다. -->
 	<select id="findMeetingBoardDetail" resultMap="meetingResult">
        SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMeetingBoardDetail() */
               A.BOARD_NO
@@ -195,7 +188,6 @@
           AND A.BOARD_NO = #{ meetingNo }
 	</select>
 	
-	<!-- 회의록게시판의 전체 게시글을 조회한다. -->
 	<select id="findMeetingTotalCount" resultType="_int" parameterType="hashmap">
         SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findMeetingTotalCount() */
                COUNT(*)
@@ -219,14 +211,12 @@
 		</where>
 	</select>	
 	
-	<!-- 해당 번호의 게시글을 삭제한다. -->
 	<delete id="removeMeetingBoard" parameterType="_int">
         DELETE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#removeMeetingBoard() */
           FROM TBL_BOARD A
          WHERE A.BOARD_NO = #{ meetingNo }	
 	</delete>
 	
-	<!-- 입력받은 정보로 게시글을 수정한다. -->
 	<update id="modifyMeetingBoard" parameterType="hashmap">
         UPDATE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#modifyMeetingBoard() */
                TBL_BOARD A
@@ -236,7 +226,6 @@
          WHERE A.BOARD_NO = #{ no } 
 	</update>
 	
-	<!-- 게시글 번호로 하나의 게시글을 조회한다. -->
 	<select id="findOneMeetingBoard" resultMap="meetingResult">
         SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#findOneMeetingBoard() */
                A.BOARD_NO
@@ -254,7 +243,6 @@
            AND A.BOARD_STATUS = 'Y'
 	</select>	
 	
-	<!-- 첨부파일번호로 첨부파일 전체 정보를 조회한다. -->
 	<select id="fineFile" resultMap="fileResultMap">
         SELECT /* com.greedy.waterfall.board.model.mapper.MeetingMapper#fineFile() */
                A.FILE_NO
@@ -269,8 +257,9 @@
           FROM TBL_FILE A
          WHERE A.FILE_NO = #{ no }
 	</select>
+	
 	<delete id="removeMeetingBoardFile">
-        DELETE
+        DELETE /* com.greedy.waterfall.board.model.mapper.MeetingMapper#removeMeetingBoardFile() */
           FROM TBL_FILE A
          WHERE A.FILE_NO = #{ fileNo }
 	</delete>

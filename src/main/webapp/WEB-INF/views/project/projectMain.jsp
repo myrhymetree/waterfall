@@ -188,10 +188,8 @@ td {
 	<div >
       <main>
          <div id="output_header">
-            
-            <%-- 각 파트별로 한번에 div 로 묶어서 한게 아니라 각 상자 따로 헤더(프로젝트1, 이슈, 프로젝트가이드 등등) 따로 입니다,,, margin-left로 글씨 넣어줌...ㅎ  --%>
              <%-- 메인화면 헤더 --%>
-            <label><i style='font-size: 24px' class='fas'>&#xf4fe;</i>프로젝트 이름</label>
+            <label><i style='font-size: 24px' class='fas'>&#xf4fe;</i>${ sessionScope.projectAutority.projectName }</label>
             <hr style="width:1470px;">
             
             <%-- 프로젝트이름  --%>
@@ -342,7 +340,7 @@ td {
 					for(let i = 0;i < $boardInfo.file.length; i++) {
 						const $fileName = $boardInfo.file[i].fileOriginName;
 						const $fileNo = $boardInfo.file[i].fileNo;
-						$buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + $fileName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/meeting/download/" + $fileNo + "'>다운로드</a><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/meeting/deleteFile/" + $fileNo + "'>삭제</a></div></div></div></div>";
+						$buttonsTag = "<div class='mt-4 row'><div class='col-2 center' style='vertical-align: top;''><label>첨부파일</label></div><div class='col-3'><div class='btn-group' id='attaachmentNameArea'><input type='button' class='btn btn-outline-dark' id='read-originalName' name='originalName' value='" + $fileName + "'><button type='button' class='btn btn-outline-dark dropdown-toggle dropdown-toggle-split' data-toggle='dropdown'><span class='caret'></span></button><div class='dropdown-menu' id='downloadArea'><a class='dropdown-item' href='${pageContext.servletContext.contextPath}/meeting/download/" + $fileNo + "'>다운로드</a></div></div></div></div>";
 						$("#downloadZone").append($buttonsTag);
 
 					}

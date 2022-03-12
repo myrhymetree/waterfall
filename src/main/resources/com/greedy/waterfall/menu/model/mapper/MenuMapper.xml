@@ -25,11 +25,9 @@
 	
 	<resultMap type="com.greedy.waterfall.menu.model.dto.ProjectInfoDTO" id="projectInfoResult">
 		<result property="outputAmount" column="OUTPUT_AMOUNT"/>
-		
 		<result property="watingIssueAmount" column="WAIT_ISSUE"/>
 		<result property="progressingIssueAmount" column="PROGRESS_ISSUE"/>
 		<result property="solvedIssueAmount" column="SOLVED_ISSUE"/>
-		
 		<result property="beforeProceedingTaskAmount" column="BEFORE_TASK"/>
 		<result property="progressingTaskAmount" column="PROGRESS_TASK"/>
 		<result property="testingTaskAmount" column="TEST_TASK"/>
@@ -58,7 +56,7 @@
 		<result property="role" column="MEMBER_AUTHORIZATION_NO"/>
 	</resultMap>
 	<select id="findProjectInfo" resultMap="projectResult">
-        SELECT 
+        SELECT /* com.greedy.waterfall.menu.model.mapper.MenuMapper#findProjectInfo() */ 
                A.PROJECT_NO
              , A.PROJECT_NAME
              , A.PROJECT_START_DATE
@@ -128,7 +126,7 @@
 	</select>
 	
 	<select id="findJoinProjectCount" resultType="_int">
-        SELECT  
+        SELECT /* com.greedy.waterfall.menu.model.mapper.MenuMapper#findJoinProjectCount() */  
                COUNT(COUNT(*))
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
           JOIN TBL_PROJECT B ON (A.PROJECT_NO = B.PROJECT_NO)
@@ -139,9 +137,8 @@
          GROUP BY A.PROJECT_NO
 	</select>
 
-
 	<select id="findProjectCount" resultType="_int">
-        SELECT  
+        SELECT /* com.greedy.waterfall.menu.model.mapper.MenuMapper#findProjectCount() */  
                COUNT(COUNT(*))
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
           JOIN TBL_PROJECT B ON (A.PROJECT_NO = B.PROJECT_NO)
@@ -153,8 +150,9 @@
        	</if>
          GROUP BY A.PROJECT_NO
 	</select>
+	
 	<select id="findMainProjectList" resultMap="projectResult">
-        SELECT 
+        SELECT /* com.greedy.waterfall.menu.model.mapper.MenuMapper#findMainProjectList() */ 
                RNUM
              , A.PROJECT_NO
              , A.PROJECT_NAME
@@ -183,8 +181,9 @@
                ) A
          WHERE RNUM >= #{ startRow }
 	</select>
+	
 	<select id="findJoinProjectList" resultMap="projectResult">
-        SELECT 
+        SELECT /* com.greedy.waterfall.menu.model.mapper.MenuMapper#findJoinProjectList() */ 
                RNUM
              , A.PROJECT_NO
              , A.PROJECT_NAME
@@ -218,7 +217,7 @@
 	</select>
 	
 	<select id="findJoinProjectDetail" resultMap="projectResult">
-        SELECT 
+        SELECT /* com.greedy.waterfall.menu.model.mapper.MenuMapper#findJoinProjectDetail() */ 
                A.PROJECT_NO
              , A.PROJECT_NAME
              , A.PROJECT_START_DATE
@@ -299,5 +298,4 @@
            AND B.PROJECT_NO = #{ projectNo }
            AND C.MEMBER_NO = #{ memberNo }
 	</select>
-
 </mapper>

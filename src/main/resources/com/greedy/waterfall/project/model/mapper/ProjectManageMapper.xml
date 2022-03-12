@@ -19,17 +19,16 @@
 		<result property="quitDate" column="PROJECT_MEM_DROP_DATE"/>
 		
 		<collection property="role" resultMap="projectRole"/>
-		
-	</resultMap>
-	
-	<resultMap type="com.greedy.waterfall.project.model.dto.DeptDTO" id="deptResult">
-		<id property="deptCode" column="DEPT_CODE"/>
-		<result property="deptName" column="DEPT_NAME"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectRoleDTO" id="projectRole">
 		<id property="roleNo" column="ROLE_NO"/>
 		<result property="roleName" column="ROLE_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.project.model.dto.DeptDTO" id="deptResult">
+		<id property="deptCode" column="DEPT_CODE"/>
+		<result property="deptName" column="DEPT_NAME"/>
 	</resultMap>
 	
 	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
@@ -38,7 +37,7 @@
 	</resultMap>
 	
 	<select id="findProjectMemberCount" parameterType="hashmap" resultType="_int">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findProjectMemberCount() */
                COUNT(COUNT(B.MEMBER_NO))
           FROM TBL_PROJECT_MEM_HISTORY A
           LEFT JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.MEMBER_NO = B.MEMBER_NO)
@@ -58,7 +57,7 @@
 	</select>
 	
 	<select id="findMemberInfo" resultMap="projectMemberResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findMemberInfo() */
                B.MEMBER_NO
              , B.MEMBER_NAME
              , C.PROJECT_NO
@@ -76,7 +75,7 @@
 	</select>
 	
 	<select id="findProjectMember" resultMap="projectMemberResult" parameterType="com.greedy.waterfall.common.paging.SelectCriteria">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findProjectMember() */
                A.RNUM
              , A.PROJECT_NO
              , A.MEMBER_NO
@@ -154,7 +153,7 @@
 	</select>
     
     <select id="findNewMember" resultMap="memberResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findNewMember() */
                B.MEMBER_NO
              , B.MEMBER_NAME
           FROM TBL_MEM_TEAM_HISTORY A
@@ -172,22 +171,23 @@
     </select>
     
     <select id="findAllRole" resultMap="projectRole">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findAllRole() */
                A.ROLE_NO
              , A.ROLE_NAME
           FROM TBL_ROLE_CATEGORY A
          WHERE A.ROLE_NO != 8
          ORDER BY A.ROLE_NO
     </select>
+    
    	<select id="findAllDept" resultMap="deptResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findAllDept() */
                A.DEPT_CODE
              , A.DEPT_NAME
           FROM TBL_DEPT A
 	</select>
 	
 	<select id="findMemberRole" parameterType="hashmap" resultMap="projectRole">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findMemberRole() */
                A.ROLE_NO
              , B.ROLE_NAME
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
@@ -216,7 +216,6 @@
         )
 	</insert>
 	
-	
 	<insert id="registMemberToProject">
         INSERT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#registMemberToProject() */
           INTO TBL_PROJECT_MEM_HISTORY A
@@ -238,26 +237,29 @@
 	</insert>
 	
 	<delete id="removeOldRole">
-        DELETE
+        DELETE /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#removeOldRole() */
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
          WHERE A.MEMBER_NO = #{ memberNo }
            AND A.PROJECT_NO = #{ projectNo }
 	</delete>
+	
 	<delete id="removeMemberRole" parameterType="hashmap">
-        DELETE
+        DELETE /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#removeMemberRole() */
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
          WHERE A.MEMBER_NO = #{ memberNo }
            AND A.PROJECT_NO = #{ projectNo }
 	</delete>
+	
 	<update id="removeMemberJoinHistory" parameterType="hashmap">
-        UPDATE
+        UPDATE /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#removeMemberJoinHistory() */
                TBL_PROJECT_MEM_HISTORY A
            SET A.PROJECT_MEM_DROP_DATE = SYSDATE
          WHERE A.MEMBER_NO = #{ memberNo }
            AND A.PROJECT_NO = #{ projectNo }
 	</update>
+	
 	<insert id="registEntireHistoryProjectRegist">
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#registEntireHistoryProjectRegist() */
           INTO TBL_ENTIRE_HISTORY A
         (
           A.HISTORY_NO
@@ -278,33 +280,3 @@
         )
 	</insert>
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

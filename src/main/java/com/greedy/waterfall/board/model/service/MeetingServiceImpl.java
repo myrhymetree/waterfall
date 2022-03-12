@@ -45,12 +45,10 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public Map<String, Object> findMeetingBoardList(Map<String, String> searchMap) { 
 		Map<String, Object> findResult = new HashMap<String, Object>();
-		
 		searchMap.put("totalCount", Integer.toString(mapper.findMeetingTotalCount(searchMap)));
 		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap);
 		
 		List<MeetingDTO> meetingList = mapper.findMeetingList(selectCriteria);
-		
 		findResult.put("selectCriteria", selectCriteria);
 		findResult.put("meetingList", meetingList);
 		
@@ -103,15 +101,12 @@ public class MeetingServiceImpl implements MeetingService {
 		/* 게시글 등록을 성공하면 첨부파일을 등록한다. */
 		if(mapper.registMeetingBoard(parameter) > 0) {
 			result = true;
-			
 		}
 		/* 첨부파일을 담는 files가 null이 아니라면 첨부파일을 등록한다.*/
 		if(result && files != null) {
-			
 			/* 첨부파일 등록 성공 갯수를 저장할 count 변수를 선언 후 0으로 초기화한다. */
 			int count = 0;
 			for(int i = 0; i < files.size(); i++) {
-				
 				/* 각각의 첨부파일에 상위 게시글번호를 전달한 후 첨부파일을 등록한다. */
 				files.get(i).setRefBoardNo(parameter.getNo());
 				count += mapper.registMeetingFile(files.get(i));
@@ -184,6 +179,13 @@ public class MeetingServiceImpl implements MeetingService {
 		return fileInfo;
 	}
 
+	/**
+	 * removeMeetingBoardFile : 첨부파일을 삭제한다.
+	 * @param 삭제하려는 파일번호를 전달받는다.
+	 * @return 삭제 성공여부를 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
 	@Override
 	public boolean removeMeetingBoardFile(int fileNo) {
 		
@@ -191,36 +193,3 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
