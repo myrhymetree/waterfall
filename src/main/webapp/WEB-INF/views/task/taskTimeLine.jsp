@@ -771,6 +771,30 @@ ul {
 						const taskDetail = JSON.parse(data.taskDetail);
 						console.log(taskDetail.taskNo);
 						console.log(taskDetail.parentTask.taskNo);
+						console.log(taskDetail.parentTask.startDate);
+						
+						const parentStart = taskDetail.parentTask.startDate;
+						const strArr = parentStart.split('-');
+						const day = Number(strArr[2]) + 1;
+						const parentStartDate = strArr[0] + "-" + strArr[1] + "-" + day;
+						
+						const parentEnd = taskDetail.parentTask.deadline;
+						const strArr2 = parentEnd.split('-');
+						const day2 = Number(strArr2[2]) + 1;
+						const parentEndDate = strArr2[0] + "-" + strArr2[1] + "-" + day2;
+						console.log(parentEndDate);
+						
+						const childStart = taskDetail.startDate;
+						const strArr3 = childStart.split('-');
+						const day3 = Number(strArr3[2]) + 1;
+						const childStartDate = strArr3[0] + "-" + strArr3[1] + "-" + day3;
+						console.log(childStartDate);
+						
+						const childEnd = taskDetail.deadline;
+						const strArr4 = childEnd.split('-');
+						const day4 = Number(strArr4[2]) + 1;
+						const childEndDate = strArr4[0] + "-" + strArr4[1] + "-" + day4;
+						console.log(childEndDate);
 						
 						//상위업무
 						$("input[name=parentTaskName]").val(taskDetail.parentTask.taskCategory.categoryName);
@@ -779,9 +803,9 @@ ul {
 						
 						$("input[name=parentTaskManagerNo]").val(taskDetail.parentTask.managerNo);
 						
-						$("input[name=parentStartDate]").val(taskDetail.parentTask.startDate);
+						$("#parent-start-date").val(parentStartDate);
 						
-						$("input[name=parentDeadline]").val(taskDetail.parentTask.deadline);
+						$("input[name=parentDeadline]").val(parentEndDate);
 						
 						$("input[name=parentImportance]").val(taskDetail.parentTask.importance);
 						
@@ -802,9 +826,9 @@ ul {
 						
 						$("input[name=childTaskManagerNo]").val(taskDetail.managerNo);
 						
-						$("input[name=childStartDate]").val(taskDetail.startDate);
+						$("input[name=childStartDate]").val(childStartDate);
 						
-						$("input[name=childDeadline]").val(taskDetail.deadline);
+						$("input[name=childDeadline]").val(childEndDate);
 						
 						$("input[name=childImportance]").val(taskDetail.importance);
 						

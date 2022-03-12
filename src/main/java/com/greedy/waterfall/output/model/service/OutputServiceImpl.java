@@ -1,6 +1,5 @@
 package com.greedy.waterfall.output.model.service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +47,6 @@ public class OutputServiceImpl implements OutputService {
 	public List<TaskDTO> findOutputTask(TaskDTO taskDTO) {
 		/* 상위업무 List */
 		List<TaskDTO> parentTaskList = mapper.selectParentTaskList(taskDTO);
-		System.out.println("parentTaskList 확인 : " + parentTaskList);
 
 		List<ChildTaskDTO> childTaskList = new ArrayList<ChildTaskDTO>();
 		/* parentTaskList안의 parentDTO내의 childTaskList 불러오기 */
@@ -69,8 +67,6 @@ public class OutputServiceImpl implements OutputService {
 			parentTaskList.get(i).setChildList(childTaskList);
 
 		}
-
-		System.out.println("parentTaskList : " + parentTaskList);
 
 		return parentTaskList;
 	}
@@ -97,11 +93,9 @@ public class OutputServiceImpl implements OutputService {
 
 		/* 선택한 하위업무의 상위업무 업무 번호를 저장한다. */
 		int parentTaskNo = childTask.getParentTaskNo();
-		System.out.println("childTask : " + childTask);
 
 		/* 상위업무 번호를 넘겨 상위업무 정보를 조회해온다 */
 		parentTask = mapper.selectParentTask(parentTaskNo);
-		System.out.println("parentTask : " + parentTask);
 
 		/* 하위업무 내 상위업무DTO에 조회해온 상위업무 정보를 저장 */
 		childTask.setParentTask(parentTask);
@@ -134,8 +128,8 @@ public class OutputServiceImpl implements OutputService {
 	/**
 	 * removeOutput : 산출물 삭제
 	 * 
-	 * @param 삭제할 업무의 번호
-	 * @return x
+	 * @param OutputDTO output : 받아온 output 정보
+	 * @return 
 	 * 
 	 * @author 김서영
 	 */
@@ -166,7 +160,7 @@ public class OutputServiceImpl implements OutputService {
 	/**
 	 * findOutputList : Admin이 모든 프로젝트별 산출물 개수 조회를 위한 로직
 	 * 
-	 * @param x
+	 * @param 
 	 * @return 전체 프로젝트 내 각각 산출물List를 담은 List
 	 * 
 	 * @author 김서영
@@ -198,6 +192,13 @@ public class OutputServiceImpl implements OutputService {
 		return projectList;
 	}
 	
+	/**
+	 * findRestoreProjectList : 삭제한 산출물 복원 페이지 프로젝트 리스트받아오는 메소드
+	 * @param 
+	 * @return projectList : 각 프로젝트에 outputList를 담은 List 반환
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public List<OutputProjectDTO> findRestoreProjectList() {
 		
@@ -221,6 +222,13 @@ public class OutputServiceImpl implements OutputService {
 		return projectList;
 	}
 
+	/**
+	 * registOutput : 산출물 등록 메소드
+	 * @param OutputDTO output : 등록할 output 정보
+	 * @return 1 : 산출물 등록 성공, 2: 산출물이 이미 존재하여 등록 실패
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public int registOutput(OutputDTO output) {
 
@@ -251,6 +259,15 @@ public class OutputServiceImpl implements OutputService {
 
 	}
 
+	
+	/**
+	 * findOutputFile : 산출물 내 파일 정보 조회 메소드
+	 * @param int outputNo : 파일정보가 속한 산출물 번호
+	 * @return OutputAttachmentDTO : 산출물 정보
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public OutputAttachmentDTO findOutputFile(int outputNo) {
 
@@ -291,7 +308,6 @@ public class OutputServiceImpl implements OutputService {
 		
 		  if(historyResult > 0) {
 			  /*memberName 조회*/
-			  
 			  String memberName = mapper.selectMemberName(output);
 			  
 			  output.setMemberName(memberName);
@@ -300,6 +316,14 @@ public class OutputServiceImpl implements OutputService {
 		  }
 	}
 
+	/**
+	 * selectOutputCount : 산출물의 유무를 판단하는 메소드
+	 * @param int taskNo : 산출물이 존재하는지 확인할 업무 번호
+	 * @return 0: taskNo에 산출물이 있음, 1 : taskNo에 해당하는 산출물이 없음
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public int selectOutputCount(int taskNo) {
 
@@ -314,6 +338,14 @@ public class OutputServiceImpl implements OutputService {
 
 	}
 
+	/**
+	 * findDeleteOutputList : 삭제된 산출물 정보 List
+	 * @param TaskRestoreOutputDTO restoreOutput : projectNo을 담고 return값을 담을 DTO
+	 * @return outputList : 업무와 삭제된 산출물 정보 List
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public List<TaskRestoreOutputDTO> findDeleteOutputList(TaskRestoreOutputDTO restoreOutput) {
 		
@@ -322,6 +354,14 @@ public class OutputServiceImpl implements OutputService {
 		return outputList;
 	}
 
+	/**
+	 * restoreOutput : 산출물 복원 메소드
+	 * @param int fileNo : 복원할 파일 번호
+	 * @return true : 로직 성공시 / false : 로직 실패시
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public boolean restoreOutput(int fileNo) throws Exception {
 		
@@ -353,6 +393,14 @@ public class OutputServiceImpl implements OutputService {
 		
 	}
 
+	/**
+	 * selectProjectNo : projectNo 조회 메소드
+	 * @param int fileNo : 파일번호
+	 * @return projectNo 파일이 속한 프로젝트 번호
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public int selectProjectNo(int fileNo) {
 		
@@ -361,6 +409,14 @@ public class OutputServiceImpl implements OutputService {
 		return projectNo;
 	}
 
+	/**
+	 * selectProjectNoByOutputNo : 메소드 설명 작성 부분
+	 * @param int outputNo : 산출물 번호
+	 * @return projectNo : outputNo이 속한 projectNo
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public int selectProjectNoByOutputNo(int outputNo) {
 		

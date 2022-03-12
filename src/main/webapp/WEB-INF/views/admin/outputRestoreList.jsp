@@ -18,6 +18,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<script src="https://kit.fontawesome.com/621489de5f.js" crossorigin="anonymous"></script>
 <style>
 .button {
 			@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
@@ -79,7 +80,7 @@
 		<div class="container-fluid px-4">
                         <br>
                         <br>
-                        <h1 class="mt-4"><i class="fas fa-exclamation-circle"></i>삭제 산출물</h1>
+                        <h3 class="mt-4"><i class="fa-solid fa-folder-open"></i>삭제 산출물</h3>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>

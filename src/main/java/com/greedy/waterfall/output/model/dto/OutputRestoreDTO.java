@@ -16,7 +16,6 @@ import lombok.ToString;
 public class OutputRestoreDTO {
 	
 	private int outputNo;
-	
 	private int taskNo;
 
 }

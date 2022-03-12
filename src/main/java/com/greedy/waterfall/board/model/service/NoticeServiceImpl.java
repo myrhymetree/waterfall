@@ -57,9 +57,6 @@ public class NoticeServiceImpl implements NoticeService {
 		
 		List<NoticeDTO> noticeList = mapper.selectNoticeList(selectCriteria);
 		
-		System.out.println("noticeList 확인용 : " + noticeList);
-		
-		
 		return noticeList;
 	}
 	/**
@@ -79,10 +76,6 @@ public class NoticeServiceImpl implements NoticeService {
 			noticeDetail = mapper.selectNoticeDetail(no);
 		}
 		
-		
-		
-		System.out.println("noticeDetail : " + noticeDetail);
-		
 		return noticeDetail;
 	}
 	/**
@@ -94,8 +87,6 @@ public class NoticeServiceImpl implements NoticeService {
 	public void registNotice(NoticeDTO notice) {
 		
 		int result = mapper.insertNotice(notice);
-		
-		System.out.println("notice insert 확인 : " + result);
 		
 		NoticeAttachmentDTO attachmentDTO = notice.getAttachmentDTO();
 	

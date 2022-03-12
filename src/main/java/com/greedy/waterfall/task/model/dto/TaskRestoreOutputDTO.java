@@ -20,12 +20,12 @@ import lombok.ToString;
 public class TaskRestoreOutputDTO {
 	
 	private int taskNo;
-	private String taskName;
 	private int projectNo;
 	private int memberNo;
-	private String originName;
 	private int fileNo;
 	private int outputNo;
+	private String taskName;
+	private String originName;
 	
 	private List<OutputDTO> restoreOutputList;
 

@@ -140,23 +140,23 @@
 	<insert id="insertNotice" >
 		 INSERT
 	       INTO TBL_BOARD A
-	          (
-	            A.BOARD_NO
-	          , A.BOARD_TITLE
-	          , A.BOARD_CONTENT
-	          , A.MEMBER_NO
-	          , A.PROJECT_NO
-	          , A.BOARD_CATEGORY_NO
-	          )
-	          VALUES
-	          (
-	            BOARD_NO.NEXTVAL
-	          , #{ title }
-	          , #{ content }
-	          , #{ memberNo }
-	          , #{ projectNo }
-	          , 1
-	        )
+	     (
+	       A.BOARD_NO
+	     , A.BOARD_TITLE
+	     , A.BOARD_CONTENT
+	     , A.MEMBER_NO
+	     , A.PROJECT_NO
+	     , A.BOARD_CATEGORY_NO
+	     )
+         VALUES
+         (
+           BOARD_NO.NEXTVAL
+         , #{ title }
+         , #{ content }
+         , #{ memberNo }
+         , #{ projectNo }
+         , 1
+         )
         <selectKey keyProperty="no" resultType="Integer" order="AFTER">
         	SELECT
         	       BOARD_NO.CURRVAL
@@ -204,14 +204,14 @@
 	
 	<select id="selectNoticeFile" resultMap="noticeFileResultMap">
 		SELECT
-		       FILE_NO
-		     , FILE_PATH
-		     , FILE_ORIGIN_NAME
-		     , FILE_RANDOM_NAME
-		     , FILE_CATEGORY_NO
-		  FROM TBL_FILE
-	 	 WHERE FILE_STATUS = 'Y'
-	 	   AND REF_BOARD_NO = #{ no }
+		       A.FILE_NO
+		     , A.FILE_PATH
+		     , A.FILE_ORIGIN_NAME
+		     , A.FILE_RANDOM_NAME
+		     , A.FILE_CATEGORY_NO
+		  FROM TBL_FILE A
+	 	 WHERE A.FILE_STATUS = 'Y'
+	 	   AND A.REF_BOARD_NO = #{ no }
 	
 	</select>
 	

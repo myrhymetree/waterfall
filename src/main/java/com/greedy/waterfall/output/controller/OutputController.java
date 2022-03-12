@@ -2,7 +2,6 @@ package com.greedy.waterfall.output.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,12 +17,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,11 +28,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.greedy.waterfall.common.paging.Pagenation;
-import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.output.model.dto.OutputAttachmentDTO;
 import com.greedy.waterfall.output.model.dto.OutputDTO;
@@ -90,7 +82,6 @@ public class OutputController {
 			projectNo = Integer.parseInt(request.getParameter("projectNo"));
 		}
 		
-		
 		taskDTO.setProjectNo(projectNo);
 		List<TaskDTO> parentTaskList = new ArrayList<>();
 		
@@ -117,8 +108,6 @@ public class OutputController {
 	public ModelAndView findOutputDetail(ModelAndView mv, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws JsonProcessingException {
 		
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
-		
-		System.out.println("outputDatail no 넘어오나? : " + taskNo);
 		
 		Map<String, Object> map = (Map<String, Object>) outputService.findOutputDetail(taskNo);
 		
@@ -183,7 +172,6 @@ public class OutputController {
 		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
-		System.out.println("taskNo 넘어오냐? : " + taskNo);
 		
 		String content = request.getParameter("content");
 		System.out.println("content 확인 : " + content);
@@ -194,7 +182,6 @@ public class OutputController {
 		output.setProjectNo(projectNo);
 		output.setContent(content);
 		output.setTaskNo(taskNo);
-		System.out.println("mapping된 outputDTO 확인 : " + output );
 		
 		/* 파일 저장될 root 설정 */
 		String root = request.getServletContext().getRealPath("resources");
@@ -242,12 +229,9 @@ public class OutputController {
 				new File(fileUploadDirectory + "\\" + savedName).delete();
 			}
 			
-			
 		} 
 		
-		
 		return "redirect:/task/timeline";
-		
 	}
 	
 	/**
@@ -260,8 +244,6 @@ public class OutputController {
 	@GetMapping("/download/{refOutputNo}")
 	public ModelAndView downloadFile(ModelAndView mv, @PathVariable("refOutputNo") String refOutputNo) throws IOException {
 		int outputNo = Integer.parseInt(URLDecoder.decode(refOutputNo, "UTF-8"));
-		
-		System.out.println("outputNo 넘어오니???????????? : " + outputNo);
 		
 		Map<String, Object> fileInfo = new HashMap<String, Object>();
 		
@@ -299,8 +281,6 @@ public class OutputController {
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		String childTaskName = request.getParameter("childTaskName");
 		String content = request.getParameter("content");
-		System.out.println("content 확인 : " + content);
-		System.out.println("outputFile 확인 : " + outputFile);
 		
 		/* 수정할 산출물 정보 dto에 담음*/
 		OutputDTO output = new OutputDTO();

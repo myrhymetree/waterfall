@@ -4,14 +4,14 @@ import java.sql.Date;
 
 public class NoticeProjectDTO {
 	
-	private int projectNo;
-	private String projectName;
-	private java.sql.Date startDate;
-	private java.sql.Date deadline;
-	private String status;
-	private String progression;
-	private java.sql.Date completedDate;
-	private String statusCode;
+	private int projectNo;					//프로젝트 번호
+	private String projectName;				//프로젝트 명
+	private java.sql.Date startDate;		//프로젝트 시작일
+	private java.sql.Date deadline;			//프로젝트 종료일
+	private String status;					//프로젝트 상태
+	private String progression;				//프로젝트 진행율
+	private java.sql.Date completedDate;	//프로젝트 완료일
+	private String statusCode;				//프로젝트 상태코드
 	
 	public NoticeProjectDTO() {}
 

@@ -8,6 +8,16 @@ import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskRestoreOutputDTO;
 
+/**
+ * <pre>
+ * Class : OutputService
+ * Comment : 산춞물 메소드 Interface
+ * 
+ * History
+ * 2022. 3. 13.  (김서영)
+ * @version 1
+ * @author 김서영
+ */
 public interface OutputService {
 
 	List<TaskDTO> findOutputTask(TaskDTO taskDTO);
