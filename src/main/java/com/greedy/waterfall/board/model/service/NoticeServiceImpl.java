@@ -138,6 +138,13 @@ public class NoticeServiceImpl implements NoticeService {
 		
 	}
 
+	/**
+	 * findNoticeFile : 공지사항 파일정보 return
+	 * @param int no : 공지사항 번호
+	 * @return NoticeAttachmentDTO : no의 첨부파일 정보DTO
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public NoticeAttachmentDTO findNoticeFile(int no) {
 		
@@ -145,6 +152,13 @@ public class NoticeServiceImpl implements NoticeService {
 		return mapper.selectNoticeFile(no);
 	}
 
+	/**
+	 * removeNoticeFile : 공지사항 첨부파일 삭제
+	 * @param int no 파일을 삭제할 공지사항 번호
+	 * @return 
+	 * 
+	 * @author 김서영
+	 */
 	@Override
 	public void removeNoticeFile(int no) {
 		

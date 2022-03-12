@@ -89,7 +89,17 @@
 		<result property="projectStatusName" column="PROJECT_PROGRESS_STATUS_NAME"/>
 	</resultMap>
 	
+	<resultMap type="com.greedy.waterfall.task.model.dto.TaskRestoreOutputDTO" id="restoreOutputResultMap">
+		<result property="taskNo" column="TASK_NO"/>
+		<result property="taskName" column="TASK_CATEGORY_NAME"/>
+		<result property="projectNo" column="PROJECT_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="originName" column="OUTPUT_ORIGIN_NAME"/>
+		<result property="fileNo" column="OUTPUT_FILE_NO"/>
+		<result property="outputNo" column="REF_OUTPUT_NO"/>
 		
+		<collection property="restoreOutputList" resultMap="outputResultMap"></collection>
+	</resultMap>
 	<select id="selectParentTaskList" resultMap="taskResultMap">
 		SELECT
 		       A.TASK_CATEGORY_CODE
@@ -210,6 +220,14 @@
 		       
 	</select>
 	
+	<select id="selectAllDeletedOutputCount" resultType="_int">
+		SELECT
+		       COUNT(*)
+		  FROM TBL_OUTPUT
+		 WHERE PROJECT_NO = #{ projectNo }
+		   AND OUTPUT_STATUS = 'N'
+	</select>
+	
 	<select id="selectAdminOutputList" resultMap="outputResultMap">
 		SELECT
 		       A.OUTPUT_NO
@@ -247,6 +265,68 @@
 		       OUTPUT_ORIGIN_NAME
 		  FROM TBL_OUTPUT_FILE
 		 WHERE REF_OUTPUT_NO = #{ outputNo }
+	</select>
+	
+	<select id="findDeleteOutputList" resultMap="restoreOutputResultMap">
+		SELECT
+		       B.TASK_CATEGORY_NAME
+		     , D.OUTPUT_ORIGIN_NAME
+		     , C.OUTPUT_COMMENT
+		     , D.OUTPUT_FILE_NO
+		     , E.MEMBER_NAME
+		     , C.TASK_NO
+		  FROM TBL_TASK A
+		  JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE )
+		  JOIN TBL_OUTPUT C ON(A.TASK_NO = C.TASK_NO)
+		  JOIN TBL_OUTPUT_FILE D ON(C.OUTPUT_NO = D.REF_OUTPUT_NO)
+		  JOIN TBL_MEMBER E ON(C.MEMBER_NO = E.MEMBER_NO)
+		 WHERE C.OUTPUT_STATUS = 'N'
+		   AND D.OUTPUT_STATUS = 'N'
+		   AND A.PROJECT_NO = #{ projectNo }
+		   AND A.TASK_STATUS = 'Y'
+		   AND B.TASK_CATEGORY_NAME IN(SELECT
+       										B.TASK_CATEGORY_NAME
+  									   FROM TBL_TASK A
+  									   JOIN TBL_TASK_CODE_MANAGE B ON(A.TASK_CATEGORY_CODE = B.TASK_CATEGORY_CODE )
+ 									  WHERE A.PROJECT_NO = #{ projectNo }
+                                        AND A.TASK_STATUS = 'Y'
+                                    )
+	</select>
+	
+	<select id="selectDeletedOutput" resultMap="outputResultMap">
+		SELECT
+		       OUTPUT_NO
+		  FROM TBL_OUTPUT
+		 WHERE OUTPUT_STATUS = 'N'
+		   AND TASK_NO = #{ taskNo }
+	</select>
+	
+	<select id="selectTaskNoOutputNo" resultMap="restoreOutputResultMap">
+		SELECT
+		       A.REF_OUTPUT_NO
+		     , C.TASK_NO
+		  FROM TBL_OUTPUT_FILE A
+		  JOIN TBL_OUTPUT B ON(A.REF_OUTPUT_NO = B.OUTPUT_NO)
+		  JOIN TBL_TASK C ON(B.TASK_NO = C.TASK_NO)
+		 WHERE A.OUTPUT_FILE_NO = #{ fileNo }
+	</select>
+	
+	<select id="selectProjectNo" resultType="int">
+		SELECT 
+		       C.PROJECT_NO
+		 FROM TBL_OUTPUT_FILE A
+		 JOIN TBL_OUTPUT B ON(A.REF_OUTPUT_NO = B.OUTPUT_NO)
+		 JOIN TBL_TASK C ON(B.TASK_NO = C.TASK_NO)
+		WHERE A.OUTPUT_FILE_NO = #{ fileNo }
+		
+	</select>
+	
+	<select id="selectProjectNoByOutputNo" resultType="int">
+		SELECT 
+		       B.PROJECT_NO
+		 FROM TBL_OUTPUT A
+		 JOIN TBL_TASK B ON(A.TASK_NO = B.TASK_NO)
+		WHERE A.OUTPUT_NO= #{ outputNo }
 	</select>
 	
 	<insert id="insertOutput">
@@ -435,6 +515,20 @@
 		     , OUTPUT_REGISTED_DATE = SYSDATE
 		 WHERE REF_OUTPUT_NO = #{ outputNo }
 		     
+	</update>
+	
+	<update id="updateRestoreFile">
+		UPDATE
+		       TBL_OUTPUT_FILE
+		   SET OUTPUT_STATUS = 'Y'
+		 WHERE OUTPUT_FILE_NO = #{ fileNo }
+	</update>
+	
+	<update id="updateRestoreOutput">
+		UPDATE
+		       TBL_OUTPUT
+		   SET OUTPUT_STATUS = 'Y'
+		 WHERE OUTPUT_NO = #{ outputNo }
 	</update>
 	
 </mapper>

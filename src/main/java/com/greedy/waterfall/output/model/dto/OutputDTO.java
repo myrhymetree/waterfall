@@ -23,6 +23,8 @@ public class OutputDTO {
 	
 	private int outputNo;
 	private int outputVer;
+	private int taskNo;
+	private int fileNo;
 	private String content;
 	private java.sql.Date registedDate;
 	private String status;
@@ -33,7 +35,6 @@ public class OutputDTO {
 	private ChildTaskDTO childTask;
 	private OutputProjectDTO project;
 	private OutputAttachmentDTO outputFile;
-	private int taskNo;
 	private String taskName;
 	private String beforeOriginName;
 	private String afterOriginName;

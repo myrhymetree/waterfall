@@ -15,6 +15,7 @@ import com.greedy.waterfall.output.model.dto.OutputDTO;
 import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskRestoreOutputDTO;
 
 /**
  * <pre>
@@ -153,10 +154,8 @@ public class OutputServiceImpl implements OutputService {
 			String savedName = file.getRandomName();
 
 			result = mapper.deleteOutputFile(output);
-
-			if (result > 0) {
-				new File(fileUploadDirectory + "\\" + savedName).delete();
-
+			
+			if(result>0) {
 				mapper.insertDeleteHistory(output);
 			}
 
@@ -196,6 +195,29 @@ public class OutputServiceImpl implements OutputService {
 
 		System.out.println(projectList);
 
+		return projectList;
+	}
+	
+	@Override
+	public List<OutputProjectDTO> findRestoreProjectList() {
+		
+		List<OutputProjectDTO> projectList = new ArrayList<OutputProjectDTO>();
+		List<OutputDTO> outputList = new ArrayList<OutputDTO>();
+		
+		projectList = mapper.selectAllProjectList();
+		
+		for(int i = 0; i < projectList.size(); i++) {
+			int projectNo = projectList.get(i).getNo();
+			
+			int deletedOutputCount = mapper.selectAllDeletedOutputCount(projectNo);
+			
+			outputList = mapper.selectAdminOutputList(projectNo);
+			
+			projectList.get(i).setTotalDeletedOutputCount(deletedOutputCount);
+			projectList.get(i).setOutput(outputList);
+			
+		}
+		
 		return projectList;
 	}
 
@@ -291,5 +313,62 @@ public class OutputServiceImpl implements OutputService {
 		}
 
 	}
+
+	@Override
+	public List<TaskRestoreOutputDTO> findDeleteOutputList(TaskRestoreOutputDTO restoreOutput) {
+		
+		List<TaskRestoreOutputDTO> outputList = mapper.findDeleteOutputList(restoreOutput);
+		
+		return outputList;
+	}
+
+	@Override
+	public boolean restoreOutput(int fileNo) throws Exception {
+		
+		/* 선택한 파일에 해당하는 outputNo, taskNo 조회 */
+		TaskRestoreOutputDTO output = mapper.selectTaskNoOutputNo(fileNo);
+		System.out.println("selectTaskNoOutputNo : " + output);
+		
+		 int taskNo = output.getTaskNo();
+		 int outptuNo = output.getOutputNo();
+		 
+		/*taskNo에 해당하는 산출물이 존재할경우 복원 불가*/
+		int result = mapper.selectOutputCount(taskNo);
+		if(result > 0) {
+			return false;
+		}else {
+			int fileResult = mapper.updateRestoreFile(fileNo);
+			if(!(fileResult > 0)) {
+				throw new Exception();
+			}
+			int restoreResult = mapper.updateRestoreOutput(outptuNo);
+			if(!(restoreResult > 0)) {
+				throw new Exception();
+			}
+			return true;
+		}
+		
+		
+		
+		
+	}
+
+	@Override
+	public int selectProjectNo(int fileNo) {
+		
+		int projectNo = mapper.selectProjectNo(fileNo);
+		
+		return projectNo;
+	}
+
+	@Override
+	public int selectProjectNoByOutputNo(int outputNo) {
+		
+		int projectNo = mapper.selectProjectNoByOutputNo(outputNo);
+		
+		return projectNo;
+	}
+
+	
 
 }

@@ -279,6 +279,14 @@ public class NoticeController {
 		return "redirect:/notice/list";
 	}
 	
+	/**
+	 * downloadNoticeFile : 공지사항 파일 다운로드
+	 * @param first : ModelAndView mv
+	 * @param second : @PathVariable("no") String no : 클릭한 공지사항 번호
+	 * @return ModelAndView(filePath, fileOriginName, fileRandomName, downloadFile)
+	 * 
+	 * @author 김서영
+	 */
 	@GetMapping("/download/{no}")
 	public ModelAndView downloadNoticeFile(ModelAndView mv, @PathVariable("no") String no) throws NumberFormatException, UnsupportedEncodingException {
 		int noticeNo = Integer.parseInt(URLDecoder.decode(no, "UTF-8"));
@@ -297,6 +305,13 @@ public class NoticeController {
 		return mv;
 	}
 	
+	/**
+	 * removeNoticeFile : 공지사항 파일만 삭제
+	 * @param @PathVariable("no") String no : 클릭한 공지사항 번호
+	 * @return 공지사항 목록으로 redirect
+	 * 
+	 * @author 김서영
+	 */
 	@GetMapping("/deleteFile/{no}")
 	public String removeNoticeFile(@PathVariable("no") String no, HttpServletRequest request, RedirectAttributes rttr) throws NumberFormatException, UnsupportedEncodingException {
 		int noticeNo = Integer.parseInt(URLDecoder.decode(no, "UTF-8"));

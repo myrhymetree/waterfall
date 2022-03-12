@@ -6,6 +6,7 @@ import com.greedy.waterfall.output.model.dto.OutputAttachmentDTO;
 import com.greedy.waterfall.output.model.dto.OutputDTO;
 import com.greedy.waterfall.output.model.dto.OutputProjectDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskRestoreOutputDTO;
 
 public interface OutputService {
 
@@ -24,6 +25,16 @@ public interface OutputService {
 	void modifyOutput(OutputDTO output);
 
 	int selectOutputCount(int outputNo);
+
+	List<OutputProjectDTO> findRestoreProjectList();
+
+	List<TaskRestoreOutputDTO> findDeleteOutputList(TaskRestoreOutputDTO restoreOutput);
+
+	boolean restoreOutput(int fileNo) throws Exception;
+
+	int selectProjectNo(int fileNo);
+
+	int selectProjectNoByOutputNo(int outputNo);
 
 
 }
