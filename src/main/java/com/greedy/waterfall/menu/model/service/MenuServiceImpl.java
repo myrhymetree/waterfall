@@ -28,7 +28,7 @@ import com.greedy.waterfall.project.model.dto.ProjectDTO;
  */
 @Service
 public class MenuServiceImpl implements MenuService{
-	
+	private static final String ROLE_ADMIN = "!";
 	private final MenuMapper mapper;
 	private final Paging paging;
 	
@@ -60,10 +60,11 @@ public class MenuServiceImpl implements MenuService{
 		/* 페이지에대한 정보가 담긴 searchMap과  출력 설정정보가 담겨져있는 pageSetting, 로그인회원의 정보가 담긴 정보를 전달해, 
 		 * 검색조건이 담겨져있는 SelectCriteria변수를 반환받아, 프로젝트목록을 조회한다. */
 		SelectCriteria selectCriteria = paging.setPagingCondition(searchMap, pageSetting, loginMember);
+		System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());System.out.println("member : " + selectCriteria.getMember());
 		List<ProjectDTO> projectList = mapper.findMainProjectList(selectCriteria);
 		
 		/* 관리자가 아닌경우 참여중인 프로젝트 목록을 반환한다. */
-		if(!"1".equals(loginMember.getRole())){
+		if(!"ROLE_ADMIN".equals(loginMember.getRole())){
 			searchMap.put("subtotalCount", Integer.toString(mapper.findJoinProjectCount(loginMember)));
 			subselectCriteria = paging.setSubPagingCondition(searchMap, pageSetting, loginMember);
 			List<ProjectDTO> joinProjectList = mapper.findJoinProjectList(selectCriteria);

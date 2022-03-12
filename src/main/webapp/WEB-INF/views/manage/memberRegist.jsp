@@ -123,7 +123,7 @@
 							</div>
 		            	</div>
 	            	</div>
-	            	<input type="text" name="memberNo" id="regist-memberNo">
+	            	<input type="hidden" name="memberNo" id="regist-memberNo">
 	            	<input type="hidden" name="managerNo" value="${ sessionScope.loginMember.no }" id="managerNo">
 	            	<input type="hidden" name="projectNo" value="${ sessionScope.projectAutority.projectNo }" id="projectNo">
 	            	

@@ -135,7 +135,6 @@ public class ProjectManageController {
 		return memberRoleList;
 	}
 	
-	
 	@GetMapping("/member/find")
 	public ModelAndView findTeamMember(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		

@@ -13,7 +13,8 @@
 		<result property="completed" column="PROJECT_COMPLETED_DATE"/>
 		<result property="statusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
 		
-		<association property="member" resultMap="memberResult"></association>
+		<association property="member" resultMap="memberResult"/>
+		<collection property="projectInfo" resultMap="projectInfoResult"/>
 	</resultMap>
 	<resultMap type="com.greedy.waterfall.project.model.dto.RegistProjectDTO" id="registProjectResult">
 		<id property="projectNo" column="PROJECT_NO"/>
@@ -89,10 +90,12 @@
 	<resultMap type="com.greedy.waterfall.menu.model.dto.ProjectInfoDTO" id="projectInfoResult">
 		<result property="outputAmount" column="OUTPUT_AMOUNT"/>
 		
+		<result property="totalIssueAmount" column="TOTAL_ISSUE"/>
 		<result property="watingIssueAmount" column="WAIT_ISSUE"/>
 		<result property="progressingIssueAmount" column="PROGRESS_ISSUE"/>
 		<result property="solvedIssueAmount" column="SOLVED_ISSUE"/>
 		
+		<result property="totalTaskAmount" column="TOTAL_TASK"/>
 		<result property="beforeProceedingTaskAmount" column="BEFORE_TASK"/>
 		<result property="progressingTaskAmount" column="PROGRESS_TASK"/>
 		<result property="testingTaskAmount" column="TEST_TASK"/>
@@ -230,6 +233,21 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , (SELECT COUNT(*)
+                  FROM TBL_ISSUE F
+                 WHERE F.PROJECT_NO = A.PROJECT_NO
+                   AND F.ISSUE_STATUS = 'Y'
+               ) AS TOTAL_ISSUE
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK G
+                 WHERE G.PROJECT_NO = A.PROJECT_NO
+                   AND G.TASK_STATUS = 'Y'
+               ) AS TOTAL_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_OUTPUT H
+                 WHERE H.PROJECT_NO = A.PROJECT_NO
+                   AND H.OUTPUT_STATUS = 'Y'
+               ) AS OUTPUT_AMOUNT
           FROM (SELECT ROWNUM RNUM 
                      , B.PROJECT_NO
                      , B.PROJECT_NAME
@@ -281,6 +299,21 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , (SELECT COUNT(*)
+                  FROM TBL_ISSUE F
+                 WHERE F.PROJECT_NO = A.PROJECT_NO
+                   AND F.ISSUE_STATUS = 'Y'
+               ) AS TOTAL_ISSUE
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK G
+                 WHERE G.PROJECT_NO = A.PROJECT_NO
+                   AND G.TASK_STATUS = 'Y'
+               ) AS TOTAL_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_OUTPUT H
+                 WHERE H.PROJECT_NO = A.PROJECT_NO
+                   AND H.OUTPUT_STATUS = 'Y'
+               ) AS OUTPUT_AMOUNT
           FROM (SELECT ROWNUM RNUM
                      , B.PROJECT_NO
                      , B.PROJECT_NAME
@@ -334,6 +367,21 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , (SELECT COUNT(*)
+                  FROM TBL_ISSUE F
+                 WHERE F.PROJECT_NO = A.PROJECT_NO
+                   AND F.ISSUE_STATUS = 'Y'
+               ) AS TOTAL_ISSUE
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK G
+                 WHERE G.PROJECT_NO = A.PROJECT_NO
+                   AND G.TASK_STATUS = 'Y'
+               ) AS TOTAL_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_OUTPUT H
+                 WHERE H.PROJECT_NO = A.PROJECT_NO
+                   AND H.OUTPUT_STATUS = 'Y'
+               ) AS OUTPUT_AMOUNT
           FROM (SELECT ROWNUM RNUM
                      , B.PROJECT_NO
                      , B.PROJECT_NAME
@@ -360,7 +408,7 @@
               			<if test="searchCondition = 'projectName'">
                                C.PROJECT_NAME LIKE '%' || #{ searchValue } || '%'
                        	</if>			
-                           AND D.MEMBER_NO = #{ projectNo }
+                           AND D.MEMBER_NO = #{ member.no }
                            AND D.ROLE_HISTORY_NO IN (SELECT MAX(F.ROLE_HISTORY_NO)
                                                        FROM TBL_ROLE_ASSIGNMENT_HISTORY F
                                                       WHERE F.ROLE_NO = 8
@@ -390,6 +438,21 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , (SELECT COUNT(*)
+                  FROM TBL_ISSUE F
+                 WHERE F.PROJECT_NO = A.PROJECT_NO
+                   AND F.ISSUE_STATUS = 'Y'
+               ) AS TOTAL_ISSUE
+             , (SELECT COUNT(*)
+                  FROM TBL_TASK G
+                 WHERE G.PROJECT_NO = A.PROJECT_NO
+                   AND G.TASK_STATUS = 'Y'
+               ) AS TOTAL_TASK
+             , (SELECT COUNT(*)
+                  FROM TBL_OUTPUT H
+                 WHERE H.PROJECT_NO = A.PROJECT_NO
+                   AND H.OUTPUT_STATUS = 'Y'
+               ) AS OUTPUT_AMOUNT
           FROM (SELECT ROWNUM RNUM
                      , B.PROJECT_NO
                      , B.PROJECT_NAME
@@ -421,12 +484,12 @@
                         </if>   
                            AND D.PROJECT_NO IN (SELECT F.PROJECT_NO
                                                   FROM TBL_ROLE_ASSIGNMENT_HISTORY F
-                                                 WHERE F.MEMBER_NO = #{ projectNo }
+                                                 WHERE F.MEMBER_NO = #{ member.no }
                                                    AND F.ROLE_NO != 8
                                                  GROUP BY F.PROJECT_NO
                                                 )
                            AND D.PROJECT_STATUS = 'Y'
-                           AND C.MEMBER_NO = #{ projectNo }
+                           AND C.MEMBER_NO = #{ member.no }
 						</where>
                          ORDER BY D.PROJECT_NO
                        ) B

@@ -9,8 +9,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-
 	<c:if test="${ sessionScope.loginMember.role eq 1 }">
 		<jsp:include page="/WEB-INF/views/main/adminMain.jsp"/>
 	</c:if>
@@ -19,9 +17,5 @@
 		<jsp:include page="/WEB-INF/views/main/memberMain.jsp"/>
 	</c:if>
 	
-	<c:if test="${ sessionScope.loginMember.role eq 3 }">
-		<jsp:include page="/WEB-INF/views/main/clientMain.jsp"/>
-	</c:if>
-
 </body>
 </html>

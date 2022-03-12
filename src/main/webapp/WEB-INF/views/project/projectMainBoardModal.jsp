@@ -9,7 +9,7 @@
 
 /* 모달 */
 .modal-content {
-   width: 500px;
+   width: 590px;
    height: 650px;
    padding: 30px;
 }
@@ -26,7 +26,7 @@
 
 .my-textarea-div {
    width: 440px;
-   height: 300px;
+   height: 180px;
 }
 
 #my-textarea {
@@ -34,10 +34,11 @@
    width: 100%;
    height: 100%;
 }
+
 #read-content {
-   display: block;
-   width: 100%;
-   height: 300px;
+    display: block;
+    width: 117%;
+    height: 169px;
 }
 
 .my-modal-footer button {
@@ -65,7 +66,15 @@
    background: none;
    padding: 5px 25px;
 }
-
+#downloadZone {
+	width: 100px;
+}
+#downloadZone #read-originalName {
+  width:300px;
+  overflow:hidden
+  white-space:nowrap
+  text-overflow: ellipsis;
+}
 </style>
 
 </head>
@@ -83,18 +92,18 @@
 						<div>
 							<label class="mb-4">작성자</label>
 							<input type="text" style="width:26%;margin-left:7%" id="read-membername" readonly>
-							<label style="margin-left:25%"class="mb-4">조회수</label>
+							<label style="margin-left:28%"class="mb-4">조회수</label>
 							<input type="text" style="width:15%;margin-left:2%" id="read-boardcount" readonly>
 						</div>
-                        <div class="my-modal-body" style="width:200px">
+                        <div class="my-modal-body" style="width:150px">
                             <div class="my-textarea-div mb-3">
-                                <textarea name="content" id="read-content" cols="30" rows="10"></textarea>
+                                <textarea name="content" id="read-content"></textarea>
                             </div>
                         </div>
-                        <div class="my-modal-upload mb-4" id="upload-file-area">
+	               	<div class="my-modal-upload mb-4" id="downloadZone" style="overflow-y:auto;overflow-x:hidden; width:100%; height:150px;">
 	            		</div>
                         <div class="my-modal-footer-read">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">돌아가기</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">돌아가기</button>
                         </div>
                     </div>
             </div>

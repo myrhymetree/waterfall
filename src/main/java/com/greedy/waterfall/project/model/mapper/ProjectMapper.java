@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.greedy.waterfall.board.model.dto.BoardDTO;
-import com.greedy.waterfall.board.model.dto.FileDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.menu.model.dto.ProjectInfoDTO;
@@ -51,9 +50,6 @@ public interface ProjectMapper {
 
 	int registMemberProject(RegistProjectDTO newProject);
 
-	//어드민 프로젝트 전체 조회
-//	List<ProjectDTO> findAllProject();
-	
 	List<ProjectDTO> findAllManageProject(SelectCriteria selectCriteria);
 
 	List<ProjectDTO> findAllRemovedProject(SelectCriteria subselectCriteria);

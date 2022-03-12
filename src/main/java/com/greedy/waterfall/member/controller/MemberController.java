@@ -5,15 +5,11 @@ package com.greedy.waterfall.member.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,9 +51,6 @@ public class MemberController {
 	private final BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private JavaMailSender mailSender;
-	
-	@Autowired
 	public MemberController(MemberService memberService, BCryptPasswordEncoder passwordEncoder) {
 		this.memberService = memberService;
 		this.passwordEncoder = passwordEncoder;
@@ -88,9 +81,10 @@ public class MemberController {
 	@PostMapping("/login2")
 	public String login(@ModelAttribute MemberDTO member, Model model) throws LoginFailedException {
 		
-		if("1".equals(member.getRole())) {
-			model.addAttribute("loginMember", memberService.findMember(member));
-			
+		if(member.getId().equals("admin")) {
+			MemberDTO loginMember = memberService.findMember(member);
+			model.addAttribute("loginMember", loginMember);
+			System.out.println("login2 member : " + loginMember );
 			return "redirect:/menu/main"; 
 		
 		} else {			
@@ -108,6 +102,15 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 	
+	/*
+	 * @GetMapping("/list") public ModelAndView MemberSelectList(HttpServletRequest
+	 * request, ModelAndView mv) {
+	 * 
+	 * String currentPage = request.getParameter("currentPage");
+	 * 
+	 * return mv; }
+	 */
+	
 	@GetMapping("list")
 	public ModelAndView findAdminMemberList(HttpServletRequest request ,ModelAndView mv) {
 		
@@ -119,8 +122,16 @@ public class MemberController {
 		}
 		
 		String searchCondition = request.getParameter("searchCondition");
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
+		System.out.println("확인용서치 첫번쨰" + " " + searchCondition);
 		String searchValue = request.getParameter("searchValue");
-
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
+		System.out.println("확인용서치 두번쨰" + " " + searchValue);
 		Map<String, String> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
@@ -134,12 +145,14 @@ public class MemberController {
 		SelectCriteria selectCriteria = null;
 		
 		if(searchCondition != null && !"".equals(searchCondition)) {
-			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue, 0, null);
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
 		} else {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
 		
 		List<AdminMemberDTO> adminMemberList = memberService.findAdminMember(selectCriteria); 
+		
+		
 		
 		mv.addObject("adminMemberList", adminMemberList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -167,6 +180,8 @@ public class MemberController {
 	@GetMapping("regist2/{deptCode}")
 	/* @ResponseBody */
 	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,HttpServletResponse response) throws JsonProcessingException {
+
+//		response.setContentType("application/json; charset=UTF-8");
 		
 		List<TeamDTO> teamList = memberService.findTeamList(deptCode);
 		
@@ -174,8 +189,24 @@ public class MemberController {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		mv.addObject("teamList", mapper.writeValueAsString(teamList));
-		mv.setViewName("jsonView"); 
+		mv.setViewName("jsonView"); // 매퍼 안에 담긴 
 		
+//		Gson gson = new GsonBuilder()
+//			      .setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+//			      .setPrettyPrinting()
+//			      .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+//			      .serializeNulls()
+//			      .disableHtmlEscaping()																			
+//			      .create();
+                                                                                                        	
+		//		mv.addObject("teamList", gson.toJson(teamList));										
+//		                                                                                                		 
+//		System.out.println("왜 안될까?" + mv);																	
+//		System.out.println("왜 안될까?" + mv);																	
+//		System.out.println("왜 안될까?" + mv);																		
+//		mv.setViewName("jsonView");																				
+//																										
+																										
 		return mv;                                                                                            	
 	}                                                                     										
 																													
@@ -193,7 +224,9 @@ public class MemberController {
 		TeamDTO teamDTO = new TeamDTO();
 		JobDTO jobDTO = new JobDTO();
 		
-		deptDTO.setDeptCode(dept);;
+		deptDTO.setDeptCode(dept);
+//		deptDTO.setDeptName(deptName);
+		
 		teamDTO.setTeamCode(team);
 		jobDTO.setJobCode(job);
 		
@@ -242,10 +275,15 @@ public class MemberController {
 	public ModelAndView memberModify(ModelAndView mv, @RequestParam Map<String, String> parameter, RedirectAttributes rttr) {
 		
 		String id = parameter.get("id");
+		System.out.println("id" + id);
 		String name = parameter.get("name");
+		System.out.println("name" + name);
 		String dept = parameter.get("dept");
+		System.out.println("dept" + dept);
 		String team = parameter.get("team");
+		System.out.println("team" + team);
 		String job = parameter.get("job");
+		System.out.println("job" + job);
 		
 		id = id.replace("\"", "");
 		
@@ -263,7 +301,8 @@ public class MemberController {
 		adminMember.setDept(deptDTO);
 		adminMember.setTeam(teamDTO);
 		adminMember.setJob(jobDTO);
-
+		System.out.println("adminMember" + adminMember);
+		System.out.println("adminMember" + adminMember);
 		memberService.memberModify(adminMember);
 		
 		String message = "수정에 성공하셨습니다.";
@@ -278,50 +317,26 @@ public class MemberController {
 	public ModelAndView removeMember(ModelAndView mv, HttpServletRequest request, RedirectAttributes rttr) {
 		
 		String id = request.getParameter("id");
+		System.out.println("id 확인용" + "" + id);
 		id = id.replace("\"", "");
-
+		System.out.println("id 확인용 두번째" + "" + id);
 		memberService.removeMember(id);
 		
 		String message = "삭제에 성공하셨습니다.";
 		
 		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/member/list");
-		
 		return mv;
 	}
 	
 	/* 이메일 인증 */
 	@RequestMapping(value="/mailCheck", method=RequestMethod.GET)
 	@ResponseBody
-	public String mailCheckGET(String email) {
+	public void mailCheckGET(String email) {
 		
-		Random random = new Random();
-		
-		int checkNum = random.nextInt(888888) + 111111; //111111~999999 범위
-
-		/* 이메일 보내기 */
-		String setFrom = "zxcv4097@naver.com";
-		String toMail = email;
-		String title = "회원가입 인증 이메일 입니다.";
-		String content = "홈페이지를 방문해주셔서 감사합니다." +
-						 "<br><br>" +
-						 "인증 번호는" + checkNum + "입니다." +
-						 "<br>" +
-						 "해당 인증번호를 인증번호 확인란에 가입해 주세요.";
-		
-		
-		  try {
-		  
-		  MimeMessage message = mailSender.createMimeMessage(); MimeMessageHelper
-		  helper = new MimeMessageHelper(message, true, "utf-8");
-		  helper.setFrom(setFrom); helper.setTo(toMail); helper.setSubject(title);
-		  helper.setText(content,true); mailSender.send(message);
-		  
-		  }catch(Exception e) { e.printStackTrace(); }
-		 		
-		String num = Integer.toString(checkNum); //인증번호 형 변환
-		
-		return num;
+		/* 뷰(view)로부터 넘어온 데이터 확인 */
+		System.out.println("이메일 데이터 전송 확인");
+		System.out.println("인증번호" + email);
 	}
 	
 	

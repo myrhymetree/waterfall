@@ -7,6 +7,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
@@ -45,29 +47,31 @@
 					
 					<input name="pmName" id="pm-name-area" type="text" class="readonly" value="${ projectInfo.pmName }" required autocomplete="off"> 
 				</div>
-				<div class="mt-4">
-					<span  style="margin-left: 2%">
-						<select id="dept" name="dept">
-							<option value="" selected disabled>부서 선택</option>
-							<c:forEach var="dept" items="${ deptList }">
-								<option value="${ dept.deptCode }"><c:out value="${ dept.deptName }"/></option>
-							</c:forEach>
-						</select>
-					</span>
-					<span>
-						<select id="team" name="team">
-							<option value="" selected disabled>팀 선택</option>
-						</select>
-					</span>
-					<span>
-						<select id="member" name="member">
-							<option value="" selected disabled>사원 선택</option>
-						</select>
-					</span>
-					<span>
-					    <input id="save-pm" type="button" value="변경">
-					</span>
-				</div>
+				<c:if test="${ sessionScope.loginMember.role eq 1 }">
+					<div class="mt-4">
+						<span  style="margin-left: 2%">
+							<select id="dept" name="dept">
+								<option value="" selected disabled>부서 선택</option>
+								<c:forEach var="dept" items="${ deptList }">
+									<option value="${ dept.deptCode }"><c:out value="${ dept.deptName }"/></option>
+								</c:forEach>
+							</select>
+						</span>
+						<span>
+							<select id="team" name="team">
+								<option value="" selected disabled>팀 선택</option>
+							</select>
+						</span>
+						<span>
+							<select id="member" name="member">
+								<option value="" selected disabled>사원 선택</option>
+							</select>
+						</span>
+						<span>
+						    <input id="save-pm" style="width:70px; margin-left:1%; height:40px;"class="btn btn-outline-dark" type="button" value="변경">
+						</span>
+					</div>
+				</c:if>
 				<div class="mt-3">
 					<label style="margin-left: 2%; width: 20%">진행률</label>
 					<input type="number" name="progression" value="${ projectInfo.progression }" min="0" max="100" required maxlength="10">

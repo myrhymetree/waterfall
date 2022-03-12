@@ -12,7 +12,7 @@ import com.greedy.waterfall.project.model.dto.TeamDTO;
 /**
  * <pre>
  * Class : ProjectService
- * Comment : 클래스 설명 작성부분
+ * Comment : 프로젝트를 조회, 생성, 수정, 삭제하는 기능을 담당한다.
  * 
  * History
  * 2022. 2. 20.  (홍성원)
@@ -22,32 +22,119 @@ import com.greedy.waterfall.project.model.dto.TeamDTO;
  */
 public interface ProjectService {
 
+	/**
+	 * findMyProject : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	MyProjectDTO findMyProject(Map<String, String> searchMap, MemberDTO member);
 
+	/**
+	 * findRegistForm : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	Map<String, Object> findRegistForm();
 
+	/**
+	 * findTeam : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	List<TeamDTO> findTeam(String deptCode);
 
+	/**
+	 * findTeamMember : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	List<MemberDTO> findTeamMember(String teamCode);
 
+	/**
+	 * registProject : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	boolean registProject(RegistProjectDTO newProject);
 
 	/* 프로젝트 번호로 pm번호를 반환한다. 프로젝트 목록에서 프로젝트 메인으로 이동할 때 해당 프로젝트의 pm번호를 세션에 추가한다. */
+	/**
+	 * findPmNumber : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	int findPmNumber(int projectNo);
 
+	/**
+	 * findOneProjectInfo : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	/**
+	 * findOneProjectInfo : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	RegistProjectDTO findOneProjectInfo(int projectNo);
 
+	/**
+	 * modifyProject : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	boolean modifyProject(RegistProjectDTO project);
 	
+	/**
+	 * removeProject : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	boolean removeProject(Map<String, Integer> removeInfo);
 
-	boolean restoreProject(int projectNo);
+	/**
+	 * restoreProject : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
+	boolean restoreProject(Map<String, Integer> restoreInfo);
 	
-	boolean deleteProject(int projectNo);
-	
+	/**
+	 * findProjectMainInfo : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	Map<String, Object> findProjectMainInfo(int projectNo);
 
+	/**
+	 * findBoardInfo : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 홍성원
+	 */
 	BoardDTO findBoardInfo(int boardNo);
-	
-	
 }

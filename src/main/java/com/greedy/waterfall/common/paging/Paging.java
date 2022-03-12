@@ -13,7 +13,7 @@ public interface Paging {
 	SelectCriteria setSubPagingCondition(Map<String, String> searchMap, PagingDTO pagingSetting);
 
 	SelectCriteria setPagingCondition(Map<String, String> searchMap, PagingDTO pageSetting, MemberDTO loginMember);
-
+	
 	SelectCriteria setSubPagingCondition(Map<String, String> searchMap, PagingDTO pageSetting, MemberDTO loginMember);
 
 }

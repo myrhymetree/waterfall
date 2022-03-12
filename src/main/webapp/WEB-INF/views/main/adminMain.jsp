@@ -8,9 +8,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <style>
-
-	
-
 	.show-project-info{
 		display:none;
 	}
