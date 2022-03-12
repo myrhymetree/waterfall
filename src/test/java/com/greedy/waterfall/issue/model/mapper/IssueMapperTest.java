@@ -44,12 +44,7 @@ public class IssueMapperTest {
 	@Test
 	public void 프로젝트_목록_조회_확인() {
 		
-		int memberNo = 1;
-		
-		Map<String, Integer> managerNo  = new HashMap<>();
-		managerNo.put("managerNo", memberNo);
-		
-		List<ProjectIssueCountDTO> result = (List<ProjectIssueCountDTO>) mapper.selectAllProjectList(managerNo);
+		List<ProjectIssueCountDTO> result = (List<ProjectIssueCountDTO>) mapper.selectAllProjectList();
 		
 		assertThat(result.size(), is(5));
 	}

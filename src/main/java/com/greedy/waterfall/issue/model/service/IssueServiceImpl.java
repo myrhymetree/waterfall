@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.waterfall.common.exception.GuideModifyException;
 import com.greedy.waterfall.common.exception.GuideRemoveException;
+import com.greedy.waterfall.common.exception.issue.IssueModifyException;
 import com.greedy.waterfall.common.exception.issue.IssueRegistException;
+import com.greedy.waterfall.common.exception.issue.IssueRemoveException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
 import com.greedy.waterfall.issue.model.dto.IssueFileDTO;
@@ -32,8 +34,8 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public List<ProjectIssueCountDTO> selectAllProjectList(Map<String, Integer> managerNo) {
-		List<ProjectIssueCountDTO> allProject = mapper.selectAllProjectList(managerNo);
+	public List<ProjectIssueCountDTO> selectAllProjectList() {
+		List<ProjectIssueCountDTO> allProject = mapper.selectAllProjectList();
 		return allProject;
 	}
 	
@@ -72,8 +74,6 @@ public class IssueServiceImpl implements IssueService {
 				} 
 			}
 			
-			
-			
 			/* 이슈 등록 시 히스토리 반영하기 위해서 mapper로 보내줌 */
 			
 			int registerNo = issue.getRegisterNo();
@@ -97,21 +97,22 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public IssueDTO selectIssueDetail(int no) {
+	public Map<String, Object> selectIssueDetail(Map<String, Integer> condition) {
+		
+		int no = condition.get("no");
+		
+		int projectNo = condition.get("projectNo");
 		
 		IssueDTO issueDetail = mapper.selectIssueDetail(no);
 		
-//		projectMemberMap = mapper.selectProjectMember();
-		
-		return issueDetail;
-	}
-
-	@Override
-	public List<ProjectMemberDTO> selectProjectMember(int projectNo) {
-		
 		List<ProjectMemberDTO> projectMemberList= mapper.selectProjectMember(projectNo);
 		
-		return projectMemberList;
+		Map<String, Object> issueDetailMap = new HashMap<>();
+		
+		issueDetailMap.put("projectMemberList", projectMemberList);
+		issueDetailMap.put("issueDetail", issueDetail);
+		
+		return issueDetailMap;
 	}
 
 	@Override
@@ -124,52 +125,60 @@ public class IssueServiceImpl implements IssueService {
 	public IssueFileDTO removeGuideFile(int fileNumber) {
 		IssueFileDTO issueFileDTO = mapper.findFile(fileNumber);
 		
-		int result = mapper.deleteIssueFile(fileNumber);
+		mapper.deleteIssueFile(fileNumber);
 				
-		//		if(!(result > 0)) {
-		//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
-		//		}
-		
 		return issueFileDTO;
 	}
 
+	/**
+	 * modifyIssue : 이슈 수정에 대한 비즈니스 로직 처리를 위한 메소드 
+	 * @param condition : 이슈 수정에 필요한 데이터가 담긴 매개변수
+	 * 
+	 * @author 박성준
+	 */
 	@Override
-	public void modifyIssue(IssueDTO issue, int loginMember) {
+	public void modifyIssue(Map<String, Object> condition) throws IssueModifyException {
+		
+		/* 매개변수에서 값 분리 */
+		IssueDTO issue = (IssueDTO) condition.get("issue");
+		int loginMemberNo = (int) condition.get("loginMemberNo");
 		
 		int result = mapper.updateIssue(issue);
 		
+		/* 이슈에서 따로 파일을 추출해서 파일을 등록 할 수 있게 한다. */
 		List<IssueFileDTO> files = issue.getFile();
 		System.out.println("IssueServiceImpl의 updateIssue의 files 는  " + files);
-		if(mapper.updateIssue(issue) > 0) {
-//			result = true;
 		
+		if(result > 0) {
+			
+			/* 파일에 해당 이슈번호를 넣어줌 */
 			if(files != null) {
+				
 				int count = 0;
+				
 				for(int i = 0; i < files.size(); i++) {
 					
 					files.get(i).setRefIssueNo(issue.getNo());
 					count += mapper.registIssueFile(files.get(i));
 				}
-				if(count != files.size()) {
-//					result = false;
-				} 
-				
+				System.out.println("총 등록한 파일의 숫자 : " + count);
 			}
-			issue.setLoginMemberNo(loginMember);
 			
+			/*이슈 수정 히스토리를 알림에 사용할 히스토리와 이슈 히스토리 조회 기능에서 사용할 수 있게 매퍼로 전송함 */
+			issue.setLoginMemberNo(loginMemberNo);
 			mapper.updateIssueHistory(issue);
-			
 			mapper.writeUpdatedIssueHistory(issue);
 			
 		}
 		
-//		if(!(result > 0)) {
-//			throw new GuideModifyException("가이드 게시글 수정에 실패하셨습니다.");
-//		}
+		/* 이슈 수정 실패시 발생하는 예외 */
+		if(!(result > 0)) {
+			throw new IssueModifyException("이슈 수정에 실패하셨습니다.");
+		}
 	}
 
 	@Override
-	public int removeIssue(int issueNo, int loginMemberNo) {
+	public int removeIssue(int issueNo, int loginMemberNo) throws IssueRemoveException {
 		
 		System.out.println("int no의 정보는 :" + issueNo);
 		
@@ -181,9 +190,9 @@ public class IssueServiceImpl implements IssueService {
 
 		int result = mapper.deleteIssue(issue);
 		
-//		if(!(result > 0)) {
-//			throw new GuideRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
-//		}
+		if(!(result > 0)) {
+			throw new IssueRemoveException("가이드 게시글 삭제에 실패하셨습니다.");
+		}
 		
 		issue.setLoginMemberNo(loginMemberNo);
 		System.out.println("로그인멤버 : " + loginMemberNo);

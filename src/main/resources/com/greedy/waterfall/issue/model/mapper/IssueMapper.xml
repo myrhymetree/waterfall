@@ -143,7 +143,8 @@
     ORDER BY 1 DESC
    </select>
    
-  	<select id="selectAllProjectList" parameterType="hashmap" resultMap="projectIssueCountResultMap">
+   	<!-- 프로젝트 목록과 해당 프로젝트의 이슈 수를 조회 하기 위한 쿼리문 -->
+  	<select id="selectAllProjectList" resultMap="projectIssueCountResultMap">
   	      SELECT DISTINCT /* com.greedy.com.greedy.waterfall.issue.model.mapper.IssueMapper#selectAllProjectList() */
                  A.PROJECT_NO
                , A.PROJECT_NAME
@@ -154,6 +155,7 @@
                     WHERE C.ISSUE_STATUS = 'Y'
                       AND K.TASK_STATUS = 'Y'
                       AND C.PROJECT_NO = B.PROJECT_NO
+                 ) AS ALL_ISSUE_COUNT
                , (SELECT
                          COUNT(C.ISSUE_NO)
                     FROM TBL_ISSUE C
@@ -195,7 +197,6 @@
            LEFT JOIN TBL_ISSUE B ON (A.PROJECT_NO = B.PROJECT_NO)
            LEFT JOIN TBL_ROLE_ASSIGNMENT_HISTORY G ON (A.PROJECT_NO = G.PROJECT_NO)
            LEFT JOIN TBL_MEMBER H ON (G.MEMBER_NO = H.MEMBER_NO)
-           LEFT JOIN TBL_TASK I ON (B.TASK_NO = I.TASK_NO)
           WHERE A.PROJECT_STATUS = 'Y'
             AND G.ROLE_HISTORY_NO IN (SELECT MAX(J.ROLE_HISTORY_NO)
                                         FROM TBL_ROLE_ASSIGNMENT_HISTORY J
