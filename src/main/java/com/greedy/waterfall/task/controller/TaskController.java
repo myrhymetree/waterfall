@@ -74,12 +74,9 @@ public class TaskController {
 	 * @throws JsonProcessingException 
 	 */
 	@GetMapping("/timeline")
-	public ModelAndView taskFindTimeline(ModelAndView mv, HttpSession session )  {
+	public ModelAndView findTaskTimeline(ModelAndView mv, HttpSession session )  {
 		
-		/* 현재 진행중인 프로젝트의 번호를 세션에서 가져온다 */
-		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
-		
-		System.out.println("projectNo : " +projectNo);
+		int projectNo = getProjectNo(session);
 		
 		/* taskList를 찾을 때 필요한 정보   setting
 		 * projectNo만 보내는 것이 아닌 TaskDTO 보내는 이유 : Service에서 TaskDTO에 하위업무List를 넣어줘야하기 때문 */
@@ -88,24 +85,19 @@ public class TaskController {
 		
 		/* 상위업무에 해당하는 하위업무들 조회해오기 */
 		List<TaskDTO> parentTaskList = taskService.findTaskTimeline(taskDTO);
+		
 		/* gantt-chart 생성 시 필요한 하위업무 List */
 		List<ChildTaskDTO> childTaskList = taskService.findChildTaskList(projectNo);
-		System.out.println("childTaskList : " + childTaskList);
-		
 		
 		/* 상위업무,하위업무 categoryCode */
 		List<TaskCategoryDTO> taskCategoryList = taskService.findAllCategoryCode();
-		System.out.println("taskCategoryList :" + taskCategoryList);
 		AllTaskCodeDTO allTaskCode = taskService.findAllTaskCode();
-		
 		
 		/* 프로젝트에 참여중인 인원 조회 */
 		List<ProjectMemberDTO> projectMemberList= taskService.findProjectMember(projectNo);
-		System.out.println("taskDetail projectMember :" + projectMemberList);
 		
 		/* PM여부 확인 */
 		int pmNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getPmNo();
-		System.out.println("pmNo : " + pmNo);
 		
 		
 		mv.addObject("parentTaskList", parentTaskList);
@@ -113,12 +105,14 @@ public class TaskController {
 		mv.addObject("taskCategoryList", taskCategoryList);
 		mv.addObject("allTaskCode", allTaskCode);
 		mv.addObject("projectMemberList", projectMemberList );
-		mv.addObject("pmNo", pmNo);
 		mv.setViewName("task/taskTimeLine");
 		
 		return mv;
 	}
 	
+	
+
+
 	/**
 	 * taskRegist : 업무생성 및 히스토리 등록
 	 * @param first : @ModelAttribute TaskRegistDTO 업무 생성시 받아오는 data
@@ -128,11 +122,11 @@ public class TaskController {
 	 * @author 김서영
 	 */
 	@PostMapping("/regist")
-	public String taskRegist(@ModelAttribute TaskRegistDTO taskRegistDTO,HttpServletRequest request, HttpSession session, RedirectAttributes rttr) {
+	public String registTask(@ModelAttribute TaskRegistDTO taskRegistDTO,HttpServletRequest request, HttpSession session, RedirectAttributes rttr) {
 		
-		/* session 내 projectNo 저장 */
-		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
-		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo()); 
+		/* session, request 내 정보 저장 */
+		int projectNo = getProjectNo(session);
+		int memberNo = getMemberNo(request);
 		
 		taskRegistDTO.setProjectNo(projectNo);
 		taskRegistDTO.setMemberNo(memberNo);
@@ -175,12 +169,12 @@ public class TaskController {
 	}
 	
 	@PostMapping("/update")
-	public String taskUpdate(@ModelAttribute TaskRegistDTO taskUpdateDTO, HttpServletRequest request,
+	public String modifyTask(@ModelAttribute TaskRegistDTO taskUpdateDTO, HttpServletRequest request,
 			                 HttpSession session, RedirectAttributes rttr) {
 		
-		/* session 내 projectNo 저장 */
-		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
-		int memberNo =  (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		/* session, request 내 정보 저장 */
+		int projectNo = getProjectNo(session);
+		int memberNo = getMemberNo(request);
 		
 		taskUpdateDTO.setProjectNo(projectNo);
 		taskUpdateDTO.setMemberNo(memberNo);
@@ -201,6 +195,9 @@ public class TaskController {
 		return "redirect:/task/timeline";
 	}
 	
+	
+
+
 	@GetMapping("/delete")
 	public String removeTask(HttpServletRequest request, HttpSession session, RedirectAttributes rttr) {
 		
@@ -225,6 +222,18 @@ public class TaskController {
 		rttr.addFlashAttribute("message", "업무 삭제에 성공하셨습니다.");
 		
 		return "redirect:/task/timeline";
+	}
+	
+	private int getProjectNo(HttpSession session) {
+		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
+		return projectNo;
+	}
+	
+	private int getMemberNo(HttpServletRequest request) {
+		
+		int memberNo = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		
+		return memberNo;
 	}
 	
 	

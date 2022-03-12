@@ -47,7 +47,7 @@ public interface TaskMapper {
 
 	void insertEntireUpdateHistory(TaskRegistDTO taskUpdateDTO);
 
-	String selectRefTaskCode(TaskDTO task);
+	Integer selectRefTaskCode(TaskDTO task);
 
 	int deleteTask(TaskDTO task);
 
@@ -59,8 +59,10 @@ public interface TaskMapper {
 
 	int deleteChildTask(TaskDTO task);
 
-	void insertEntireregistHistroy(TaskRegistDTO taskRegistDTO);
+	void insertEntireRegistHistroy(TaskRegistDTO taskRegistDTO);
 
 	Integer selectParentTaskNoCurrval(TaskRegistDTO taskRegistDTO);
+
+	int registParentTask(TaskRegistDTO taskRegistDTO);
 
 }

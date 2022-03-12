@@ -173,7 +173,7 @@
 		   AND TASK_STATUS = 'Y'
 	</select>
 	
-	<select id="selectRefTaskCode" resultType="String">
+	<select id="selectRefTaskCode" resultType="int">
 		SELECT
 		       TASK_REF_NO
 		  FROM TBL_TASK
@@ -228,6 +228,37 @@
 		     , #{ importance }
 		     )
 		    
+	</insert>
+	<insert id="registParentTask">
+		INSERT
+  		  INTO TBL_TASK
+		     (
+		       TASK_NO
+		     , TASK_START_DATE
+		     , TASK_DEADLINE
+		     , TASK_PROGRESSION
+		     , TASK_PROGRESS_STATUS
+		     , TASK_TYPE_NO
+		     , PROJECT_NO
+		     , MEMBER_NO
+		     , TASK_CATEGORY_CODE
+		     , TASK_REF_NO
+		     , TASK_IMPORTANCE
+		     )
+		 VALUES
+		     (
+		       TASK_NO.NEXTVAL
+		     , #{ startDate }
+		     , #{ deadline }
+		     , #{ progressRatio }
+		     , #{ progressStatus }
+		     , #{ typeNo }
+		     , #{ projectNo }
+		     , #{ taskMember }
+		     , #{ taskCode }
+		     , NULL
+		     , #{ importance }
+		     )
 	</insert>
 	
 	<insert id="registHistory">
@@ -412,7 +443,7 @@
 		     )
 	</insert>
 	
-	<insert id="insertEntireregistHistroy">
+	<insert id="insertEntireRegistHistroy">
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY
 		     (

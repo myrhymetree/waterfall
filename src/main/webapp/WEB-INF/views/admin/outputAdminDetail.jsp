@@ -573,7 +573,7 @@ input{
     					if(result == 1){
     						$("#errorModal").modal("show");
     					} else{
-    						location.href="${ pageContext.servletContext.contextPath }/output/delete?outputNo=" + outputNo;
+    						location.href="${ pageContext.servletContext.contextPath }/output/admin/delete?outputNo=" + outputNo;
     					}
     				}
     			});

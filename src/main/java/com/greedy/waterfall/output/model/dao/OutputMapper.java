@@ -10,6 +10,7 @@ import com.greedy.waterfall.project.model.dto.ProjectDTO;
 import com.greedy.waterfall.task.model.dto.ChildTaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskCategoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskDTO;
+import com.greedy.waterfall.task.model.dto.TaskRestoreOutputDTO;
 
 public interface OutputMapper {
 
@@ -60,6 +61,22 @@ public interface OutputMapper {
 	String selectMemberName(OutputDTO output);
 
 	void insertEntireHistory(OutputDTO output);
+
+	int selectAllDeletedOutputCount(int projectNo);
+
+	List<TaskRestoreOutputDTO> findDeleteOutputList(TaskRestoreOutputDTO restoreOutput);
+
+	List<Integer> selectDeletedOutput(int taskNo);
+
+	TaskRestoreOutputDTO selectTaskNoOutputNo(int fileNo);
+
+	int updateRestoreFile(int fileNo);
+
+	int updateRestoreOutput(int outptuNo);
+
+	int selectProjectNo(int fileNo);
+
+	int selectProjectNoByOutputNo(int outputNo);
 	
 	
 }

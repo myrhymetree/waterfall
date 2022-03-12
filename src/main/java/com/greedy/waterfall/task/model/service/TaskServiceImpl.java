@@ -131,24 +131,21 @@ public class TaskServiceImpl implements TaskService{
 	@Override
 	public boolean registTask(TaskRegistDTO taskRegistDTO) {
 		
-		String taskCode = taskRegistDTO.getTaskCode();
-		String parentTaskCode = taskRegistDTO.getParentTaskCode();
 		int memberNo = taskRegistDTO.getMemberNo();
 		TaskHistoryDTO history = new TaskHistoryDTO();
+		
 			/*종속관계가 Null이면서 상위업무 코드일때만 등록가능*/
-			if(taskRegistDTO.getParentTaskCode().equals("NULL")) {
-				
-				if(taskCode.equals("REQ") || taskCode.equals("MAINTENANCE") || taskCode.equals("DEVELOPMENT") ||
-						taskCode.equals("TEST") || taskCode.equals("DEVELOPMENT")) {
+			if(isParentTaskCodeNull(taskRegistDTO)) {
+				if(isParentTaskCode(taskRegistDTO)) {
+					int result = mapper.registParentTask(taskRegistDTO);
 					
-					int result = mapper.registTask(taskRegistDTO);
-					if(result > 0) {
+					if(isSuccess(result)) {
 						mapper.registHistory(taskRegistDTO);
 						
 						String memberName = mapper.selectMemberName(memberNo);
 						taskRegistDTO.setMemberName(memberName);
 						
-						mapper.insertEntireregistHistroy(taskRegistDTO);
+						mapper.insertEntireRegistHistroy(taskRegistDTO);
 						return true;
 					}
 				/*상위업무가 등록안된 상태로 하위업무를 등록하려고 할 때*/	
@@ -162,23 +159,24 @@ public class TaskServiceImpl implements TaskService{
 			} else {
 				/*상위업무, 하위업무 동시에 들어올때 상위업무 먼저 등록*/
 				Integer parentTaskNo = mapper.selectParentTaskNo(taskRegistDTO);
-				if(parentTaskNo == null) {
-					parentTaskNo = 0;
-				}
+				
+				/*parentTaskNo이 Null이면 0으로 반환 받음*/
+				parentTaskNo = isParentTaskNoNull(parentTaskNo);
 				
 				System.out.println("상위업무 없을 때 등록 테스트 : "+ parentTaskNo);
+				
 				/*등록된 상위업무가 있을 때 하위업무로 바로 등록*/
-				if(parentTaskNo > 0) {
+				if(isParentTaskExist(parentTaskNo)) {
 					taskRegistDTO.setParentTaskNo(parentTaskNo);
 					int result = mapper.registTask(taskRegistDTO);
 					
-					if(result > 0) {
+					if(isSuccess(result)) {
 						mapper.registHistory(taskRegistDTO);
 						
 						String memberName = mapper.selectMemberName(memberNo);
 						taskRegistDTO.setMemberName(memberName);
 						
-						mapper.insertEntireregistHistroy(taskRegistDTO);
+						mapper.insertEntireRegistHistroy(taskRegistDTO);
 						
 						return true;
 					}
@@ -186,15 +184,13 @@ public class TaskServiceImpl implements TaskService{
 				} else {
 					
 					/*상위업무와 종속관계가 둘다 상위업무 코드로 들어올 때*/
-					if(taskCode.equals("REQ") || taskCode.equals("MAINTENANCE") || taskCode.equals("DEVELOPMENT") ||
-						taskCode.equals("TEST") || taskCode.equals("DEVELOPMENT") && parentTaskCode.equals("REQ") || parentTaskCode.equals("MAINTENANCE") || parentTaskCode.equals("DEVELOPMENT") ||
-							taskCode.equals("TEST") || taskCode.equals("DEVELOPMENT")) {
+					if(isParentTaskCode(taskRegistDTO) && isParentTaskCodeEqualsTaskCode(taskRegistDTO)) {
 						return false;
 					}
 					/*상위업무 먼저 등록*/
 					int parentTaskResult = mapper.registTask(taskRegistDTO);
 					
-					if(parentTaskResult > 0) {
+					if(isSuccess(parentTaskResult)) {
 						/* 상위업무 등록한 후 히스토리 등록*/
 						String memberName = mapper.selectMemberName(memberNo);
 						taskRegistDTO.setMemberName(memberName);
@@ -202,21 +198,20 @@ public class TaskServiceImpl implements TaskService{
 						String taskName = mapper.selectTaskName(history);
 						taskRegistDTO.setTaskName(taskName);
 						System.out.println("야야야ㅑ야야야야야야taskRegistDTO : " + taskRegistDTO);
-						mapper.insertEntireregistHistroy(taskRegistDTO);
+						mapper.insertEntireRegistHistroy(taskRegistDTO);
 						
 						/*하위업무 등록*/
 						parentTaskNo = mapper.selectParentTaskNoCurrval(taskRegistDTO);
 						taskRegistDTO.setParentTaskNo(parentTaskNo);
 						int result = mapper.registTask(taskRegistDTO);
 						
-						if(result > 0) {
+						if(isSuccess(result)) {
 							mapper.registHistory(taskRegistDTO);
-							
 							history.setTaskCode(taskRegistDTO.getTaskCode());
 							taskName = mapper.selectTaskName(history);
 							taskRegistDTO.setTaskName(taskName);
 							System.out.println("야야야ㅑ야야야야야야taskRegistDTO22222222 : " + taskRegistDTO);
-							mapper.insertEntireregistHistroy(taskRegistDTO);
+							mapper.insertEntireRegistHistroy(taskRegistDTO);
 							return true;
 						}
 					/*상위업무 등록 실패시*/	
@@ -227,6 +222,7 @@ public class TaskServiceImpl implements TaskService{
 			}
 			return false;
 	}
+
 
 	/**
 	 * findAllCategoryCode : 메소드 설명 작성 부분
@@ -313,7 +309,7 @@ public class TaskServiceImpl implements TaskService{
 		history.setMemberName(historyInfo.getMemberName());
 		history.setTaskName(historyInfo.getTaskName());
 		
-		String taskCodeResult = mapper.selectRefTaskCode(task);
+		Integer taskCodeResult = mapper.selectRefTaskCode(task);
 		
 		System.out.println("taskCodeResult : " + taskCodeResult);
 		
@@ -340,6 +336,149 @@ public class TaskServiceImpl implements TaskService{
 		}
 		
 		
+	}
+	
+	
+	/**
+	 * isParentTaskCodeNull : view에서 받아온 종속관계가 null 인지 확인하는 메소드
+	 * @param TaskRegistDTO taskRegistDTO : view에서 받아온 정보
+	 * @return 종속관계 select value가 null인경우 true, null이 아닌경우 false
+	 * 
+	 * @author 김서영
+	 */
+	private boolean isParentTaskCodeNull(TaskRegistDTO taskRegistDTO) {
+		
+		if(taskRegistDTO.getParentTaskCode().equals("NULL")) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * isParentTaskCode : view에서 선택한 업무가 상위업무 목록과 같은지 확인하는 메소드
+	 * @param TaskRegistDTO taskRegistDTO : view에서 받아온 정보
+	 * @return 받아온 업무가 상위업무(요구사항명세, 테스트, 설계 등)과 같을 때 true, 그 외 false
+	 * 
+	 * @author 김서영
+	 */
+	private boolean isParentTaskCode(TaskRegistDTO taskRegistDTO) {
+		
+		String taskCode = taskRegistDTO.getTaskCode();
+		List<String> parentTaskCodes = getParentTaskCodes();
+		
+		for(int i = 0; i < parentTaskCodes.size(); i++) {
+			if(isCompareParentTaskCode(taskCode, parentTaskCodes.get(i))) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * isParentTaskCodeEqualsTaskCode : 종속관계에서 선택한 업무가 상위업무 목록에 속하는지 확인하는 메소드
+	 * @param TaskRegistDTO taskRegistDTO : view에서 받아온 정보
+	 * @return 받아온 종속관계 업무가 상위업무(요구사항명세, 테스트, 설계 등)과 같을 때 true, 그 외 false
+	 * 
+	 * @author 김서영
+	 */
+	private boolean isParentTaskCodeEqualsTaskCode(TaskRegistDTO taskRegistDTO) {
+		String parentTaskCode = taskRegistDTO.getParentTaskCode();
+		List<String> parentTaskCodes = getParentTaskCodes();
+		
+		for(int i = 0; i < parentTaskCodes.size(); i++) {
+			
+			if(isCompareParentTaskCode(parentTaskCode, parentTaskCodes.get(i))) {
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	 * isCompareParentTaskCode : taskCode와 parentTaskCode가 같은지 확인하는 메소드
+	 * @param first : String taskCode : 선택한 업무
+	 * @param second : String parentTaskCode : 상위업무 목록 중 한개
+	 * @return 같으면 true, 다를 시 false
+	 * 
+	 * @author 김서영
+	 */
+	private boolean isCompareParentTaskCode(String taskCode, String parentTaskCode) {
+		
+		return taskCode.equals(parentTaskCode);
+	}
+	
+	/**
+	 * getParentTaskCodes : 상위업무 List 반환 메소드
+	 * @param 
+	 * @return 상위업무 List
+	 * 
+	 * @author 김서영
+	 */
+	private List<String> getParentTaskCodes() {
+		
+		List<String> parentTaskCodes = new ArrayList<String>();
+		
+		String parentTaskCode1 = "REQ";
+		String parentTaskCode2 = "MAINTENANCE";
+		String parentTaskCode3 = "DEVELOPMENT";
+		String parentTaskCode4 = "TEST";
+		String parentTaskCode5 = "DESIGN";
+		
+		parentTaskCodes.add(parentTaskCode1);
+		parentTaskCodes.add(parentTaskCode2);
+		parentTaskCodes.add(parentTaskCode3);
+		parentTaskCodes.add(parentTaskCode4);
+		parentTaskCodes.add(parentTaskCode5);
+		
+		return parentTaskCodes;
+	}
+
+	/**
+	 * isSuccess : insert, update, delete 수행결과가 성공인지 확인하는 메소드
+	 * @param int result : dao 수행결과
+	 * @return result > 0 일시 true 그 외 false
+	 * 
+	 * @author 김서영
+	 */
+	private boolean isSuccess(int result) {
+		
+		if(result > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * isParentTaskNoNull : 상위업무가 존재하는지 확인하는 메소드
+	 * @param Integer parentTaskNo : dao에서 받아온  참조하고있는 상위업무번호(ref_task_no)
+	 * @return parentTaskNo이 null 일 시(상위업무가 존재하지 않음) true
+	 * 
+	 * @author 김서영
+	 */
+	private int isParentTaskNoNull(Integer parentTaskNo) {
+		
+		if(parentTaskNo == null) {
+			parentTaskNo = 0;
+		}
+		
+		return parentTaskNo;
+	}
+	
+	/**
+	 * isParentTaskExist : 상위업무번호가
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 김서영
+	 */
+	private boolean isParentTaskExist(Integer parentTaskNo) {
+		if(parentTaskNo > 0) {
+			return true;
+		}
+		return false;
 	}
 	
 	

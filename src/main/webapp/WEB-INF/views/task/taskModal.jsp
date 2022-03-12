@@ -101,7 +101,7 @@
 				</p>
 				<p>
 					<label>업무선택</label>
-					<select id="modifyCategoryName" class="task-register-code" name="taskCode" required disabled>
+					<select id="modifyCategoryName" class="task-register-code" name="taskCode" required>
 					<option value="" disabled >선택</option>
 					<c:forEach var="taskList" items="${requestScope.taskCategoryList }" varStatus="status" >
 						<option  value="${taskList.categoryCode }" ><c:out value="${ taskList.categoryName }"/></option>
@@ -191,33 +191,33 @@
 				</c:if>
 					<p>
 						<label>업무명</label>
-						<input id="parentTaskName" type="text" name="parentTaskName"/>
+						<input id="parentTaskName" type="text" name="parentTaskName" readonly>
 						<input type="hidden" name="parentTaskCode" id="parentTaskCode" />
 					</p>
 					<p>
 						<label>담당자</label>
-						<input id="parentTaskManager" type="text" name="parentTaskManager"/>
+						<input id="parentTaskManager" type="text" name="parentTaskManager" readonly>
 						<input id="parentTaskManagerNo" type="hidden" name="parentTaskManagerNo">
 					</p>	
 					<p>
 						<label>시작일</label>
-						<input type="date" id="parent-start-date" name="parentStartDate">
+						<input type="date" id="parent-start-date" name="parentStartDate" readonly>
 					</p>	
 					<p>
 						<label>마감일</label>
-						<input type="date" id="parent-end-date" name="parentDeadline">
+						<input type="date" id="parent-end-date" name="parentDeadline" readonly>
 					</p>
 					<p>
 						<label>중요도</label>
-						<input type="text" id="parentImportance" name="parentImportance">
+						<input type="text" id="parentImportance" name="parentImportance" readonly>
 					</p>
 					<p>
 						<label>진행률</label>
-						<input id="parentProgress" class="rate ms-2" type="number" name="parentProgress" value="0" min="0" max="100" >%
+						<input id="parentProgress" class="rate ms-2" type="number" name="parentProgress" value="0" min="0" max="100" readonly>%
 					</p>
 					<p>
 						<label>진행상태</label>
-						<input id="parentStatus" type="text" name="parentStatus" >
+						<input id="parentStatus" type="text" name="parentStatus" readonly>
 					</p>
 					<p>
 						<label>마일스톤</label>
@@ -252,39 +252,39 @@
 				</c:if>
 					<p>
 						<label>업무명</label>
-						<input id="childTaskName" type="text" name="childTaskName"/>
+						<input id="childTaskName" type="text" name="childTaskName" readonly>
 						<input id="childTaskCode" type="hidden" name="childTaskCode"/>
 					</p>
 					
 					<p>
 						<label>담당자</label>
-						<input id="childTaskManager" type="text" name="childTaskManager"/>
+						<input id="childTaskManager" type="text" name="childTaskManager" readonly>
 						<input id="childTaskManagerNo" type="hidden" name="childTaskManagerNo">
 					</p>
 					
 					<p>
 						<label>시작일</label>
-						<input type="date" id="child-start-date" name="childStartDate">
+						<input type="date" id="child-start-date" name="childStartDate" readonly>
 					</p>
 					
 					<p>
 						<label>마감일</label>
-						<input type="date" id="child-end-date" name="childDeadline">
+						<input type="date" id="child-end-date" name="childDeadline" readonly>
 					</p>
 					
 					<p>
 						<label>중요도</label>
-						<input type="text" id="childImportance" name="childImportance">
+						<input type="text" id="childImportance" name="childImportance" readonly>
 					</p>
 					
 					<p>
 						<label>진행률</label>
-						<input id="childProgress" class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" >%
+						<input id="childProgress" class="rate ms-2" type="number" name="childProgress" value="0" min="0" max="100" readonly>%
 					</p>
 					
 					<p>
 						<label>진행상태</label>
-						<input id="childStatus" type="text" name="childStatus" >
+						<input id="childStatus" type="text" name="childStatus" readonly>
 					</p>
 					
 					<p>

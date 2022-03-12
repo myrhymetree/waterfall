@@ -31,5 +31,6 @@ public class OutputProjectDTO {
 	private OutputProjectStatusDTO status;
 	private List<OutputDTO> output;
 	private int totalOutputCount;
+	private int totalDeletedOutputCount;
 
 }

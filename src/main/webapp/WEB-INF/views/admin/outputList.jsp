@@ -24,6 +24,51 @@
     td {
             vertical-align: middle !important;  
         }
+.button {
+			@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
+			-webkit-appearance: none;
+            -moz-appearance: none ;
+            appearance: none ;
+
+            margin: 0;
+            padding-left: 0.7rem;
+            padding-right: 0.7rem;
+            padding-top : 0.4rem;
+            padding-bottom:0.4rem;
+
+            font-family: "Noto Sans KR ", sans-serif ;
+            font-size: 1rem ;
+            font-weight: 400;
+            text-align: center ;
+            text-decoration: none ;
+
+            display: inline-block ;
+            width: auto ;
+
+            border: none ;
+            border-radius: 4px ;
+
+            cursor: pointer ;
+            transition: 0.5s ;
+
+            box-shadow: 3px 3px 3px gray ;
+
+            margin: 10px ;
+        
+	
+}
+.float {
+	display: inline-block;
+	transition-duration: 0.3s;
+	transition-property: transform;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	transform: translateZ(0);
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+
+.float:hover {
+	transform: translateY(-7px);
+}
 </style>
 </head>
 <body>
@@ -34,6 +79,7 @@
                         <br>
                         <br>
                         <h1 class="mt-4"><i class="fas fa-exclamation-circle"></i>산출물</h1>
+                        <button id="restoreOutput" class="button float">산출물 복구</button>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -90,6 +136,10 @@ $(function() {
        console.log(projectNo)
        location.href = "${ pageContext.servletContext.contextPath }/output/admin/detail?projectNo=" + projectNo;
    });
+});
+
+$("#restoreOutput").click(function(){
+	location.href = "${ pageContext.servletContext.contextPath }/output/admin/projectList";
 });
 </script>
    <jsp:include page="../common/footer.jsp"/>
