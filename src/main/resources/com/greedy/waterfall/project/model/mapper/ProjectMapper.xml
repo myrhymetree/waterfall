@@ -111,7 +111,7 @@
 	</resultMap>
 	
 	<select id="findAdminInfo" resultMap="memberResultMap">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAdminInfo() */
                A.MEMBER_NO
              , A.MEMBER_NAME
           FROM TBL_MEMBER A
@@ -119,7 +119,7 @@
 	</select>		
 	
 	<select id="findManageProjectCount" resultType="_int">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findManageProjectCount() */
                COUNT(*)
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
           JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
@@ -132,8 +132,9 @@
           AND B.MEMBER_NO = TO_NUMBER(#{ memberNo })
 		</where>
 	</select>
+	
 	<select id="findAllManageProjectCount" resultType="_int" parameterType="hashmap">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAllManageProjectCount() */
         	COUNT(*)
          FROM TBL_ROLE_ASSIGNMENT_HISTORY A
           JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
@@ -149,8 +150,9 @@
            AND C.PROJECT_STATUS = 'Y'
 		</where>
 	</select>
+	
 	<select id="findAllJoinProjectCount" resultType="_int" parameterType="hashmap">
-       SELECT 
+       SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAllJoinProjectCount() */ 
               COUNT(COUNT(E.PROJECT_NO))
          FROM (SELECT D.MEMBER_NAME AS PM_NAME
                     , B.PROJECT_NO
@@ -161,7 +163,6 @@
                 WHERE C.ROLE_NO = 8
               ) A
          JOIN TBL_ROLE_ASSIGNMENT_HISTORY E ON (A.PROJECT_NO = E.PROJECT_NO)
-         
 	<where>         
 		<if test="subsearchCondition == 'projectName'">
              A.PROJECT_NAME LIKE '%' || #{ subsearchValue } || '%'
@@ -174,8 +175,9 @@
 	</where>          
         GROUP BY E.PROJECT_NO
 	</select>
+	
 	<select id="findAllRemovedProjectCount" resultType="_int">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAllRemovedProjectCount() */
                COUNT(*)
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
           JOIN TBL_PROJECT B ON (A.PROJECT_NO = B.PROJECT_NO)
@@ -185,7 +187,7 @@
 	</select> 	
  	
 	<select id="findTeam" resultMap="teamResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findTeam() */
                A.TEAM_CODE
              , A.TEAM_NAME
           FROM TBL_TEAM A
@@ -193,7 +195,7 @@
 	</select>
 	
 	<select id="findTeamMember" resultMap="memberResultMap">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findTeamMember() */
                B.MEMBER_NO
              , B.MEMBER_NAME
           FROM TBL_MEM_TEAM_HISTORY A
@@ -206,7 +208,7 @@
 	</select>
 	
 	<update id="increaseBoardCount">
-        UPDATE 
+        UPDATE /* com.greedy.waterfall.project.model.mapper.ProjectMapper#increaseBoardCount() */ 
                TBL_BOARD A 
            SET A.BOARD_COUNT = (SELECT B.BOARD_COUNT 
                                   FROM TBL_BOARD B 
@@ -216,21 +218,21 @@
 	</update>	
 	
 	<select id="findAllProjectStatus" resultMap="projectStatusResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAllProjectStatus() */
                A.PROJECT_PROGRESS_STATUS_CODE
              , A.PROJECT_PROGRESS_STATUS_NAME
           FROM TBL_PROJECT_STATUS A
 	</select>
 	
 	<select id="findAllDept" resultMap="deptResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAllDept() */
                A.DEPT_CODE
              , A.DEPT_NAME
           FROM TBL_DEPT A
 	</select>
 	
 	<select id="findAllManageProject" resultMap="projectResult">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAllManageProject() */ 
                RNUM
              , A.PROJECT_NO
              , A.PROJECT_NAME
@@ -296,8 +298,10 @@
                ) A
          WHERE RNUM >= #{ startRow }	
 	</select> 
+	
 	<select id="findAllRemovedProject" resultMap="projectResult">
-        SELECT RNUM
+        SELECT  /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findAllRemovedProject() */ 
+               A.RNUM
              , A.PROJECT_NO
              , A.PROJECT_NAME
              , A.PROJECT_START_DATE
@@ -364,7 +368,7 @@
 	</select> 
 	
 	<select id="findManagaProject" resultMap="projectResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findManagaProject() */
                A.RNUM
              , A.PROJECT_NO
              , A.PROJECT_NAME
@@ -435,7 +439,7 @@
 	</select>
  
 	<select id="findJoinProject" resultMap="projectResult">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findJoinProject() */
                RNUM
              , A.PROJECT_NO
              , A.PROJECT_NAME
@@ -507,7 +511,6 @@
                ) A  
          WHERE RNUM >= #{ startRow }
  	</select>
-	
 
 	<insert id="registProject">
 		<selectKey keyProperty="projectNo" resultType="_int" order="AFTER">
@@ -515,7 +518,7 @@
                PROJECT_NO.CURRVAL AS projectNo
           FROM DUAL
 		</selectKey>
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#registProject() */
           INTO TBL_PROJECT A
         (
           A.PROJECT_NO
@@ -539,7 +542,7 @@
 	</insert>
 	
 	<insert id="registEntireHistoryProjectRegist">
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#registEntireHistoryProjectRegist() */
           INTO TBL_ENTIRE_HISTORY A
         (
           A.HISTORY_NO
@@ -560,9 +563,8 @@
         )
 	</insert>
 	
-	
 	<insert id="registProjectHistory">
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#registProjectHistory() */
           INTO TBL_PROJECT_HISTORY A
         (
           A.PROJECT_HISTORY_NO
@@ -588,7 +590,7 @@
 	</insert>
 	
 	<insert id="registPm">
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#registPm() */
           INTO TBL_ROLE_ASSIGNMENT_HISTORY A
         (
           A.ROLE_HISTORY_NO
@@ -607,7 +609,7 @@
         )
 	</insert>
 	<insert id="registMemberProject">
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#registMemberProject() */
           INTO TBL_PROJECT_MEM_HISTORY A
         (
           A.PROJECT_MEM_HISTORY_NO
@@ -629,7 +631,7 @@
 	</insert>
 	
 	<select id="findPmNumber" resultMap="projectAutority">
-        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findPmNumber() */
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findPmNumberfindPmNumber() */
                A.MEMBER_NO
              , B.PROJECT_NO
              , B.PROJECT_NAME
@@ -644,7 +646,7 @@
 	</select> 
  	
 	<select id="findOneProjectInfo" resultMap="registProjectResult">
-        SELECT  /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findOneProjectInfo() */
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findOneProjectInfo() */
                A.PROJECT_NO
              , A.PROJECT_NAME
              , A.PROJECT_START_DATE 
@@ -665,8 +667,9 @@
                                     )
            AND A.PROJECT_NO = #{ projectNo } 
 	</select>
+	
 	<update id="modifyProject" >
-        UPDATE
+        UPDATE /* com.greedy.waterfall.project.model.mapper.ProjectMapper#modifyProject() */
                TBL_PROJECT A
            SET A.PROJECT_NAME = #{ projectName }
              , A.PROJECT_START_DATE = #{ startDate }
@@ -676,18 +679,17 @@
          WHERE A.PROJECT_NO = #{ projectNo }
 	</update>
 	
-	
-	
 	<select id="findMemberInProject" resultType="_int">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findMemberInProject() */ 
                A.MEMBER_NO
           FROM TBL_PROJECT_MEM_HISTORY A
          WHERE A.MEMBER_NO = #{ pmNumber }
            AND A.PROJECT_NO = #{ projectNo }
            AND A.PROJECT_MEM_DROP_DATE = NULL
 	</select>
+	
 	<insert id="joinPmInProject">
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#joinPmInProject() */
           INTO TBL_PROJECT_MEM_HISTORY A
         (
           A.PROJECT_MEM_HISTORY_NO
@@ -709,7 +711,7 @@
 	</insert>
 
 	<insert id="assignPmRole">
-        INSERT
+        INSERT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#assignPmRole() */
           INTO TBL_ROLE_ASSIGNMENT_HISTORY A
         (
           A.MEMBER_NO
@@ -727,34 +729,30 @@
         , #{ adminNo }
         )	
 	</insert>
+	
 	<delete id="kickOldPm">
-        DELETE
+        DELETE /* com.greedy.waterfall.project.model.mapper.ProjectMapper#kickOldPm() */
           FROM TBL_PROJECT_MEM_HISTORY A
          WHERE A.PROJECT_NO = #{ projectNo }
            AND A.MEMBER_NO = #{ pmNumber }
 	</delete>
+	
 	<update id="removeProject">
-        UPDATE
+        UPDATE /* com.greedy.waterfall.project.model.mapper.ProjectMapper#removeProject() */
                TBL_PROJECT A
            SET A.PROJECT_STATUS = 'N'
          WHERE A.PROJECT_NO = #{ projectNo }
 	</update>
 	
 	<update id="restoreProject">
-        UPDATE
+        UPDATE /* com.greedy.waterfall.project.model.mapper.ProjectMapper#restoreProject() */
                TBL_PROJECT A
            SET A.PROJECT_STATUS = 'Y'
          WHERE A.PROJECT_NO = #{ projectNo }
 	</update>
-	<delete id="deleteProject">
-        DELETE
-          FROM TBL_PROJECT A
-         WHERE A.PROJECT_NO = #{ projectNo }
-	</delete>
-	
 	
 	<select id ="findMainBoardList" resultMap="boardResult" parameterType="_int">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findMainBoardList() */ 
                ROWNUM
              , A.BOARD_NO
              , A.BOARD_UPDATED_DATE
@@ -786,7 +784,7 @@
 	</select>
 	
 	<select id="findBoardInfo" resultMap="boardResult">
-        SELECT
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findBoardInfo() */
                A.BOARD_NO
              , A.BOARD_CATEGORY_NO
              , A.BOARD_COUNT
@@ -802,7 +800,7 @@
 	</select>
 	
 	<select id="findProjectMainInfo" resultMap="projectInfoResult">
-        SELECT 
+        SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findProjectMainInfo() */ 
                (SELECT COUNT(*) 
                   FROM TBL_OUTPUT D
                  WHERE D.PROJECT_NO = A.PROJECT_NO
@@ -855,43 +853,9 @@
 	</select>
 	
 	<delete id="projectRoleRemove">
-        DELETE
+        DELETE /* com.greedy.waterfall.project.model.mapper.ProjectMapper#projectRoleRemove() */
           FROM TBL_ROLE_ASSIGNMENT_HISTORY A
          WHERE A.PROJECT_NO = #{ projectNo }
            AND A.MEMBER_NO = #{ pmNumber }
 	</delete>
-	
-	
-	
-	
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

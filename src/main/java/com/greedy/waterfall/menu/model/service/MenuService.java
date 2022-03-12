@@ -5,6 +5,17 @@ import java.util.Map;
 import com.greedy.waterfall.menu.model.dto.MainInfoDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
 
+/**
+ * <pre>
+ * Class : MenuService
+ * Comment : 로그인 후 메인화면에 필요한 정보를 조회하는 메소드를 선언한다.
+ * 
+ * History
+ * 2022. 3. 13.  (홍성원)
+ * </pre>
+ * @version 1
+ * @author 홍성원
+ */
 public interface MenuService {
 	
 	/**
@@ -33,5 +44,4 @@ public interface MenuService {
 	 * @author 홍성원
 	 */
 	public ProjectDTO findJoinProjectInfo(Map<String, Integer> searchMap);
-
 }

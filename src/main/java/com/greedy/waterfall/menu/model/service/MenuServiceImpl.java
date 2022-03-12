@@ -18,7 +18,7 @@ import com.greedy.waterfall.project.model.dto.ProjectDTO;
 /**
  * <pre>
  * Class : MenuServiceImpl
- * Comment : 클래스 설명 작성부분
+ * Comment : 로그인 후 메인화면에 필요한 정보를 조회한다.
  * 
  * History
  * 2022. 3. 4.  (홍성원)
@@ -109,40 +109,3 @@ public class MenuServiceImpl implements MenuService{
 	}
 
 }
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
