@@ -1,7 +1,5 @@
 package com.greedy.waterfall.member.controller;
 
-
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +43,18 @@ import com.greedy.waterfall.member.model.dto.JobDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.member.model.dto.TeamDTO;
 import com.greedy.waterfall.member.model.service.MemberService;
-
+/**
+ * <pre>
+ * Class : MemberController
+ * Comment : 1. 사용자 회원의 로그인 
+ * 			 2. 계정 생성, 계정 목록조회, 계정 수정, 
+ * 			 3. 계정 이메일 발송
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
 @Controller
 @RequestMapping("/member")
 @SessionAttributes("loginMember")
@@ -63,14 +72,26 @@ public class MemberController {
 		this.passwordEncoder = passwordEncoder;
 	}
 	
-	/* 로그인 메인화면 */
+	/**
+	 * login : 로그인 화면
+	 * @param : 로그인 화면 요청
+	 * @return "/member/memberLogin" : 요청화면으로 view 반환 
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("/login")
 	public String login() {
 		
 		return "/member/memberLogin";
 	}
 	
-	/* 관리자 이외 멤버회원 화면 */
+	/**
+	 * login2 : 일반 로그인 메인 멤버회원의 화면
+	 * @param  : 로그인 이후 member회원의 화면 요청
+	 * @return "/main/mainPage" : 멤버회원의 요청화면으로 view 반환 
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("/login2") 
 	public String login2() {
 		
@@ -78,6 +99,13 @@ public class MemberController {
 	}
 	
 	/* 관리자 화면으로 가기 */
+	/**
+	 *  login3 : 로그인 이후 관리자 메인화면 
+	 * @param : 로그인 이후 admin의 화면 요청
+	 * @return "/main/adminMain" : 관리자 요청화면으로 view 반환
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("/login3") 
 	public String login3() {
 		
@@ -85,6 +113,14 @@ public class MemberController {
 	}
 	
 	/* 로그인시 메인화면으로 리다이렉트 한다. */
+	/**
+	 * login : 로그인요청 ID와 PW
+	 * @param member : 요청한 ip,pwd 정보를 MemberDTO클래스에 필드명 정보가 담긴 변수
+	 * @param model : loginMember 세션 키값에 회원정보 담은 변수 
+	 * @return "redirect:/menu/main" : 요청주소로 반환한다.
+	 * 
+	 * @author 김영광
+	 */
 	@PostMapping("/login2")
 	public String login(@ModelAttribute MemberDTO member, Model model) throws LoginFailedException {
 		
@@ -100,6 +136,13 @@ public class MemberController {
 		return "redirect:/menu/main";
 	}
 		
+	/**
+	 * logout : 세션에서 로그인정보를 없앤다. 로그인 페이지를 요청한다.
+	 * @param sessionStatus : 세션만료를 위한 변수   
+	 * @return "redirect:/member/login" : 로그인화면으로 view 반환
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("logout")
 	public String logout(SessionStatus sessionStatus) {
 	
@@ -108,6 +151,13 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 	
+	/**
+	 * findAdminMemberList : 조회한 계정 목록전체를 view로 전달하는 메소드
+	 * @param request : 계정 목록에 현재 페이지, 검색, 요청을 전달 받는다.  
+	 * @return mv("member/memberList") : 계정 목록, 검색 결과 요청주소를 담아 반환한다. 
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("list")
 	public ModelAndView findAdminMemberList(HttpServletRequest request ,ModelAndView mv) {
 		
@@ -149,6 +199,13 @@ public class MemberController {
 		return mv;
 	}
 	
+	/**
+	 * regist : 계정 생성에서 사용되는 selectBox의 부서,직급 리스트 목록을 전달해주는 메소드
+	 * @param : 계정 생성에서  부서,직급으로 쓸 리스트 목록을 요청
+	 * @return mv("member/memberRegist") : 부서, 직급 목록 리스트를 담아 지정한 view의 주소 반환
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("regist")
 	public ModelAndView regist(ModelAndView mv) {
 		
@@ -164,9 +221,16 @@ public class MemberController {
 		return mv;
 	}
 	
+	/**
+	 * findTeam : 계정생성에 selectBox에서 1-depth(부서)에 따른 2-depth(팀)을 보여줄 리스트 목록을 view로 전달해주는 메소드
+	 * @param Pathvariable(deptCode) : 1-depth(부서)에 따른 2-depth(팀)을 보여줄 리스트 목록을 요청함 
+	 * @return mv("jsonView") : 요청한 jsonview로 반환  
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("regist2/{deptCode}")
-	/* @ResponseBody */
-	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,HttpServletResponse response) throws JsonProcessingException {
+	public ModelAndView findTeam(ModelAndView mv, @PathVariable("deptCode") String deptCode ,
+			HttpServletResponse response) throws JsonProcessingException {
 		
 		List<TeamDTO> teamList = memberService.findTeamList(deptCode);
 		
@@ -179,8 +243,16 @@ public class MemberController {
 		return mv;                                                                                            	
 	}                                                                     										
 																													
+	/**
+	 * registMember : 계정 정보를 등록한다.
+	 * @param RequestParam : 이름, 부서, 팀, 직급 정보 담고있는 map 
+	 * @param rttr : 등록 성공시 출력할 메세지 
+	 * @return mv("redirect:/member/regist") : 요청 주소값을 반환
+	 * 
+	 * @author 김영광
+	 */
 	@PostMapping("/regist3")                                                                                	
-	public ModelAndView registMember(ModelAndView mv, @RequestParam Map<String, String> parameter, HttpServletRequest request,
+	public ModelAndView registMember(ModelAndView mv, @RequestParam Map<String, String> parameter,
 			RedirectAttributes rttr) throws MemberRegistException {       																	
 	
 		String name = parameter.get("name");
@@ -212,6 +284,13 @@ public class MemberController {
 		return mv;                                                                                      					
 	}
 	
+	/**
+	 * findMemberModify : 계정목록 중 수정할 계정 정보를 조회 후 전달해주는 메소드 
+	 * @param request : 선택한 계정 id의 정보를 조회하기 위한  변수 
+	 * @return mv("jsonView") : 조회한 해당 계정의 정보와 요청 url 정보를 담고있는 ModelAndView변수 반환 
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping(value="modify")
 	@ResponseBody
 	public ModelAndView findMemberModify(HttpServletRequest request, HttpServletResponse response,
@@ -238,6 +317,14 @@ public class MemberController {
 		return mv;
 	}
 	
+	/**
+	 * memberModify : 수정할 아이디, 이름, 부서, 팀, 직급을 등록한다. 
+	 * @param parameter : 수정할 아이디, 이름, 부서, 팀 , 직급을 담고있는 변수
+	 * @param rttr : 수정의 성공한 메세지를 담고있다.
+	 * @return mv("redirect:/member/list") : 요청 주소값을 반환
+	 * 
+	 * @author 김영광
+	 */
 	@PostMapping("/memberModify")
 	public ModelAndView memberModify(ModelAndView mv, @RequestParam Map<String, String> parameter, RedirectAttributes rttr) {
 		
@@ -274,6 +361,14 @@ public class MemberController {
 		return mv;
 	}
 	
+	/**
+	 * removeMember : 선택된 계정을 삭제한다.
+	 * @param request : 선택된 계정에 아이디를 담고있는 변수
+	 * @param rttr : 삭제 성공 메세지가 담겨 있는 변수 
+	 * @return mv("redirect:/member/list") : 요청 주소를 담은 변수를 반환한다. 
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("/delete")
 	public ModelAndView removeMember(ModelAndView mv, HttpServletRequest request, RedirectAttributes rttr) {
 		
@@ -290,7 +385,14 @@ public class MemberController {
 		return mv;
 	}
 	
-	/* 이메일 인증 */
+	
+	/**
+	 * mailCheckGET : 이메일 인증번호를 랜덤하게 생성하고 mailSender를 통해 메일을 보내는 메소드  
+	 * @param email : 이메일 정보를 담고 있는 변수
+	 * @return num : 인증번호를 담아있는 변수를 반환 
+	 * 
+	 * @author 김영광
+	 */
 	@RequestMapping(value="/mailCheck", method=RequestMethod.GET)
 	@ResponseBody
 	public String mailCheckGET(String email) {
@@ -299,7 +401,7 @@ public class MemberController {
 		
 		int checkNum = random.nextInt(888888) + 111111; //111111~999999 범위
 
-		/* 이메일 보내기 */
+		
 		String setFrom = "zxcv4097@naver.com";
 		String toMail = email;
 		String title = "회원가입 인증 이메일 입니다.";
@@ -317,9 +419,11 @@ public class MemberController {
 		  helper.setFrom(setFrom); helper.setTo(toMail); helper.setSubject(title);
 		  helper.setText(content,true); mailSender.send(message);
 		  
-		  }catch(Exception e) { e.printStackTrace(); }
+		  }catch(Exception e) { 
+			  e.printStackTrace();   
+		  }
 		 		
-		String num = Integer.toString(checkNum); //인증번호 형 변환
+		String num = Integer.toString(checkNum); 
 		
 		return num;
 	}
