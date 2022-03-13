@@ -10,6 +10,17 @@ import com.greedy.waterfall.common.exception.board.BoardRegistException;
 import com.greedy.waterfall.common.exception.board.BoardRemoveException;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 
+/**
+ * <pre>
+ * Class : EduService
+ * Comment : 서비스 트랜젝션 담당 인터페이스
+ * 
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
 public interface EduService {
 
 	int selectTotalCount(Map<Object, Object> searchMap); 

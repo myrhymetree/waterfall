@@ -1,60 +1,35 @@
 package com.greedy.waterfall.member.model.dto;
 
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+/**
+ * <pre>
+ * Class : DeptJobDTO
+ * Comment : 부서와 직급을 담을 정보
+ * 관련 테이블 : TBL_DEPT, TBL_TEAM
+ * 
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
 public class DeptJobDTO {
 
-	private String deptCode;	
-	private String deptName;
-	private String jobCode;
-	private String jobName;
-	
-	public DeptJobDTO() {}
-
-	public DeptJobDTO(String deptCode, String deptName, String jobCode, String jobName) {
-		super();
-		this.deptCode = deptCode;
-		this.deptName = deptName;
-		this.jobCode = jobCode;
-		this.jobName = jobName;
-	}
-
-	public String getDeptCode() {
-		return deptCode;
-	}
-
-	public void setDeptCode(String deptCode) {
-		this.deptCode = deptCode;
-	}
-
-	public String getDeptName() {
-		return deptName;
-	}
-
-	public void setDeptName(String deptName) {
-		this.deptName = deptName;
-	}
-
-	public String getJobCode() {
-		return jobCode;
-	}
-
-	public void setJobCode(String jobCode) {
-		this.jobCode = jobCode;
-	}
-
-	public String getJobName() {
-		return jobName;
-	}
-
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
-	}
-
-	@Override
-	public String toString() {
-		return "DeptJobDTO [deptCode=" + deptCode + ", deptName=" + deptName + ", jobCode=" + jobCode + ", jobName="
-				+ jobName + "]";
-	}
-	
-	
-	
+	private String deptCode;		//부서코드
+	private String deptName;		//부서이름
+	private String jobCode;			//직급코드
+	private String jobName;			//직급이름
+			
 }

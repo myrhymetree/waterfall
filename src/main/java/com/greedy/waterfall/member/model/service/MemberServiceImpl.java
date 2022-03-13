@@ -18,6 +18,18 @@ import com.greedy.waterfall.member.model.dto.JobDTO;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.member.model.dto.TeamDTO;
 
+/**
+ * <pre>
+ * Class : MemberServiceImpl
+ * Comment : 회원의 로그인을 위한 비밀번호 비교, 회원의 정보 수정(핸드폰, 이메일, 비밀번호변경), 
+ * 관리자의 계정 목록 리스트 , 수정(부서,직급,팀), 삭제 
+ * 
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -30,8 +42,13 @@ public class MemberServiceImpl implements MemberService {
 		this.passwordEncoder = passwordEncoder;
 	}
 	
-	
-	/* 회원 로그인용 메소드 */
+	/**
+	 * findMember : 로그인 시 데이터테이블에 있는 비밀번호와 입력한 비밀번호를 비교하는 메소드
+	 * @param member : 요청한 ip,pwd 정보를 MemberDTO클래스에 필드명 정보가 담긴 변수
+	 * @return mapper.selectMember(member) : 요청한 아이디로부터 받아올 회원정보다 담길 member변수
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public MemberDTO findMember(MemberDTO member) throws LoginFailedException {
 //		if(!passwordEncoder.matches(member.getPwd(), mapper.selectEncryptedPwd(member))) {
@@ -42,24 +59,29 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	/**
+	 * findAdminMember : 계정 목록 리스트를 매퍼에 요청 후 컨트롤러에 전달해준 메소드  
+	 * @param selectCriteria : 페이징과 검색을 위한 매개변수
+	 * @return adminMemberList : 요청 받은 정보를 담고 컨트롤러에 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public List<AdminMemberDTO> findAdminMember(SelectCriteria selectCriteria) {
 		
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
-		System.out.println("확인용 서치" + " " + selectCriteria);
 		List<AdminMemberDTO> adminMemberList = mapper.findAdminMemberList(selectCriteria);
 		
 		return adminMemberList;
 	}
 
 
+	/**
+	 * selectTotalCount : 회원인원 총 수를 요청 후 반환하기 위한 메소드 
+	 * @param searchMap : 검색 내용 정보를 담은 매개변수
+	 * @return result : 결과의 대한 회원 수를 컨트롤러에 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public int selectTotalCount(Map<String, String> searchMap) {
 		int result = mapper.selectTotalCount(searchMap);
@@ -67,7 +89,13 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
-
+	/**
+	 * findDeptJobService : 부서와 직급을 목록을 요청 후 컨트롤러에 반환하는 메소드
+	 * @param : 부서 목로과 직급 목록을 요청
+	 * @return allList : 부서와 직급의 목록을 담아 컨트롤러에 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public Map<String, Object> findDeptJobService() {
 
@@ -80,14 +108,27 @@ public class MemberServiceImpl implements MemberService {
 		
 	    return allList;
 	}
-
+	
+	/**
+	 * findTeamList : 부서에 코드의 따른 팀을 목록을 담아 컨트롤러에 반환해줄 메소드 
+	 * @param deptCode : 선택한 부서코드 정보가 들어있는 매개변수
+	 * @return mapper.findTeamList(deptCode) : 부서코드에 따른 팀 목록을 정보를 담고 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public List<TeamDTO> findTeamList(String deptCode) {
 
 		return mapper.findTeamList(deptCode);
 	}
 
-
+	/**
+	 * adminMemberRegist : 입력한 회원 정보를 insert요청하고 결과를 반환받는 메소드    
+	 * @param adminMember : 입력한 회원정보가 들어있는 매개변수
+	 * @return : member 컨트롤러로 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public void adminMemberRegist(AdminMemberDTO adminMember) throws MemberRegistException {
 		
@@ -98,29 +139,27 @@ public class MemberServiceImpl implements MemberService {
 		int memberResult = mapper.memberRegist(adminMember);
 		
 		if(adminResult < 0 || deptResult < 0 || teamResult < 0 || jobResult < 0 || memberResult < 0) {
-			throw new MemberRegistException("게시글 등록에 실패하셨습니다.");
+			throw new MemberRegistException("회원 등록에 실패하셨습니다.");
 		}
 	}
 
-
+	/**
+	 * findMemberModify : 선택한 회원에 정보를 출력할 정보를 조회한다.    
+	 * @param id : 조회할 아이디 정보가 있는 매개변수
+	 * @return findModify : 조회한 아이디 정보를 반환한다. 
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public AdminMemberDTO findMemberModify(String id) {
-		
-		System.out.println("확인용33" + id);
-		System.out.println("확인용33" + id);
-		System.out.println("확인용33" + id);
 		
 		AdminMemberDTO findModify = new AdminMemberDTO();
 		
 		findModify = mapper.adminMemberModify(id);
 		List<DeptDTO> deptList = mapper.adminDeptMember();
-		System.out.println("확인용44" + deptList);
 		List<TeamDTO> teamList = mapper.adminTeamMember();
-		System.out.println("확인용55" + teamList);
 		List<JobDTO> jobList = mapper.adminJobMember();
-		System.out.println("확인용66" + jobList);
-		
-		
+			
 		findModify.setDeptList(deptList);
 		findModify.setTeamList(teamList);
 		findModify.setJobList(jobList);
@@ -128,47 +167,60 @@ public class MemberServiceImpl implements MemberService {
 		return findModify;
 	}
 	
-
+	/**
+	 * memberModify : 변경한 회원정보를 성공여부를 반환하는 메소드이다.   
+	 * @param adminMember : 수정할 회원정보가 있는 매개변수
+	 * @return : 요청에 따른 결과를 반환한다.
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public void memberModify(AdminMemberDTO adminMember) {
-		System.out.println("실행 첫번째 성공");
+		
 		int adminMemberResult = mapper.adminMember(adminMember);
-		System.out.println("실행 두번째 성공");
-		System.out.println("실행 두번쨰 " + "" + adminMember.getNo());
 		int deptResult = mapper.adminDept(adminMember);
-		System.out.println("실행 세번째 성공");
-		System.out.println("실행 세번째 " + "" + adminMember.getNo());
 		int teamResult = mapper.adminTeam(adminMember);
-		System.out.println("실행 네번째 " + "" + adminMember.getNo());
 		int jobResult = mapper.adminJob(adminMember);
 		int memberResult = mapper.oneMember(adminMember);
 		
-		
 	}
 
-
+	/**
+	 * removeMember : 관리자가 선택한 아이디 정보를 삭제한다.  
+	 * @param id : 삭제할 아이디를 전달받는다.
+	 * @return : 삭제 요청 후 결과를 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public void removeMember(String id) {
 
 		int MemberResult = mapper.removeMember(id);
-		System.out.println("memberResult" + "" + MemberResult);
 		int MemberInfoResult = mapper.removeMemberInfo(id);
-		System.out.println("MemberInfoResult" + "" + MemberInfoResult);
+		
 	}
 
-
+	/**
+	 * pwCheck : 해당 아이디의 비밀번호를 조회하여 반환하는 메소드
+	 * @param id : 요청할 비밀번호를 찾기위한 아이디
+	 * @return : 해당 아이디의 비밀번호를 반환한다.
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public String pwCheck(String id) {
 		
-//		if(!passwordEncoder.matches(member.getPwd(), mapper.selectEncryptedPwd(member))) {
-//			int result = 0;	
-//			return result;
-//		}
-		System.out.println("확인3번째" + id);
 		return mapper.selectOne(id);
 	}
 
-
+	/**
+	 * pwUpdate : 비밀번호 변경을 위한 메소드
+	 * @param id : 요청한 아이디의 비밀번호를 바꾸기 위한 변수
+	 * @param hashedPw : 암호화된 변경할 비밀번호 업데이트 하기위한 변수
+	 * @return : 해당 아이디의 따른 비밀번호 변경 후 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public void pwUpdate(String id, String hashedPw) {
 
@@ -179,15 +231,20 @@ public class MemberServiceImpl implements MemberService {
 		mapper.pwUpdate(map);
 	}
 
-
+	/**
+	 * memberInfo : 회원의 이메일과 핸드폰번호를 insert하기 위한 메소드
+	 * @param member : 회원의 이메일과 핸드폰 번호 정보가 저장되어있는 매개변수
+	 * @return : 등록 후 결과를 반환
+	 * 
+	 * @author 김영광
+	 */
 	@Override
 	public void memberInfo(MemberDTO member) {
 
 		mapper.memberInfoUpdate(member);
-		System.out.println("성공 " + member);
 		mapper.memberInfoPhone(member);
-		System.out.println("성공 2번째 "+ ":" + member);
 		mapper.memberInfoEmail(member);
+		
 	}
 
 
