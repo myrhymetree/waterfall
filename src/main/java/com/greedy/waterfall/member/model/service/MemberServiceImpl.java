@@ -51,9 +51,9 @@ public class MemberServiceImpl implements MemberService {
 	 */
 	@Override
 	public MemberDTO findMember(MemberDTO member) throws LoginFailedException {
-//		if(!passwordEncoder.matches(member.getPwd(), mapper.selectEncryptedPwd(member))) {
-//			  throw new LoginFailedException("로그인 실패");
-//		}
+		if(!passwordEncoder.matches(member.getPwd(), mapper.selectEncryptedPwd(member))) {
+			  throw new LoginFailedException("로그인 실패");
+		}
 		
 		return mapper.selectMember(member);
 	}

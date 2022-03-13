@@ -93,5 +93,8 @@
 					  com.greedy.waterfall.history.model.mapper"/>
 	
 	 <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
-
+	
+	 <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+     	<property name="defaultErrorView" value="error/default"/>
+     </bean>
 </beans>
