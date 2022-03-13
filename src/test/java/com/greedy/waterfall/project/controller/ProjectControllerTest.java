@@ -1,13 +1,9 @@
 package com.greedy.waterfall.project.controller;
 
-import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,10 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.greedy.waterfall.board.controller.MeetingController;
-import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
 import com.greedy.waterfall.project.model.service.ProjectService;
 
 
@@ -47,9 +40,9 @@ public class ProjectControllerTest implements ProjectControllerView {
     
     @Test
     public void testSendRegistPage() throws Exception {
-        mvc.perform(get("/regist"))
+        mvc.perform(get("/project/regist"))
         	.andExpect(forwardedUrl(PROJECT_REGIST_VIEW))
-        	.andExpect(model().size(2))
+        	.andExpect(model().size(3))
         	.andExpect(model().attributeExists("statusList"))
         	.andDo(print());
     }
