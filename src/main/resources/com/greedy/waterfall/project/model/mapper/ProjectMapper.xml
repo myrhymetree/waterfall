@@ -24,6 +24,7 @@
 		<result property="deadLine" column="PROJECT_DEADLINE"/>
 		<result property="pmNumber" column="MEMBER_NO"/>
 		<result property="pmName" column="MEMBER_NAME"/>
+		<result property="pmStatus" column="MEMBER_STATUS"/>
 		<result property="projectStatusCode" column="PROJECT_PROGRESS_STATUS_CODE"/>
 		<result property="projectStatusName" column="PROJECT_PROGRESS_STATUS_NAME"/>
 		<result property="progression" column="PROJECT_PROGRESSION"/>
@@ -34,6 +35,7 @@
 	
 	<resultMap type="com.greedy.waterfall.board.model.dto.MeetingMemberDTO" id="memberResult">
 		<result property="memberName" column="MEMBER_NAME"/>
+		<result property="memberStatus" column="MEMBER_STATUS"/>
 	</resultMap>
 
 	<resultMap type="com.greedy.waterfall.project.model.dto.DeptDTO" id="deptResult">
@@ -198,13 +200,9 @@
         SELECT /* com.greedy.waterfall.project.model.mapper.ProjectMapper#findTeamMember() */
                B.MEMBER_NO
              , B.MEMBER_NAME
-          FROM TBL_MEM_TEAM_HISTORY A
+          FROM TBL_MEMBER_COM_INFO A
           JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-         WHERE A.TEAM_UPDATED_NAME = #{ teamCode }
-           AND A.TEAM_MEM_HISTORY_NO IN (SELECT MAX(C.TEAM_MEM_HISTORY_NO)
-                                           FROM TBL_MEM_TEAM_HISTORY C
-                                          GROUP BY C.MEMBER_NO
-                                          )
+         WHERE A.TEAM_CODE = #{ teamCode }
 	</select>
 	
 	<update id="increaseBoardCount">
@@ -243,6 +241,7 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , A.MEMBER_STATUS
              , (SELECT COUNT(*)
                   FROM TBL_ISSUE F
                  WHERE F.PROJECT_NO = A.PROJECT_NO
@@ -268,6 +267,7 @@
                      , B.PROJECT_COMPLETED_DATE
                      , B.PROJECT_PROGRESS_STATUS_CODE
                      , B.MEMBER_NAME
+                     , B.MEMBER_STATUS
                   FROM (SELECT C.PROJECT_NO
                              , C.PROJECT_NAME
                              , C.PROJECT_START_DATE
@@ -277,6 +277,7 @@
                              , C.PROJECT_COMPLETED_DATE
                              , C.PROJECT_PROGRESS_STATUS_CODE
                              , E.MEMBER_NAME
+                             , E.MEMBER_STATUS
                           FROM TBL_PROJECT C
                           JOIN TBL_ROLE_ASSIGNMENT_HISTORY D ON (C.PROJECT_NO = D.PROJECT_NO)
                           JOIN TBL_MEMBER E ON(D.MEMBER_NO = E.MEMBER_NO)
@@ -311,6 +312,7 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , A.MEMBER_STATUS
              , (SELECT COUNT(*)
                   FROM TBL_ISSUE F
                  WHERE F.PROJECT_NO = A.PROJECT_NO
@@ -336,6 +338,7 @@
                      , B.PROJECT_COMPLETED_DATE
                      , B.PROJECT_PROGRESS_STATUS_CODE
                      , B.MEMBER_NAME
+                     , B.MEMBER_STATUS
                   FROM (SELECT C.PROJECT_NO
                              , C.PROJECT_NAME
                              , C.PROJECT_START_DATE
@@ -345,6 +348,7 @@
                              , C.PROJECT_COMPLETED_DATE
                              , C.PROJECT_PROGRESS_STATUS_CODE
                              , E.MEMBER_NAME
+                             , E.MEMBER_STATUS
                           FROM TBL_PROJECT C
                           JOIN TBL_ROLE_ASSIGNMENT_HISTORY D ON (C.PROJECT_NO = D.PROJECT_NO)
                           JOIN TBL_MEMBER E ON(D.MEMBER_NO = E.MEMBER_NO)
@@ -379,6 +383,7 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , A.MEMBER_STATUS
              , (SELECT COUNT(*)
                   FROM TBL_ISSUE F
                  WHERE F.PROJECT_NO = A.PROJECT_NO
@@ -404,6 +409,7 @@
                      , B.PROJECT_COMPLETED_DATE
                      , B.PROJECT_PROGRESS_STATUS_CODE
                      , B.MEMBER_NAME
+                     , B.MEMBER_STATUS
                   FROM (SELECT C.PROJECT_NO
                              , C.PROJECT_NAME
                              , C.PROJECT_START_DATE
@@ -413,6 +419,7 @@
                              , C.PROJECT_COMPLETED_DATE
                              , C.PROJECT_PROGRESS_STATUS_CODE
                              , E.MEMBER_NAME
+                             , E.MEMBER_STATUS
                           FROM TBL_PROJECT C
                           JOIN TBL_ROLE_ASSIGNMENT_HISTORY D ON (C.PROJECT_NO = D.PROJECT_NO)
                           JOIN TBL_MEMBER E ON(D.MEMBER_NO = E.MEMBER_NO)
@@ -450,6 +457,7 @@
              , A.PROJECT_COMPLETED_DATE
              , A.PROJECT_PROGRESS_STATUS_CODE
              , A.MEMBER_NAME
+             , A.MEMBER_STATUS
              , (SELECT COUNT(*)
                   FROM TBL_ISSUE F
                  WHERE F.PROJECT_NO = A.PROJECT_NO
@@ -475,6 +483,7 @@
                      , B.PROJECT_COMPLETED_DATE
                      , B.PROJECT_PROGRESS_STATUS_CODE
                      , B.MEMBER_NAME
+                     , B.MEMBER_STATUS
                   FROM (SELECT D.PROJECT_NO
                              , D.PROJECT_NAME
                              , D.PROJECT_START_DATE
@@ -484,6 +493,7 @@
                              , D.PROJECT_COMPLETED_DATE
                              , D.PROJECT_PROGRESS_STATUS_CODE
                              , E.MEMBER_NAME
+                             , E.MEMBER_STATUS
                           FROM TBL_PROJECT_MEM_HISTORY C
                           JOIN TBL_PROJECT D ON (C.PROJECT_NO = D.PROJECT_NO)
                           JOIN TBL_MEMBER E ON (C.MEMBER_NO = E.MEMBER_NO)
@@ -656,6 +666,7 @@
              , A.PROJECT_PROGRESSION
              , C.MEMBER_NO
              , C.MEMBER_NAME
+             , C.MEMBER_STATUS
           FROM TBL_PROJECT A
           JOIN TBL_ROLE_ASSIGNMENT_HISTORY B ON (A.PROJECT_NO = B.PROJECT_NO)
           JOIN TBL_MEMBER C ON (B.MEMBER_NO = C.MEMBER_NO)

@@ -26,4 +26,5 @@ public class MeetingMemberDTO {
 
 	private int memberNo;			//게시물 등록자의 번호를 저장
 	private String memberName;		//게시물 등록자의 이름을 저장
+	private String memberStatus;		//게시물 등록자의 이름을 저장
 }

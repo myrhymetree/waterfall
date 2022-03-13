@@ -156,13 +156,9 @@
         SELECT /* com.greedy.waterfall.project.model.mapper.ProjectManageMapper#findNewMember() */
                B.MEMBER_NO
              , B.MEMBER_NAME
-          FROM TBL_MEM_TEAM_HISTORY A
+          FROM TBL_MEMBER_COM_INFO A
           JOIN TBL_MEMBER B ON (A.MEMBER_NO = B.MEMBER_NO)
-         WHERE A.TEAM_UPDATED_NAME = #{ teamCode }
-           AND A.TEAM_MEM_HISTORY_NO IN (SELECT MAX(C.TEAM_MEM_HISTORY_NO)
-                                           FROM TBL_MEM_TEAM_HISTORY C
-                                          GROUP BY C.MEMBER_NO
-                                          )
+         WHERE A.TEAM_CODE = #{ teamCode }
            AND B.MEMBER_NO NOT IN (SELECT C.MEMBER_NO
                                      FROM TBL_PROJECT_MEM_HISTORY C
                                     WHERE C.PROJECT_NO = TO_NUMBER(#{ projectNo })

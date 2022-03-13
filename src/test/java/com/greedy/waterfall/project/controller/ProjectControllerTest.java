@@ -9,12 +9,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.greedy.waterfall.board.controller.MeetingController;
 import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
 import com.greedy.waterfall.project.model.service.ProjectService;
 
@@ -26,31 +29,27 @@ import com.greedy.waterfall.project.model.service.ProjectService;
         "classpath:mybatis/mybatis-config.xml"
 })
 @WebAppConfiguration
-public class ProjectControllerTest {
+public class ProjectControllerTest implements ProjectControllerView {
 
     @Autowired 
-    ProjectService service;
+    @Qualifier("stubProjectService")
+    private ProjectService service;
     private MockMvc mvc;
-    private RegistProjectDTO project;
     
     @Before
 	public void setUp() throws Exception {
-		
-		project = new RegistProjectDTO().builder()
-                .projectName("테스트코드작성")
-                .startDate(java.sql.Date.valueOf("2012-03-15"))
-                .deadLine(java.sql.Date.valueOf("2012-03-16"))
-                .pmNumber(43)
-                .projectStatusCode("PROGRESSING")
-                .progression(1)
-                .adminNo(1)
-                .build(); 
+		mvc = MockMvcBuilders.standaloneSetup(new ProjectController(service)).build();
 		
 	}
     
+    /**
+     * controller_test_test : sendRegistPage() 테스트 메소드.
+     * 요청 url과 반환값을 확인한다.
+     *  
+     * @author 홍성원
+     */
     @Test
-    @Transactional
-    public void controller_test_test() throws Exception {
+    public void sendRegistPage_test() throws Exception {
         this.mvc.perform(
                 post("/project/regist")
                 .param("projectName", "테스트코드작성")
@@ -68,77 +67,76 @@ public class ProjectControllerTest {
 
 	@Test
 	public void testProjectController() {
-		fail("Not yet implemented");
 	}
 
 	@Test
 	public void testSendRegistPage() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testRegistProject() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testSendManageProjectList() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testFindManageProjectList() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testFindProjectList() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testFindTeam() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testFindProjectMainBoard() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testFindTeamMember() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testFindProjectDetail() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testModifyProject() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testSendProjectDetail() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testRemoveProject() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testRestoreProject() {
-		fail("Not yet implemented");
+		 
 	}
 
 	@Test
 	public void testDeleteProject() {
-		fail("Not yet implemented");
+		 
 	}
 
 }

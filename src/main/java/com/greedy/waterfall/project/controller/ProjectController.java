@@ -59,7 +59,7 @@ import com.greedy.waterfall.project.model.service.ProjectService;
 @Controller
 @RequestMapping("/project/*")
 @SessionAttributes("projectAutority")
-public class ProjectController {
+public class ProjectController implements ProjectControllerView {
 	private final ProjectService projectService;
 	
 	@Autowired
@@ -84,7 +84,7 @@ public class ProjectController {
 		/* 조회한 목록들을 ModelAndView에 저장하고, 프로젝트 생성 페이지로 forwarding한다. */
 		mv.addObject("statusList", statusList);
 		mv.addObject("deptList", deptList);
-		mv.setViewName("/project/projectRegist");
+		mv.setViewName(PROJECT_REGIST_VIEW);
 		
 		return mv;
 	}
@@ -104,7 +104,7 @@ public class ProjectController {
 			message = "프로젝트 생성 성공!";
 		} 
 		rttr.addFlashAttribute("message", message);
-		mv.setViewName("redirect:managelist");
+		mv.setViewName(REDIRECT_MANAGE_VIEW);
 		
 		return mv;
 	}
@@ -117,7 +117,7 @@ public class ProjectController {
 	@GetMapping("/manage")
 	public ModelAndView sendManageProjectList() {
 		
-		return new ModelAndView("redirect:/project/managelist");
+		return new ModelAndView(REDIRECT_MANAGE_VIEW);
 	}
 	
 	/**
@@ -162,7 +162,7 @@ public class ProjectController {
 		mv.addObject("manageProject", manageProject);
 		mv.addObject("removedProject", removedProject);
 		mv.addObject("intent", "/project/managelist");
-		mv.setViewName("/project/projectManage");
+		mv.setViewName(PROJECT_MANAGE_VIEW);
 		return mv;
 	}
 	
@@ -206,7 +206,7 @@ public class ProjectController {
 		mv.addObject("subselectCriteria", project.getSubselectCriteria());
 		mv.addObject("projectList", project);
 		mv.addObject("intent", "/project/list");
-		mv.setViewName("/project/projectList");
+		mv.setViewName(PROJECT_MANAGE_VIEW);
 
 		return mv;
 	}
@@ -226,7 +226,7 @@ public class ProjectController {
 
 		response.setContentType("application/json; charset=UTF-8");
 		mv.addObject("teamList", mapper.writeValueAsString(teamList));
-		mv.setViewName("jsonView");
+		mv.setViewName(JSON_VIEW);
 		
 		return mv;
 	}
@@ -247,7 +247,7 @@ public class ProjectController {
 		/* 조회한 게시글의 상세정보를 반환한다. */
 		response.setContentType("application/json; charset=UTF-8");
 		mv.addObject("board", mapper.writeValueAsString(boardInfo));
-		mv.setViewName("jsonView");
+		mv.setViewName(JSON_VIEW);
 		
 		return mv;
 	}
@@ -268,7 +268,7 @@ public class ProjectController {
 		/* 조회한 개발자 목록을 반환한다. */
 		response.setContentType("application/json; charset=UTF-8");
 		mv.addObject("memberList", mapper.writeValueAsString(memberList));
-		mv.setViewName("jsonView");
+		mv.setViewName(JSON_VIEW);
 		return mv;
 	}
 	
@@ -294,7 +294,7 @@ public class ProjectController {
 		mv.addObject("statusList", statusList);
 		mv.addObject("deptList", deptList);
 		mv.addObject("projectInfo", projectInfo);
-		mv.setViewName("/project/projectModify");
+		mv.setViewName(REDIRECT_MANAGE_VIEW);
 		return mv;
 	}
 	
@@ -313,7 +313,7 @@ public class ProjectController {
 			message = "프로젝트를 수정했습니다.";
 		} 
 		rttr.addFlashAttribute("message", message);
-		mv.setViewName("redirect:managelist");
+		mv.setViewName(REDIRECT_MANAGE_VIEW);
 		
 		return mv;
 	}
@@ -341,7 +341,7 @@ public class ProjectController {
 		mv.addObject("projectInfo", mapper.writeValueAsString(projectInfo));
 		mv.addObject("projectBoard", projectBoard);
 		mv.addObject("projectAutority", projectAutority);
-		mv.setViewName("/project/projectMain");
+		mv.setViewName(PROJECT_MAIN_VIEW);
 		
 		return mv;
 	}
@@ -367,7 +367,7 @@ public class ProjectController {
 			message = "삭제에 성공했습니다.";
 		}
 		rttr.addFlashAttribute("message", message);
-		mv.setViewName("redirect:/project/managelist");
+		mv.setViewName(REDIRECT_MANAGE_VIEW);
 
 		return mv;
 	}
@@ -392,7 +392,7 @@ public class ProjectController {
 			message = "프로젝트 복구 성공.";
 		}
 		rttr.addFlashAttribute("message", message);
-		mv.setViewName("redirect:/project/managelist");
+		mv.setViewName(REDIRECT_MANAGE_VIEW);
 
 		return mv;
 	}

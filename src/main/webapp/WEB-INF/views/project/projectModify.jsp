@@ -24,7 +24,7 @@
 				<div class="card-header col" style="width: 100%">
 					<label style="width: 15%;">프로젝트 수정</label>
 					<span style="display:inline-block; width: 80%; margin-left: 2em; text-align: right;">
-						<button class="btn-dark" style="width: 80px; height: 40px;">취소</button>
+						<input type="button" id="backtolist" class="btn-dark" style="width: 80px; height: 40px;" value="취소">
 						<input type="submit" class="btn-dark" style="width: 80px; height: 40px;" value="수정">
 					</span>
 				</div>
@@ -104,6 +104,10 @@
 	$("#projectStatus").on("change", function() {
 		
 		$("#projectStatusName").val($("#projectStatus option:selected").text());
+	});
+	
+	$("#backtolist").on("click", function() {
+		location.href = "${ pageContext.servletContext.contextPath }/project/manage";
 	});
 	
 	$("#save-pm").on("click", function() {

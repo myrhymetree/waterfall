@@ -217,8 +217,12 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Override
 	public RegistProjectDTO findOneProjectInfo(int projectNo) {
-
-		return mapper.findOneProjectInfo(projectNo);
+		RegistProjectDTO project = mapper.findOneProjectInfo(projectNo);
+		if("N".equals(project.getPmStatus())) {
+			project.setPmName("미지정");
+		}
+		
+		return project;
 	}
 
 	/**

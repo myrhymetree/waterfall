@@ -86,7 +86,14 @@
 							<c:forEach var="project" items="${ projectList.manageProject }">
 								<tr>
 									<td><c:out value="${ project.name}" /></td>
-									<td><c:out value="${ project.member.memberName}" /></td>
+									<td>
+										<c:if test="${ project.member.memberStatus eq 'Y' }">
+											<c:out value="${ project.member.memberName}" />
+										</c:if>
+										<c:if test="${ project.member.memberStatus eq 'N' }">
+											미지정
+										</c:if>
+									</td>
 									<td><c:out value="${ project.progression }" /></td>
 									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
 									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>
@@ -151,8 +158,15 @@
 						<tbody>
 							<c:forEach var="project" items="${ projectList.joinProject }">
 								<tr>
-									<td><c:out value="${ project.name}" /></td>
-									<td><c:out value="${ project.member.memberName}" /></td>
+									<td><c:out value="${ project.name}" />
+									<td>
+										<c:if test="${ project.member.memberStatus eq 'Y' }">
+											<c:out value="${ project.member.memberName}" />
+										</c:if>
+										<c:if test="${ project.member.memberStatus eq 'N' }">
+											미지정
+										</c:if>
+									</td>
 									<td><c:out value="${ project.progression }" /></td>
 									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
 									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>

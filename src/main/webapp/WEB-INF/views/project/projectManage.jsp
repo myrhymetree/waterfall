@@ -86,10 +86,17 @@
 						<c:forEach var="project" items="${ manageProject }">
 							<tr>
 								<td><c:out value="${ project.name}" /></td>
-								<td><c:out value="${ project.member.memberName}" /></td>
+									<td>
+										<c:if test="${ project.member.memberStatus eq 'Y' }">
+											<c:out value="${ project.member.memberName}" />
+										</c:if>
+										<c:if test="${ project.member.memberStatus eq 'N' }">
+											미지정
+										</c:if>
+									</td>
 								<td><c:out value="${ project.progression }" /></td>
-									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
-									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>
+								<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
+								<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>
 								<td><c:out value="${ project.startDate }" /></td>
 								<td><c:out value="${ project.deadLine }" /></td>
 								<td><button class="btn btn-danger">삭제</button></td>
@@ -150,7 +157,14 @@
 							<c:forEach var="project" items="${ removedProject }">
 								<tr data-bs-toggle="modal" data-bs-target="#projectRemove">
 									<td><c:out value="${ project.name}" /></td>
-									<td><c:out value="${ project.member.memberName}" /></td>
+									<td>
+										<c:if test="${ project.member.memberStatus eq 'Y' }">
+											<c:out value="${ project.member.memberName}" />
+										</c:if>
+										<c:if test="${ project.member.memberStatus eq 'N' }">
+											미지정
+										</c:if>
+									</td>
 									<td><c:out value="${ project.progression }" /></td>
 									<td><c:out value="${ project.projectInfo.outputAmount }" /></td>
 									<td><c:out value="${ project.projectInfo.totalIssueAmount }" /></td>

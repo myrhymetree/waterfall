@@ -12,7 +12,7 @@ import com.greedy.waterfall.project.model.dto.MyProjectDTO;
 import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
 import com.greedy.waterfall.project.model.dto.TeamDTO;
 
-@Component("stub")
+@Component("stubProjectService")
 @Primary
 public class StubProjectServiceImplTest implements ProjectService {
 
@@ -46,11 +46,6 @@ public class StubProjectServiceImplTest implements ProjectService {
 		return false;
 	}
 
-	@Override
-	public int findPmNumber(int projectNo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public RegistProjectDTO findOneProjectInfo(int projectNo) {
@@ -70,17 +65,6 @@ public class StubProjectServiceImplTest implements ProjectService {
 		return false;
 	}
 
-	@Override
-	public boolean restoreProject(int projectNo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deleteProject(int projectNo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public Map<String, Object> findProjectMainInfo(int projectNo) {
@@ -92,6 +76,12 @@ public class StubProjectServiceImplTest implements ProjectService {
 	public BoardDTO findBoardInfo(int boardNo) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean restoreProject(Map<String, Integer> restoreInfo) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

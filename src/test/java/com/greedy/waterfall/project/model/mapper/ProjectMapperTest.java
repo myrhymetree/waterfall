@@ -1,21 +1,27 @@
 package com.greedy.waterfall.project.model.mapper;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.greedy.waterfall.common.paging.SelectCriteria;
+import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -26,41 +32,186 @@ import com.greedy.waterfall.project.model.dto.ProjectDTO;
 })
 @WebAppConfiguration
 public class ProjectMapperTest {
-
 	@Autowired
 	private ProjectMapper mapper;
+	private SelectCriteria sampleSC;
+
+	@Before
+	public void setUp() {
+		sampleSC = new SelectCriteria().builder().startRow(1).endRow(100).member(new MemberDTO().builder().no(44).build()).build();
 	
-	@Test
-	public void test() {
-		Map<String, String> searchMap = new HashMap<>();
-		searchMap.put("searchCondition", "projectName");
-		searchMap.put("searchValue", "sdfafdsafdas");
-		
-		Integer i = mapper.findAllManageProjectCount(searchMap);
-		
-		Integer nulltest = null;
-		if(nulltest == null) {
-			nulltest = 0;
-		}
-		int i2 = nulltest;
-		System.out.println(i2);
-		
-		assertThat(i, is(0));
 	}
-	
+	/**
+	 * testFindManagaProject : 모든 프로젝트를 조회한다.
+	 * @author 홍성원
+	 */
 	@Test
-	public void findAllManageProject_test() {
+	@Transactional
+	public void testFindManagaProject() {
+		SelectCriteria selectCriteria = new SelectCriteria();
+		List<ProjectDTO> result = mapper.findAllManageProject(selectCriteria);
+		
+		
+		assertThat(result.size(), is(equalTo(2)));
+	}
+
+	@Test
+	public void testFindJoinProject() {
+	}
+
+	@Test
+	public void testFindAllProjectStatus() {
+		 
+	}
+
+	@Test
+	public void testFindAllDept() {
+		 
+	}
+
+	@Test
+	public void testFindTeam() {
+		 
+	}
+
+	@Test
+	public void testFindTeamMember() {
+		 
+	}
+
+	@Test
+	public void testRegistProject() {
+		 
+	}
+
+	@Test
+	public void testRegistPm() {
+		 
+	}
+
+	@Test
+	public void testRegistMemberProject() {
+		 
+	}
+
+	@Test
+	public void testFindAllManageProject() {
 		SelectCriteria sc = new SelectCriteria().builder().startRow(1).endRow(100).build();
 		List<ProjectDTO> projectResultList = mapper.findAllManageProject(sc);
 		
 		for(int i = 0; i < projectResultList.size(); i++) {
 //			System.out.println(i + " : " + projectResultList.get(i));
 			System.out.println(projectResultList.get(i).getProjectInfo());
-		}
-		
+		}	}
+
+	@Test
+	public void testFindAllRemovedProject() {
+		 
 	}
-	
-	
-	
+
+	@Test
+	public void testFindAllManageProjectCount() {
+		 
+	}
+
+	@Test
+	public void testFindPmNumber() {
+		 
+	}
+
+	@Test
+	public void testFindOneProjectInfo() {
+		 
+	}
+
+	@Test
+	public void testRegistProjectHistory() {
+		 
+	}
+
+	@Test
+	public void testModifyProject() {
+		 
+	}
+
+	@Test
+	public void testFindMemberInProject() {
+		 
+	}
+
+	@Test
+	public void testJoinPmInProject() {
+		 
+	}
+
+	@Test
+	public void testAssignPmRole() {
+		 
+	}
+
+	@Test
+	public void testKickOldPm() {
+		 
+	}
+
+	@Test
+	public void testRemoveProject() {
+		 
+	}
+
+	@Test
+	public void testRestoreProject() {
+		 
+	}
+
+	@Test
+	public void testFindMainBoardList() {
+		 
+	}
+
+	@Test
+	public void testFindBoardInfo() {
+		 
+	}
+
+	@Test
+	public void testIncreaseBoardCount() {
+		 
+	}
+
+	@Test
+	public void testFindManageProjectCount() {
+		 
+	}
+
+	@Test
+	public void testFindAllJoinProjectCount() {
+		 
+	}
+
+	@Test
+	public void testFindAllRemovedProjectCount() {
+		 
+	}
+
+	@Test
+	public void testFindProjectMainInfo() {
+		 
+	}
+
+	@Test
+	public void testProjectRoleRemove() {
+		 
+	}
+
+	@Test
+	public void testFindAdminInfo() {
+		 
+	}
+
+	@Test
+	public void testRegistEntireHistoryProjectRegist() {
+		 
+	}
 
 }

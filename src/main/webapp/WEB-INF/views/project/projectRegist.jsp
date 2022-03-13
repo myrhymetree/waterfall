@@ -22,7 +22,7 @@
 				<div class="card-header col" style="width: 100%">
 					<label style="width: 15%;">프로젝트 생성</label>
 					<span style="display:inline-block; width: 80%; margin-left: 2em; text-align: right;">
-						<button class="btn-dark" style="width: 80px; height: 40px;">취소</button>
+						<input type="button" class="btn-dark" id="backtolist" style="width: 80px; height: 40px;" value="취소">
 						<input type="submit" class="btn-dark" style="width: 80px; height: 40px;" value="저장">
 					</span>
 				</div>
@@ -150,6 +150,9 @@
 	$(".readonly").keydown(function(e){
         e.preventDefault();
     });
+	$("#backtolist").on("click", function() {
+		location.href = "${ pageContext.servletContext.contextPath }/project/manage";
+	});
 	
 	</script>
 </body>

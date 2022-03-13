@@ -32,6 +32,7 @@ public class RegistProjectDTO {
 	private java.sql.Date deadLine;
 	private int pmNumber;
 	private String pmName;
+	private String pmStatus;
 	private String projectStatusCode;
 	private String projectStatusName;
 	private int progression;

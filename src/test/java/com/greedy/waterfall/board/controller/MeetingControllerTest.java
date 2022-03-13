@@ -86,7 +86,6 @@ public class MeetingControllerTest {
 			.andDo(print());
 	}
 
-	/* 여까지테스트 */
 	@Test
 	public void testRegistMeetingBoard() throws Exception {
 		mvc.perform(

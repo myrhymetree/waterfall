@@ -316,6 +316,4 @@ public interface ProjectMapper {
 	 * @author 홍성원
 	 */
 	int registEntireHistoryProjectRegist(ProjectHistoryDTO projectHistoryDTO);
-
-
 }

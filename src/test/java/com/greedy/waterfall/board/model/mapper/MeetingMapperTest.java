@@ -105,13 +105,6 @@ public class MeetingMapperTest {
 		
 	}
 	
-	/**
-	 * registMeetingFile : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
-	 * 
-	 * @author 홍성원
-	 */
 	@Test
 	@Transactional
 	public void registMeetingFile() {
@@ -124,13 +117,6 @@ public class MeetingMapperTest {
 		assertThat(secondCount, is(equalTo(firstCount + 1)));
 	}
 	
-	/**
-	 * findMeetingList : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
-	 * 
-	 * @author 홍성원
-	 */
 	@Test
 	@Transactional
 	public void findMeetingList() {
