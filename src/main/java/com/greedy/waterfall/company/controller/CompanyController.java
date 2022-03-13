@@ -36,6 +36,17 @@ import com.greedy.waterfall.common.exception.company.TeamModifyException;
 import com.greedy.waterfall.common.exception.company.TeamRegistException;
 import com.greedy.waterfall.common.exception.company.TeamRemoveException;
 
+/**
+ * <pre>
+ * Class : CompanyController
+ * Comment : 클라이언트의 요청을 처리한 뒤, 결과를 view페이지 deptList.jsp 또는 jobList.jsp에게 리턴
+ * 
+ * History
+ * 2022. 3. 13.  (차화응)
+ * </pre>
+ * @version 1
+ * @author 차화응
+ */
 @Controller
 @RequestMapping("/company")
 public class CompanyController {
@@ -47,7 +58,14 @@ public class CompanyController {
 		this.companyService = companyService;
 	}
 	
-	/* 부서 및 팀 조회 */
+	/**
+	 * deptSelectList : 부서 및 팀 조회 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 mv 데이터(모델)와 화면(뷰) 정보 담은 객체
+	 * @return : 리턴값 mv ModelAndView 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping("/dept/list")
 	public ModelAndView deptSelectList(HttpServletRequest request, ModelAndView mv) {
 
@@ -64,7 +82,15 @@ public class CompanyController {
 		return mv;
 	}
 	
-	/* 팀 리스트 조회 */
+	/**
+	 * findTeamList : 팀 리스트 조회 메소드
+	 * @param : 매개변수 mv 데이터(모델)와 화면(뷰) 정보 담은 객체
+	 * @param : 매개변수 deptCode 문자열 타입으로 전달받음 
+	 * @param : 매개변수 response HTTP 응답 정보(요청 처리 결과) 제공
+	 * @return : 리턴값 mv ModelAndView 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping("/dept/list/{deptCode}")
 	public ModelAndView findTeamList(ModelAndView mv, @PathVariable("deptCode") String deptCode, HttpServletResponse response) throws IOException {
 		
@@ -85,7 +111,15 @@ public class CompanyController {
 		return mv;
 	}
 	
-	/* 부서 생성 */
+	/**
+	 * registDept : 부서 생성 메소드
+	 * @param : 매개변수 dept DTO 타입으로 전달받음 
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/dept/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/dept/regist")
 	public String registDept(@ModelAttribute DeptDTO dept, HttpServletRequest request, RedirectAttributes rttr) 
 			throws DeptRegistException {
@@ -103,7 +137,15 @@ public class CompanyController {
 		return "redirect:/company/dept/list";
 	}
 	
-	/* 부서 상세 */
+	/**
+	 * detailDept : 부서 상세 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 response HTTP 응답 정보(요청 처리 결과) 제공
+	 * @param : 매개변수 mv 데이터(모델)와 화면(뷰) 정보 담은 객체
+	 * @return : 리턴값 mv ModelAndView 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping(value = "deptDetail")
 	@ResponseBody
 	public ModelAndView detailDept(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
@@ -128,7 +170,15 @@ public class CompanyController {
 		return mv;
 	}
 	
-	/* 부서 수정 */
+	/**
+	 * modifyDept : 부서 수정 메소드
+	 * @param : 매개변수 dept DTO 타입으로 전달받음 
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/dept/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/dept/update")
 	public String modifyDept(@ModelAttribute DeptDTO dept,
 			HttpServletRequest request, RedirectAttributes rttr) throws DeptModifyException {
@@ -140,7 +190,14 @@ public class CompanyController {
 		return "redirect:/company/dept/list";
 	}
 	
-	/* 부서 삭제 */
+	/**
+	 * removeDept : 부서 삭제 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/dept/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping("/dept/delete")
 	public String removeDept(HttpServletRequest request, RedirectAttributes rttr) throws DeptRemoveException {
 		
@@ -153,7 +210,15 @@ public class CompanyController {
 		return "redirect:/company/dept/list";
 	}
 	
-	/* 팀 생성 */
+	/**
+	 * registTeam : 팀 생성 메소드
+	 * @param : 매개변수 team DTO 타입으로 전달받음
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/dept/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/team/regist")
 	public String registTeam(@ModelAttribute TeamDTO team, HttpServletRequest request, RedirectAttributes rttr) 
 			throws TeamRegistException {
@@ -171,7 +236,15 @@ public class CompanyController {
 		return "redirect:/company/dept/list";
 	}
 	
-	/* 팀 상세 */
+	/**
+	 * detailTeam : 팀 상세 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 response HTTP 응답 정보(요청 처리 결과) 제공 
+	 * @param : 매개변수 mv 데이터(모델)와 화면(뷰) 정보 담은 객체
+	 * @return : 리턴값 mv ModelAndView 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping(value = "teamDetail")
 	@ResponseBody
 	public ModelAndView detailTeam(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
@@ -196,7 +269,15 @@ public class CompanyController {
 		return mv;
 	}
 	
-	/* 팀 수정 */
+	/**
+	 * modifyTeam : 팀 수정 메소드
+	 * @param : 매개변수 team DTO 타입으로 전달받음
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음 
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/dept/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/team/update")
 	public String modifyTeam(@ModelAttribute TeamDTO team,
 			HttpServletRequest request, RedirectAttributes rttr) throws TeamModifyException {
@@ -208,7 +289,14 @@ public class CompanyController {
 		return "redirect:/company/dept/list";
 	}
 	
-	/* 팀 삭제 */
+	/**
+	 * removeTeam : 팀 삭제 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음 
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/dept/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping("/team/delete")
 	public String removeTeam(HttpServletRequest request, RedirectAttributes rttr) throws TeamRemoveException {
 		
@@ -221,7 +309,14 @@ public class CompanyController {
 		return "redirect:/company/dept/list";
 	}
 	
-	/* 직급 조회 */
+	/**
+	 * jobSelectList : 직급 조회 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 mv 데이터(모델)와 화면(뷰) 정보 담은 객체
+	 * @return : 리턴값 mv ModelAndView 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping("/job/list")
 	public ModelAndView jobSelectList(HttpServletRequest request, ModelAndView mv) {
 
@@ -235,7 +330,15 @@ public class CompanyController {
 		return mv;
 	}
 	
-	/* 직급 생성 */
+	/**
+	 * registJob : 직급 생성 메소드
+	 * @param : 매개변수 job DTO 타입으로 전달받음
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/job/list"문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/job/regist")
 	public String registJob(@ModelAttribute JobDTO job, HttpServletRequest request, RedirectAttributes rttr)
 			throws JobRegistException {
@@ -255,7 +358,15 @@ public class CompanyController {
 		return "redirect:/company/job/list";
 	}
 	
-	/* 직급 상세 */
+	/**
+	 * detailJob : 직급 상세 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 response HTTP 응답 정보(요청 처리 결과) 제공
+	 * @param : 매개변수 mv 데이터(모델)와 화면(뷰) 정보 담은 객체
+	 * @return : 리턴값 mv ModelAndView 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping(value = "jobDetail")
 	@ResponseBody
 	public ModelAndView detailJob(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
@@ -280,7 +391,15 @@ public class CompanyController {
 		return mv;
 	}
 	
-	/* 직급 수정 */
+	/**
+	 * modifyJob : 직급 수정 메소드
+	 * @param : 매개변수 job DTO 타입으로 전달받음
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/job/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/job/update")
 	public String modifyJob(@ModelAttribute JobDTO job,
 			HttpServletRequest request, RedirectAttributes rttr) throws JobModifyException {
@@ -292,7 +411,14 @@ public class CompanyController {
 		return "redirect:/company/job/list";
 	}
 	
-	/* 직급 삭제 */
+	/**
+	 * removeJob : 직급 삭제 메소드
+	 * @param : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음 
+	 * @param : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/company/job/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping("/job/delete")
 	public String removeJob(HttpServletRequest request, RedirectAttributes rttr) throws JobRemoveException {
 		

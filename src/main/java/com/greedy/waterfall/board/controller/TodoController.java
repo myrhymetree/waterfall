@@ -57,7 +57,15 @@ public class TodoController {
 		this.todoService = todoService;
 	}
 	
-	/* 게시글 등록 */
+	/**
+	 * registTodo : 게시글 등록 메소드
+	 * @param first  : 매개변수 todo DTO 타입으로 전달받음
+	 * @param second : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param third  : 매개변수 rttr 리다이렉트 시 플래시 속성 세션에서 모델로 이동
+	 * @return : 리턴값 "redirect:/todo/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/regist")
 	public String registTodo(@ModelAttribute TodoDTO todo, HttpServletRequest request,
 			RedirectAttributes rttr) throws TodoRegistException {
@@ -164,14 +172,13 @@ public class TodoController {
 //	}
 	
 	/**
-	 * todoSelectList : 메소드 설명 작성 부분
+	 * todoSelectList : 게시글 전체 목록 조회 메소드
 	 * @param first  : request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
 	 * @param second : mv 컨트롤러가 처리한 결과 정보 및 뷰 선택에 필요한 정보를 담은 매개변수를 전달인자로 받음
 	 * @return : mv ModelAndView 타입으로 반환
 	 * 
 	 * @author 차화응
 	 */
-	/* 게시글 전체 목록 조회 */
 	@GetMapping("/list")
 	public ModelAndView todoSelectList(HttpServletRequest request, ModelAndView mv) {
 		
@@ -270,7 +277,15 @@ public class TodoController {
 		return mv;
 	}
 	
-	/* 게시글 상세 조회 */
+	/**
+	 * detailTodo : 게시글 상세 조회 메소드
+	 * @param first : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음 
+	 * @param second : 매개변수 response HTTP 응답 정보(요청 처리 결과) 제공
+	 * @param third : 매개변수 mv 데이터(모델)와 화면(뷰) 정보 담은 객체
+	 * @return 리턴값 mv ModelAndView 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping(value = "todoDetail"/* , produces = "application/json; charset=UTF-8" */)
 	@ResponseBody
 	public ModelAndView detailTodo(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
@@ -295,7 +310,15 @@ public class TodoController {
 		return mv;
 	}
 	
-	/* 게시글 수정 */
+	/**
+	 * modifyTodo : 게시글 수정 메소드
+	 * @param first  : 매개변수 todo DTO 타입으로 전달받음
+	 * @param second : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param third  : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return 리턴값   : "redirect:/todo/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@PostMapping("/update")
 	public String modifyTodo(@ModelAttribute TodoDTO todo,  
 			HttpServletRequest request, RedirectAttributes rttr) throws TodoModifyException {
@@ -307,7 +330,14 @@ public class TodoController {
 		return "redirect:/todo/list";
 	}
 	
-	/* 게시글 삭제 */
+	/**
+	 * removeTodo : 게시글 삭제 메소드
+	 * @param first  : 매개변수 request 클라이언트로부터 서버로 들어온 요청정보를 전달인자로 받음
+	 * @param second : 매개변수 rttr 리다이렉트 시 플래시 속성을 세션에서 모델로 이동
+	 * @return 리턴값   : "redirect:/todo/list" 문자열 타입으로 반환
+	 * 
+	 * @author 차화응
+	 */
 	@GetMapping("/delete")
 	public String removeTodo(HttpServletRequest request, RedirectAttributes rttr) throws TodoRemoveException {
 

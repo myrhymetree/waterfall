@@ -20,6 +20,17 @@ import com.greedy.waterfall.company.model.dto.DeptDTO;
 import com.greedy.waterfall.company.model.dto.JobDTO;
 import com.greedy.waterfall.company.model.dto.TeamDTO;
 
+/**
+ * <pre>
+ * Class : CompanyServiceImpl
+ * Comment : CompanyService 인터페이스 구현부 클래스
+ * 
+ * History
+ * 2022. 3. 13.  (차화응)
+ * </pre>
+ * @version 1
+ * @author 차화응
+ */
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
@@ -30,7 +41,13 @@ public class CompanyServiceImpl implements CompanyService {
 		this.mapper = mapper;
 	}
 	
-	/* 부서 조회 */
+	/**
+	 * findDept : 부서 조회 메소드
+	 * @param 매개변수 selectCriteria
+	 * @return 리턴값 deptList
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public List<DeptDTO> findDept(SelectCriteria selectCriteria) {
 
@@ -39,7 +56,13 @@ public class CompanyServiceImpl implements CompanyService {
 		return deptList;
 	}
 
-	/* 팀 조회 */
+	/**
+	 * findTeam : 팀 조회 메소드
+	 * @param 매개변수 selectCriteria
+	 * @return 리턴값 teamList
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public List<TeamDTO> findTeam(SelectCriteria selectCriteria) {
 
@@ -48,14 +71,26 @@ public class CompanyServiceImpl implements CompanyService {
 		return teamList;
 	}
 	
-	/* 팀 리스트 조회 */
+	/**
+	 * findTeamList : 팀 리스트 조회 메소드
+	 * @param 매개변수 deptCode
+	 * @return 리턴값 mapper.findTeamList(deptCode)
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public List<TeamDTO> findTeamList(String deptCode) {
 
 		return mapper.findTeamList(deptCode);
 	}
 
-	/* 부서 생성 */
+	/**
+	 * registDept : 부서 생성 메소드
+	 * @param 매개변수 dept
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void registDept(DeptDTO dept) throws DeptRegistException {
 
@@ -66,7 +101,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
-	/* 부서 상세 */
+	/**
+	 * detailDept : 부서 상세 메소드
+	 * @param 매개변수 code
+	 * @return deptDetail
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public DeptDTO detailDept(String code) {
 
@@ -77,7 +118,13 @@ public class CompanyServiceImpl implements CompanyService {
 		return deptDetail;
 	}
 	
-	/* 부서 수정 */
+	/**
+	 * modifyDept : 부서 수정 메소드
+	 * @param 매개변수 dept
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void modifyDept(DeptDTO dept) throws DeptModifyException {
 
@@ -88,7 +135,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
-	/* 부서 삭제 */
+	/**
+	 * removeDept : 부서 삭제 메소드
+	 * @param 매개변수 code
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void removeDept(String code) throws DeptRemoveException {
 		
@@ -99,7 +152,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 
-	/* 팀 생성 */
+	/**
+	 * registTeam : 팀 생성 메소드
+	 * @param 매개변수 team
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void registTeam(TeamDTO team) throws TeamRegistException {
 
@@ -110,7 +169,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
-	/* 팀 상세 */
+	/**
+	 * detailTeam : 팀 상세 메소드
+	 * @param 매개변수 code
+	 * @return 리턴값 teamDetail
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public TeamDTO detailTeam(String code) {
 
@@ -121,7 +186,13 @@ public class CompanyServiceImpl implements CompanyService {
 		return teamDetail;
 	}
 
-	/* 팀 수정 */
+	/**
+	 * modifyTeam : 팀 수정 메소드
+	 * @param 매개변수 team
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void modifyTeam(TeamDTO team) throws TeamModifyException {
 		
@@ -132,7 +203,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
-	/* 팀 삭제 */
+	/**
+	 * removeTeam : 팀 삭제 메소드
+	 * @param 매개변수 code
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void removeTeam(String code) throws TeamRemoveException {
 
@@ -143,7 +220,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
-	/* 직급 조회 */
+	/**
+	 * findJob : 직급 조회 메소드
+	 * @param 매개변수 selectCriteria
+	 * @return 리턴값 jobList
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public List<JobDTO> findJob(SelectCriteria selectCriteria) {
 
@@ -152,7 +235,13 @@ public class CompanyServiceImpl implements CompanyService {
 		return jobList;
 	}
 	
-	/* 직급 생성 */
+	/**
+	 * registJob : 직급 생성 메소드
+	 * @param 매개변수 job
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void registJob(JobDTO job) throws JobRegistException {
 
@@ -163,7 +252,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
-	/* 직급 상세 */
+	/**
+	 * detailJob : 직급 상세 메소드
+	 * @param 매개변수 code
+	 * @return 리턴값 jobDetail
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public JobDTO detailJob(String code) {
 
@@ -174,7 +269,13 @@ public class CompanyServiceImpl implements CompanyService {
 		return jobDetail;
 	}
 	
-	/* 직급 수정 */
+	/**
+	 * modifyJob : 직급 수정 메소드
+	 * @param 매개변수 job
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void modifyJob(JobDTO job) throws JobModifyException {
 
@@ -185,7 +286,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 	
-	/* 직급 삭제 */
+	/**
+	 * removeJob : 직급 삭제 메소드
+	 * @param 매개변수 code
+	 * @return 리턴값 없음
+	 * 
+	 * @author 차화응
+	 */
 	@Override
 	public void removeJob(String code) throws JobRemoveException {
 

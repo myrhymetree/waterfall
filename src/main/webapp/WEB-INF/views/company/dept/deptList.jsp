@@ -416,12 +416,10 @@ select:focus {
 							<!-- 줄바꿈 방지 -->
 							<div style="white-space: nowrap">
 								<button  rel="float" class="button float" id="dept-add" data-bs-toggle="modal" data-bs-target="#writeModal">
-									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;부서
-									추가
+									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;부서 추가
 								</button>
 								<button  rel="float" class="button float" id="team-add" data-bs-toggle="modal" data-bs-target="#writeTeamModal">
-									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;팀
-									추가
+									<i style='font-size: 16px' class='fas' style='color: white;'>&#xf550;</i>&nbsp;팀 추가
 								</button>
 								<button  rel="float" class="button float" id="btn-modify">
 									<i style='font-size: 16px' class='far' style='color: white;'>&#xf044;</i>&nbsp;수정
