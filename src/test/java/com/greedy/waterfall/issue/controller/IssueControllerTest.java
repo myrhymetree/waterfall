@@ -42,7 +42,7 @@ public class IssueControllerTest {
 	@Test
 	public void 경로_제대로_찾아가는지() throws Exception {
 		
-		mvc.perform(get("/admin/list/1"))
+		mvc.perform(get("/admin/list/"))
 			.andExpect(forwardedUrl("/issue/adminIssueList"))
 			.andExpect(status().isOk());
 	}

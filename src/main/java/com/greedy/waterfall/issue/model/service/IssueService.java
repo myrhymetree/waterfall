@@ -28,7 +28,7 @@ public interface IssueService {
 
 	IssueFileDTO removeGuideFile(int fileNumber);
 
-	void modifyIssue(Map<String, Object> condition) throws IssueModifyException;
+	int modifyIssue(Map<String, Object> condition) throws IssueModifyException;
 
 	int removeIssue(int issueNo, int loginMemberNo) throws IssueRemoveException;
 

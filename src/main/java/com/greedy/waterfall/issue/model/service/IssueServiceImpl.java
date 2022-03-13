@@ -137,7 +137,7 @@ public class IssueServiceImpl implements IssueService {
 	 * @author 박성준
 	 */
 	@Override
-	public void modifyIssue(Map<String, Object> condition) throws IssueModifyException {
+	public int modifyIssue(Map<String, Object> condition) throws IssueModifyException {
 		
 		/* 매개변수에서 값 분리 */
 		IssueDTO issue = (IssueDTO) condition.get("issue");
@@ -175,6 +175,8 @@ public class IssueServiceImpl implements IssueService {
 		if(!(result > 0)) {
 			throw new IssueModifyException("이슈 수정에 실패하셨습니다.");
 		}
+		
+		return result;
 	}
 
 	@Override
