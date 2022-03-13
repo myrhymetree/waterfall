@@ -76,9 +76,7 @@
                         <div>
                             <input type="text" class="form-control" placeholder="아이디" id="id" name="id" style="width: 70%; margin-left: 15%;" readonly="readonly">
                         </div>
-                        <div class="mb-3" style="margin-top: 3%;"> 
-                            <!--label for랑 input id랑 일치시키면 라벨에 타이틀을 적을경우 라벨눌르면 인풋박스안 텍스트로 포커스를 맞춘다  -->
-                            <!-- placeholder는 인풋박스안에 적을 내용 기술해두 되고 빼두되고 편한대로 -->          
+                        <div class="mb-3" style="margin-top: 3%;">        
                              <input type="text" class="form-control" placeholder="이름" id="name" name="name" style="width: 70%; margin-left: 15%;">
                         </div>
                         <div class="mb-3">                                   
@@ -96,20 +94,6 @@
                                 <option value="" selected disabled></option>
                             </select> 
                         </div>
-                        <!-- 아래 텍스트박스는 글쓴이가 쓰는 만큼 늘어날 수 있다. 초기 크기 설정은 위에 일반 텍스트 박스 참조 -->
-                        <!-- <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div> --> 
-                        <!-- 셀렉트 박스 크기 조절 위에 참고 하면 충분히 합니다. -->
-                        <!-- <div>
-                            <select class="form-select">
-                                <option selected>부서</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select> 
-                        </div> -->
                     </div>
                     <!-- 모달의 바디 끝  -->
                     <div class="modal-footer">
@@ -126,15 +110,13 @@
      <!-- Modal HTML 두번째 모달 -->
     <div class="modal fade" id="exampleModalToggle2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <!--  style="top: 200px" 모달 위치변경은 top,left이런거로 조정하면 돼요 -->
             <div class="modal-content" style="top: 200px; height: 252px; width: 402px; margin-left: 0px; left: 100px;">
                 <div style="background-color: #212529;">
                     <br>
                 </div>
                 <div class="modal-header">
                     <span class="modal-title" id="exampleModalLabel"><strong></strong></span>
-                </div> 
-            <!-- 모달의 바디 부분 내용물 채우면 저절로 크기는 늘어남  -->           
+                </div>         
                     <div class="modal-body">  
                         <h5 align="center" style="margin-top: 30px;"><strong>등록되었습니다.</strong></h5>                          
                     </div>
@@ -187,7 +169,7 @@
                                             <th scope="col">등록일</th>
                                         </tr>
                                         </thead>
-                                        <tbody>             <!-- ajax 참고해볼 것 360부분 선생님한테 한번 물어보기 -->
+                                        <tbody>             
                                         <c:forEach var="adminMember" items="${ requestScope.adminMemberList }">
                                     		<tr id="listArea" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer">
                                         		<th scope="row">"${ adminMember.id }"</th>
@@ -203,11 +185,9 @@
                                         </tbody>
                                     </table>
                                    
-                                   <div class="paging mt-3">
-                            
+                                   <div class="paging mt-3">         
 					                        <!-- 페이지 처리  -->
-					                     <jsp:include page="../common/paging.jsp" />
-					                        
+					                     <jsp:include page="../common/paging.jsp" />          
 					                        <!-- 검색폼  -->   
 					                </div>
 					                <div class="search-area" align="center">
@@ -222,36 +202,12 @@
 					                        <button type="submit"><i class="fas fa-search"></i></button>
 					                     </div>
 					                   </form> 
-					                </div>
-                
-                                   
-                                    
+					                </div>              
                                 </div>          
-                        </div>
-                    </main>
-                </div>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-		
-   
-                
-           
-                      <!-- 검색폼  -->   
-     
-		 	<%--   <div class="search-area">
-               	 <form id="loginForm" action="${ pageContext.servletContext.contextPath }/member/list"
-                		method="get">
-                   <div class="search-set mt-2">
-                    <input type="hidden" name="currentPage" value="1">
-                      <select name="searchCondition" id="searchCondition">
-                          <option value="title" ${ requestScope.selectCriteria.searchCondition eq "name"? "selected": "" }>제목</option>
-                          <option value="content" ${ requestScope.selectCriteria.searchCondition eq "deptname"? "selected": "" }>내용</option>
-                      </select>
-                      <input type="search" id="searchValue" name="searchValue" value="<c:out value="${ requestScope.selectCriteria.searchValue }"/>">
-                      <button type="submit"><i class="fas fa-search"></i></button>
-                   </div>
-                 </form> 
-              </div> --%>
-		
+                        	</div>
+                    	</main>
+               	 </div>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>	
 		<script>
 			
 		if(document.querySelectorAll("#listArea td")) {
@@ -296,21 +252,11 @@
 											jobList[i].jobName + "</option>");
 									console.log(jobList);
 								}
-										
-									
+																
 								$("#id").val(memberArray[1][1]);
 								$("#name").val(memberArray[2][1]);
-								/* $("#dept").val(memberArray[6][1]); */
-								/* $("#dept").innerText(memberArray[6][1].deptName);
-								$("#team").val(memberArray[7][1]);
-								$("#job").val(memberArray[9][1]); */
 								$("#exampleModal").modal("show");
-									
-													
-							
-									
-									
-									
+																							
 							}, error : function(data){
 								console.log("문제있네");
 							}
