@@ -97,7 +97,7 @@
                         		<label>이름 : </label>
                         		<input type="text" id="memberName-modify" name="memberName" readonly>
                         	</span>
-                        		<input type="button" id="remove-project-member" value="내보내기" class="btn-outline-primary" style="margin-left:40%"><br>
+                        		<input type="button" id="remove-project-member" value="내보내기" class="btn btn-secondary" style="margin-left:40%"><br>
                         </div>
 						<div class="mt-4 member-modify-checkbox">
 							<c:forEach var="projectRole" items="${ allRole }">
@@ -110,7 +110,7 @@
 							</div>
 		            	</div>
 	            	</div>
-	            	<input type="text" name="memberNo" id="memberNo-modify">
+	            	<input type="hidden" name="memberNo" id="memberNo-modify">
 	            	<input type="hidden" name="managerNo" value="${ sessionScope.loginMember.no }" id="managerNo">
 	            	<input type="hidden" name="projectNo" value="${ sessionScope.projectAutority.projectNo }" id="projectNo">
 	            	
