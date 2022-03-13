@@ -138,9 +138,11 @@ public class UserController {
 		member.setPhone(phone);
 
 		memberService.memberInfo(member);
+	
+		session.invalidate();
 		
 		rttr.addFlashAttribute("message", "정보 수정이 완료되었습니다.");
-		mv.setViewName("redirect:/user/info");
+		mv.setViewName("redirect:/member/login"); //메인
 		
 		return mv;
 	}

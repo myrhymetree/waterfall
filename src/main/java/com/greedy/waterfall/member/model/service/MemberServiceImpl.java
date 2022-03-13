@@ -242,8 +242,14 @@ public class MemberServiceImpl implements MemberService {
 	public void memberInfo(MemberDTO member) {
 
 		mapper.memberInfoUpdate(member);
-		mapper.memberInfoPhone(member);
-		mapper.memberInfoEmail(member);
+		
+		if(member.getPhone() != null && !"".equals(member.getPhone())) {
+			mapper.memberInfoPhone(member);
+		}
+		
+		if(member.getEmail() != null && !"".equals(member.getEmail())) {
+			mapper.memberInfoEmail(member);	
+		}
 		
 	}
 
