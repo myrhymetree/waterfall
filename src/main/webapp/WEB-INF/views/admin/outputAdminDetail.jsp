@@ -54,8 +54,8 @@
 } */
 
 .box {
-	width: 600px;
-	height: 580px;
+	width: 630px;
+	height: 630px;
 	border-style: solid;
 	border-color: #888686;
 	
@@ -82,7 +82,7 @@
 }
 
 #box2_border_top {
-	width: 600px;
+	width: 628px;
 	height: 50px;
 	background-color: #343A40;
 }

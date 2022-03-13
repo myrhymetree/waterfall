@@ -135,7 +135,7 @@ public class ProjectHistory implements History{
 		MemberDTO memberInfo = (MemberDTO) ((Map<String, Object>) info).get("memberInfo");
 
 		/* 프로젝트 복구이력을 저장 후 반환한다. */
-		ProjectHistoryDTO history = new ProjectHistoryDTO().builder().projectNo(projectInfo.getProjectNo())
+		ProjectHistoryDTO history = new ProjectHistoryDTO().builder().projectNo(projectInfo.getProjectNo()).managerNo(memberInfo.getNo())
 				.content("[" + memberInfo.getName() + "]님이 [" + projectInfo.getProjectName() + "] 프로젝트를 복구했습니다.").build();
 
 		historyList.add(history);		
