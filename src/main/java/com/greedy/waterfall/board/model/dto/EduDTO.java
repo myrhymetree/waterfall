@@ -10,6 +10,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <pre>
+ * Class : EduDTO
+ * Comment : 게시판 등록,수정,상태,삭제 정보를 저장한 클래스
+ * 관련 테이블 : TBL_BOARD, TBL_FILE, TBL_MEMBER, TBL_PROJECT   
+ * 
+ * History
+ * 2022. 3. 12.  (김영광)
+ * </pre>
+ * @version 0.0.1
+ * @author 김영광
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

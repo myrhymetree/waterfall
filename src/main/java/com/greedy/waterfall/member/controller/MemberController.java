@@ -112,7 +112,6 @@ public class MemberController {
 		return "/main/adminMain";
 	}
 	
-	/* 로그인시 메인화면으로 리다이렉트 한다. */
 	/**
 	 * login : 로그인요청 ID와 PW
 	 * @param member : 요청한 ip,pwd 정보를 MemberDTO클래스에 필드명 정보가 담긴 변수
