@@ -41,6 +41,8 @@ import com.greedy.waterfall.board.model.dto.GuideDTO;
 import com.greedy.waterfall.board.model.dto.GuideFileDTO;
 import com.greedy.waterfall.common.exception.GuideModifyException;
 import com.greedy.waterfall.common.exception.GuideRemoveException;
+import com.greedy.waterfall.common.exception.issue.IssueModifyException;
+import com.greedy.waterfall.common.exception.issue.IssueRemoveException;
 import com.greedy.waterfall.common.paging.Pagenation;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.issue.model.dto.IssueDTO;
@@ -60,9 +62,9 @@ import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
  * Comment : 이슈 기능의 조회, 추가, 수정, 삭제, 업로드, 다운로드, 알림 기능을 담당하는 클래스
  * 
  * History
- * 2022. 3. 11.  (박성준)
+ * 2022. 3. 13.  (박성준)
  * </pre>
- * @version 1
+ * @version 1.1
  * @author 박성준
  */
 @RestController
@@ -86,14 +88,9 @@ public class IssueController {
 	 * @author 박성준
 	 */
 	@GetMapping("/project")
-	public ModelAndView projectList(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView selectAllProjectList(HttpServletRequest request, ModelAndView mv) {
 		
-		int memberNo = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
-		
-		Map<String, Integer> managerNo = new HashMap<>();
-		managerNo.put("managerNo", memberNo);
-
-		List<ProjectIssueCountDTO> allProject = issueService.selectAllProjectList(managerNo);
+		List<ProjectIssueCountDTO> allProject = issueService.selectAllProjectList();
 		System.out.println("allProject" + allProject);
 		
 		mv.addObject("allProject", allProject);
@@ -128,6 +125,15 @@ public class IssueController {
 		return mv;
 	}
 	
+	/**
+	 * adminIssueList : 해당 업무의 이슈 목록을 반환하는 메소드
+	 * @param taskNo : 해당 업무의 번호
+	 * @param request : 현재 페이지의 정보를 담고 있는 requestScope의 매개 변수
+	 * @param mv : key&value형태로 요청 값과 요청주소를 반환하기 위한 매개 변수
+	 * @return mv : 요청 값을 전송하기 위해 model에 값을 담아주고, 해당 view에 대한 요청 주소를 담아주는 매개변수
+	 * 
+	 * @author 박성준
+	 */
 	@GetMapping("/admin/list/{taskNo}")
 	public ModelAndView adminIssueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
@@ -147,9 +153,19 @@ public class IssueController {
 		return mv;
 	}
 	
+	/**
+	 * adminRemoveGuide : 해당 이슈를 삭제 기능 메소드
+	 * @param mv : key&value형태로 요청 값과 요청주소를 반환하기 위한 매개 변수
+	 * @param request : 현재 페이지의 정보를 담고 있는 requestScope의 매개 변수
+	 * @param rttr : 지정된 메시지를 view 페이지에 출력할 매개변수
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 박성준
+	 * @throws IssueRemoveException 
+	 */
 	@GetMapping("/admin/delete")
 	public ModelAndView adminRemoveGuide(ModelAndView mv, HttpServletRequest request, 
-			RedirectAttributes rttr) throws GuideRemoveException {
+			RedirectAttributes rttr) throws IssueRemoveException {
 		
 		int issueNo = Integer.parseInt(request.getParameter("no"));
 		
@@ -265,9 +281,16 @@ public class IssueController {
 		int projectNo = (int) request.getSession().getAttribute("adminProjectNo");
 		System.out.println("detail에 들어오는 프로젝트 번호 : " + projectNo);
 		
-		IssueDTO issueDetail = issueService.selectIssueDetail(no);
+		Map<String, Integer> condition = new HashMap<>();
 		
-		List<ProjectMemberDTO> projectMember = issueService.selectProjectMember(projectNo);
+		condition.put("no", no);
+		condition.put("projectNo", projectNo);
+		
+		Map<String, Object> issueDetailMap = issueService.selectIssueDetail(condition);
+		
+		IssueDTO issueDetail = (IssueDTO) issueDetailMap.get("issueDetail");
+		
+		List<ProjectMemberDTO> projectMember = (List<ProjectMemberDTO>) issueDetailMap.get("projectMemberList");
 		
 		System.out.println("상세조회 issueDetail : " + issueDetail);
 		Gson gson = new GsonBuilder()
@@ -287,7 +310,7 @@ public class IssueController {
 	
 	@PostMapping("/admin/update")
 	public ModelAndView adminModifyIssue(@ModelAttribute @Nullable IssueDTO issue, HttpServletRequest request,
-			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws GuideModifyException {
+			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws IssueModifyException {
 		
 		/* 파일 업로드 */
 		System.out.println("MultiFiles : " + multiFiles);
@@ -349,9 +372,14 @@ public class IssueController {
 		System.out.println("update에 들어오는 업무번호 : " + taskNo);
 		
 		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
-		int loginMember =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
-		issueService.modifyIssue(issue, loginMember);
+		Map<String, Object> condition = new HashMap<>();
+		
+		condition.put("issue", issue);
+		condition.put("loginMemberNo", loginMemberNo);
+		
+		issueService.modifyIssue(condition);
 		
 		System.out.println("modifyIssue : " + issue);
 		
@@ -364,7 +392,7 @@ public class IssueController {
 	}
 	
 	@GetMapping("/list/{taskNo}")
-	public ModelAndView issueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView selectIssueList(@PathVariable("taskNo") int taskNo, HttpServletRequest request, ModelAndView mv) {
 		
 		System.out.println(taskNo);
 		
@@ -379,7 +407,7 @@ public class IssueController {
 	}
 	
 	@GetMapping("/task")
-	public ModelAndView taskList(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView selectTaskList(HttpServletRequest request, ModelAndView mv) {
 		
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		
@@ -487,10 +515,16 @@ public class IssueController {
 		int projectNo = (((ProjectAuthorityDTO) request.getSession().getAttribute("projectAutority")).getProjectNo());
 		System.out.println("detail에 들어오는 프로젝트 no : " + projectNo);
 		
-		IssueDTO issueDetail = issueService.selectIssueDetail(no);
-		System.out.println("issueDetail : " + issueDetail);
+		Map<String, Integer> condition = new HashMap<>();
 		
-		List<ProjectMemberDTO> projectMember = issueService.selectProjectMember(projectNo);
+		condition.put("no", no);
+		condition.put("projectNo", projectNo);
+		
+		Map<String, Object> issueDetailMap = issueService.selectIssueDetail(condition);
+		
+		IssueDTO issueDetail = (IssueDTO) issueDetailMap.get("issueDetail");
+		
+		List<ProjectMemberDTO> projectMember = (List<ProjectMemberDTO>) issueDetailMap.get("projectMemberList");
 		
 		System.out.println("상세조회 issueDetail : " + issueDetail);
 		Gson gson = new GsonBuilder()
@@ -550,22 +584,34 @@ public class IssueController {
 		return mv; 
 	}
 	
+
+	/**
+	 * modifyIssue : 해당 이슈 수정 기능 메소드
+	 * @param issue : 수정에 필요한 정보를 담아올 매개변수
+	 * @param request : 지정할 페이지의 주소를 담아줄 매개변수
+	 * @param rttr : 지정된 메시지를 view 페이지에 출력할 매개변수
+	 * @param mv : key&value 형태의 요청 값과 요청주소를 반환하기 위한 매개 변수
+	 * @param multiFiles : 
+	 * @return mv : 매개변수 mv 반환
+	 * 
+	 * @author 박성준
+	 */
 	@PostMapping("/update")
 	public ModelAndView modifyIssue(@ModelAttribute @Nullable IssueDTO issue, HttpServletRequest request,
-			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws GuideModifyException {
+			RedirectAttributes rttr, ModelAndView mv, @RequestParam List<MultipartFile> multiFiles) throws IssueModifyException {
 		
-		/* 파일 업로드 */
+		/* 파일 업로드에 필요한 파일 정보 출력 */
 		System.out.println("MultiFiles : " + multiFiles);
-		
+		/* 파일을 저장할 루트 경로 */
 		String root = request.getSession().getServletContext().getRealPath("resources");
-		
+		/* 경로 출력 */
 		System.out.println("root : " + root);
-		
+		/* 이슈에 관련된 파일을 저장할 경로 */
 		String filePath = root + "/issueUploadFiles";
-		
+		/* 파일 객체 선언 */
 		File mkdir = new File(filePath);
 		
-		/* 폴더 생성 완료 */
+		/* 폴더가 생성되지 않았으면 폴더 생성 */
 		if(!mkdir.exists()) {
 			mkdir.mkdirs();
 		}
@@ -573,6 +619,8 @@ public class IssueController {
 		System.out.println("multiFiles.size() : " + multiFiles.size());
 		
 		List<IssueFileDTO> fileList = new ArrayList<IssueFileDTO>();
+		
+		/* 파일이 전송되었을 경우만 다중 파일에 대한 정보를 IssueDTO 타입 객체에 넣어서 List<IssueFileDTO>에 담음 */
 		if(multiFiles.get(0).getSize() != 0) {
 			for(int i = 0; i < multiFiles.size(); i++) {
 				String originFileName = multiFiles.get(i).getOriginalFilename();
@@ -592,16 +640,18 @@ public class IssueController {
 			}
 			
 			try {
+				/* 파일이 존재하면 해당경로에 파일을 전송 */
 				for(int i = 0; i < multiFiles.size(); i++) {
 					
 					multiFiles.get(i).transferTo(new File(filePath + "\\" + issue.getFile().get(i).getRandomName()));
 					
-					System.out.println("이슈 등록 확인 " + issue);
 				}
+				System.out.println("이슈 등록 확인 " + issue);
 				
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 				
+				/* 파일 전송 실패 시 모든 파일을 삭제 */
 				for(int i = 0; i < multiFiles.size(); i++) {
 					new File(filePath + "/" + issue.getFile().get(i).getRandomName()).delete();
 				}
@@ -609,19 +659,25 @@ public class IssueController {
 			  }
 		}
 		
-		/* 이슈 수정 */
+		/* 경로로 반환해 줄 업무 번호  */
 		int taskNo = issue.getTaskNo();
 		System.out.println("update에 들어오는 업무 no : " + taskNo);
 		
 		/* 히스토리에 반영하기 위해서 현재 이슈를 수정한 사람의 정보를 넣어줘야 됨 */
-		int loginMember =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
+		int loginMemberNo =   (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());
 		
-		issueService.modifyIssue(issue, loginMember);
+		/* Service에 Map으로 여러 변수를 넘겨주기 */
+		Map<String, Object> condition = new HashMap<>();
+		condition.put("issue", issue);
+		condition.put("loginMemberNo", loginMemberNo);
+		issueService.modifyIssue(condition);
 		
 		System.out.println("modifyIssue : " + issue);
 		
+		/* 수정 성공 시 해당 메시지를 view에 전달 */
 		rttr.addFlashAttribute("message", "이슈 수정에 성공하셨습니다");
 		
+		/* 해당 경로 요청 */
 		mv.addObject("intent", "/issue/update");
 		mv.setViewName("redirect:/issue/list/" + taskNo);
 		
@@ -630,7 +686,7 @@ public class IssueController {
 	
 	@GetMapping("/delete")
 	public ModelAndView removeGuide(ModelAndView mv, HttpServletRequest request, 
-			RedirectAttributes rttr) throws GuideRemoveException {
+			RedirectAttributes rttr) throws IssueRemoveException {
 		
 		int issueNo = Integer.parseInt(request.getParameter("no"));
 		
@@ -688,6 +744,13 @@ public class IssueController {
 		return mv;
 	}
 	
+	/**
+	 * taskRegistIssue : 업무에서 이슈 등록 기능 메소드
+	 * @param 매개변수의 설명 작성 부분
+	 * @return 리턴값의 설명 작성 부분
+	 * 
+	 * @author 박성준
+	 */
 	@PostMapping("task/regist/{taskNo}")
 	public ModelAndView taskRegistIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request, ModelAndView mv,
 			@PathVariable("taskNo") int taskNo, RedirectAttributes rttr,  @RequestParam List<MultipartFile> multiFiles) {

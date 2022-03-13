@@ -89,36 +89,6 @@
 	</form>
 </div>
 
-<!-- <!-- 모달 확인 버튼 누를 시 나오는 모달 -->
-<div class="modal" id="mySubModal">
-    <div class="modal-dialog">
-    <div class="modal-content">
-
-        Modal Header
-        <div class="modal-header">
-        <h4 class="modal-title">이슈</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-
-        Modal body
-        <div class="modal-body">
-        정보를 저장하시겠습니까?
-        </div>
-
-        Modal footer
-        <div class="modal-footer row">
-            <div class="col-5">
-            <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#mySubModal">확인</button>
-            </div>
-            <div class="col-4">
-            <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="text-align: left;">취소</button>
-            </div>
-        </div>
-
-    </div>
-    </div>
-</div>
-
 <script>
 
  /* 쿼리스트링 형태의 taskNo를 파라미터에서 추출해주는 함수와 form에 있는 data를 submit 했을 때 발생하는 이벤트 */
