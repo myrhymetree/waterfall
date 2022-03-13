@@ -164,7 +164,7 @@ public class IssueController {
 	 * @throws IssueRemoveException 
 	 */
 	@GetMapping("/admin/delete")
-	public ModelAndView adminRemoveGuide(ModelAndView mv, HttpServletRequest request, 
+	public ModelAndView adminRemoveIssue(ModelAndView mv, HttpServletRequest request, 
 			RedirectAttributes rttr) throws IssueRemoveException {
 		
 		int issueNo = Integer.parseInt(request.getParameter("no"));
@@ -186,6 +186,18 @@ public class IssueController {
 		
 	}
 	
+	/**
+	 * adminRegistIssue : 관리자 이슈 등록 기능 메소드
+	 * @param issue : 등록에 필요한 정보를 담아올 매개변수
+	 * @param request : 지정할 페이지의 주소를 담아줄 매개변수
+	 * @param mv : key&value 형태의 요청 값과 요청주소를 반환하기 위한 매개 변수
+	 * @param taskNo : 이슈 등록에 필요한 해당 업무번호
+	 * @param rttr : 지정된 메시지를 view 페이지에 출력할 매개변수
+	 * @param multiFiles : 첨부파일 등록에 필요한 파일 매개변수
+	 * @return mv : 매개변수 mv 반환
+	 * 
+	 * @author 박성준
+	 */
 	@PostMapping("/admin/regist/{taskNo}")
 	public ModelAndView adminRegistIssue(@ModelAttribute IssueDTO issue, HttpServletRequest request, ModelAndView mv,
 			@PathVariable("taskNo") int taskNo, RedirectAttributes rttr,  @RequestParam List<MultipartFile> multiFiles) {
