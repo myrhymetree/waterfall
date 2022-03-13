@@ -60,6 +60,8 @@
                                   <label class="col-form-label">첨부파일</label>
                                   <input type="file" class="form-control" name="outputFile" required>
                                   <input id="outputNo" type="hidden" name="outputNo">
+                                  <input name="taskNo" type="hidden" name="taskNo">
+                                  <input id="fileNo" type="hidden" name="fileNo">
                                 </div>
                             </div>
                             <!-- 모달의 바디 끝  -->

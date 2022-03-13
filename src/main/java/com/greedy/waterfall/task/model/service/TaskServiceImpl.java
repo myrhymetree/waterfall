@@ -48,11 +48,6 @@ public class TaskServiceImpl implements TaskService{
 		
 		/* 상위업무 List */
 		List<TaskDTO> parentTaskList = mapper.selectParentTaskList(taskDTO);
-		List<ChildTaskDTO> defaultChildTaskList =  new ArrayList<ChildTaskDTO>();
-		for(int i = 0; i < parentTaskList.size(); i++) {
-			parentTaskList.get(i).setChildList(defaultChildTaskList);
-		}
-		
 		List<ChildTaskDTO> childTaskList = new ArrayList<ChildTaskDTO>();
 		/* parentTaskList안의 parentDTO내의 childTaskList 불러오기 */
 		for(int i = 0; i < parentTaskList.size(); i++) {
@@ -66,13 +61,12 @@ public class TaskServiceImpl implements TaskService{
 				childTaskList.get(j).setParentTaskNo(parentTaskNo);
 				childTaskList.get(j).setProjectNo(taskDTO.getProjectNo());
 			}
-		}
-		/*위에서 조회한 상위업무의 번호를 통해 하위업무 list 조회*/
-		for(int i = 0; i < parentTaskList.size(); i++) {
-			childTaskList = mapper.selectChildTaskList(parentTaskList.get(i).getTaskNo());
-			parentTaskList.get(i).setChildList(childTaskList);
 			
+			/*위에서 조회한 상위업무의 번호를 통해 하위업무 list 조회*/
+			childTaskList = mapper.selectChildTaskList(parentTaskNo);
+			parentTaskList.get(i).setChildList(childTaskList);
 		}
+		
 			
 		System.out.println("parentTaskList : " +parentTaskList);
 		
