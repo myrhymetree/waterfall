@@ -22,6 +22,7 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.menu.model.dto.MainInfoDTO;
 import com.greedy.waterfall.menu.model.service.MenuService;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 
 /**
  * <pre>
@@ -95,6 +96,7 @@ public class MenuController {
 		Map<String, Object> adminPageInfo = menuService.findAdminPageInfo(projectNo);
 		
 		ProjectDTO project = (ProjectDTO) adminPageInfo.get("projectInfo");
+		List<ProjectHistoryDTO> projectHistory = (List<ProjectHistoryDTO>) adminPageInfo.get("projectHistory");
 		
 		response.setContentType("application/json; charset=UTF-8");
 
@@ -104,6 +106,7 @@ public class MenuController {
 		mapper.setDateFormat(dateFormat);
 		
 		mv.addObject("project", mapper.writeValueAsString(project));
+		mv.addObject("projectHistory", mapper.writeValueAsString(projectHistory));
 		mv.setViewName("jsonView");
 		
 		return mv;

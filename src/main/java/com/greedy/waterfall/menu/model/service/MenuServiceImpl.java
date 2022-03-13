@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greedy.waterfall.common.History.ProjectHistory;
 import com.greedy.waterfall.common.paging.Paging;
 import com.greedy.waterfall.common.paging.PagingDTO;
 import com.greedy.waterfall.common.paging.SelectCriteria;
@@ -14,6 +15,7 @@ import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.menu.model.dto.MainInfoDTO;
 import com.greedy.waterfall.menu.model.mapper.MenuMapper;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 
 /**
  * <pre>
@@ -90,7 +92,9 @@ public class MenuServiceImpl implements MenuService{
 		/* 프로젝트번호에 해당하는 정보를 반환한다. */
 		Map<String, Object> pageInfo = new HashMap<>();
 		ProjectDTO projectInfo = mapper.findProjectInfo(projectNo);
+		List<ProjectHistoryDTO> projectHistory = mapper.findProjectHistory(projectNo);
 		pageInfo.put("projectInfo", projectInfo);
+		pageInfo.put("projectHistory", projectHistory);
 		
 		return pageInfo;
 	}

@@ -58,8 +58,7 @@ public class ProjectControllerTest implements ProjectControllerView {
                 .param("projectStatusCode", "PROGRESSING")
                 .param("progression", "1")
                 .param("adminNo", "1"))
-        .andExpect(redirectedUrl("managelist"))
-        .andExpect(model().attribute("newProject", project));
+        .andExpect(redirectedUrl("managelist"));
                 
     }
     
