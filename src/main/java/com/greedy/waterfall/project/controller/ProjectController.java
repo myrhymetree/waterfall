@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,7 +75,7 @@ public class ProjectController implements ProjectControllerView {
 	 * @author 홍성원
 	 */
 	@GetMapping("/regist")
-	public ModelAndView sendRegistPage(ModelAndView mv) {
+	public String sendRegistPage(Model model) {
 		
 		/* 프로젝트 생성에 필요한 목록을 조회한다. */
 		Map<String, Object> projectForm = projectService.findRegistForm();
@@ -82,11 +83,10 @@ public class ProjectController implements ProjectControllerView {
 		List<DeptDTO> deptList = (List<DeptDTO>) projectForm.get("deptList");
 		
 		/* 조회한 목록들을 ModelAndView에 저장하고, 프로젝트 생성 페이지로 forwarding한다. */
-		mv.addObject("statusList", statusList);
-		mv.addObject("deptList", deptList);
-		mv.setViewName(PROJECT_REGIST_VIEW);
+		model.addAttribute("statusList", statusList);
+		model.addAttribute("deptList", deptList);
 		
-		return mv;
+		return PROJECT_REGIST_VIEW;
 	}
 	
 	/**

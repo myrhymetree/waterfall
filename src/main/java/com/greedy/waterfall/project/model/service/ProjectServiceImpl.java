@@ -327,6 +327,7 @@ public class ProjectServiceImpl implements ProjectService {
 			/* 이력등록의 성공여부를 반환한다. */
 			return registHistoryResult(historyInfo);
 		}
+		
 		return mapper.restoreProject(projectNo);
 	}
 	

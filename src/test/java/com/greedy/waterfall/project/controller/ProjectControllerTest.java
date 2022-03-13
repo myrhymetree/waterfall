@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,8 +43,10 @@ public class ProjectControllerTest implements ProjectControllerView {
     public void testSendRegistPage() throws Exception {
         mvc.perform(get("/project/regist"))
         	.andExpect(forwardedUrl(PROJECT_REGIST_VIEW))
-        	.andExpect(model().size(3))
         	.andExpect(model().attributeExists("statusList"))
+        	.andExpect(model().attributeExists("deptList"))
+        	.andExpect(model().size(2))
+        	.andExpect(status().isOk())
         	.andDo(print());
     }
     
