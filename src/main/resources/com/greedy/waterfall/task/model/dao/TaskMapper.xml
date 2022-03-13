@@ -166,18 +166,18 @@
 	
 	<select id="selectParentTaskNo" resultType = "_int">
 		SELECT
-		       TASK_NO
-		  FROM TBL_TASK
-		 WHERE PROJECT_NO = #{ projectNo }
-		   AND TASK_CATEGORY_CODE = #{ parentTaskCode }
-		   AND TASK_STATUS = 'Y'
+		       A.TASK_NO
+		  FROM TBL_TASK A
+		 WHERE A.PROJECT_NO = #{ projectNo }
+		   AND A.TASK_CATEGORY_CODE = #{ parentTaskCode }
+		   AND A.TASK_STATUS = 'Y'
 	</select>
 	
 	<select id="selectRefTaskCode" resultType="int">
 		SELECT
-		       TASK_REF_NO
-		  FROM TBL_TASK
-		 WHERE TASK_NO = #{ taskNo }
+		       A.TASK_REF_NO
+		  FROM TBL_TASK A
+		 WHERE A.TASK_NO = #{ taskNo }
 	</select>
 	
 	<select id="selectParentTaskNoCurrval" resultType = "_int">
@@ -189,113 +189,113 @@
 	
 	<insert id="registTask">
 		INSERT
-  		  INTO TBL_TASK
-		     (
-		       TASK_NO
-		     , TASK_START_DATE
-		     , TASK_DEADLINE
-		     , TASK_PROGRESSION
-		     , TASK_PROGRESS_STATUS
-		     , TASK_TYPE_NO
-		     , PROJECT_NO
-		     , MEMBER_NO
-		     , TASK_CATEGORY_CODE
-		     , TASK_REF_NO
-		     , TASK_IMPORTANCE
-		     )
+  		  INTO TBL_TASK A
+		(
+		  A.TASK_NO
+		, A.TASK_START_DATE
+		, A.TASK_DEADLINE
+		, A.TASK_PROGRESSION
+		, A.TASK_PROGRESS_STATUS
+		, A.TASK_TYPE_NO
+		, A.PROJECT_NO
+		, A.MEMBER_NO
+		, A.TASK_CATEGORY_CODE
+		, A.TASK_REF_NO
+		, A.TASK_IMPORTANCE
+		)
 		 VALUES
-		     (
-		       TASK_NO.NEXTVAL
-		     , #{ startDate }
-		     , #{ deadline }
-		     , #{ progressRatio }
-		     , #{ progressStatus }
-		     , #{ typeNo }
-		     , #{ projectNo }
-		     , #{ taskMember }
-		     <if test="parentTaskNo == 0">
-		     , #{ parentTaskCode }
-		     </if>
-		     <if test="parentTaskNo != 0">
-		     , #{ taskCode }
-		     </if>
-		     <if test="parentTaskNo == 0">
-		     , NULL
-		     </if>
-		     <if test="parentTaskNo != 0">
-		     , #{ parentTaskNo }
-		      </if>
-		     , #{ importance }
-		     )
+		(
+		  TASK_NO.NEXTVAL
+		, #{ startDate }
+		, #{ deadline }
+		, #{ progressRatio }
+		, #{ progressStatus }
+		, #{ typeNo }
+		, #{ projectNo }
+		, #{ taskMember }
+		<if test="parentTaskNo == 0">
+		, #{ parentTaskCode }
+		</if>
+		<if test="parentTaskNo != 0">
+		, #{ taskCode }
+		</if>
+		<if test="parentTaskNo == 0">
+		, NULL
+		 </if>
+		<if test="parentTaskNo != 0">
+		, #{ parentTaskNo }
+		 </if>
+		, #{ importance }
+		)
 		    
 	</insert>
 	<insert id="registParentTask">
 		INSERT
-  		  INTO TBL_TASK
-		     (
-		       TASK_NO
-		     , TASK_START_DATE
-		     , TASK_DEADLINE
-		     , TASK_PROGRESSION
-		     , TASK_PROGRESS_STATUS
-		     , TASK_TYPE_NO
-		     , PROJECT_NO
-		     , MEMBER_NO
-		     , TASK_CATEGORY_CODE
-		     , TASK_REF_NO
-		     , TASK_IMPORTANCE
-		     )
-		 VALUES
-		     (
-		       TASK_NO.NEXTVAL
-		     , #{ startDate }
-		     , #{ deadline }
-		     , #{ progressRatio }
-		     , #{ progressStatus }
-		     , #{ typeNo }
-		     , #{ projectNo }
-		     , #{ taskMember }
-		     , #{ taskCode }
-		     , NULL
-		     , #{ importance }
+  		  INTO TBL_TASK A
+		(
+		  A.TASK_NO
+		, A.TASK_START_DATE
+		, A.TASK_DEADLINE
+		, A.TASK_PROGRESSION
+		, A.TASK_PROGRESS_STATUS
+		, A.TASK_TYPE_NO
+		, A.PROJECT_NO
+		, A.MEMBER_NO
+		, A.TASK_CATEGORY_CODE
+		, A.TASK_REF_NO
+		, A.TASK_IMPORTANCE
+		)
+		VALUES
+		(
+		  TASK_NO.NEXTVAL
+		, #{ startDate }
+		, #{ deadline }
+		, #{ progressRatio }
+		, #{ progressStatus }
+		, #{ typeNo }
+		, #{ projectNo }
+		, #{ taskMember }
+		, #{ taskCode }
+		, NULL
+		, #{ importance }
 		     )
 	</insert>
 	
 	<insert id="registHistory">
 		INSERT
-		  INTO TBL_TASK_HISTORY
-		     (
-		       TASK_HISTORY_NO
-		     , TASK_PROGRESS_STATUS
-		     , TASK_NO
-		     , MEMBER_NO
-		     , TASK_HISTORY_RECORD
-		     , TASK_UPDATED_DATE
-		     , TASK_UPDATED_CODE
-		     )
+		  INTO TBL_TASK_HISTORY A
+		(
+		  A.TASK_HISTORY_NO
+		, A.TASK_PROGRESS_STATUS
+		, A.TASK_NO
+		, A.MEMBER_NO
+		, A.TASK_HISTORY_RECORD
+		, A.TASK_UPDATED_DATE
+		, A.TASK_UPDATED_CODE
+		)
 		VALUES
-			 (
-			   TASK_HISTORY_NO.NEXTVAL
-			 , #{ progressStatus }
-			 , TASK_NO.CURRVAL
-			 , #{ taskMember }
-			 <if test="parentTaskCode == 'NULL'">
-			 , #{ parentTaskCode}
-			 </if>
-			 <if test="parentTaskCode != 'NULL'">
-			 , #{ taskCode }
-			 </if> 
-			 , SYSDATE
-			 , 1
-			 )
+		(
+		  TASK_HISTORY_NO.NEXTVAL
+		, #{ progressStatus }
+		, TASK_NO.CURRVAL
+		, #{ taskMember }
+		<if test="parentTaskCode == 'NULL'">
+		, #{ parentTaskCode}
+		</if>
+		<if test="parentTaskCode != 'NULL'">
+		, #{ taskCode }
+		</if> 
+		, SYSDATE
+		, 1
+		)
 	</insert>
 	
 	<select id="selectAllCategoryCode" resultMap="taskCategoryResultMap">
 		SELECT
-		       TASK_CATEGORY_CODE
-		     , TASK_CATEGORY_NAME
-		     , TASK_CATEGORY_CODE_TYPE_NO
-		  FROM TBL_TASK_CODE_MANAGE
+		       A.TASK_CATEGORY_CODE
+		     , A.TASK_CATEGORY_NAME
+		     , A.TASK_CATEGORY_CODE_TYPE_NO
+		  FROM TBL_TASK_CODE_MANAGE A
 	</select>
 	
 	<select id="selectChildTask" resultMap="childTaskResultMap">
@@ -344,16 +344,16 @@
 	
 	<select id="selectMemberName" resultType="String">
 		SELECT
-		       MEMBER_NAME
-		  FROM TBL_MEMBER
+		       A.MEMBER_NAME
+		  FROM TBL_MEMBER A
 		 WHERE MEMBER_NO = #{ memberNo }
 	</select>
 	
 	<select id="selectTaskName" resultType="String">
 		SELECT
-		       TASK_CATEGORY_NAME
-		  FROM TBL_TASK_CODE_MANAGE
-		 WHERE TASK_CATEGORY_CODE = #{ taskCode }
+		       A.TASK_CATEGORY_NAME
+		  FROM TBL_TASK_CODE_MANAGE A
+		 WHERE A.TASK_CATEGORY_CODE = #{ taskCode }
 		       
 	</select>
 	
@@ -372,141 +372,141 @@
 	
 	<update id="updateTask">
 		UPDATE
-		       TBL_TASK
-		   SET TASK_START_DATE = #{ startDate }
-		     , TASK_DEADLINE = #{ deadline }
-		     , TASK_PROGRESSION = #{ progressRatio }
-		     , TASK_PROGRESS_STATUS = #{ progressStatus }
-		     , TASK_TYPE_NO = #{ typeNo }
-		     , PROJECT_NO = #{ projectNo }
-		     , MEMBER_NO = #{ taskMember }
-		     , TASK_CATEGORY_CODE = #{ taskCode }
-		     , TASK_IMPORTANCE = #{ importance }
-		 WHERE TASK_NO = #{ taskNo }
+		       TBL_TASK A
+		   SET A.TASK_START_DATE = #{ startDate }
+		     , A.TASK_DEADLINE = #{ deadline }
+		     , A.TASK_PROGRESSION = #{ progressRatio }
+		     , A.TASK_PROGRESS_STATUS = #{ progressStatus }
+		     , A.TASK_TYPE_NO = #{ typeNo }
+		     , A.PROJECT_NO = #{ projectNo }
+		     , A.MEMBER_NO = #{ taskMember }
+		     , A.TASK_CATEGORY_CODE = #{ taskCode }
+		     , A.TASK_IMPORTANCE = #{ importance }
+		 WHERE A.TASK_NO = #{ taskNo }
 	</update>
 	
 	<update id="deleteTask">
 		UPDATE
-               TBL_TASK
-           SET TASK_STATUS = 'N'
-         WHERE TASK_NO = #{ taskNo }
-            OR TASK_REF_NO = #{ taskNo }		 
+               TBL_TASK A
+           SET A.TASK_STATUS = 'N'
+         WHERE A.TASK_NO = #{ taskNo }
+            OR A.TASK_REF_NO = #{ taskNo }		 
 	</update>
 	
 	<update id="deleteChildTask">
 		UPDATE
-               TBL_TASK
-           SET TASK_STATUS = 'N'
-         WHERE TASK_NO = #{ taskNo }
+               TBL_TASK A
+           SET A.TASK_STATUS = 'N'
+         WHERE A.TASK_NO = #{ taskNo }
 	</update>
 	
 	<insert id="insertUpdateHistory">
 		INSERT
-		  INTO TBL_TASK_HISTORY
-		     (
-		       TASK_HISTORY_NO
-		     , TASK_PROGRESS_STATUS
-		     , TASK_NO
-		     , MEMBER_NO
-		     , TASK_HISTORY_RECORD
-		     , TASK_UPDATED_DATE
-		     , TASK_UPDATED_CODE
-		     )
+		  INTO TBL_TASK_HISTORY A
+		(
+		  A.TASK_HISTORY_NO
+		, A.TASK_PROGRESS_STATUS
+		, A.TASK_NO
+		, A.MEMBER_NO
+		, A.TASK_HISTORY_RECORD
+		, A.TASK_UPDATED_DATE
+		, A.TASK_UPDATED_CODE
+		)
 		VALUES
-		     (
-		       TASK_HISTORY_NO.NEXTVAL
-		     , #{ progressStatus }
-		     , #{ taskNo }
-		     , #{ memberNo }
-		     , #{ taskCode }
-		     , SYSDATE
-		     , 2
-		     )
+		(
+		  TASK_HISTORY_NO.NEXTVAL
+		, #{ progressStatus }
+		, #{ taskNo }
+		, #{ memberNo }
+		, #{ taskCode }
+	    , SYSDATE
+		, 2
+		)
 	</insert>
 	<insert id="insertDeleteHistory">
 		INSERT
-		  INTO TBL_TASK_HISTORY
-		     (
-		       TASK_HISTORY_NO
-		     , TASK_NO
-		     , MEMBER_NO
-		     , TASK_UPDATED_DATE
-		     , TASK_UPDATED_CODE
-		     )
+		  INTO TBL_TASK_HISTORY A
+		(
+		  A.TASK_HISTORY_NO
+		, A.TASK_NO
+		, A.MEMBER_NO
+		, A.TASK_UPDATED_DATE
+		, A.TASK_UPDATED_CODE
+		)
 		VALUES
-		     (
-		       TASK_HISTORY_NO.NEXTVAL
-		     , #{ taskNo }
-		     , #{ memberNo }
-		     , SYSDATE
-		     , 3
-		     )
+		(
+		   TASK_HISTORY_NO.NEXTVAL
+		, #{ taskNo }
+		, #{ memberNo }
+		, SYSDATE
+		, 3
+		)
 	</insert>
 	
 	<insert id="insertEntireRegistHistroy">
 		INSERT
-		  INTO TBL_ENTIRE_HISTORY
-		     (
-		       HISTORY_NO
-		     , UPDATED_DATE
-		     , CONTENT
-		     , CATEGORY_TYPE_NO
-		     , PROJECT_NO
-		     , REGISTER_NO  
-		     )
+		  INTO TBL_ENTIRE_HISTORY A
+		(
+		  A.HISTORY_NO
+		, A.UPDATED_DATE
+		, A.CONTENT
+		, A.CATEGORY_TYPE_NO
+		, A.PROJECT_NO
+		, A.REGISTER_NO  
+		)
 		VALUES
-		     (
-		       HISTORY_NO.NEXTVAL
-		     , SYSDATE
-		     , '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '등록' || '] ' || '했습니다'
-		     , 2
-		     , #{ projectNo }
-		     , #{ memberNo }
+		(
+		  HISTORY_NO.NEXTVAL
+		, SYSDATE
+		, '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '등록' || '] ' || '했습니다'
+		, 2
+		, #{ projectNo }
+		, #{ memberNo }
 		     )
 	</insert>
 		
 	<insert id="insertEntireUpdateHistory">
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
-			 (
-			   A.HISTORY_NO
-			 , A.UPDATED_DATE
-		     , A.CONTENT
-		     , A.CATEGORY_TYPE_NO
-		     , A.PROJECT_NO
-		     , A.REGISTER_NO
-		     )
+		(
+		  A.HISTORY_NO
+		, A.UPDATED_DATE
+		, A.CONTENT
+		, A.CATEGORY_TYPE_NO
+		, A.PROJECT_NO
+		, A.REGISTER_NO
+		)
 		VALUES
-		     (
-		       HISTORY_NO.NEXTVAL
-		     , SYSDATE
-		     , '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '수정' || '] ' || '했습니다'
-		     , 2
-		     , #{ projectNo }
-		     , #{ memberNo }
+		(
+		  HISTORY_NO.NEXTVAL
+		, SYSDATE
+		, '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '수정' || '] ' || '했습니다'
+		, 2
+		, #{ projectNo }
+		, #{ memberNo }
 	         )
 	</insert>
 	
 	<insert id="insertEntireDeleteHistory">
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
-			 (
-			   A.HISTORY_NO
-			 , A.UPDATED_DATE
-		     , A.CONTENT
-		     , A.CATEGORY_TYPE_NO
-		     , A.PROJECT_NO
-		     , A.REGISTER_NO
-		     )
-		     VALUES
-		     (
-		       HISTORY_NO.NEXTVAL
-		     , SYSDATE
-		     , '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName  } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '삭제' || '] ' || '했습니다'
-		     , 2
-		     , #{ projectNo }
-		     , #{ memberNo }
-	         )
+		(
+		  A.HISTORY_NO
+		, A.UPDATED_DATE
+		, A.CONTENT
+		, A.CATEGORY_TYPE_NO
+		, A.PROJECT_NO
+		, A.REGISTER_NO
+		)
+		VALUES
+		(
+		  HISTORY_NO.NEXTVAL
+		, SYSDATE
+		, '[' || #{ memberName } || ']' || '님이 ' || ' [' || #{ taskName  } || '] ' || ' [' || '업무' || '] ' || '를 ' || '[' || '삭제' || '] ' || '했습니다'
+		, 2
+		, #{ projectNo }
+		, #{ memberNo }
+	    )
 	</insert>
 	
 </mapper>

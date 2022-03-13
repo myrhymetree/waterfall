@@ -27,15 +27,15 @@ public class ChildTaskDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private java.sql.Date deadline;				//마감기한
 	private int progression;					//진행률
+	private int managerNo;						//업무 담당하는 사람 번호
+	private int projectNo;						//업무에 해당하는 프로젝트번호
 	private String progressStatus;				//진행상태("진행중","진행")
 	private String typeNo;						//1 : 일반 2: 마일스톤
 	private String taskStatus;					//업무 삭제여부
-	private int projectNo;						//업무에 해당하는 프로젝트번호
-	private int managerNo;						//업무 담당하는 사람 번호
-	private String managerName;
+	private String managerName;					//하위업무 담당자 이름
 	private String taskCode;					//하위업무 코드명(ex.TEST_ALL)
-	private ProjectDTO projectName;
-	private String importance;
+	private ProjectDTO projectName;				//프로젝트명
+	private String importance;					//중요도
 	
 	private TaskCategoryDTO taskCategory;
 	private TaskDTO parentTask;

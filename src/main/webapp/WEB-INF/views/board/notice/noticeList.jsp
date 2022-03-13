@@ -192,7 +192,9 @@ td {
          <div class="write">
             <button type="button" class="btn btn-secondary mb-2"
                data-bs-toggle="modal" data-bs-target="#writeModal">
+               <c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
                <i class="far fa-edit me-1"></i>등록
+               </c:if>
             </button>
          </div>
          <table class="notice-tbl">

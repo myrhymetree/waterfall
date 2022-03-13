@@ -1,10 +1,6 @@
 package com.greedy.waterfall.task.controller;
 
-import java.net.http.HttpRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,16 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectAuthorityDTO;
 import com.greedy.waterfall.task.model.dto.AllTaskCodeDTO;
@@ -139,7 +131,7 @@ public class TaskController {
 		if(taskService.registTask(taskRegistDTO)) {
 			rttr.addFlashAttribute("message", "업무 등록에 성공하셨습니다.");
 		} else {
-			rttr.addFlashAttribute("message", "등록할 업무를 확인 해주세요.");
+			rttr.addFlashAttribute("message", "등록할 업무를 확인해주세요.");
 		}
 		
 		
@@ -147,6 +139,14 @@ public class TaskController {
 		
 	}
 	
+	/**
+	 * findTaskDetail : 메소드 설명 작성 부분
+	 * @param 매개변수의 설명 작성 부분
+	 * @return taskDetail : 하위업무 정보
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@GetMapping("/detail")
 	public ModelAndView findTaskDetail(ModelAndView mv, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
 		
@@ -155,11 +155,8 @@ public class TaskController {
 		/* jsp에서 받은 클릭한 하위업무 번호*/
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 		
-		System.out.println("taskTimeline Detail taskNo : " + taskNo);
-		
 		ChildTaskDTO taskDetail = taskService.findTaskDetail(taskNo);
-		
-		System.out.println("taskDetail : " + taskDetail);
+		System.out.println("taskDetail 확인 :" + taskDetail );
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -168,6 +165,14 @@ public class TaskController {
 		return mv;
 	}
 	
+	/**
+	 * modifyTask : 업무수정 메소드
+	 * @param @ModelAttribute TaskRegistDTO taskUpdateDTO 수정할 업무 정보
+	 * @return message와 업무 메인으로 redirect
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@PostMapping("/update")
 	public String modifyTask(@ModelAttribute TaskRegistDTO taskUpdateDTO, HttpServletRequest request,
 			                 HttpSession session, RedirectAttributes rttr) {
@@ -198,6 +203,14 @@ public class TaskController {
 	
 
 
+	/**
+	 * removeTask : 업무 삭제 메소드
+	 * @param 
+	 * @return 업무 삭제 성공 메세지와 업무 메인으로 redirect
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@GetMapping("/delete")
 	public String removeTask(HttpServletRequest request, HttpSession session, RedirectAttributes rttr) {
 		
@@ -224,11 +237,27 @@ public class TaskController {
 		return "redirect:/task/timeline";
 	}
 	
+	/**
+	 * getProjectNo : session에 담겨있는 projectNo을 리턴해주는 메소드
+	 * @param session
+	 * @return projectNo : session에 담겨있는 projectNo
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	private int getProjectNo(HttpSession session) {
 		int projectNo = ((ProjectAuthorityDTO) session.getAttribute("projectAutority")).getProjectNo();
 		return projectNo;
 	}
 	
+	/**
+	 * getMemberNo : session에 담겨있는 member 번호를 리턴해주는 메소드
+	 * @param request view페이지 요청 값
+	 * @return memberNo : session에 담겨있는 멤버 번호
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	private int getMemberNo(HttpServletRequest request) {
 		
 		int memberNo = (((MemberDTO) request.getSession().getAttribute("loginMember")).getNo());

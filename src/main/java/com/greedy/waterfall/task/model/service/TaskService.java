@@ -11,6 +11,16 @@ import com.greedy.waterfall.task.model.dto.TaskDTO;
 import com.greedy.waterfall.task.model.dto.TaskHistoryDTO;
 import com.greedy.waterfall.task.model.dto.TaskRegistDTO;
 
+/**
+ * <pre>
+ * Class : TaskService
+ * Comment : 업무 서비스 interface
+ * 
+ * History
+ * 2022. 3. 13.  (김서영)
+ * @version 1
+ * @author 김서영
+ */
 public interface TaskService {
 
 	List<TaskDTO> findTaskTimeline(TaskDTO taskDTO);

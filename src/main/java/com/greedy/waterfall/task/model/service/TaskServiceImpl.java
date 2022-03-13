@@ -48,12 +48,6 @@ public class TaskServiceImpl implements TaskService{
 		
 		/* 상위업무 List */
 		List<TaskDTO> parentTaskList = mapper.selectParentTaskList(taskDTO);
-		List<ChildTaskDTO> defaultChildTaskList =  new ArrayList<ChildTaskDTO>();
-		for(int i = 0; i < parentTaskList.size(); i++) {
-			parentTaskList.get(i).setChildList(defaultChildTaskList);
-		}
-		System.out.println("parentTaskList 확인 : " + parentTaskList);
-		
 		List<ChildTaskDTO> childTaskList = new ArrayList<ChildTaskDTO>();
 		/* parentTaskList안의 parentDTO내의 childTaskList 불러오기 */
 		for(int i = 0; i < parentTaskList.size(); i++) {
@@ -67,13 +61,12 @@ public class TaskServiceImpl implements TaskService{
 				childTaskList.get(j).setParentTaskNo(parentTaskNo);
 				childTaskList.get(j).setProjectNo(taskDTO.getProjectNo());
 			}
-		}
-		/*위에서 조회한 상위업무의 번호를 통해 하위업무 list 조회*/
-		for(int i = 0; i < parentTaskList.size(); i++) {
-			childTaskList = mapper.selectChildTaskList(parentTaskList.get(i).getTaskNo());
-			parentTaskList.get(i).setChildList(childTaskList);
 			
+			/*위에서 조회한 상위업무의 번호를 통해 하위업무 list 조회*/
+			childTaskList = mapper.selectChildTaskList(parentTaskNo);
+			parentTaskList.get(i).setChildList(childTaskList);
 		}
+		
 			
 		System.out.println("parentTaskList : " +parentTaskList);
 		
@@ -82,9 +75,9 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	/**
-	 * findAllTaskCode : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * findAllTaskCode : 모든 업무 코드, 업무명 조회 메소드
+	 * @param 
+	 * @return allTaskCodeDTO : 모든 업무코드와 코드명이 담긴 DTO
 	 * 
 	 * @author 김서영
 	 */
@@ -102,14 +95,12 @@ public class TaskServiceImpl implements TaskService{
 		
 		return allTaskCodeDTO;
 		
-		
-		 
 	}
 
 	/**
-	 * findProjectMember : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * findProjectMember : 프로젝트에 참여중인 멤버 정보 조회
+	 * @param int projectNo : 프로젝트 번호
+	 * @return memberList : projectNo에 해당하는 member정보 List
 	 * 
 	 * @author 김서영
 	 */
@@ -122,9 +113,9 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	/**
-	 * registTask : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * registTask : 업무 등록 메소드
+	 * @param TaskRegistDTO taskRegistDTO : 등록할 업무 정보
+	 * @return true : 업무 등록 성공/ false : 업무 등록 실패
 	 * 
 	 * @author 김서영
 	 */
@@ -225,9 +216,9 @@ public class TaskServiceImpl implements TaskService{
 
 
 	/**
-	 * findAllCategoryCode : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * findAllCategoryCode : 모든 업무 카테고리 코드 조회 메소드
+	 * @param 
+	 * @return taskCategoryList : 모든 카테고리 코드와 코드명
 	 * 
 	 * @author 김서영
 	 */
@@ -240,9 +231,9 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	/**
-	 * findChildTaskList : 메소드 설명 작성 부분
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * findChildTaskList : 프로젝트 내 하위업무 조회하는 메소드
+	 * @param int projectNo 프로젝트 번호
+	 * @return childTaskList : proejctNo에 해당하는 하위업무 List
 	 * 
 	 * @author 김서영
 	 */
@@ -254,6 +245,14 @@ public class TaskServiceImpl implements TaskService{
 		return childTaskList;
 	}
 
+	/**
+	 * findTaskDetail : 업무 상세정보 조회
+	 * @param int taskNo : 상세조회할 taskNo
+	 * @return childTask : taskNo에 해당하는 업무 상세정보
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public ChildTaskDTO findTaskDetail(int taskNo) {
 		
@@ -269,6 +268,15 @@ public class TaskServiceImpl implements TaskService{
 		return childTask;
 	}
 
+	/**
+	 * updateTask : 업무 수정
+	 * @param first : TaskRegistDTO taskUpdateDTO : 업무 수정정보가 담긴 DTO
+	 * @param second : TaskHistoryDTO history : history 등록을 위한 DTO
+	 * @return 
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public void updateTask(TaskRegistDTO taskUpdateDTO,  TaskHistoryDTO history) {
 		
@@ -300,6 +308,15 @@ public class TaskServiceImpl implements TaskService{
 		
 	}
 
+	/**
+	 * removeTask : 상위업무 번호로 삭제 요청이 들어올 시 로직을 통해 하위업무까지 삭제하는 메소드
+	 * @param first TaskDTO task : 삭제할 task 정보
+	 * @param second TaskHistoryDTO history :히스토리 등록을 위한 DTO
+	 * @return 
+	 * 
+	 * @author 김서영
+	 * @date 2022. 3. 13.
+	 */
 	@Override
 	public void removeTask(TaskDTO task, TaskHistoryDTO history) {
 		
@@ -468,9 +485,9 @@ public class TaskServiceImpl implements TaskService{
 	}
 	
 	/**
-	 * isParentTaskExist : 상위업무번호가
-	 * @param 매개변수의 설명 작성 부분
-	 * @return 리턴값의 설명 작성 부분
+	 * isParentTaskExist : 상위업무번호(ref_task_no)가 존재하는지 확인하는 메소드
+	 * @param Integer parentTaskNo
+	 * @return parentTaskNo이 0보다 크면 return true;
 	 * 
 	 * @author 김서영
 	 */

@@ -77,6 +77,7 @@
 	top: 150px;
 	border-width: 1px;
 	margin-left:660px;
+	overflow : auto;
 
 }
 

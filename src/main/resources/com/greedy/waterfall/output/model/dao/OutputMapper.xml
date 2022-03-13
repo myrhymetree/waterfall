@@ -188,7 +188,7 @@
 		UPDATE
 		       TBL_OUTPUT A
 		   SET A.OUTPUT_STATUS = 'N'
-		 WHERE OUTPUT_NO = #{ outputNo }
+		 WHERE A.OUTPUT_NO = #{ outputNo }
 	</update>
 	
 	<select id="selectAllProjectList" resultMap="projectResultMap">
@@ -214,18 +214,18 @@
 	<select id="selectAlloutputCount" resultType="_int">
 		SELECT
 		       COUNT(*)
-		  FROM TBL_OUTPUT
-		 WHERE PROJECT_NO = #{ projectNo }
-		   AND OUTPUT_STATUS = 'Y'
+		  FROM TBL_OUTPUT A
+		 WHERE A.PROJECT_NO = #{ projectNo }
+		   AND A.OUTPUT_STATUS = 'Y'
 		       
 	</select>
 	
 	<select id="selectAllDeletedOutputCount" resultType="_int">
 		SELECT
 		       COUNT(*)
-		  FROM TBL_OUTPUT
-		 WHERE PROJECT_NO = #{ projectNo }
-		   AND OUTPUT_STATUS = 'N'
+		  FROM TBL_OUTPUT A
+		 WHERE A.PROJECT_NO = #{ projectNo }
+		   AND A.OUTPUT_STATUS = 'N'
 	</select>
 	
 	<select id="selectAdminOutputList" resultMap="outputResultMap">
@@ -247,24 +247,24 @@
 	<select id="selectOutputVer" resultType="_int">
 		SELECT
 		       COUNT(*)
-		  FROM TBL_OUTPUT
-		 WHERE TASK_NO = #{ taskNo }
-		   AND OUTPUT_STATUS = 'Y'
+		  FROM TBL_OUTPUT A
+		 WHERE A.TASK_NO = #{ taskNo }
+		   AND A.OUTPUT_STATUS = 'Y'
 	</select>
 	
 	<select id="selectOutputCount" resultType="_int">
 		SELECT
 		       COUNT(*)
-		  FROM TBL_OUTPUT
-		 WHERE TASK_NO = #{ taskNo }
-		   AND OUTPUT_STATUS = 'Y'
+		  FROM TBL_OUTPUT A
+		 WHERE A.TASK_NO = #{ taskNo }
+		   AND A.OUTPUT_STATUS = 'Y'
 	</select>
 	
 	<select id="selectOriginName" resultType="String">
 		SELECT
-		       OUTPUT_ORIGIN_NAME
-		  FROM TBL_OUTPUT_FILE
-		 WHERE REF_OUTPUT_NO = #{ outputNo }
+		       A.OUTPUT_ORIGIN_NAME
+		  FROM TBL_OUTPUT_FILE A
+		 WHERE A.REF_OUTPUT_NO = #{ outputNo }
 	</select>
 	
 	<select id="findDeleteOutputList" resultMap="restoreOutputResultMap">
@@ -295,10 +295,10 @@
 	
 	<select id="selectDeletedOutput" resultMap="outputResultMap">
 		SELECT
-		       OUTPUT_NO
-		  FROM TBL_OUTPUT
-		 WHERE OUTPUT_STATUS = 'N'
-		   AND TASK_NO = #{ taskNo }
+		       A.OUTPUT_NO
+		  FROM TBL_OUTPUT A
+		 WHERE A.OUTPUT_STATUS = 'N'
+		   AND A.TASK_NO = #{ taskNo }
 	</select>
 	
 	<select id="selectTaskNoOutputNo" resultMap="restoreOutputResultMap">
@@ -332,164 +332,164 @@
 	<insert id="insertOutput">
 		INSERT
 		  INTO TBL_OUTPUT A
-		     (
-		       A.OUTPUT_NO
-		     , A.OUTPUT_COMMENT
-		     , A.OUTPUT_REGISTED_DATE
-		     , A.OUTPUT_STATUS
-		     , A.MEMBER_NO
-		     , A.PROJECT_NO
-		     , A.TASK_NO
-		     , A.OUTPUT_VER
-		     )
-		     VALUES
-		     (
-		       OUTPUT_NO.NEXTVAL
-		     , #{ content }
-		     , SYSDATE
-		     , 'Y'
-		     , #{ memberNo }
-		     , #{ projectNo }
-		     , #{ taskNo }
-		     , 1
-		     )
+	    (
+          A.OUTPUT_NO
+	    , A.OUTPUT_COMMENT
+        , A.OUTPUT_REGISTED_DATE
+    	, A.OUTPUT_STATUS
+        , A.MEMBER_NO
+        , A.PROJECT_NO
+        , A.TASK_NO
+	    , A.OUTPUT_VER
+	    )
+	    VALUES
+        (
+          OUTPUT_NO.NEXTVAL
+        , #{ content }
+	    , SYSDATE
+        , 'Y'
+        , #{ memberNo }
+        , #{ projectNo }
+		, #{ taskNo }
+		, 1
+		)
 	</insert>
 	
 	<insert id="insertOutputAttachment">
 		INSERT
-		  INTO TBL_OUTPUT_FILE 
-		     (
-		       OUTPUT_FILE_NO
-		     , OUTPUT_FILE_PATH
-		     , OUTPUT_ORIGIN_NAME
-		     , OUTPUT_RANDOM_NAME
-		     , OUTPUT_STATUS
-		     , OUTPUT_REGISTED_DATE
-		     , REF_OUTPUT_NO
-		     )
-		     VALUES
-		     (
-		       OUTPUT_FILE_NO.NEXTVAL
-		     , #{ filePath }
-		     , #{ originName }
-		     , #{ randomName }
-		     , 'Y'
-		     , SYSDATE
-		     , OUTPUT_NO.CURRVAL
-		     )
+		  INTO TBL_OUTPUT_FILE A
+		(
+		  A.OUTPUT_FILE_NO
+		, A.OUTPUT_FILE_PATH
+		, A.OUTPUT_ORIGIN_NAME
+		, A.OUTPUT_RANDOM_NAME
+		, A.OUTPUT_STATUS
+		, A.OUTPUT_REGISTED_DATE
+		, A.REF_OUTPUT_NO
+		)
+		VALUES
+		(
+		  OUTPUT_FILE_NO.NEXTVAL
+		, #{ filePath }
+		, #{ originName }
+	    , #{ randomName }
+		, 'Y'
+		, SYSDATE
+		, OUTPUT_NO.CURRVAL
+		)
 	</insert>
 	
 	<insert id="insertOutputHistory">
 		INSERT
-		  INTO TBL_OUTPUT_HISTORY
-		     (
-		       OUTPUT_HISTORY_NO
-		     , OUTPUT_HISTORY_DATE
-		     , OUTPUT_HISTORY_CONDITION
-		     , OUTPUT_NO
-		     , MEMBER_NO
-		     )
-		     VALUES
-		     (
-		       OUTPUT_HISTORY_NO.NEXTVAL
-		     , SYSDATE
-		     , '등록'
-		     , OUTPUT_NO.CURRVAL
-		     , #{ memberNo }
-		     )
+		  INTO TBL_OUTPUT_HISTORY A
+		(
+		  A.OUTPUT_HISTORY_NO
+		, A.OUTPUT_HISTORY_DATE
+		, A.OUTPUT_HISTORY_CONDITION
+		, A.OUTPUT_NO
+		, A.MEMBER_NO
+		)
+		  VALUES
+		(
+		  OUTPUT_HISTORY_NO.NEXTVAL
+		, SYSDATE
+		, '등록'
+		, OUTPUT_NO.CURRVAL
+		, #{ memberNo }
+		)
 	</insert>
 	<insert id="insertUpdateHistory">
 		INSERT
-		  INTO TBL_OUTPUT_HISTORY
-			 (
-		  	   OUTPUT_HISTORY_NO
-		     , OUTPUT_HISTORY_DATE
-		     , OUTPUT_HISTORY_CONDITION
-		     , OUTPUT_NO
-		     , MEMBER_NO
-		     , OUTPUT_HISTORY_BEFORE_MODIFY
-		     , OUTPUT_HISTORY_AFTER_MODIFY
-			 )
-			 VALUES
-			 (
-			   OUTPUT_HISTORY_NO.NEXTVAL
-			 , SYSDATE
-			 , '수정'
-			 , #{ outputNo }
-			 , #{ memberNo }
-			 , #{ beforeOriginName }
-			 , #{ afterOriginName }
-			 )   
+		  INTO TBL_OUTPUT_HISTORY A
+		(
+		  A.OUTPUT_HISTORY_NO
+		, A.OUTPUT_HISTORY_DATE
+		, A.OUTPUT_HISTORY_CONDITION
+		, A.OUTPUT_NO
+		, A.MEMBER_NO
+		, A.OUTPUT_HISTORY_BEFORE_MODIFY
+		, A.OUTPUT_HISTORY_AFTER_MODIFY
+		)
+		VALUES
+	    (
+		  OUTPUT_HISTORY_NO.NEXTVAL
+		, SYSDATE
+		, '수정'
+		, #{ outputNo }
+		, #{ memberNo }
+		, #{ beforeOriginName }
+		, #{ afterOriginName }
+		)   
 	</insert>
 	
 	<insert id="insertDeleteHistory">
 		INSERT
-		  INTO TBL_OUTPUT_HISTORY
-		     (
-		       OUTPUT_HISTORY_NO
-		     , OUTPUT_HISTORY_DATE
-		     , OUTPUT_HISTORY_CONDITION
-		     , OUTPUT_NO
-		     , MEMBER_NO
-		     )
-		     VALUES
-		     (
-		       OUTPUT_HISTORY_NO.NEXTVAL
-		     , SYSDATE
-		     , '삭제'
-		     , #{ outputNo }
-		     , #{ memberNo }
+		  INTO TBL_OUTPUT_HISTORY A
+		(
+		  A.OUTPUT_HISTORY_NO
+		, A.OUTPUT_HISTORY_DATE
+		, A.OUTPUT_HISTORY_CONDITION
+		, A.OUTPUT_NO
+		, A.MEMBER_NO
+		)
+		VALUES
+		(
+		  OUTPUT_HISTORY_NO.NEXTVAL
+		, SYSDATE
+		, '삭제'
+		, #{ outputNo }
+		, #{ memberNo }
 		     )
 	</insert>
 	
 	<insert id="insertEntireHistory">
 		INSERT
 		  INTO TBL_ENTIRE_HISTORY A
-			 (
-			   A.HISTORY_NO
-			 , A.UPDATED_DATE
-		     , A.CONTENT
-		     , A.CATEGORY_TYPE_NO
-		     , A.PROJECT_NO
-		     , A.REGISTER_NO
-		     )
-		     VALUES
-		     (
-		       HISTORY_NO.NEXTVAL
-		     , SYSDATE
-		     , '[' || #{ memberName } || ']' || '님이 ' || #{ taskName  } || ' [' || '업무' || '] ' || '에서 ' || '[' || '산출물' || '] 를 ' || '[' || '수정' || '] ' || '했습니다'
-		     , 4
-		     , #{ projectNo }
-		     , #{ memberNo } 
+		(
+		  A.HISTORY_NO
+		, A.UPDATED_DATE
+		, A.CONTENT
+		, A.CATEGORY_TYPE_NO
+		, A.PROJECT_NO
+		, A.REGISTER_NO
+		)
+		VALUES
+		(
+		  HISTORY_NO.NEXTVAL
+		, SYSDATE
+		, '[' || #{ memberName } || ']' || '님이 ' || #{ taskName  } || ' [' || '업무' || '] ' || '에서 ' || '[' || '산출물' || '] 를 ' || '[' || '수정' || '] ' || '했습니다'
+		, 4
+		, #{ projectNo }
+		, #{ memberNo } 
 		     )
 	</insert>
 	
 	<select id="selectMemberName" resultType="String">
 		 SELECT
-        		MEMBER_NAME
-  		   FROM TBL_MEMBER
- 		  WHERE MEMBER_NO = #{ memberNo }
+        		A.MEMBER_NAME
+  		   FROM TBL_MEMBER A
+ 		  WHERE A.MEMBER_NO = #{ memberNo }
 	</select>
 	
 	<select id="selectOutputFile" resultMap="fileResultMap">
 		SELECT
-		       OUTPUT_FILE_NO
-		     , OUTPUT_FILE_PATH
-		     , OUTPUT_ORIGIN_NAME
-		     , OUTPUT_RANDOM_NAME
-		     , OUTPUT_STATUS
-		     , OUTPUT_REGISTED_DATE
-		     , REF_OUTPUT_NO
-		  FROM TBL_OUTPUT_FILE
-		 WHERE REF_OUTPUT_NO = #{ outputNo }
-		   AND OUTPUT_STATUS = 'Y'
+		       A.OUTPUT_FILE_NO
+		     , A.OUTPUT_FILE_PATH
+		     , A.OUTPUT_ORIGIN_NAME
+		     , A.OUTPUT_RANDOM_NAME
+		     , A.OUTPUT_STATUS
+		     , A.OUTPUT_REGISTED_DATE
+		     , A.REF_OUTPUT_NO
+		  FROM TBL_OUTPUT_FILE A
+		 WHERE A.REF_OUTPUT_NO = #{ outputNo }
+		   AND A.OUTPUT_STATUS = 'Y'
 	</select>
 	
 	<update id="deleteOutputFile">
 		UPDATE
-		       TBL_OUTPUT_FILE
-		   SET OUTPUT_STATUS = 'N'
-		 WHERE REF_OUTPUT_NO = #{ outputNo }
+		       TBL_OUTPUT_FILE A
+		   SET A.OUTPUT_STATUS = 'N'
+		 WHERE A.REF_OUTPUT_NO = #{ outputNo }
 	</update>
 	
 	
@@ -508,27 +508,27 @@
 	
 	<update id="updateFile">
 		UPDATE
-		       TBL_OUTPUT_FILE
-		   SET OUTPUT_FILE_PATH = #{ filePath }
-		     , OUTPUT_ORIGIN_NAME = #{ originName }
-		     , OUTPUT_RANDOM_NAME = #{ randomName }
-		     , OUTPUT_REGISTED_DATE = SYSDATE
-		 WHERE REF_OUTPUT_NO = #{ outputNo }
+		       TBL_OUTPUT_FILE A
+		   SET A.OUTPUT_FILE_PATH = #{ filePath }
+		     , A.OUTPUT_ORIGIN_NAME = #{ originName }
+		     , A.OUTPUT_RANDOM_NAME = #{ randomName }
+		     , A.OUTPUT_REGISTED_DATE = SYSDATE
+		 WHERE A.REF_OUTPUT_NO = #{ outputNo }
 		     
 	</update>
 	
 	<update id="updateRestoreFile">
 		UPDATE
-		       TBL_OUTPUT_FILE
-		   SET OUTPUT_STATUS = 'Y'
-		 WHERE OUTPUT_FILE_NO = #{ fileNo }
+		       TBL_OUTPUT_FILE A
+		   SET A.OUTPUT_STATUS = 'Y'
+		 WHERE A.OUTPUT_FILE_NO = #{ fileNo }
 	</update>
 	
 	<update id="updateRestoreOutput">
 		UPDATE
-		       TBL_OUTPUT
-		   SET OUTPUT_STATUS = 'Y'
-		 WHERE OUTPUT_NO = #{ outputNo }
+		       TBL_OUTPUT A
+		   SET A.OUTPUT_STATUS = 'Y'
+		 WHERE A.OUTPUT_NO = #{ outputNo }
 	</update>
 	
 </mapper>

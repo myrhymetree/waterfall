@@ -15,13 +15,13 @@ import lombok.ToString;
 @ToString
 public class NoticeAttachmentDTO {
 	
-	private int fileNo;
-	private String filePath;
-	private String originName;
-	private String randomName;
-	private String status;
-	private int noticeNo;
-	private int categoryNo;
+	private int fileNo;				//공지사항 파일번호
+	private String filePath;		//공지사항 파일경로
+	private String originName;		//공지사항 파일 원본명
+	private String randomName;		//공지사항 파일 랜덤명
+	private String status;			//파일 삭제여부
+	private int noticeNo;			//파일이 속한 공지사항 번호
+	private int categoryNo;			//게시판 카테고리 번호
 	
 
 }

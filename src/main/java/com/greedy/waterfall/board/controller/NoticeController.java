@@ -93,14 +93,7 @@ public class NoticeController {
 		searchMap.put("searchValue", searchValue);
 		searchMap.put("projectNo", projectNo2);
 		
-		
-		
-
-		System.out.println("컨트롤러에서 검색조건 확인하기 : " + searchMap);
-
 		int totalCount = noticeService.findTotalCount(searchMap);
-
-		System.out.println("totalNoticeCount : " + totalCount);
 
 		int limit = 20;
 
@@ -119,8 +112,6 @@ public class NoticeController {
 		System.out.println(selectCriteria);
 
 		List<NoticeDTO> noticeList = noticeService.findNoticeList(selectCriteria);
-
-		System.out.println("NoticeList : " + noticeList);
 
 		mv.addObject("noticeList", noticeList);
 		mv.addObject("selectCriteria", selectCriteria);
@@ -143,8 +134,6 @@ public class NoticeController {
 		int no = Integer.parseInt(request.getParameter("no"));
 		
 		NoticeDTO noticeDetail = noticeService.findNoticeDetail(no);
-
-		System.out.println("상세조회 noticeDetail : " + noticeDetail);
 
 		Gson gson = new GsonBuilder()
 				.setDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
@@ -175,9 +164,6 @@ public class NoticeController {
 
 		notice.setMemberNo(memberNo);
 		notice.setProjectNo(projectNo);
-		System.out.println("content 확인" + content);
-		
-		
 		
 		/* 파일 저장될 root 설정 */
 		String root = request.getServletContext().getRealPath("resources");
@@ -189,8 +175,6 @@ public class NoticeController {
 		if(!directory.exists()) {
 			directory.mkdirs();
 		}
-		
-		
 		
 		if(noticeFile.getSize() > 0 ) {
 			/* request로 들어온 파일 확인 */
@@ -214,7 +198,6 @@ public class NoticeController {
 			/* 파일 저장 */
 			try {
 				noticeFile.transferTo(new File(fileUploadDirectory + "/" + savedName));
-				System.out.println("등록용 noticeDTO 확인 : " + notice);
 				
 				noticeService.registNotice(notice);
 				
@@ -290,8 +273,6 @@ public class NoticeController {
 	@GetMapping("/download/{no}")
 	public ModelAndView downloadNoticeFile(ModelAndView mv, @PathVariable("no") String no) throws NumberFormatException, UnsupportedEncodingException {
 		int noticeNo = Integer.parseInt(URLDecoder.decode(no, "UTF-8"));
-		
-		System.out.println("noticeNo 넘어오냐? : " + noticeNo);
 		
 		Map<String, Object> fileInfo = new HashMap<String, Object>();
 		

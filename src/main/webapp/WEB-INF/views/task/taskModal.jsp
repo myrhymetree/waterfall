@@ -235,13 +235,8 @@
 					
 					<p>
 						<label>산출물 등록</label>
-							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
 								<button id="addOutput1" class="button float">등록</button>
 								<input id="outputParentTaskNo" type="hidden" name="parentTaskNo">
-							</c:if>
-							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
-								<input id="outputFileName1" type="file" name="outputFile" readonly>
-							</c:if>
 					</p>
 				</div>
 				<div class="detail"id="childTaskDetail">
@@ -303,13 +298,8 @@
 					
 					<p>
 						<label>산출물 등록</label>
-							<c:if test="${ sessionScope.loginMember.role eq 1 || sessionScope.loginMember.no == sessionScope.projectAutority.pmNo }">
 								<button id="addOutput2" class="button float">등록</button>
 								<input id="outputChildTaskNo" type="hidden" name="childTaskNo">
-							</c:if>
-							<c:if test="${ sessionScope.loginMember.role eq 2 && sessionScope.loginMember.no != sessionScope.projectAutority.pmNo }">
-								<input id=outputFileName2 type="file" name="outputFile" readonly>
-							</c:if>
 					</p>
 					</div>
 						<button id="close" class="button float" style="float: none; padding:4px; margin-right:30px; margin-left: 600px;"  rel="float">업무 나가기</button>

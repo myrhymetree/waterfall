@@ -517,8 +517,9 @@ ul {
 				</div>
 			</div>
 		</div>
+		<jsp:include page="/WEB-INF/views/task/taskModal.jsp"/>	
 	</div>
-	<jsp:include page="/WEB-INF/views/task/taskModal.jsp"/>	
+	
 	<script>
 	<%--Modal drag 이벤트 --%>
 	/* $(function(){
@@ -769,8 +770,33 @@ ul {
 					data : {"taskNo" : taskNo},
 					success : function(data, textStatus, xhr) {
 						const taskDetail = JSON.parse(data.taskDetail);
+						console.log(data);
 						console.log(taskDetail.taskNo);
 						console.log(taskDetail.parentTask.taskNo);
+						console.log(taskDetail.parentTask.startDate);
+						
+						/* const parentStart = taskDetail.parentTask.startDate;
+						const strArr = parentStart.split('-');
+						const day = Number(strArr[2]) + 1;
+						const parentStartDate = strArr[0] + "-" + strArr[1] + "-" + day;
+						
+						const parentEnd = taskDetail.parentTask.deadline;
+						const strArr2 = parentEnd.split('-');
+						const day2 = Number(strArr2[2]) + 1;
+						const parentEndDate = strArr2[0] + "-" + strArr2[1] + "-" + day2;
+						console.log(parentEndDate);
+						
+						const childStart = taskDetail.startDate;
+						const strArr3 = childStart.split('-');
+						const day3 = Number(strArr3[2]) + 1;
+						const childStartDate = strArr3[0] + "-" + strArr3[1] + "-" + day3;
+						console.log(childStartDate);
+						
+						const childEnd = taskDetail.deadline;
+						const strArr4 = childEnd.split('-');
+						const day4 = Number(strArr4[2]) + 1;
+						const childEndDate = strArr4[0] + "-" + strArr4[1] + "-" + day4;
+						console.log(childEndDate); */
 						
 						//상위업무
 						$("input[name=parentTaskName]").val(taskDetail.parentTask.taskCategory.categoryName);

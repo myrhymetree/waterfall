@@ -278,7 +278,6 @@ input{
 								
 								<label class="box2_sql_body" id="content">내용</label><br>
 								<textarea class="test" cols="75" rows="5"  style="font-size: 14px;margin-left:20px" name="content" ></textarea><br>
-								
 								<button class="box2_sql_body button float" id="modifyBtn" style="margin-left : 500px;" >수정하기</button>
 								<input id="outputNo" type="hidden" name="outputNo"/>
 								<input id="taskNo" type="hidden" name="taskNo">
@@ -390,6 +389,10 @@ input{
 						     $("input[name=originalName]").val(outputFile.originName);
 						     
 						     $("input[name=taskNo]").val(no);
+						     
+						     $("input[name=projectNo]").val(parentTask.projectNo);
+						     
+						     $("input[name=childTaskName]").val(childTask.taskCategory.categoryName);
 							 
 			                 
 						     var $downloadTag = "<a href='${pageContext.servletContext.contextPath}/output/download/" + refOutputNo 
