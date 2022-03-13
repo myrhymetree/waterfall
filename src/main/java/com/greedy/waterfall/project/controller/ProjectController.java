@@ -206,7 +206,7 @@ public class ProjectController implements ProjectControllerView {
 		mv.addObject("subselectCriteria", project.getSubselectCriteria());
 		mv.addObject("projectList", project);
 		mv.addObject("intent", "/project/list");
-		mv.setViewName(PROJECT_MANAGE_VIEW);
+		mv.setViewName(PROJECT_LIST_VIEW);
 
 		return mv;
 	}
@@ -294,7 +294,7 @@ public class ProjectController implements ProjectControllerView {
 		mv.addObject("statusList", statusList);
 		mv.addObject("deptList", deptList);
 		mv.addObject("projectInfo", projectInfo);
-		mv.setViewName(REDIRECT_MANAGE_VIEW);
+		mv.setViewName(PROJECT_MODIFY_VIEW);
 		return mv;
 	}
 	
