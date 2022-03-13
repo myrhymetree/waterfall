@@ -65,7 +65,7 @@ public class EduController {
 	/**
 	 * eduSelectList : 게시판 전체 목록 조회 메소드
 	 * @param request : 현재 페이지, 프로젝트 번호, 검색 내용 정보가 담긴 변수  
-	 * @return mv("/board/edu/eduList") : 
+	 * @return mv("/board/edu/eduList") : 현재 페이지에서 조회한 게시글 목록과, 돌아갈 주소가 담긴 변수를 반환한다.
 	 * 
 	 * @author 김영광
 	 */
@@ -120,11 +120,17 @@ public class EduController {
 		return mv;
  	}
 	
-	@GetMapping("edu/eduList")
-	public void registEduBoard() {
-		
-	}
 	
+	/**
+	 * registEduBoard : 교육 게시판의 등록 기능을 담당하는 메소드
+	 * @param eduBoard : 게시글 등록에 필요한 정보가 담아올 변수
+	 * @param request :  페이지의 주소를 담아줄 매개변수
+	 * @param rttr : 결과의 따른 메시지를 view 페이지에 출력할 변수 
+	 * @param singleFile : view 페이지에 등록한 파일을 담아올 매개변수
+	 * @return "redirect:/edu/list" : 현재 페이지의 주소가 담긴 문자열을 view로 반환한다. 
+	 * 
+	 * @author 김영광
+	 */
 	@PostMapping("/regist")
 	public String registEduBoard(@ModelAttribute EduDTO eduBoard, HttpServletRequest request,
 			RedirectAttributes rttr, @RequestParam MultipartFile singleFile) throws BoardRegistException {
@@ -179,18 +185,18 @@ public class EduController {
 			
 			rttr.addFlashAttribute("message", "게시글 등록에 성공하셨습니다.");
 		}
-		/*
-		 * String title = request.getParameter("title"); String body =
-		 * request.getParameter("body");
-		 * 
-		 * eduBoard.setTitle(title); eduBoard.setContent(body);
-		 * 
-		 * eduService.registEdu(eduBoard);
-		 */
-		
+
 		return "redirect:/edu/list";
 	}
 	
+	/**
+	 * findNoticeDetail : 선택한 게시글을 수정하는 메소드
+	 * @param request : 해당 게시글의 번호를 담아올 매개변수
+	 * @param response : json타입으로 응답하기 위한 변수
+	 * @return mv : 선택한 게시글의 정보를 json으로 반환
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping(value="eduDetail")
     @ResponseBody
     public ModelAndView findNoticeDetail(HttpServletRequest request,
@@ -222,6 +228,14 @@ public class EduController {
 		return mv; 
 	}
 	
+	/**
+	 * removeEduBoard : 해당 게시글을 삭제하는 메소드  
+	 * @param request : 해당 게시글의 번호를 가져오기 위한 매개변수
+	 * @param rttr : "삭제 성공에 대한 메세지"가 담긴 변수
+	 * @return "redirect:/edu/list" : 전달 받은 페이지의 주소가 담긴 문자열을 반환한다. 
+	 * 
+	 * @author 김영광
+	 */
 	@GetMapping("/delete")
 	public String removeEduBoard(HttpServletRequest request, RedirectAttributes rttr) throws BoardRemoveException {
 			System.out.println("확인용" + request.getParameter("no"));
@@ -242,9 +256,17 @@ public class EduController {
 		return "redirect:/edu/list";
 	}
 	
+	/**
+	 * modifyEduBoard : 선택한 게시글을 수정하는 메소드
+	 * @param edu : 해당 게시글의 수정한 정보를 담은 매개변수 
+	 * @param rttr : 게시판 수정 성공을 담은 메세지
+	 * @return "redirect:/edu/list" : 게시판 목록이 담긴 주소로 반환
+	 * 
+	 * @author 김영광
+	 */
 	@PostMapping("/update")
-	public String modifyEduBoard(@ModelAttribute EduDTO edu, HttpServletRequest request,
-			RedirectAttributes rttr) throws BoardModifyException {
+	public String modifyEduBoard(@ModelAttribute EduDTO edu, RedirectAttributes rttr) throws BoardModifyException {
+		
 		eduService.modifyEduBoard(edu);
 		
 		rttr.addFlashAttribute("message", "게시판 수정에 성공하셨습니다.");

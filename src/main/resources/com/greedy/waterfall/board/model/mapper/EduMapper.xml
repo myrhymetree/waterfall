@@ -38,7 +38,7 @@
 	</resultMap>
 	
 	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
-		SELECT
+		SELECT	/* com.greedy.waterfall.board.model.mapper.EduMapper#selectTotalCount() */
 			   COUNT(*)
 	      FROM TBL_BOARD A
 	      <where>
@@ -55,7 +55,7 @@
 	</select>
 	
 	<select id="selectEduList" parameterType="com.greedy.waterfall.common.paging.SelectCriteria" resultMap="eduResultMap">
-		SELECT
+		SELECT	/* com.greedy.waterfall.board.model.mapper.EduMapper#selectEduList() */
 			   A.RNUM
 		     , A.BOARD_NO
 		     , A.BOARD_TITLE
@@ -110,7 +110,7 @@
 	</select>
 	
 	<insert id="insertEduBoard" parameterType="com.greedy.waterfall.board.model.dto.EduDTO">
-		INSERT
+		INSERT	/* com.greedy.waterfall.board.model.mapper.EduMapper#insertEduBoard() */
 		  INTO TBL_BOARD A
 		(
 		  A.BOARD_NO
@@ -137,7 +137,7 @@
 	</insert>
 	
 	<insert id="insertEduFile" parameterType="com.greedy.waterfall.board.model.dto.EduFileDTO">
-		INSERT
+		INSERT	/* com.greedy.waterfall.board.model.mapper.EduMapper#insertEduFile() */
 		  INTO TBL_FILE A
 		 (
 		   A.FILE_NO
@@ -159,7 +159,7 @@
 	</insert>
 	
 	<update id="incrementEduCount" parameterType="_int">
-      UPDATE 
+      UPDATE	/* com.greedy.waterfall.board.model.mapper.EduMapper#incrementEduCount() */ 
              TBL_BOARD A
          SET A.BOARD_COUNT = (SELECT B.BOARD_COUNT
                                 FROM TBL_BOARD B
@@ -169,7 +169,7 @@
     </update>
 	
 	<select id="selectEduDetail" resultMap="eduResultMap">
-      SELECT
+      SELECT	/* com.greedy.waterfall.board.model.mapper.EduMapper#selectEduDetail() */ 
              A.BOARD_NO
            , A.BOARD_UPDATED_DATE
            , A.BOARD_POSTING_DATE
@@ -187,13 +187,13 @@
     </select>
 	
 	<delete id="deleteEduBoard" parameterType="_int">
-		DELETE
+		DELETE	/* com.greedy.waterfall.board.model.mapper.EduMapper#deleteEduBoard() */ 
 		       FROM TBL_BOARD A
 		 WHERE A.BOARD_NO = #{ no }       
 	</delete>
 	
 	<update id="updateEduBoard" parameterType="com.greedy.waterfall.board.model.dto.EduDTO">
-		UPDATE
+		UPDATE	/* com.greedy.waterfall.board.model.mapper.EduMapper#updateEduBoard() */
 		       TBL_BOARD A
 		   SET A.BOARD_TITLE = #{ title }
 		     , A.BOARD_CONTENT = #{ content }
@@ -201,7 +201,7 @@
 	</update>
 	
 	<select id="selectEduDetailFile" resultMap="eduResultMap">
-		SELECT
+		SELECT	/* com.greedy.waterfall.board.model.mapper.EduMapper#selectEduDetailFile() */
                A.BOARD_NO
              , A.BOARD_UPDATED_DATE
              , A.BOARD_POSTING_DATE
@@ -223,7 +223,7 @@
 	</select>
 	
 	<select id="findFile" resultMap="fileResultMap">
-		SELECT
+		SELECT	/* com.greedy.waterfall.board.model.mapper.EduMapper#findFile() */
                A.FILE_NO
              , A.FILE_PATH
              , A.FILE_ORIGIN_NAME
@@ -238,7 +238,7 @@
 	</select>
 	
 	<delete id="deleteEduFile" parameterType="_int">
-	DELETE 
+	DELETE	/* com.greedy.waterfall.board.model.mapper.EduMapper#deleteEduFile() */ 
   	  FROM TBL_File A
      WHERE A.FILE_NO = #{ fileNo }
 	</delete>
