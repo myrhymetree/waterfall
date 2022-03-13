@@ -182,17 +182,7 @@
 					<div class="project-name-area" >
 						<input id="admin-main-project-name"  value="히스토리" type="text" style="border: none; background: transparent;">
 					</div>
-					<div class="history-area">
-						<label class="mt-2">[김서영]님이 [요구사항분석]업무를 [생성]했습니다.</label>
-						<label class="mt-2">[차화응]님이 [홍성원]님을 [5번프로젝트]프로젝트에 [배정]했습니다.</label>
-						<label class="mt-2">[박성준]님이 [논리데이터모델링]업무에 [이슈]를 [등록]했습니다.</label>
-						<label class="mt-2">[김영광]님이 [5번프로젝트]프로젝를 [수정]했습니다.</label>
-						<label class="mt-2">[홍성원]님이 [김서영]님을 프로젝트에 [배정]]했습니다.</label>
-						<label class="mt-2">[김서영]님이 [요구사항분석]업무를 [생성]했습니다.</label>
-						<label class="mt-2">[차화응]님이 [홍성원]님을 [5번프로젝트]프로젝트에 [배정]했습니다.</label>
-						<label class="mt-2">[박성준]님이 [논리데이터모델링]업무에 [이슈]를 [등록]했습니다.</label>
-						<label class="mt-2">[김영광]님이 [5번프로젝트]프로젝를 [수정]했습니다.</label>
-						<label class="mt-2">[홍성원]님이 [김서영]님을 프로젝트에 [배정]]했습니다.</label>
+					<div class="history-area" id="history-area">
 					</div>
 				</div>
 			</div>
@@ -253,7 +243,6 @@
 				
 			}).click(function() {
 				$projectNo = this.parentNode.children[0].children[0].value;
-				console.log($projectNo);
 				
 				$.ajax({
 					type: "get",
@@ -261,8 +250,8 @@
 					success: function(data) {
 						
 						$project = JSON.parse(data.project);
+						$projectHistory = JSON.parse(data.projectHistory);
 						$projectInfo = $project.projectInfo;
-						console.log($projectInfo);
 						$("#admin-main-project-name").val($project.name);
 						$("#admin-main-project-pm").val($project.member.memberName);
 						$("#admin-main-project-startdate").val($project.startDate);
@@ -285,8 +274,11 @@
 						$("#task-category-test").val($projectInfo.testingTaskAmount + "개");
 						$("#task-category-done").val($projectInfo.finishedTaskAmount + "개");
 						$("#task-category-pend").val($projectInfo.pendingTaskAmount + "개");
-
-
+						
+						for(var i = 0; i < $projectHistory.length; i++){
+							$historyLog = '<label class="mt-2">' + $projectHistory[i].content + '</label>';
+							$("#history-area").append($historyLog);
+						}
 
 						google.charts.load('current', {'packages':['corechart']});
 						google.charts.setOnLoadCallback(drawissueChart);

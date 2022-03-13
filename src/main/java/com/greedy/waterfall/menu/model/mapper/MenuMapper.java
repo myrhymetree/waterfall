@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.greedy.waterfall.common.paging.SelectCriteria;
 import com.greedy.waterfall.member.model.dto.MemberDTO;
 import com.greedy.waterfall.project.model.dto.ProjectDTO;
+import com.greedy.waterfall.project.model.dto.ProjectHistoryDTO;
 
 /**
  * <pre>
@@ -73,5 +74,14 @@ public interface MenuMapper {
 	 * 
 	 * @author 홍성원
 	 */
-	public ProjectDTO findJoinProjectDetail(Map<String, Integer> searchMap); 
+	public ProjectDTO findJoinProjectDetail(Map<String, Integer> searchMap);
+
+	/**
+	 * findProjectHistory : 프로젝트의 히스토리를 조회한다.
+	 * @param 프로젝트 번호를 전달받는다.
+	 * @return 히스토리목록을 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	public List<ProjectHistoryDTO> findProjectHistory(int projectNo); 
 }

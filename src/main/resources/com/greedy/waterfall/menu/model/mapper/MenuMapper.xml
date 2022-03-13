@@ -55,6 +55,11 @@
 		<result property="initStatus" column="MEMBER_PWD_INIT_STATUS"/>
 		<result property="role" column="MEMBER_AUTHORIZATION_NO"/>
 	</resultMap>
+	
+	<resultMap type="com.greedy.waterfall.project.model.dto.ProjectHistoryDTO" id="projectHistory">
+		<result property="content" column="CONTENT"/>
+	</resultMap>
+	
 	<select id="findProjectInfo" resultMap="projectResult">
         SELECT /* com.greedy.waterfall.menu.model.mapper.MenuMapper#findProjectInfo() */ 
                A.PROJECT_NO
@@ -297,5 +302,13 @@
          WHERE B.ROLE_NO != 8
            AND B.PROJECT_NO = #{ projectNo }
            AND C.MEMBER_NO = #{ memberNo }
+	</select>
+	
+	<select id="findProjectHistory" resultMap="projectHistory">
+        SELECT /*com.greedy.waterfall.project.model.mapper.ProjectMapper#findProjectHistory() */
+               A.CONTENT
+          FROM TBL_ENTIRE_HISTORY A
+         WHERE A.PROJECT_NO = #{ projectNo }
+         ORDER BY A.HISTORY_NO DESC
 	</select>
 </mapper>
