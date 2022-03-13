@@ -200,7 +200,7 @@ td {
             <%-- 프로젝트 가이드 시작 --%>
             <label style="margin-left: 2%">&emsp;&emsp;&emsp;프로젝트 가이드</label>
             <%-- + 버튼 --%>
-            <button class="float" id="addButton1" onclick="location.href='${ pageContext.servletContext.contextPath }/edu /list'">
+            <button class="float" id="addButton1" onclick="location.href='${ pageContext.servletContext.contextPath }/guide/list'">
                <i style='font-size: 16px' class='fas'>&#xf055;</i>
             </button>
             <%-- 프로젝트 가이드 끝 --%>
