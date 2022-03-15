@@ -7,6 +7,7 @@ public interface ProjectControllerView {
 	
 	final static String PROJECT_MANAGE_VIEW = "/project/projectManage";
 	final static String PROJECT_LIST_VIEW = "/project/projectList";
+	final static String MANAGE_LIST_VIEW = "/project/managelist";
 	
 	final static String PROJECT_REGIST_VIEW = "/project/projectRegist";
 	final static String PROJECT_MODIFY_VIEW = "/project/projectModify";  

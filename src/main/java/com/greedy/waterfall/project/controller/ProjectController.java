@@ -306,16 +306,15 @@ public class ProjectController implements ProjectControllerView {
 	 * @author 홍성원
 	 */
 	@PostMapping("/modify")
-	public ModelAndView modifyProject(ModelAndView mv, @ModelAttribute RegistProjectDTO project, RedirectAttributes rttr) {
+	public String modifyProject(Model model, @ModelAttribute RegistProjectDTO project, RedirectAttributes rttr) {
 		/* 프로젝트의 수정 성공여부 메세지를 담은 문자열을 반환한다. */
 		String message = "프로젝트 수정에 실패했습니다."; 
 		if(projectService.modifyProject(project)) {
 			message = "프로젝트를 수정했습니다.";
 		} 
 		rttr.addFlashAttribute("message", message);
-		mv.setViewName(REDIRECT_MANAGE_VIEW);
 		
-		return mv;
+		return REDIRECT_MANAGE_VIEW;
 	}
 	
 	/**

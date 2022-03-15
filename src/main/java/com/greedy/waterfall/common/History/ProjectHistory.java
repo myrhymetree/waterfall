@@ -25,36 +25,6 @@ import com.greedy.waterfall.project.model.dto.RegistProjectDTO;
 public class ProjectHistory implements History{
 
 	/**
-	 * registHistory : 프로젝트 생성 이력을 저장 후 반환한다.
-	 * @param 프로젝트 생성 정보를 전달받는다.
-	 * @return 생성 이력을 반환한다.
-	 * 
-	 * @author 홍성원
-	 */
-	@Override
-	public List<ProjectHistoryDTO> registHistory(Object info) {
-		/* 프로젝트 생성한 관리자의 정보와 프로젝트의 정보를 전달받는다. */
-		MemberDTO findAdminInfo = (MemberDTO) ((Map<String, Object>) info).get("findAdminInfo");
-		RegistProjectDTO newProject = (RegistProjectDTO) ((Map<String, Object>) info).get("newProject");
-		List<ProjectHistoryDTO> projectRegistHistory = new ArrayList<ProjectHistoryDTO>();
-		/* 프로젝트 생성 이력내용을 저장한다. */
-		projectRegistHistory.add(new ProjectHistoryDTO().builder()
-				.projectNo(newProject.getProjectNo())
-				.managerNo(newProject.getAdminNo())
-				.contentType(PROJECT_HISTORY)
-				.content("[" + findAdminInfo.getName() + "]님이 [" + newProject.getProjectName() + "]프로젝트를 [생성]했습니다.")
-				.build());
-		/* 프로젝트 pm등록 내역을 저장한다. */
-		projectRegistHistory.add(new ProjectHistoryDTO().builder()
-				.projectNo(newProject.getProjectNo())
-				.managerNo(newProject.getAdminNo())
-				.contentType(PROJECT_HISTORY)
-				.content("[" + findAdminInfo.getName() + "]님이 [" + newProject.getProjectName() + "]에 [" + newProject.getPmName() + "]님을 PM으로 등록했습니다.")
-						.build());
-		return projectRegistHistory;
-	}
-
-	/**
 	 * modifyHistory : 프로젝트 수정 이력을 저장 후 반환한다.
 	 * @param 프로젝트 수정 정보를 전달받는다.
 	 * @return 수정 이력을 반환한다.
@@ -98,6 +68,37 @@ public class ProjectHistory implements History{
 		return projectHistoryList;
 	}
 
+
+	/**
+	 * registHistory : 프로젝트 생성 이력을 저장 후 반환한다.
+	 * @param 프로젝트 생성 정보를 전달받는다.
+	 * @return 생성 이력을 반환한다.
+	 * 
+	 * @author 홍성원
+	 */
+	@Override
+	public List<ProjectHistoryDTO> registHistory(Object info) {
+		/* 프로젝트 생성한 관리자의 정보와 프로젝트의 정보를 전달받는다. */
+		MemberDTO findAdminInfo = (MemberDTO) ((Map<String, Object>) info).get("findAdminInfo");
+		RegistProjectDTO newProject = (RegistProjectDTO) ((Map<String, Object>) info).get("newProject");
+		List<ProjectHistoryDTO> projectRegistHistory = new ArrayList<ProjectHistoryDTO>();
+		/* 프로젝트 생성 이력내용을 저장한다. */
+		projectRegistHistory.add(new ProjectHistoryDTO().builder()
+				.projectNo(newProject.getProjectNo())
+				.managerNo(newProject.getAdminNo())
+				.contentType(PROJECT_HISTORY)
+				.content("[" + findAdminInfo.getName() + "]님이 [" + newProject.getProjectName() + "]프로젝트를 [생성]했습니다.")
+				.build());
+		/* 프로젝트 pm등록 내역을 저장한다. */
+		projectRegistHistory.add(new ProjectHistoryDTO().builder()
+				.projectNo(newProject.getProjectNo())
+				.managerNo(newProject.getAdminNo())
+				.contentType(PROJECT_HISTORY)
+				.content("[" + findAdminInfo.getName() + "]님이 [" + newProject.getProjectName() + "]에 [" + newProject.getPmName() + "]님을 PM으로 등록했습니다.")
+						.build());
+		return projectRegistHistory;
+	}
+	
 	/**
 	 * removeHistory : 프로젝트 삭제 이력을 저장 후 반환한다.
 	 * @param 프로젝트 삭제 정보를 전달받는다.

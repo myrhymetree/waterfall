@@ -234,24 +234,20 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Override
 	public boolean modifyProject(RegistProjectDTO newProject) {
-		/* 이력테이블에 수정 내역을 저장하기 위해, 기존 프로젝트 상세내용을 조회하고, 수정하고자 하는 내용을 전달 한 */
+		/* 이력테이블에 수정 내역을 저장하기 위해, 기존 프로젝트 상세내용을 조회하고, 수정하고자 하는 내용을 전달 한다 */
 		Map<String, Object> info  = new HashMap<>();
 		RegistProjectDTO oldProject = mapper.findOneProjectInfo(newProject.getProjectNo());
 		info.put("newProject", newProject);
 		info.put("oldProject", oldProject);
-
 		/* 새로 입력받은 내용으로 프로젝트를 수정한다. */
 		Result modifyResult = new Result(mapper.modifyProject(newProject));
-		
 		/* 기존의 PM과 수정정보에서 입력된 PM정보를 비교 후, PM이 바뀌었는지 확인한다. */
 		if(oldProject.getPmNumber() != newProject.getPmNumber()) {
-			
 			/* 기존 pm의 역할을 지우고,프로젝트에서 내보낸다. */
 			modifyResult.perform(mapper.kickOldPm(oldProject))
 						.and(mapper.projectRoleRemove(newProject))
 						.and(mapper.projectRoleRemove(oldProject))
 						.and(mapper.assignPmRole(newProject)).result();
-			
 			/* 새로운 pm이 프로젝트에 배정이 안돼있을 시 프로젝트에 배정한다. */
 			if(mapper.findMemberInProject(newProject) == null) {
 				

@@ -1,9 +1,13 @@
 package com.greedy.waterfall.project.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -39,6 +43,15 @@ public class ProjectControllerTest implements ProjectControllerView {
 		mvc = MockMvcBuilders.standaloneSetup(new ProjectController(service)).build();
 	}
     
+	@Test
+	public void testModifyProject() throws Exception {
+		 mvc.perform(post("/project/modify"))
+		 	.andExpect(flash().attributeExists("message"))
+		 	.andExpect(redirectedUrl(MANAGE_LIST_VIEW))
+		 	.andExpect(status().is3xxRedirection())
+		 	.andDo(print());
+	}
+    
     @Test
     public void testSendRegistPage() throws Exception {
         mvc.perform(get("/project/regist"))
@@ -51,74 +64,5 @@ public class ProjectControllerTest implements ProjectControllerView {
     }
     
     
-
-	@Test
-	public void testProjectController() {
-	}
-
-	@Test
-	public void testRegistProject() {
-		 
-	}
-
-	@Test
-	public void testSendManageProjectList() {
-		 
-	}
-
-	@Test
-	public void testFindManageProjectList() {
-		 
-	}
-
-	@Test
-	public void testFindProjectList() {
-		 
-	}
-
-	@Test
-	public void testFindTeam() {
-		 
-	}
-
-	@Test
-	public void testFindProjectMainBoard() {
-		 
-	}
-
-	@Test
-	public void testFindTeamMember() {
-		 
-	}
-
-	@Test
-	public void testFindProjectDetail() {
-		 
-	}
-
-	@Test
-	public void testModifyProject() {
-		 
-	}
-
-	@Test
-	public void testSendProjectDetail() {
-		 
-	}
-
-	@Test
-	public void testRemoveProject() {
-		 
-	}
-
-	@Test
-	public void testRestoreProject() {
-		 
-	}
-
-	@Test
-	public void testDeleteProject() {
-		 
-	}
 
 }

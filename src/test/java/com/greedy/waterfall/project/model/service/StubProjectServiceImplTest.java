@@ -25,6 +25,11 @@ public class StubProjectServiceImplTest implements ProjectService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public boolean modifyProject(RegistProjectDTO project) {
+
+		return true;
+	}
 
 	@Override
 	public Map<String, Object> findRegistForm() {
@@ -62,11 +67,7 @@ public class StubProjectServiceImplTest implements ProjectService {
 		return null;
 	}
 
-	@Override
-	public boolean modifyProject(RegistProjectDTO project) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 
 	@Override
 	public boolean removeProject(Map<String, Integer> removeInfo) {
