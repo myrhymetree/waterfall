@@ -68,7 +68,7 @@
 이슈 관리 :  https://ember-event-d5a.notion.site/Issue-Management-8406bf8cbc954735a6c1ce6863bddeb5?pvs=4 <br/>
 
 ## 7. 형상관리
-![image](https://github.com/myrhymetree/waterfall/assets/94158097/0eb1e686-8e04-4cc3-845b-ca616875ced8)
+<img width="1152" alt="커밋작성규칙" src="https://github.com/myrhymetree/waterfall/assets/94158097/a531b92b-24eb-48ef-892c-91dbbb83b505">
 
 다음과 같이 커밋메시지 규칙을 정하여 커밋 메시지를 작성하고, 잦은 충돌을 방지하고, 개발 하고 있는 기능 마다 명확한 의미를 전달할 수 있도록 브랜치 전략을 수립하였습니다.
 
