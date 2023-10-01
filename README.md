@@ -11,7 +11,7 @@
 <table>
   <tr>
     <td align="center">홍성원<a href=""><b></b></td>
-    <td align="center">박성준<a href="https://github.com/myrhymetree"><b>박성준</b></td>
+    <td align="center"><a href="https://github.com/myrhymetree"><b>박성준</b></td>
     <td align="center">김서영<a href=""><b></b></td>
     <td align="center">김영광<a href=""><b></b></td>
     <td align="center">차화응<a href=""><b></b></td>
