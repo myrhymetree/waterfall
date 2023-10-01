@@ -1,6 +1,7 @@
 # waterfall
 ## 1. 프로젝트 소개
 폭포수 개발방법론을 이용하여 프로젝트를 진행할 수 있게 도와주는 사내 구축형 협업툴(PMS)
+설계 및 개발 기간 : 2021.12.27 ~ 2022.3.12
 
 ### 1-1. 프로젝트 산출물
 ![image](https://github.com/myrhymetree/waterfall/assets/94158097/ff6783b8-4135-4d4f-8f32-55d828fdbf31)
@@ -49,3 +50,10 @@
       - 계정 생성, 조회, 수정, 삭제
 ### 5-7. 사내 정보 관리
       - 부서 관리, 팀 관리, 직급 관리
+
+### 6. 이슈
+<img width="1300" alt="이슈" src="https://github.com/myrhymetree/waterfall/assets/94158097/166a9002-36c5-4c6d-be99-61375520a7b5">
+
+프로젝트를 진행하면서 발생한 에러와 해결방안을 팀원들과 같이 공유하였습니다.
+
+링크 : https://ember-event-d5a.notion.site/7bdcc22689154c3fb0a5bc8a3b774cd9?pvs=4
