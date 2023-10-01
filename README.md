@@ -62,6 +62,6 @@
 프로젝트를 진행하면서 발생한 에러와 해결방안을 팀원들과 같이 공유하였습니다.
 
 링크 
-https://ember-event-d5a.notion.site/7bdcc22689154c3fb0a5bc8a3b774cd9?pvs=4 <br/>
-https://ember-event-d5a.notion.site/Issue-Management-8406bf8cbc954735a6c1ce6863bddeb5?pvs=4 <br/>
+에러 정리 공유 : https://ember-event-d5a.notion.site/7bdcc22689154c3fb0a5bc8a3b774cd9?pvs=4 <br/>
+이슈 관리 :  https://ember-event-d5a.notion.site/Issue-Management-8406bf8cbc954735a6c1ce6863bddeb5?pvs=4 <br/>
 
