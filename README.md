@@ -51,9 +51,14 @@
 ### 5-7. 사내 정보 관리
       - 부서 관리, 팀 관리, 직급 관리
 
-### 6. 이슈
+## 6. 이슈
 <img width="1300" alt="이슈" src="https://github.com/myrhymetree/waterfall/assets/94158097/166a9002-36c5-4c6d-be99-61375520a7b5">
+
+<img width="1368" alt="이슈 1" src="https://github.com/myrhymetree/waterfall/assets/94158097/fc8ad85e-8242-47b8-828d-525e0cc5c49a">
 
 프로젝트를 진행하면서 발생한 에러와 해결방안을 팀원들과 같이 공유하였습니다.
 
-링크 : https://ember-event-d5a.notion.site/7bdcc22689154c3fb0a5bc8a3b774cd9?pvs=4
+링크 
+https://ember-event-d5a.notion.site/7bdcc22689154c3fb0a5bc8a3b774cd9?pvs=4 <br/>
+https://ember-event-d5a.notion.site/Issue-Management-8406bf8cbc954735a6c1ce6863bddeb5?pvs=4 <br/>
+
