@@ -4,7 +4,8 @@
 설계 및 개발 기간 : 2021.12.27 ~ 2022.3.12
 
 ### 1-1. 프로젝트 산출물
-![image](https://github.com/myrhymetree/waterfall/assets/94158097/ff6783b8-4135-4d4f-8f32-55d828fdbf31)
+<img width="1645" alt="워터폴 메인" src="https://github.com/myrhymetree/waterfall/assets/94158097/8730274e-ab7f-4712-be57-a750578e8d7b">
+
 
 * 산출물 링크 : https://ember-event-d5a.notion.site/Project-Waterfall-Service-_-c1873360e0bb4924b59ed04ea686671c?pvs=4
 
@@ -28,10 +29,11 @@
 </table>
 
 ## 3. 개발 환경
-![워터폴 개발환경](https://github.com/myrhymetree/waterfall/assets/94158097/a70237c5-ae30-4baf-bbb5-a9b13c21ee25)
+![워터폴 개발환경](https://github.com/myrhymetree/waterfall/assets/94158097/a9a8aec3-3c6b-40cb-8269-9f44001289e6)
+
 
 ## 4. ERD
-![ERD](https://github.com/myrhymetree/waterfall/assets/94158097/22612922-ccbf-4b22-97b9-a8bac2620ff1)
+![ERD](https://github.com/myrhymetree/waterfall/assets/94158097/4818c232-67d6-4960-9da3-2d12cb2c47d5)
 
 ## 5. 주요기능
 ### 5-1. 프로젝트 관리
@@ -54,10 +56,10 @@
 ## 6. 이슈
 프로젝트를 진행하면서 겪은 에러와 해결방안을 에러정리공유에, 비즈니스로직 개발과 별개의 건은 이슈 관리 페이지에서 따로 작성하였습니다.
 
-<img width="1300" alt="이슈" src="https://github.com/myrhymetree/waterfall/assets/94158097/166a9002-36c5-4c6d-be99-61375520a7b5">
+<img width="1300" alt="이슈" src="https://github.com/myrhymetree/waterfall/assets/94158097/53a6361c-e73e-4bee-b9b4-db1cf7960d1c">
 
 ### 이슈
-<img width="1368" alt="이슈 1" src="https://github.com/myrhymetree/waterfall/assets/94158097/fc8ad85e-8242-47b8-828d-525e0cc5c49a">
+<img width="1368" alt="이슈 1" src="https://github.com/myrhymetree/waterfall/assets/94158097/df271a29-867a-4edf-927c-8591f5313197">
 
 프로젝트를 진행하면서 발생한 에러와 해결방안을 팀원들과 같이 공유하였습니다.
 
