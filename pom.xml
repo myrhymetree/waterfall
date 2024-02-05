@@ -17,7 +17,7 @@
 	<!-- 이거 버전 꼭 확인해서 자바버전부터 다 바꾸자 -->
 	<properties>
 		<java-version>11</java-version>              		 <!-- 자바 버전 -->
-		<org.springframework-version>5.3.14</org.springframework-version>
+		<org.springframework-version>5.3.19</org.springframework-version>
 		<org.aspectj-version>1.9.6</org.aspectj-version>   <!-- aop관련 aspectj 버전 -->
 		<org.slf4j-version>1.7.30</org.slf4j-version>      <!-- logging관련 slf4j 버전 -->
 	</properties>
